@@ -1,4 +1,4 @@
 Vizi
 ====
 
-A Framework and Tool for Creating Interactive 3D Applications
+A Framework for Creating Interactive 3D Applications
