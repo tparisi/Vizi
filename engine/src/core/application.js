@@ -130,59 +130,59 @@ Vizi.Application.prototype.removeObject = function(e) {
     }
 }
 	
-Vizi.Application.prototype.onMouseMove = function(x, y)
+Vizi.Application.prototype.onMouseMove = function(event)
 {
 	if (this.mouseDelegate)
 	{
-		this.mouseDelegate.onMouseMove(x, y);
+		this.mouseDelegate.onMouseMove(event);
 	}
 }
 
-Vizi.Application.prototype.onMouseDown = function(x, y)
+Vizi.Application.prototype.onMouseDown = function(event)
 {
 	if (this.mouseDelegate)
 	{
-		this.mouseDelegate.onMouseDown(x, y);
+		this.mouseDelegate.onMouseDown(event);
 	}
 }
 
-Vizi.Application.prototype.onMouseUp = function(x, y)
+Vizi.Application.prototype.onMouseUp = function(event)
 {
 	if (this.mouseDelegate)
 	{
-		this.mouseDelegate.onMouseUp(x, y);
+		this.mouseDelegate.onMouseUp(event);
 	}
 }
 
-Vizi.Application.prototype.onMouseScroll = function(delta)
+Vizi.Application.prototype.onMouseScroll = function(event)
 {
 	if (this.mouseDelegate)
 	{
-		this.mouseDelegate.onMouseScroll(delta);
+		this.mouseDelegate.onMouseScroll(event);
 	}
 }
 
-Vizi.Application.prototype.onKeyDown = function(keyCode, charCode)
+Vizi.Application.prototype.onKeyDown = function(event)
 {
 	if (this.keyboardDelegate)
 	{
-		this.keyboardDelegate.onKeyDown(keyCode, charCode);
+		this.keyboardDelegate.onKeyDown(event);
 	}
 }
 
-Vizi.Application.prototype.onKeyUp = function(keyCode, charCode)
+Vizi.Application.prototype.onKeyUp = function(event)
 {
 	if (this.keyboardDelegate)
 	{
-		this.keyboardDelegate.onKeyUp(keyCode, charCode);
+		this.keyboardDelegate.onKeyUp(event);
 	}
 }
 
-Vizi.Application.prototype.onKeyPress = function(keyCode, charCode)
+Vizi.Application.prototype.onKeyPress = function(event)
 {
 	if (this.keyboardDelegate)
 	{
-		this.keyboardDelegate.onKeyPress(keyCode, charCode);
+		this.keyboardDelegate.onKeyPress(event);
 	}
 }	
 
@@ -192,62 +192,60 @@ Vizi.Application.instance = null;
 Vizi.Application.curObjectID = 0;
 Vizi.Application.minFrameTime = 1;
 	    	
-Vizi.Application.handleMouseMove = function(pageX, pageY, eltX, eltY)
+Vizi.Application.handleMouseMove = function(event)
 {
-//    if (Vizi.Picker.clickedObject)
-//   	return;
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
     
     if (Vizi.Application.instance.onMouseMove)
-    	Vizi.Application.instance.onMouseMove(pageX, pageY, eltX, eltY);	            	
+    	Vizi.Application.instance.onMouseMove(event);	            	
 }
 
-Vizi.Application.handleMouseDown = function(pageX, pageY, eltX, eltY)
+Vizi.Application.handleMouseDown = function(event)
 {
-    // N.B.: ahh, the bullshit continues...
+    // Click to focus
     if (Vizi.Application.instance.tabstop)
     	Vizi.Application.instance.focus();
-    
-    // console.log("Mouse down " + event.pageX + ", " + event.pageY);
-    
-    if (Vizi.Picker.clickedObject)
+        
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
     
     if (Vizi.Application.instance.onMouseDown)
-    	Vizi.Application.instance.onMouseDown(pageX, pageY, eltX, eltY);	            	
+    	Vizi.Application.instance.onMouseDown(event);	            	
 }
 
-Vizi.Application.handleMouseUp = function(pageX, pageY, eltX, eltY)
+Vizi.Application.handleMouseUp = function(event)
 {
-    if (Vizi.Picker.clickedObject)
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
     
     if (Vizi.Application.instance.onMouseUp)
-    	Vizi.Application.instance.onMouseUp(pageX, pageY, eltX, eltY);	            	
+    	Vizi.Application.instance.onMouseUp(event);	            	
 }
 
-Vizi.Application.handleMouseScroll = function(delta)
+Vizi.Application.handleMouseScroll = function(event)
 {
-    if (Vizi.Picker.overObject)
+    if (Vizi.PickManager && Vizi.PickManager.overObject)
     	return;
     
     if (Vizi.Application.instance.onMouseScroll)
-    	Vizi.Application.instance.onMouseScroll(delta);	            	
+    	Vizi.Application.instance.onMouseScroll(event);	            	
 }
 
-Vizi.Application.handleKeyDown = function(keyCode, charCode)
+Vizi.Application.handleKeyDown = function(event)
 {
     if (Vizi.Application.instance.onKeyDown)
-    	Vizi.Application.instance.onKeyDown(keyCode, charCode);	            	
+    	Vizi.Application.instance.onKeyDown(kevent);	            	
 }
 
-Vizi.Application.handleKeyUp = function(keyCode, charCode)
+Vizi.Application.handleKeyUp = function(event)
 {
     if (Vizi.Application.instance.onKeyUp)
-    	Vizi.Application.instance.onKeyUp(keyCode, charCode);	            	
+    	Vizi.Application.instance.onKeyUp(event);	            	
 }
 
-Vizi.Application.handleKeyPress = function(keyCode, charCode)
+Vizi.Application.handleKeyPress = function(event)
 {
     if (Vizi.Application.instance.onKeyPress)
-    	Vizi.Application.instance.onKeyPress(keyCode, charCode);	            	
+    	Vizi.Application.instance.onKeyPress(event);	            	
 }	        

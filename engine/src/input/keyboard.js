@@ -11,15 +11,15 @@ Vizi.Keyboard = function()
 	Vizi.Keyboard.instance = this;
 }
 
-Vizi.Keyboard.prototype.onKeyDown = function(keyCode, charCode)
+Vizi.Keyboard.prototype.onKeyDown = function(event)
 {
 }
 
-Vizi.Keyboard.prototype.onKeyUp = function(keyCode, charCode)
+Vizi.Keyboard.prototype.onKeyUp = function(event)
 {
 }
 
-Vizi.Keyboard.prototype.onKeyPress = function(keyCode, charCode)
+Vizi.Keyboard.prototype.onKeyPress = function(event)
 {
 }	        
 

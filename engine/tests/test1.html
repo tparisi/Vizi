@@ -5,9 +5,9 @@
 <title>Vizi</title>
 </head>
 <body>
-	<div id="container" style="width:95%; height:95%; position:absolute;background-color:red"></div>
-	<div id="timeDisplay" style="width:15%; height:15%; position:absolute;left:24px;top:10px;"></div>
-	<div id="fractionDisplay" style="width:15%; height:15%; position:absolute;left:24px;top:30px;"></div>
+	<div id="container" style="width:800px; height:600px; position:absolute;background-color:red"></div>
+	<div id="timeDisplay" style="width:15%; height:15%; position:absolute;left:124px;top:10px;"></div>
+	<div id="fractionDisplay" style="width:15%; height:15%; position:absolute;left:124px;top:30px;"></div>
 
 	<script>
 	var CLOSURE_NO_DEPS = true;
@@ -15,6 +15,7 @@
     <script src="../libs/JQuery/jquery-1.6.4.js"></script>
     <script src="../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js"></script>
 	<script src="../libs/three.js.r58/three.js"></script>
+	<script src="../libs/three.js.r58/stats.min.js"></script>
 	<script src="../libs/requestAnimationFrame/RequestAnimationFrame.js"></script>
 	<script src="../build-debug/vizi.js"></script>
 	<script>
@@ -26,7 +27,7 @@
 		var container = document.getElementById("container");
 		
 		var app = new Vizi.Application();
-		app.initialize( { container : container } );
+		app.initialize( { container : container, displayStats:false } );
 		var o = new Vizi.Object;
 		var t = new Vizi.Timer({duration: 5000, loop:true});
 		
@@ -36,6 +37,9 @@
 		o.addComponent(t);
 		app.addObject(o);
 		o.realize();
+		app.onMouseDown = onAppMouseDown;
+		app.onMouseMove = onAppMouseMove;
+		app.onMouseUp = onAppMouseUp;
 		app.run();
 	}
 	);
@@ -54,6 +58,20 @@
 		fractionDisplay.innerHTML = f.toFixed(2);
 	}
 		
+	function onAppMouseDown(event)
+	{
+		console.log("Mouse down", this, event);
+	}
+
+	function onAppMouseMove(event)
+	{
+		console.log("Mouse move ", event);
+	}
+
+	function onAppMouseUp(event)
+	{
+		console.log("Mouse up ", event);
+	}
 	
 	</script>
 	

@@ -18,23 +18,23 @@ Vizi.Mouse = function()
 	Vizi.Mouse.instance = this;
 };
 
-Vizi.Mouse.prototype.onMouseMove = function(x, y)
+Vizi.Mouse.prototype.onMouseMove = function(event)
 {
-    this.state.x = x;
-    this.state.y = y;	            
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
 }
 
-Vizi.Mouse.prototype.onMouseDown = function(x, y)
+Vizi.Mouse.prototype.onMouseDown = function(event)
 {
-    this.state.x = x;
-    this.state.y = y;
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
     this.state.buttons.left = true;
 }
 
-Vizi.Mouse.prototype.onMouseUp = function(x, y)
+Vizi.Mouse.prototype.onMouseUp = function(event)
 {
-    this.state.x = x;
-    this.state.y = y;
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
     this.state.buttons.left = false;	            
 }
 

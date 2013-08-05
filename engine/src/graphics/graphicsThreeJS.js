@@ -60,7 +60,7 @@ Vizi.GraphicsThreeJS.prototype.initPageElements = function(param)
         var stats = new Stats();
         stats.domElement.style.position = 'absolute';
         stats.domElement.style.top = '0px';
-        stats.domElement.style.left = '140px';
+        stats.domElement.style.left = '0px';
         stats.domElement.style.height = '40px';
         this.container.appendChild( stats.domElement );
         this.stats = stats;
@@ -161,8 +161,10 @@ Vizi.GraphicsThreeJS.prototype.addDomHandlers = function()
 	window.addEventListener( 'resize', function(event) { that.onWindowResize(event); }, false );
 }
 
-Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(eltx, elty)
+Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 {
+	var eltx = event.elementX, elty = event.elementY;
+	
 	// translate client coords into vp x,y
     var vpx = ( eltx / this.container.offsetWidth ) * 2 - 1;
     var vpy = - ( elty / this.container.offsetHeight ) * 2 + 1;
@@ -216,12 +218,14 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 	}
 }
 
-Vizi.GraphicsThreeJS.prototype.nodeFromMouse = function(eltx, elty)
+Vizi.GraphicsThreeJS.prototype.nodeFromMouse = function(event)
 {
 	// Blerg, this is to support code outside the SB components & picker framework
 	// Returns a raw Three.js node
 	
 	// translate client coords into vp x,y
+	var eltx = event.elementX, elty = event.elementY;
+	
     var vpx = ( eltx / this.container.offsetWidth ) * 2 - 1;
     var vpy = - ( elty / this.container.offsetHeight ) * 2 + 1;
     
@@ -269,14 +273,17 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
 	
-    Vizi.Mouse.instance.onMouseMove(eltx, elty);
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty };
+	
+    Vizi.Mouse.instance.onMouseMove(evt);
     
-    if (Vizi.Picker)
+    if (Vizi.PickManager)
     {
-    	Vizi.Picker.handleMouseMove(eltx, elty);
+    	Vizi.PickManager.handleMouseMove(evt);
     }
     
-    Vizi.Application.handleMouseMove(event.pageX, event.pageY, eltx, elty);
+    Vizi.Application.handleMouseMove(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
@@ -288,14 +295,17 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
 	
-    Vizi.Mouse.instance.onMouseDown(eltx, elty);
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty };
+	
+    Vizi.Mouse.instance.onMouseDown(evt);
     
-    if (Vizi.Picker)
+    if (Vizi.PickManager)
     {
-    	Vizi.Picker.handleMouseDown(eltx, elty);
+    	Vizi.PickManager.handleMouseDown(evt);
     }
     
-    Vizi.Application.handleMouseDown(event.pageX, event.pageY, eltx, elty);
+    Vizi.Application.handleMouseDown(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
@@ -307,29 +317,33 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
 	
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty };
     
-    Vizi.Mouse.instance.onMouseUp(eltx, elty);
+    Vizi.Mouse.instance.onMouseUp(evt);
     
-    if (Vizi.Picker)
+    if (Vizi.PickManager)
     {
-    	Vizi.Picker.handleMouseUp(eltx, elty);
+    	Vizi.PickManager.handleMouseUp(evt);
     }	            
 
-    Vizi.Application.handleMouseUp(event.pageX, event.pageY, eltx, elty);
+    Vizi.Application.handleMouseUp(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event, delta)
 {
     event.preventDefault();
-    
-    Vizi.Mouse.instance.onMouseScroll(delta);
 
-    if (Vizi.Picker)
+    var evt = { type : "mousescroll", delta : delta };
+    
+    Vizi.Mouse.instance.onMouseScroll(evt);
+
+    if (Vizi.PickManager)
     {
-    	Vizi.Picker.handleMouseScroll(delta);
+    	Vizi.PickManager.handleMouseScroll(evt);
     }
     
-    Vizi.Application.handleMouseScroll(delta);
+    Vizi.Application.handleMouseScroll(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onKeyDown = function(event)
@@ -337,9 +351,9 @@ Vizi.GraphicsThreeJS.prototype.onKeyDown = function(event)
 	// N.B.: Chrome doesn't deliver keyPress if we don't bubble... keep an eye on this
 	event.preventDefault();
 
-    Vizi.Keyboard.instance.onKeyDown(event.keyCode, event.charCode);
+    Vizi.Keyboard.instance.onKeyDown(event);
     
-	Vizi.Application.handleKeyDown(event.keyCode, event.charCode);
+	Vizi.Application.handleKeyDown(event);
 }
 
 Vizi.GraphicsThreeJS.prototype.onKeyUp = function(event)
@@ -347,9 +361,9 @@ Vizi.GraphicsThreeJS.prototype.onKeyUp = function(event)
 	// N.B.: Chrome doesn't deliver keyPress if we don't bubble... keep an eye on this
 	event.preventDefault();
 
-    Vizi.Keyboard.instance.onKeyUp(event.keyCode, event.charCode);
+    Vizi.Keyboard.instance.onKeyUp(event);
     
-	Vizi.Application.handleKeyUp(event.keyCode, event.charCode);
+	Vizi.Application.handleKeyUp(event);
 }
 	        
 Vizi.GraphicsThreeJS.prototype.onKeyPress = function(event)
@@ -357,9 +371,9 @@ Vizi.GraphicsThreeJS.prototype.onKeyPress = function(event)
 	// N.B.: Chrome doesn't deliver keyPress if we don't bubble... keep an eye on this
 	event.preventDefault();
 
-    Vizi.Keyboard.instance.onKeyPress(event.keyCode, event.charCode);
+    Vizi.Keyboard.instance.onKeyPress(event);
     
-	Vizi.Application.handleKeyPress(event.keyCode, event.charCode);
+	Vizi.Application.handleKeyPress(event);
 }
 
 Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
@@ -397,11 +411,6 @@ Vizi.GraphicsThreeJS.prototype.update = function()
     if (this.stats)
     {
     	this.stats.update();
-    }
-    
-    if (window.TWEEN !== undefined)
-    {
-    	TWEEN.update();
     }
 }
 
