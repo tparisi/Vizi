@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:95%; height:95%; position:absolute;background-color:red"></div>
+	<div id="timeDisplay" style="width:15%; height:15%; position:absolute;left:24px;top:10px;"></div>
+	<div id="fractionDisplay" style="width:15%; height:15%; position:absolute;left:24px;top:30px;"></div>
+
+	<script>
+	var CLOSURE_NO_DEPS = true;
+	</script>
+    <script src="../libs/JQuery/jquery-1.6.4.js"></script>
+    <script src="../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js"></script>
+	<script src="../libs/three.js.r58/three.js"></script>
+	<script src="../libs/requestAnimationFrame/RequestAnimationFrame.js"></script>
+	<script src="../build-debug/vizi.js"></script>
+	<script>
+
+	var timeDisplay = document.getElementById("timeDisplay");
+	var fractionDisplay = document.getElementById("fractionDisplay");
+	
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application();
+		app.initialize( { container : container } );
+		var o = new Vizi.Object;
+		var t = new Vizi.Timer({duration: 5000, loop:true});
+		
+		t.addEventListener("time", onTimeChanged);
+		t.addEventListener("fraction", onTimeFractionChanged);
+		t.start();
+		o.addComponent(t);
+		app.addObject(o);
+		o.realize();
+		app.run();
+	}
+	);
+
+	var once = false;
+	function onTimeChanged(t) { 
+		if (!once) { 
+			console.log(this);
+			once = true;
+		}
+		 
+		timeDisplay.innerHTML = t;
+	}
+
+	function onTimeFractionChanged(f) {
+		fractionDisplay.innerHTML = f.toFixed(2);
+	}
+		
+	
+	</script>
+	
+</body>
+</html>

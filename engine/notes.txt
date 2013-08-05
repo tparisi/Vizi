@@ -1,0 +1,4 @@
+Design notes
+
+Make Stats counting into a service
+Removed page-handling stuff from three.js driver
