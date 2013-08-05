@@ -8,8 +8,6 @@ goog.provide('Vizi.PickManager');
 
 Vizi.PickManager.handleMouseMove = function(event)
 {
-    // console.log("PICKER Mouse move " + x + ", " + y);
-
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseMove)
     {
         Vizi.PickManager.clickedObject.onMouseMove(event);
@@ -49,8 +47,6 @@ Vizi.PickManager.handleMouseMove = function(event)
 
 Vizi.PickManager.handleMouseDown = function(event)
 {
-    // console.log("PICKER Mouse down " + x + ", " + y);
-
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDown)
     {
@@ -60,8 +56,6 @@ Vizi.PickManager.handleMouseDown = function(event)
 
 Vizi.PickManager.handleMouseUp = function(event)
 {
-    // console.log("PICKER Mouse up " + x + ", " + y);
-
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseUp)
     {
         Vizi.PickManager.clickedObject.onMouseUp(event);
@@ -72,8 +66,6 @@ Vizi.PickManager.handleMouseUp = function(event)
 
 Vizi.PickManager.handleMouseScroll = function(event)
 {
-    // console.log("PICKER Mouse up " + x + ", " + y);
-
     if (Vizi.PickManager.overObject && Vizi.PickManager.overObject.onMouseScroll)
     {
         Vizi.PickManager.overObject.onMouseScroll(event);
