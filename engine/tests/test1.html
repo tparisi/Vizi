@@ -24,16 +24,37 @@
 	var fractionDisplay = document.getElementById("fractionDisplay");
 	var cylinderTransform = null;
 	var cube = null;
+	var cubeTransform = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
 		var app = new Vizi.Application();
-		app.initialize( { container : container, displayStats:false } );
+		app.initialize( { container : container, displayStats:true } );
 
 		var root = new Vizi.Object;
+		var xfm = new Vizi.Transform;
+		
+		var p = new Vizi.PlaneDragger;
+		p.addEventListener("mouseover", onPickerMouseOver);
+		p.addEventListener("mouseout", onPickerMouseOut);
+		p.addEventListener("mousedown", onPickerMouseDown);
+		p.addEventListener("mousemove", onPickerMouseMove);
+		p.addEventListener("mouseup", onPickerMouseUp);
+		p.addEventListener("drag", onPickerDrag);
+		
+		var t = new Vizi.Timer({duration: 5000, loop:true});
+		
+		t.addEventListener("time", onTimeChanged);
+		t.addEventListener("fraction", onTimeFractionChanged);
+		t.start();
+
+		root.addComponent(xfm);
+		root.addComponent(p);
+		root.addComponent(t);
 		
 		var cube = createCube();
+		cubeTransform = cube.getComponent(Vizi.Transform);
 		root.addChild(cube);
 
 		var cylinder = createCylinder();
@@ -57,24 +78,8 @@
 
 		cube = new Vizi.CubeVisual({color:0x00aaaa});
 
-		var p = new Vizi.PlaneDragger;
-		p.addEventListener("mouseover", onPickerMouseOver);
-		p.addEventListener("mouseout", onPickerMouseOut);
-		p.addEventListener("mousedown", onPickerMouseDown);
-		p.addEventListener("mousemove", onPickerMouseMove);
-		p.addEventListener("mouseup", onPickerMouseUp);
-		p.addEventListener("drag", onPickerDrag);
-		
-		var t = new Vizi.Timer({duration: 5000, loop:true});
-		
-		t.addEventListener("time", onTimeChanged);
-		t.addEventListener("fraction", onTimeFractionChanged);
-		t.start();
-		
 		o.addComponent(xfm);
 		o.addComponent(cube);
-		o.addComponent(p);
-		o.addComponent(t);
 
 		return o;
 	}
@@ -149,13 +154,12 @@
 	function onPickerMouseUp(event)
 	{
 		console.log("Picker mouse up ", event.point);
-		cylinderTransform.position.copy(event.point);
 	}	
 
 	function onPickerDrag(point)
 	{
 		console.log("Picker drag ", point);
-		cylinderTransform.position.copy(point);
+		cubeTransform.position.copy(point);
 	}	
 	</script>
 	

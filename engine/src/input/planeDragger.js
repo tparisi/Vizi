@@ -37,7 +37,7 @@ Vizi.PlaneDragger.prototype.onMouseMove = function(event)
 	
 	if (planeIntersects.length)
 	{
-		this.dragHitPoint.copy(planeIntersects[ 0 ].point.sub( this.dragOffset ) );
+		this.dragHitPoint.copy(planeIntersects[ 0 ].point).sub(this.dragOffset);
 		this.dragHitPoint.add(this.dragStartPoint);
 		this.dispatchEvent("drag", this.dragHitPoint);
 	}
@@ -51,7 +51,7 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	
 	if (planeIntersects.length)
 	{
-		this.dragOffset.copy( planeIntersects[ 0 ].point.sub( this.dragPlane.position ));
+		this.dragOffset.copy(planeIntersects[ 0 ].point).sub( this.dragPlane.position );
 		this.dragStartPoint.copy(event.point);
 	}
 }
