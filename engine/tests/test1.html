@@ -57,12 +57,13 @@
 
 		cube = new Vizi.CubeVisual({color:0x00aaaa});
 
-		var p = new Vizi.Picker;
+		var p = new Vizi.PlaneDragger;
 		p.addEventListener("mouseover", onPickerMouseOver);
 		p.addEventListener("mouseout", onPickerMouseOut);
 		p.addEventListener("mousedown", onPickerMouseDown);
 		p.addEventListener("mousemove", onPickerMouseMove);
 		p.addEventListener("mouseup", onPickerMouseUp);
+		p.addEventListener("drag", onPickerDrag);
 		
 		var t = new Vizi.Timer({duration: 5000, loop:true});
 		
@@ -143,13 +144,18 @@
 	function onPickerMouseMove(event)
 	{
 		console.log("Picker mouse move ", event.point);
-		cylinderTransform.position.copy(event.point);
 	}
 
 	function onPickerMouseUp(event)
 	{
 		console.log("Picker mouse up ", event.point);
 		cylinderTransform.position.copy(event.point);
+	}	
+
+	function onPickerDrag(point)
+	{
+		console.log("Picker drag ", point);
+		cylinderTransform.position.copy(point);
 	}	
 	</script>
 	

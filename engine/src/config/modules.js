@@ -18,6 +18,7 @@ goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');
 goog.require('Vizi.Picker');
 goog.require('Vizi.PickManager');
+goog.require('Vizi.PlaneDragger');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.Transform');
 goog.require('Vizi.Time');

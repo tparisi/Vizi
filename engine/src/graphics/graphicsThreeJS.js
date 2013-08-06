@@ -264,6 +264,24 @@ Vizi.GraphicsThreeJS.prototype.nodeFromMouse = function(event)
     }
 }
 
+Vizi.GraphicsThreeJS.prototype.getObjectIntersection = function(x, y, object)
+{
+	// Translate client coords into viewport x,y
+	var vpx = ( x / this.renderer.domElement.offsetWidth ) * 2 - 1;
+	var vpy = - ( y / this.renderer.domElement.offsetHeight ) * 2 + 1;
+	
+    var vector = new THREE.Vector3( vpx, vpy, 0.5 );
+
+    this.projector.unprojectVector( vector, this.camera );
+	
+    var pos = new THREE.Vector3;
+    pos = pos.applyMatrix4(this.camera.matrixWorld);
+	
+    var raycaster = new THREE.Raycaster( pos, vector.sub( pos ).normalize() );
+
+	return raycaster.intersectObject( object, true );
+}
+
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 {
     event.preventDefault();
