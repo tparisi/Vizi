@@ -22,12 +22,34 @@
 
 	var timeDisplay = document.getElementById("timeDisplay");
 	var fractionDisplay = document.getElementById("fractionDisplay");
+	var cylinderTransform = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
 		var app = new Vizi.Application();
 		app.initialize( { container : container, displayStats:false } );
+
+		var root = new Vizi.Object;
+		
+		var cube = createCube();
+		root.addChild(cube);
+
+		var cylinder = createCylinder();
+		cylinderTransform = cylinder.getComponent(Vizi.Transform);
+		root.addChild(cylinder);
+		
+		app.addObject(root);
+		root.realize();
+
+		//app.onMouseDown = onAppMouseDown;
+		//app.onMouseMove = onAppMouseMove;
+		//app.onMouseUp = onAppMouseUp;
+		app.run();
+	}
+	);
+
+	function createCube() {	
 		var o = new Vizi.Object;
 
 		var xfm = new Vizi.Transform;
@@ -49,16 +71,23 @@
 		o.addComponent(c);
 		o.addComponent(p);
 		o.addComponent(t);
-		
-		app.addObject(o);
-		o.realize();
-		//app.onMouseDown = onAppMouseDown;
-		//app.onMouseMove = onAppMouseMove;
-		//app.onMouseUp = onAppMouseUp;
-		app.run();
-	}
-	);
 
+		return o;
+	}
+
+
+	function createCylinder() {	
+		var o = new Vizi.Object;
+
+		var xfm = new Vizi.Transform;
+		xfm.position.set(1, 1, 1);
+		var c = new Vizi.CylinderVisual({ height: .3, radiusTop: .1, radiusBottom: .1 });
+
+		o.addComponent(xfm);
+		o.addComponent(c);
+		return o;
+	}
+		
 	var once = false;
 	function onTimeChanged(t) { 
 		if (!once) { 
@@ -92,16 +121,19 @@
 	function onPickerMouseDown(event)
 	{
 		console.log("Picker mouse down", this, event.point);
+		cylinderTransform.position.copy(event.point);
 	}
 
 	function onPickerMouseMove(event)
 	{
 		console.log("Picker mouse move ", event.point);
+		cylinderTransform.position.copy(event.point);
 	}
 
 	function onPickerMouseUp(event)
 	{
 		console.log("Picker mouse up ", event.point);
+		cylinderTransform.position.copy(event.point);
 	}	
 	</script>
 	
