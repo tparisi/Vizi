@@ -23,8 +23,6 @@ goog.require('Vizi.SceneComponent');
 goog.require('Vizi.Transform');
 goog.require('Vizi.Time');
 goog.require('Vizi.Timer');
-goog.require('Vizi.CubeVisual');
-goog.require('Vizi.CylinderVisual');
 goog.require('Vizi.Visual');
 
 /**
