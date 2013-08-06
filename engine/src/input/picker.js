@@ -9,8 +9,6 @@ goog.require('Vizi.Component');
 
 Vizi.Picker = function(param) {
     Vizi.Component.call(this, param);
-
-    // this.post = true; // these messages get posted to sim queue since they're async, kinda
 }
 
 goog.inherits(Vizi.Picker, Vizi.Component);
@@ -29,6 +27,9 @@ Vizi.Picker.prototype.realize = function()
 			object.picker = this;
 		}
 	}
+	
+    this.lastHitPoint = new THREE.Vector3;
+    this.lastHitNormal = new THREE.Vector3;
 }
 
 Vizi.Picker.prototype.update = function()
@@ -50,22 +51,29 @@ Vizi.Picker.prototype.onMouseMove = function(event)
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
 	if (mouseOverObject == this)
 	{
+		this.lastHitPoint.copy(event.point);
+		this.lastHitNormal.copy(event.normal);
 		this.dispatchEvent("mousemove", event);
 	}
 }
 
 Vizi.Picker.prototype.onMouseDown = function(event)
 {
+	this.lastHitPoint.copy(event.point);
+	this.lastHitNormal.copy(event.normal);
     this.dispatchEvent("mousedown", event);
 }
 
 Vizi.Picker.prototype.onMouseUp = function(event)
 {
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (mouseOverObject == this)
+	if (mouseOverObject != this)
 	{
-		this.dispatchEvent("mouseup", event);
+		event.point = this.lastHitPoint;
+		event.normal = this.lastHitNormal;
 	}
+
+	this.dispatchEvent("mouseup", event);
 }
 	        
 Vizi.Picker.prototype.onMouseScroll = function(event)
