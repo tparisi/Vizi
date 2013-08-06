@@ -47,7 +47,11 @@ Vizi.Picker.prototype.onMouseOut = function(event)
 	        	        
 Vizi.Picker.prototype.onMouseMove = function(event)
 {
-    this.dispatchEvent("mousemove", event);
+	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
+	if (mouseOverObject == this)
+	{
+		this.dispatchEvent("mousemove", event);
+	}
 }
 
 Vizi.Picker.prototype.onMouseDown = function(event)
@@ -57,7 +61,11 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 
 Vizi.Picker.prototype.onMouseUp = function(event)
 {
-    this.dispatchEvent("mouseup", event);
+	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
+	if (mouseOverObject == this)
+	{
+		this.dispatchEvent("mouseup", event);
+	}
 }
 	        
 Vizi.Picker.prototype.onMouseScroll = function(event)

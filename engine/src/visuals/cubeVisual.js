@@ -32,7 +32,7 @@ Vizi.CubeVisual.prototype.realize = function()
     var height = this.param.height || 2.0;
     var depth = this.param.depth || 2.0;
     var color;
-    if (this.param.color === null)
+    if (this.param.color === undefined)
     {
     	color = 0x808080;
     }
@@ -41,12 +41,11 @@ Vizi.CubeVisual.prototype.realize = function()
     	color = this.param.color;
     }
     
-    var map = this.param.map;
-    
-    var ambient = this.param.ambient || 0;
-    
-	var geometry = new THREE.CubeGeometry(width, height, depth);
-	this.object = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial( { color: color, map:map, opacity: 1, ambient: ambient, transparent: false, wireframe: false } ));
+    var map = this.param.map || null;
+        
+	this.geometry = new THREE.CubeGeometry(width, height, depth);
+	this.material = new THREE.MeshBasicMaterial({color: color, map:map });
+	this.object = new THREE.Mesh(this.geometry, this.material);
 	
     this.addToScene();
 }

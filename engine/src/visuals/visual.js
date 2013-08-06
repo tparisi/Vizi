@@ -10,7 +10,9 @@ goog.require('Vizi.SceneComponent');
  */
 Vizi.Visual = function(param)
 {
-	Vizi.SceneComponent.call(this, param);	
+	Vizi.SceneComponent.call(this, param);
+	this.geometry = null;
+	this.material = null;
 } ;
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);

@@ -10,11 +10,7 @@ Vizi.PickManager.handleMouseMove = function(event)
 {
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseMove)
     {
-    	var picked = Vizi.PickManager.objectFromMouse(event); // get new mouse coords
-    	if (picked == Vizi.PickManager.clickedObject)
-    	{
-    		Vizi.PickManager.clickedObject.onMouseMove(event);
-    	}
+		Vizi.PickManager.clickedObject.onMouseMove(event);
     }
     else
     {
@@ -29,6 +25,7 @@ Vizi.PickManager.handleMouseMove = function(event)
     			
     			if (oldObj.onMouseOut)
                 {
+    				event.type = "mouseout";
                     oldObj.onMouseOut(event);
                 }
     		}
@@ -42,6 +39,7 @@ Vizi.PickManager.handleMouseMove = function(event)
 	        	
 	        	if (Vizi.PickManager.overObject.onMouseOver)
 	        	{
+	        		event.type = "mouseover";
 	        		Vizi.PickManager.overObject.onMouseOver(event);
 	        	}
             }
@@ -62,11 +60,7 @@ Vizi.PickManager.handleMouseUp = function(event)
 {
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseUp)
     {
-    	var picked = Vizi.PickManager.objectFromMouse(event); // get new mouse coords
-    	if (picked == Vizi.PickManager.clickedObject)
-    	{
-    		Vizi.PickManager.clickedObject.onMouseUp(event);
-    	}
+		Vizi.PickManager.clickedObject.onMouseUp(event);
     }
 
     Vizi.PickManager.clickedObject = null;

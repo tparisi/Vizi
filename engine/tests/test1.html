@@ -23,6 +23,7 @@
 	var timeDisplay = document.getElementById("timeDisplay");
 	var fractionDisplay = document.getElementById("fractionDisplay");
 	var cylinderTransform = null;
+	var cube = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
@@ -54,9 +55,11 @@
 
 		var xfm = new Vizi.Transform;
 
-		var c = new Vizi.CubeVisual;
+		cube = new Vizi.CubeVisual({color:0x00aaaa});
 
 		var p = new Vizi.Picker;
+		p.addEventListener("mouseover", onPickerMouseOver);
+		p.addEventListener("mouseout", onPickerMouseOut);
 		p.addEventListener("mousedown", onPickerMouseDown);
 		p.addEventListener("mousemove", onPickerMouseMove);
 		p.addEventListener("mouseup", onPickerMouseUp);
@@ -68,7 +71,7 @@
 		t.start();
 		
 		o.addComponent(xfm);
-		o.addComponent(c);
+		o.addComponent(cube);
 		o.addComponent(p);
 		o.addComponent(t);
 
@@ -117,7 +120,20 @@
 		console.log("Mouse up ", event);
 	}
 
-	
+	var savedColor = 0;
+	function onPickerMouseOver(event)
+	{
+		console.log("Picker mouse over", this, event);
+		savedColor = cube.material.color.getHex();
+		cube.material.color.setHex(0xaaaa00);
+	}
+		
+	function onPickerMouseOut(event)
+	{
+		console.log("Picker mouse out", this, event);
+		cube.material.color.setHex(savedColor);
+	}
+
 	function onPickerMouseDown(event)
 	{
 		console.log("Picker mouse down", this, event.point);

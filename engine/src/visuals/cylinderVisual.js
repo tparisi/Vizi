@@ -37,8 +37,9 @@ Vizi.CylinderVisual.prototype.realize = function()
     var color = this.param.color || 0xFFFFFF;
     var ambient = this.param.ambient || 0;
     
-	var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, segmentsRadius, segmentsHeight, openEnded);
-	this.object = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color : color }));
+	this.geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, segmentsRadius, segmentsHeight, openEnded);
+	this.material = new THREE.MeshBasicMaterial({ color : color });
+	this.object = new THREE.Mesh(this.geometry, this.material);
 	
     this.addToScene();
 }
