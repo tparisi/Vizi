@@ -58,9 +58,9 @@ Vizi.SceneComponent.prototype.update = function()
 
 Vizi.SceneComponent.prototype.addToScene = function() {
 	var scene = this.layer ? this.layer.scene : Vizi.Graphics.instance.scene;
-	if (this._entity)
+	if (this._object)
 	{
-		var parent = this._entity.transform ? this._entity.transform.object : scene;
+		var parent = this._object.transform ? this._object.transform.object : scene;
 		if (parent)
 		{
 		    parent.add(this.object);
@@ -79,9 +79,9 @@ Vizi.SceneComponent.prototype.addToScene = function() {
 
 Vizi.SceneComponent.prototype.removeFromScene = function() {
 	var scene = this.layer ? this.layer.scene : Vizi.Graphics.instance.scene;
-	if (this._entity)
+	if (this._object)
 	{
-		var parent = this._entity.transform ? this._entity.transform.object : scene;
+		var parent = this._object.transform ? this._object.transform.object : scene;
 		if (parent)
 		{
 			this.object.data = null;

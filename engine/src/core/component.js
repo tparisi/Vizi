@@ -52,5 +52,4 @@ Vizi.Component.prototype.realize = function() {
 }
 
 Vizi.Component.prototype.update = function() {
-    this.handleMessages();
 }

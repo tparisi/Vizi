@@ -10,6 +10,7 @@ Vizi.PickManager.handleMouseMove = function(event)
 {
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseMove)
     {
+    	Vizi.PickManager.objectFromMouse(event); // get new mouse coords
         Vizi.PickManager.clickedObject.onMouseMove(event);
     }
     else
@@ -58,7 +59,8 @@ Vizi.PickManager.handleMouseUp = function(event)
 {
     if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseUp)
     {
-        Vizi.PickManager.clickedObject.onMouseUp(event);
+    	Vizi.PickManager.objectFromMouse(event); // get new mouse coords
+    	Vizi.PickManager.clickedObject.onMouseUp(event);
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -79,6 +81,9 @@ Vizi.PickManager.objectFromMouse = function(event)
 	var intersected = Vizi.Graphics.instance.objectFromMouse(event);
 	if (intersected.object)
 	{
+		event.normal = intersected.normal;
+		event.point = intersected.point;
+		
     	if (intersected.object.picker)
     	{
     		return intersected.object.picker;

@@ -21,9 +21,9 @@ Vizi.Picker.prototype.realize = function()
 	
 	this.overCursor = this.param.overCursor;
 	
-	if (this._entity)
+	if (this._object)
 	{
-		var object = this._entity.transform;
+		var object = this._object.transform;
 		if (object)
 		{
 			object.picker = this;
@@ -35,33 +35,33 @@ Vizi.Picker.prototype.update = function()
 {
 }
 
-Vizi.Picker.prototype.onMouseOver = function(x, y)
+Vizi.Picker.prototype.onMouseOver = function(event)
 {
-    this.publish("mouseOver", x, y);
+    this.dispatchEvent("mouseover", event);
 }
 
-Vizi.Picker.prototype.onMouseOut = function(x, y)
+Vizi.Picker.prototype.onMouseOut = function(event)
 {
-    this.publish("mouseOut", x, y);
+    this.dispatchEvent("mouseout", event);
 }
 	        	        
-Vizi.Picker.prototype.onMouseMove = function(x, y)
+Vizi.Picker.prototype.onMouseMove = function(event)
 {
-    this.publish("mouseMove", x, y);
+    this.dispatchEvent("mousemove", event);
 }
 
-Vizi.Picker.prototype.onMouseDown = function(x, y)
+Vizi.Picker.prototype.onMouseDown = function(event)
 {
-    this.publish("mouseDown", x, y);
+    this.dispatchEvent("mousedown", event);
 }
 
-Vizi.Picker.prototype.onMouseUp = function(x, y)
+Vizi.Picker.prototype.onMouseUp = function(event)
 {
-    this.publish("mouseUp", x, y);
+    this.dispatchEvent("mouseup", event);
 }
 	        
-Vizi.Picker.prototype.onMouseScroll = function(delta)
+Vizi.Picker.prototype.onMouseScroll = function(event)
 {
-    this.publish("mouseScroll", delta);
+    this.dispatchEvent("mousescroll", event);
 }
 

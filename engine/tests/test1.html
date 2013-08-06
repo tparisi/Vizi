@@ -29,17 +29,32 @@
 		var app = new Vizi.Application();
 		app.initialize( { container : container, displayStats:false } );
 		var o = new Vizi.Object;
+
+		var xfm = new Vizi.Transform;
+
+		var c = new Vizi.CubeVisual;
+
+		var p = new Vizi.Picker;
+		p.addEventListener("mousedown", onPickerMouseDown);
+		p.addEventListener("mousemove", onPickerMouseMove);
+		p.addEventListener("mouseup", onPickerMouseUp);
+		
 		var t = new Vizi.Timer({duration: 5000, loop:true});
 		
 		t.addEventListener("time", onTimeChanged);
 		t.addEventListener("fraction", onTimeFractionChanged);
 		t.start();
+		
+		o.addComponent(xfm);
+		o.addComponent(c);
+		o.addComponent(p);
 		o.addComponent(t);
+		
 		app.addObject(o);
 		o.realize();
-		app.onMouseDown = onAppMouseDown;
-		app.onMouseMove = onAppMouseMove;
-		app.onMouseUp = onAppMouseUp;
+		//app.onMouseDown = onAppMouseDown;
+		//app.onMouseMove = onAppMouseMove;
+		//app.onMouseUp = onAppMouseUp;
 		app.run();
 	}
 	);
@@ -72,7 +87,22 @@
 	{
 		console.log("Mouse up ", event);
 	}
+
 	
+	function onPickerMouseDown(event)
+	{
+		console.log("Picker mouse down", this, event.point);
+	}
+
+	function onPickerMouseMove(event)
+	{
+		console.log("Picker mouse move ", event.point);
+	}
+
+	function onPickerMouseUp(event)
+	{
+		console.log("Picker mouse up ", event.point);
+	}	
 	</script>
 	
 </body>
