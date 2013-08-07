@@ -120,9 +120,11 @@
 		cube.visual.material.color.setHex(savedColor);
 	}
 
+	var offset = null;
 	function onDraggerMouseDown(event)
 	{
 		cylinder.transform.position.copy(event.point);
+		offset = event.point.clone();
 	}
 	
 	function onDraggerMouseUp(event)
@@ -132,7 +134,8 @@
 	function onDraggerDrag(point)
 	{
 		cube.transform.position.copy(point);
-		cylinder.transform.rotation.z += Math.PI / 10;
+		var cylinderpos = point.clone().add(offset);
+//		cylinder.transform.position.copy(cylinderpos);
 	}	
 	</script>
 	
