@@ -23,9 +23,7 @@
 	var timeDisplay = document.getElementById("timeDisplay");
 	var fractionDisplay = document.getElementById("fractionDisplay");
 	var cube = null;
-	var cubeTransform = null;
 	var cylinder = null;
-	var cylinderTransform = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
@@ -54,11 +52,10 @@
 		root.addComponent(p);
 		root.addComponent(t);
 		
-		var cube = createCube();
-		cubeTransform = cube.getComponent(Vizi.Transform);
+		cube = createCube();
 		root.addChild(cube);
 
-		var cylinder = createCylinder();
+		cylinder = createCylinder();
 		cylinderTransform = cylinder.getComponent(Vizi.Transform);
 		root.addChild(cylinder);
 		
@@ -77,14 +74,14 @@
 
 		var xfm = new Vizi.Transform;
 
-		cube = new Vizi.Visual(
+		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
 					material: new THREE.MeshBasicMaterial({color:0x808080})
 				});
 
 		
 		o.addComponent(xfm);
-		o.addComponent(cube);
+		o.addComponent(visual);
 
 		return o;
 	}
@@ -96,14 +93,14 @@
 		var xfm = new Vizi.Transform;
 		xfm.position.set(1, 1, 1);
 		
-		cylinder = new Vizi.Visual(
+		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CylinderGeometry(.1, .1, .3, 100, 100, false),
 					material: new THREE.MeshBasicMaterial()
 				});
 
 		
 		o.addComponent(xfm);
-		o.addComponent(cylinder);
+		o.addComponent(visual);
 		return o;
 	}
 		
@@ -153,7 +150,7 @@
 	function onPickerMouseDown(event)
 	{
 		console.log("Picker mouse down", this, event.point);
-		cylinderTransform.position.copy(event.point);
+		cylinder.transform.position.copy(event.point);
 	}
 
 	function onPickerMouseMove(event)
@@ -169,7 +166,7 @@
 	function onPickerDrag(point)
 	{
 		console.log("Picker drag ", point);
-		cubeTransform.position.copy(point);
+		cube.transform.position.copy(point);
 	}	
 	</script>
 	
