@@ -32,25 +32,24 @@
 		app.initialize( { container : container, displayStats:true } );
 
 		var root = new Vizi.Object;
-		var xfm = new Vizi.Transform;
+		var transform = new Vizi.Transform;
 		
-		var p = new Vizi.PlaneDragger;
-		p.addEventListener("mouseover", onPickerMouseOver);
-		p.addEventListener("mouseout", onPickerMouseOut);
-		p.addEventListener("mousedown", onPickerMouseDown);
-		p.addEventListener("mousemove", onPickerMouseMove);
-		p.addEventListener("mouseup", onPickerMouseUp);
-		p.addEventListener("drag", onPickerDrag);
+		var dragger = new Vizi.PlaneDragger;
+		dragger.addEventListener("mouseover", onDraggerMouseOver);
+		dragger.addEventListener("mouseout", onDraggerMouseOut);
+		dragger.addEventListener("mousedown", onDraggerMouseDown);
+		dragger.addEventListener("mouseup", onDraggerMouseUp);
+		dragger.addEventListener("drag", onDraggerDrag);
 		
-		var t = new Vizi.Timer({duration: 5000, loop:true});
+		var timer = new Vizi.Timer({duration: 5000, loop:true});
 		
-		t.addEventListener("time", onTimeChanged);
-		t.addEventListener("fraction", onTimeFractionChanged);
-		t.start();
+		timer.addEventListener("time", onTimeChanged);
+		timer.addEventListener("fraction", onTimeFractionChanged);
+		timer.start();
 
-		root.addComponent(xfm);
-		root.addComponent(p);
-		root.addComponent(t);
+		root.addComponent(transform);
+		root.addComponent(dragger);
+		root.addComponent(timer);
 		
 		cube = createCube();
 		root.addChild(cube);
@@ -62,9 +61,6 @@
 		app.addObject(root);
 		root.realize();
 
-		//app.onMouseDown = onAppMouseDown;
-		//app.onMouseMove = onAppMouseMove;
-		//app.onMouseUp = onAppMouseUp;
 		app.run();
 	}
 	);
@@ -72,7 +68,7 @@
 	function createCube() {	
 		var o = new Vizi.Object;
 
-		var xfm = new Vizi.Transform;
+		var transform = new Vizi.Transform;
 
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
@@ -80,8 +76,7 @@
 				});
 
 		
-		o.addComponent(xfm);
-		o.addComponent(new Vizi.Transform);
+		o.addComponent(transform);
 		o.addComponent(visual);
 
 		return o;
@@ -91,8 +86,8 @@
 	function createCylinder() {	
 		var o = new Vizi.Object;
 
-		var xfm = new Vizi.Transform;
-		xfm.position.set(1, 1, 1);
+		var transform = new Vizi.Transform;
+		transform.position.set(1, 1, 1);
 		
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CylinderGeometry(.1, .1, .3, 100, 100, false),
@@ -100,73 +95,42 @@
 				});
 
 		
-		o.addComponent(xfm);
+		o.addComponent(transform);
 		o.addComponent(visual);
 		return o;
 	}
 		
-	var once = false;
 	function onTimeChanged(t) { 
-		if (!once) { 
-			console.log(this);
-			once = true;
-		}
-		 
 		timeDisplay.innerHTML = t;
 	}
 
 	function onTimeFractionChanged(f) {
 		fractionDisplay.innerHTML = f.toFixed(2);
 	}
-		
-	function onAppMouseDown(event)
-	{
-		console.log("Mouse down", this, event);
-	}
-
-	function onAppMouseMove(event)
-	{
-		console.log("Mouse move ", event);
-	}
-
-	function onAppMouseUp(event)
-	{
-		console.log("Mouse up ", event);
-	}
 
 	var savedColor = 0;
-	function onPickerMouseOver(event)
+	function onDraggerMouseOver(event)
 	{
-		console.log("Picker mouse over", this, event);
 		savedColor = cube.visual.material.color.getHex();
 		cube.visual.material.color.setHex(0xaaaa00);
 	}
 		
-	function onPickerMouseOut(event)
+	function onDraggerMouseOut(event)
 	{
-		console.log("Picker mouse out", this, event);
 		cube.visual.material.color.setHex(savedColor);
 	}
 
-	function onPickerMouseDown(event)
+	function onDraggerMouseDown(event)
 	{
-		console.log("Picker mouse down", this, event.point);
 		cylinder.transform.position.copy(event.point);
 	}
-
-	function onPickerMouseMove(event)
+	
+	function onDraggerMouseUp(event)
 	{
-		console.log("Picker mouse move ", event.point);
-	}
-
-	function onPickerMouseUp(event)
-	{
-		console.log("Picker mouse up ", event.point);
 	}	
 
-	function onPickerDrag(point)
+	function onDraggerDrag(point)
 	{
-		console.log("Picker drag ", point);
 		cube.transform.position.copy(point);
 		cylinder.transform.rotation.z += Math.PI / 10;
 	}	
