@@ -10,6 +10,7 @@ Vizi.Transform = function(param)
 	
     Vizi.Component.call(this);
     
+    // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         position: {
 	        get: function() {

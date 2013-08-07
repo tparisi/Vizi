@@ -21,6 +21,7 @@ goog.require('Vizi.PickManager');
 goog.require('Vizi.PlaneDragger');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.Transform');
+goog.require('Vizi.System');
 goog.require('Vizi.Time');
 goog.require('Vizi.Timer');
 goog.require('Vizi.Visual');

@@ -147,33 +147,13 @@ Vizi.Object.prototype.addComponent = function(component) {
     	if (this[proto._componentProperty])
     	{
     		var t = proto._componentPropertyType;
-            throw new Error('Object already has a ' + t + ' component')
+            Vizi.System.warn('Object already has a ' + t + ' component');
+            return;
     	}
     	
     	this[proto._componentProperty] = component;
     }
 
-    /*
-    if (component instanceof Vizi.Transform)
-    {
-    	if (this.transform != null && component != this.transform)
-    	{
-            throw new Error('Object already has a Transform component')
-    	}
-    	
-    	this.transform = component;
-    }
-    else if (component instanceof Vizi.Visual)
-    {
-    	if (this.visual != null && component != this.visual)
-    	{
-            throw new Error('Object already has a Visual component')
-    	}
-    	
-    	this.visual = component;
-    }
-    */
-    
     this._components.push(component);
     component.setObject(this);
     
