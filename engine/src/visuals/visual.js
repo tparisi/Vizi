@@ -20,6 +20,9 @@ Vizi.Visual = function(param)
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);
 
+Vizi.Visual.prototype._componentProperty = "visual";
+Vizi.Visual.prototype._componentPropertyType = "Visual";
+
 Vizi.Visual.prototype.realize = function()
 {
 	Vizi.SceneComponent.prototype.realize.call(this);

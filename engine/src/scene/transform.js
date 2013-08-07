@@ -10,19 +10,49 @@ Vizi.Transform = function(param)
 	
     Vizi.Component.call(this);
     
-    this.position = new THREE.Vector3();
-    this.rotation = new THREE.Vector3();
-    this.scale = new THREE.Vector3(1, 1, 1);
-    this.orientation = new THREE.Quaternion;
-    this.useQuaternion = false;
+    Object.defineProperties(this, {
+        position: {
+	        get: function() {
+	            return this.object.position;
+	        }
+    	},
+        rotation: {
+	        get: function() {
+	            return this.object.rotation;
+	        }
+    	},
+        scale: {
+	        get: function() {
+	            return this.object.scale;
+	        }
+    	},
+        quaternion: {
+	        get: function() {
+	            return this.object.quaternion;
+	        }
+    	},    	
+        useQuaternion: {
+	        get: function() {
+	            return this.object.useQuaternion;
+	        },
+	        set: function(v) {
+	            this.object.useQuaternion = v;
+	        }
+    	},    	
+
+    });
+    
+	this.object = new THREE.Object3D();
     this.layer = param.layer;
 } ;
 
 goog.inherits(Vizi.Transform, Vizi.Component);
 
+Vizi.Transform.prototype._componentProperty = "transform";
+Vizi.Transform.prototype._componentPropertyType = "Transform";
+
 Vizi.Transform.prototype.realize = function()
 {
-	this.object = new THREE.Object3D();
 	this.addToScene();
 
 	Vizi.Component.prototype.realize.call(this);
@@ -30,20 +60,6 @@ Vizi.Transform.prototype.realize = function()
 
 Vizi.Transform.prototype.update = function()
 {
-    this.object.position.x = this.position.x;
-    this.object.position.y = this.position.y;
-    this.object.position.z = this.position.z;
-    this.object.rotation.x = this.rotation.x;
-    this.object.rotation.y = this.rotation.y;
-    this.object.rotation.z = this.rotation.z;
-    this.object.scale.x = this.scale.x;
-    this.object.scale.y = this.scale.y;
-    this.object.scale.z = this.scale.z;
-    if (this.useQuaternion)
-    {
-    	this.object.quaternion.copy(this.orientation);
-    	this.object.useQuaternion = true;
-    }
 }
 
 Vizi.Transform.prototype.addToScene = function() {

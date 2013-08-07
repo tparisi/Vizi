@@ -137,14 +137,14 @@
 	function onPickerMouseOver(event)
 	{
 		console.log("Picker mouse over", this, event);
-		savedColor = cube.material.color.getHex();
-		cube.material.color.setHex(0xaaaa00);
+		savedColor = cube.visual.material.color.getHex();
+		cube.visual.material.color.setHex(0xaaaa00);
 	}
 		
 	function onPickerMouseOut(event)
 	{
 		console.log("Picker mouse out", this, event);
-		cube.material.color.setHex(savedColor);
+		cube.visual.material.color.setHex(savedColor);
 	}
 
 	function onPickerMouseDown(event)
@@ -167,6 +167,7 @@
 	{
 		console.log("Picker drag ", point);
 		cube.transform.position.copy(point);
+		cylinder.transform.rotation.z += Math.PI / 10;
 	}	
 	</script>
 	

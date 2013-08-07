@@ -141,6 +141,19 @@ Vizi.Object.prototype.addComponent = function(component) {
         throw new Error('Component is already attached to an Object')
     }
 
+    var proto = Object.getPrototypeOf(component);
+    if (proto._componentProperty)
+    {
+    	if (this[proto._componentProperty])
+    	{
+    		var t = proto._componentPropertyType;
+            throw new Error('Object already has a ' + t + ' component')
+    	}
+    	
+    	this[proto._componentProperty] = component;
+    }
+
+    /*
     if (component instanceof Vizi.Transform)
     {
     	if (this.transform != null && component != this.transform)
@@ -150,6 +163,16 @@ Vizi.Object.prototype.addComponent = function(component) {
     	
     	this.transform = component;
     }
+    else if (component instanceof Vizi.Visual)
+    {
+    	if (this.visual != null && component != this.visual)
+    	{
+            throw new Error('Object already has a Visual component')
+    	}
+    	
+    	this.visual = component;
+    }
+    */
     
     this._components.push(component);
     component.setObject(this);
