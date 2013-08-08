@@ -59,9 +59,6 @@
 		cylinderTransform = cylinder.getComponent(Vizi.Transform);
 		root.addChild(cylinder);
 
-		var backdrop = createBackdrop();
-		root.addChild(backdrop);
-
 		var obj = new Vizi.Object;
 		obj.addComponent(new Vizi.Transform);
 		obj.addComponent(new Vizi.AmbientLight);
@@ -72,12 +69,17 @@
 		dirlight.addComponent(new Vizi.Transform);
 		dirlight.addComponent(new Vizi.PointLight);
 		dirlight.transform.position.z = 20;
-		dirlight.light.color.setHex(0x00ff00);
+		// dirlight.light.color.setHex(0x00ff00);
 		// dirlight.light.angle = Math.PI / 10;
 		root.addChild(dirlight);
 		
 		app.addObject(root);
+
+		var backdrop = createBackdrop();
+		app.addObject(backdrop);
+
 		root.realize();
+		backdrop.realize();
 
 		app.run();
 	}
