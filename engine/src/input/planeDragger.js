@@ -53,8 +53,10 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	
 	if (intersection)
 	{
-		this.dragOffset.copy(intersection.point).sub( this.dragPlane.position );
-		this.dragStartPoint.copy(event.point);
+		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
+		var origin = new THREE.Vector3;
+		origin.applyMatrix4(event.object.object.matrixWorld);
+		this.dragStartPoint.copy(origin);
 	}
 }
 

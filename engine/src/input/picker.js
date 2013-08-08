@@ -71,6 +71,7 @@ Vizi.Picker.prototype.onMouseUp = function(event)
 	{
 		event.point = this.lastHitPoint;
 		event.normal = this.lastHitNormal;
+		this.dispatchEvent("mouseout", event);
 	}
 
 	this.dispatchEvent("mouseup", event);

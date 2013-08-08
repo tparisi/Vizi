@@ -83,6 +83,7 @@ Vizi.PickManager.objectFromMouse = function(event)
 	{
 		event.normal = intersected.normal;
 		event.point = intersected.point;
+		event.object = intersected.object;
 		
     	if (intersected.object.picker)
     	{
