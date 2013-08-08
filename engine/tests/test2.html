@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi Test Load Scene</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+	<script>
+	var CLOSURE_NO_DEPS = true;
+	</script>
+    <script src="../libs/JQuery/jquery-1.6.4.js"></script>
+    <script src="../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js"></script>
+	<script src="../libs/three.js.r58/three.js"></script>
+	<script src="../libs/three.js.r58/stats.min.js"></script>
+	<script src="../libs/three.js.r58/ColladaLoader.js"></script>
+	<script src="../libs/requestAnimationFrame/RequestAnimationFrame.js"></script>
+	<script src="../build-debug/vizi.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application();
+		app.initialize( { container : container, displayStats:true } );
+
+		var root = new Vizi.Object;
+		var transform = new Vizi.Transform;
+		var timer = new Vizi.Timer({duration: 10000, loop:true});
+		
+		timer.addEventListener("fraction", function(f) { onTimeFractionChanged(f, root); });
+		timer.start();
+		
+		root.addComponent(transform);
+		root.addComponent(timer);
+
+		//root.addComponent(new Vizi.Visual({geometry: new THREE.CubeGeometry(2, 2, 2),
+		//								   material: new THREE.MeshBasicMaterial}));
+		 
+		var loader = new Vizi.Loader;
+		loader.addEventListener("loaded", function(data) { onSceneLoaded(data, root); });
+		loader.loadScene("./models/monster.dae");
+		  
+		var dirlight = new Vizi.Object;
+		dirlight.addComponent(new Vizi.Transform);
+		dirlight.addComponent(new Vizi.DirectionalLight);
+		root.addChild(dirlight);
+		
+		app.addObject(root);
+
+		app.run();
+	}
+	);
+
+	function onSceneLoaded(data, root) {
+		root.addComponent(data.scene);
+		root.transform.scale.set(.1, .1, .1);
+	}
+
+	function onTimeFractionChanged(f, root) {
+		root.transform.rotation.y = f * Math.PI * 2;
+	}
+	
+	</script>
+	
+</body>
+</html>

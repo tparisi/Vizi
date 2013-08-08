@@ -50,6 +50,7 @@
 		var transform = new Vizi.Transform;
 		
 		var dragger = new Vizi.PlaneDragger;
+		dragger.overCursor = 'pointer';
 		dragger.addEventListener("mouseover", onDraggerMouseOver);
 		dragger.addEventListener("mouseout", onDraggerMouseOut);
 		dragger.addEventListener("mousedown", onDraggerMouseDown);

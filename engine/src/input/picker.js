@@ -8,7 +8,10 @@ goog.provide('Vizi.Picker');
 goog.require('Vizi.Component');
 
 Vizi.Picker = function(param) {
+	param = param || {};
+	
     Vizi.Component.call(this, param);
+    this.overCursor = param.overCursor;
 }
 
 goog.inherits(Vizi.Picker, Vizi.Component);
@@ -16,8 +19,6 @@ goog.inherits(Vizi.Picker, Vizi.Component);
 Vizi.Picker.prototype.realize = function()
 {
 	Vizi.Component.prototype.realize.call(this);
-	
-	this.overCursor = this.param.overCursor;
 	
 	if (this._object)
 	{

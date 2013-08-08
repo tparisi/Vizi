@@ -27,12 +27,14 @@ goog.require('Vizi.AmbientLight');
 goog.require('Vizi.DirectionalLight');
 goog.require('Vizi.PointLight');
 goog.require('Vizi.SpotLight');
+goog.require('Vizi.Loader');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.Transform');
 goog.require('Vizi.System');
 goog.require('Vizi.Time');
 goog.require('Vizi.Timer');
 goog.require('Vizi.Visual');
+goog.require('Vizi.SceneVisual');
 
 /**
  * @constructor
