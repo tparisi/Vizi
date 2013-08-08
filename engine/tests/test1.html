@@ -25,6 +25,7 @@
 	var cube = null;
 	var cylinder = null;
 	var dirlight = null;
+	var camera1 = null, camera2 = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
@@ -32,12 +33,18 @@
 		var app = new Vizi.Application();
 		app.initialize( { container : container, displayStats:true } );
 
-		var camobj = new Vizi.Object;
-		camobj.addComponent(new Vizi.Transform);
-		var camera = new Vizi.PerspectiveCamera({active:true});
-		camobj.addComponent(camera);
-		camera.position.z = 20;
-		app.addObject(camobj);
+		var camobj1 = new Vizi.Object;
+		camobj1.addComponent(new Vizi.Transform);
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		camera1.position.z = 20;
+		app.addObject(camobj1);
+
+		var camobj2 = new Vizi.Object;
+		camobj2.addComponent(new Vizi.Transform);
+		camera2 = new Vizi.PerspectiveCamera({active:false});
+		camobj2.addComponent(camera2);
+		app.addObject(camobj2);
 		
 		var root = new Vizi.Object;
 		var transform = new Vizi.Transform;
@@ -187,6 +194,14 @@
 	
 	function onDraggerMouseUp(event)
 	{
+		if (camera1.active) {
+			camera1.setActive(false);
+			camera2.setActive(true);
+		}
+		else {
+			camera1.setActive(true);
+			camera2.setActive(false);
+		}
 	}	
 
 	function onDraggerDrag(event)
