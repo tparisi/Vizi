@@ -58,7 +58,7 @@
 
 		cylinder = createCylinder();
 		cylinderTransform = cylinder.getComponent(Vizi.Transform);
-		root.addChild(cylinder);
+		cube.addChild(cylinder);
 
 		var obj = new Vizi.Object;
 		obj.addComponent(new Vizi.Transform);
@@ -163,17 +163,14 @@
 		cube.visual.material.color.setHex(savedColor);
 	}
 
-	var offset = null;
 	function onDraggerMouseDown(event)
 	{
 		cylinder.transform.position.copy(event.point);
-		offset = event.point.clone();
 	}
 
 	function onDraggerMouseMove(event)
 	{
 		offset = event.point.clone();
-		cylinder.transform.position.copy(event.point);		
 	}
 	
 	function onDraggerMouseUp(event)
@@ -182,9 +179,7 @@
 
 	function onDraggerDrag(point)
 	{
-		cube.transform.position.copy(point);
-		var cylinderpos = point.clone().add(offset);
-// 		cylinder.transform.position.copy(cylinderpos);
+		// cube.transform.position.copy(point);
 	}	
 	</script>
 	

@@ -206,6 +206,9 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 {
 	if (object.data)
 	{
+		var modelMat = new THREE.Matrix4;
+		modelMat.getInverse(object.matrixWorld);
+		point.applyMatrix4(modelMat);
 		return { object: object.data, point: point, normal: normal };
 	}
 	else if (object.parent)
@@ -279,7 +282,18 @@ Vizi.GraphicsThreeJS.prototype.getObjectIntersection = function(x, y, object)
 	
     var raycaster = new THREE.Raycaster( pos, vector.sub( pos ).normalize() );
 
-	return raycaster.intersectObject( object, true );
+	var intersects = raycaster.intersectObject( object, true );
+	if (intersects.length)
+	{
+		var intersection = intersects[0];
+		var modelMat = new THREE.Matrix4;
+		modelMat.getInverse(intersection.object.matrixWorld);
+		intersection.point.applyMatrix4(modelMat);
+		return intersection;
+	}
+	else
+		return null;
+		
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
