@@ -7,7 +7,24 @@ Vizi.Camera = function(param)
 	
 	Vizi.SceneComponent.call(this, param);
 
-	this.active = param.active || false;
+    // Accessors
+    Object.defineProperties(this, {
+        active: {
+	        get: function() {
+	            return this._active;
+	        },
+	        set: function(v) {
+	        	this._active = v;
+	        	if (this._realized && this._active)
+	        	{
+	        		Vizi.CameraManager.setActiveCamera(this);
+	        	}
+	        }
+    	},    	
+
+    });
+	
+	this._active = param.active || false;
 	var position = param.position || Vizi.Camera.DEFAULT_POSITION;
     this.position.copy(position);	
 }
@@ -20,18 +37,9 @@ Vizi.Camera.prototype.realize = function()
 	
 	this.addToScene();
 	
-	if (this.active)
+	if (this._active)
 	{
-		Vizi.Graphics.instance.camera = this.object;
-	}
-}
-
-Vizi.Camera.prototype.setActive = function(active) 
-{
-	this.active = active;
-	if (this._realized && this.active)
-	{
-		Vizi.Graphics.instance.camera = this.object;
+		Vizi.CameraManager.setActiveCamera(this);
 	}
 }
 

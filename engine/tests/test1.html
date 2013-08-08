@@ -195,12 +195,10 @@
 	function onDraggerMouseUp(event)
 	{
 		if (camera1.active) {
-			camera1.setActive(false);
-			camera2.setActive(true);
+			camera2.active = true;
 		}
 		else {
-			camera1.setActive(true);
-			camera2.setActive(false);
+			camera1.active = true;
 		}
 	}	
 
