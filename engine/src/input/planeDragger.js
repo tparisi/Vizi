@@ -21,6 +21,7 @@ Vizi.PlaneDragger.prototype.realize = function()
     this.projector = new THREE.Projector();
 	
     // And some helpers
+    this.dragObject = null;
 	this.dragOffset = new THREE.Vector3;
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
@@ -41,7 +42,12 @@ Vizi.PlaneDragger.prototype.onMouseMove = function(event)
 	{
 		this.dragHitPoint.copy(intersection.point).sub(this.dragOffset);
 		this.dragHitPoint.add(this.dragStartPoint);
-		this.dispatchEvent("drag", this.dragHitPoint);
+		this.dispatchEvent("drag", {
+									type : "drag", 
+									object : this.dragObject, 
+									point : this.dragHitPoint
+									}
+		);
 	}
 }
 
@@ -54,9 +60,9 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	if (intersection)
 	{
 		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
-		var origin = new THREE.Vector3;
-		origin.applyMatrix4(event.object.object.matrixWorld);
-		this.dragStartPoint.copy(origin);
+		this.dragStartPoint.set(0, 0, 0);
+		this.dragStartPoint.applyMatrix4(event.object.object.matrixWorld);
+		this.dragObject = event.object;
 	}
 }
 

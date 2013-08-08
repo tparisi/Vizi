@@ -54,7 +54,7 @@
 
 		var group = new Vizi.Object;
 		transform = new Vizi.Transform;
-		transform.rotation.y = Math.PI / 4;
+		// transform.rotation.y = Math.PI / 4;
 		group.addComponent(transform);
 		group.addComponent(dragger);
 
@@ -173,7 +173,7 @@
 
 	function onDraggerMouseDown(event)
 	{
-		cylinder.transform.position.copy(event.point);
+//		cylinder.transform.position.copy(event.point);
 	}
 
 	function onDraggerMouseMove(event)
@@ -185,9 +185,9 @@
 	{
 	}	
 
-	function onDraggerDrag(point)
+	function onDraggerDrag(event)
 	{
-		cube.transform.position.copy(point);
+		cube.transform.position.copy(event.point);
 	}	
 	</script>
 	
