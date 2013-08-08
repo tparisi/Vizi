@@ -14,11 +14,39 @@ Vizi.SceneComponent = function(param)
 
 	Vizi.Component.call(this, param);
     
-    this.object = null;
-    this.position = this.param.position || new THREE.Vector3();
-    this.rotation = this.param.rotation || new THREE.Vector3();
-    this.scale = this.param.scale || new THREE.Vector3(1, 1, 1);
-    this.autoUpdateTransform = true;
+    // Create accessors for all properties... just pass-throughs to Three.js
+    Object.defineProperties(this, {
+        position: {
+	        get: function() {
+	            return this.object.position;
+	        }
+    	},
+        rotation: {
+	        get: function() {
+	            return this.object.rotation;
+	        }
+    	},
+        scale: {
+	        get: function() {
+	            return this.object.scale;
+	        }
+    	},
+        quaternion: {
+	        get: function() {
+	            return this.object.quaternion;
+	        }
+    	},    	
+        useQuaternion: {
+	        get: function() {
+	            return this.object.useQuaternion;
+	        },
+	        set: function(v) {
+	            this.object.useQuaternion = v;
+	        }
+    	},    	
+
+    });
+    
     this.layer = param.layer;
 } ;
 
@@ -37,23 +65,6 @@ Vizi.SceneComponent.prototype.realize = function()
 Vizi.SceneComponent.prototype.update = function()
 {	
 	Vizi.Component.prototype.update.call(this);
-	
-	if (this.object && this.autoUpdateTransform)
-	{
-		this.object.position.x = this.position.x;
-		this.object.position.y = this.position.y;
-		this.object.position.z = this.position.z;
-		this.object.rotation.x = this.rotation.x;
-		this.object.rotation.y = this.rotation.y;
-		this.object.rotation.z = this.rotation.z;
-		this.object.scale.x = this.scale.x;
-		this.object.scale.y = this.scale.y;
-		this.object.scale.z = this.scale.z;
-	}
-	else
-	{
-		var debug = 1;
-	}
 }
 
 Vizi.SceneComponent.prototype.addToScene = function() {

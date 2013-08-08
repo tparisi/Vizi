@@ -2,66 +2,20 @@
  *
  */
 goog.provide('Vizi.Transform');
-goog.require('Vizi.Component');
+goog.require('Vizi.SceneComponent');
 
 Vizi.Transform = function(param)
 {
 	param = param || {};
-	
-    Vizi.Component.call(this);
-    
-    // Create accessors for all properties... just pass-throughs to Three.js
-    Object.defineProperties(this, {
-        position: {
-	        get: function() {
-	            return this.object.position;
-	        }
-    	},
-        rotation: {
-	        get: function() {
-	            return this.object.rotation;
-	        }
-    	},
-        scale: {
-	        get: function() {
-	            return this.object.scale;
-	        }
-    	},
-        quaternion: {
-	        get: function() {
-	            return this.object.quaternion;
-	        }
-    	},    	
-        useQuaternion: {
-	        get: function() {
-	            return this.object.useQuaternion;
-	        },
-	        set: function(v) {
-	            this.object.useQuaternion = v;
-	        }
-    	},    	
+    Vizi.SceneComponent.call(this, param);
 
-    });
-    
-	this.object = new THREE.Object3D();
-    this.layer = param.layer;
+    this.object = new THREE.Object3D();
 } ;
 
-goog.inherits(Vizi.Transform, Vizi.Component);
+goog.inherits(Vizi.Transform, Vizi.SceneComponent);
 
 Vizi.Transform.prototype._componentProperty = "transform";
 Vizi.Transform.prototype._componentPropertyType = "Transform";
-
-Vizi.Transform.prototype.realize = function()
-{
-	this.addToScene();
-
-	Vizi.Component.prototype.realize.call(this);
-}
-
-Vizi.Transform.prototype.update = function()
-{
-}
 
 Vizi.Transform.prototype.addToScene = function() {
 	var scene = this.layer ? this.layer.scene : Vizi.Graphics.instance.scene;

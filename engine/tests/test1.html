@@ -24,6 +24,7 @@
 	var fractionDisplay = document.getElementById("fractionDisplay");
 	var cube = null;
 	var cylinder = null;
+	var dirlight = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
@@ -57,6 +58,23 @@
 		cylinder = createCylinder();
 		cylinderTransform = cylinder.getComponent(Vizi.Transform);
 		root.addChild(cylinder);
+
+		var backdrop = createBackdrop();
+		root.addChild(backdrop);
+
+		var obj = new Vizi.Object;
+		obj.addComponent(new Vizi.Transform);
+		obj.addComponent(new Vizi.AmbientLight);
+		obj.light.color.setHex(0x444444);
+		root.addChild(obj);
+
+		dirlight = new Vizi.Object;
+		dirlight.addComponent(new Vizi.Transform);
+		dirlight.addComponent(new Vizi.PointLight);
+		dirlight.transform.position.z = 20;
+		dirlight.light.color.setHex(0x00ff00);
+		// dirlight.light.angle = Math.PI / 10;
+		root.addChild(dirlight);
 		
 		app.addObject(root);
 		root.realize();
@@ -70,9 +88,12 @@
 
 		var transform = new Vizi.Transform;
 
+		transform.rotation.x = Math.PI / 6;
+		transform.rotation.y = Math.PI / 4;
+		
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
-					material: new THREE.MeshBasicMaterial({color:0x808080})
+					material: new THREE.MeshPhongMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/board.png")})
 				});
 
 		
@@ -82,6 +103,23 @@
 		return o;
 	}
 
+	function createBackdrop() {	
+		var o = new Vizi.Object;
+
+		var transform = new Vizi.Transform;
+		transform.position.z = -5;
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.PlaneGeometry(2000, 2000, 8, 8),
+					material: new THREE.MeshPhongMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/lavatile.jpg")})
+				});
+
+		
+		o.addComponent(transform);
+		o.addComponent(visual);
+
+		return o;
+	}
+	
 
 	function createCylinder() {	
 		var o = new Vizi.Object;
@@ -91,7 +129,7 @@
 		
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CylinderGeometry(.1, .1, .3, 100, 100, false),
-					material: new THREE.MeshBasicMaterial()
+					material: new THREE.MeshPhongMaterial({color:0, ambient:0x00ff00})
 				});
 
 		
@@ -101,18 +139,20 @@
 	}
 		
 	function onTimeChanged(t) { 
-		timeDisplay.innerHTML = t;
+		//timeDisplay.innerHTML = t;
+		//cube.transform.rotation.y += 0.01;
+		//dirlight.transform.rotation.y += 0.01;
 	}
 
 	function onTimeFractionChanged(f) {
-		fractionDisplay.innerHTML = f.toFixed(2);
+		//fractionDisplay.innerHTML = f.toFixed(2);
 	}
 
 	var savedColor = 0;
 	function onDraggerMouseOver(event)
 	{
 		savedColor = cube.visual.material.color.getHex();
-		cube.visual.material.color.setHex(0xaaaa00);
+		cube.visual.material.color.setHex(0x00ff00);
 	}
 		
 	function onDraggerMouseOut(event)
