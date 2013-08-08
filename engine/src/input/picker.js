@@ -39,13 +39,11 @@ Vizi.Picker.prototype.update = function()
 Vizi.Picker.prototype.onMouseOver = function(event)
 {
     this.dispatchEvent("mouseover", event);
-    this.dispatchEvent("over", true);
 }
 
 Vizi.Picker.prototype.onMouseOut = function(event)
 {
     this.dispatchEvent("mouseout", event);
-    this.dispatchEvent("over", false);
 }
 	        	        
 Vizi.Picker.prototype.onMouseMove = function(event)
@@ -56,8 +54,6 @@ Vizi.Picker.prototype.onMouseMove = function(event)
 		this.lastHitPoint.copy(event.point);
 		this.lastHitNormal.copy(event.normal);
 		this.dispatchEvent("mousemove", event);
-	    this.dispatchEvent("hitPoint", event.point);
-	    this.dispatchEvent("hitNormal", event.normal);
 	}
 }
 
@@ -66,8 +62,6 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 	this.lastHitPoint.copy(event.point);
 	this.lastHitNormal.copy(event.normal);
     this.dispatchEvent("mousedown", event);
-    this.dispatchEvent("hitPoint", event.point);
-    this.dispatchEvent("hitNormal", event.normal);
 }
 
 Vizi.Picker.prototype.onMouseUp = function(event)
@@ -80,8 +74,6 @@ Vizi.Picker.prototype.onMouseUp = function(event)
 	}
 
 	this.dispatchEvent("mouseup", event);
-    this.dispatchEvent("hitPoint", event.point);
-    this.dispatchEvent("hitNormal", event.normal);
 }
 	        
 Vizi.Picker.prototype.onMouseScroll = function(event)
