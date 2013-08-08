@@ -21,7 +21,6 @@ Vizi.CameraManager.removeCamera = function(camera)
     }
 }
 
-
 Vizi.CameraManager.setActiveCamera = function(camera)
 {
 	if (Vizi.CameraManager.activeCamera)
@@ -30,6 +29,25 @@ Vizi.CameraManager.setActiveCamera = function(camera)
 	Vizi.CameraManager.activeCamera = camera;
 	Vizi.Graphics.instance.camera = camera.object;
 }
+
+
+Vizi.CameraManager.handleWindowResize = function(width, height)
+{
+	var cameras = Vizi.CameraManager.cameraList;
+	
+	if (cameras.length == 0)
+		return false;
+
+	var i, len = cameras.length;
+	for (i = 0; i < len; i++)
+	{
+		var camera = cameras[i];
+		camera.aspect = width / height;
+	}
+
+	return true;
+}
+
 
 Vizi.CameraManager.cameraList = [];
 Vizi.CameraManager.activeCamera = null;

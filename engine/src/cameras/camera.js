@@ -37,6 +37,8 @@ Vizi.Camera.prototype.realize = function()
 	
 	this.addToScene();
 	
+	Vizi.CameraManager.addCamera(this);
+	
 	if (this._active)
 	{
 		Vizi.CameraManager.setActiveCamera(this);

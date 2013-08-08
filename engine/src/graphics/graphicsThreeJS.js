@@ -413,8 +413,14 @@ Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 {
 	this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
 
-	this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
-	this.camera.updateProjectionMatrix();
+	if (Vizi.CameraManager && Vizi.CameraManager.handleWindowResize(this.container.offsetWidth, this.container.offsetHeight))
+	{		
+	}
+	else
+	{
+		this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
+		this.camera.updateProjectionMatrix();
+	}
 }
 
 Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
