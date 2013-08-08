@@ -10,6 +10,8 @@ goog.require('Vizi.Object');
 goog.require('Vizi.Application');
 goog.require('Vizi.Service');
 goog.require('Vizi.Services');
+goog.require('Vizi.Camera');
+goog.require('Vizi.PerspectiveCamera');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');
 goog.require('Vizi.Graphics');

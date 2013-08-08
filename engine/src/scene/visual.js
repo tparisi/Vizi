@@ -33,3 +33,4 @@ Vizi.Visual.prototype.realize = function()
 	    this.addToScene();
 	}	
 }
+

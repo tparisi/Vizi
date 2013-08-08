@@ -75,8 +75,8 @@ Vizi.Application.prototype.focus = function()
 
 Vizi.Application.prototype.run = function()
 {
-    // core game loop here	        	
-	// this.graphics.run();
+    // core game loop here
+	this.realizeObjects();
 	this.lastFrameTime = Date.now();
 	this.runloop();
 }
@@ -128,6 +128,17 @@ Vizi.Application.prototype.removeObject = function(e) {
     	// N.B.: I suppose we could be paranoid and check to see if I actually own this component
         this._objects.splice(i, 1);
     }
+}
+
+Vizi.Application.prototype.realizeObjects = function()
+{
+	var i, len = this._objects.length;
+	
+	for (i = 0; i < len; i++)
+	{
+		this._objects[i].realize();
+	}
+	
 }
 	
 Vizi.Application.prototype.onMouseMove = function(event)

@@ -75,7 +75,7 @@ Vizi.GraphicsThreeJS.prototype.initScene = function()
 	
     var camera = new THREE.PerspectiveCamera( 45, 
     		this.container.offsetWidth / this.container.offsetHeight, 1, 4000 );
-    camera.position.set( 0, 0, 10 );
+    camera.position.copy(Vizi.Camera.DEFAULT_POSITION);
 
     scene.add(camera);
     

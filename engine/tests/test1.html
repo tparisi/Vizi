@@ -32,6 +32,13 @@
 		var app = new Vizi.Application();
 		app.initialize( { container : container, displayStats:true } );
 
+		var camobj = new Vizi.Object;
+		camobj.addComponent(new Vizi.Transform);
+		var camera = new Vizi.PerspectiveCamera({active:true});
+		camobj.addComponent(camera);
+		camera.position.z = 20;
+		app.addObject(camobj);
+		
 		var root = new Vizi.Object;
 		var transform = new Vizi.Transform;
 		
@@ -86,9 +93,6 @@
 
 		var backdrop = createBackdrop();
 		app.addObject(backdrop);
-
-		root.realize();
-		backdrop.realize();
 
 		app.run();
 	}
