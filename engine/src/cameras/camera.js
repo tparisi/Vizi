@@ -31,6 +31,9 @@ Vizi.Camera = function(param)
 
 goog.inherits(Vizi.Camera, Vizi.SceneComponent);
 
+Vizi.Camera.prototype._componentProperty = "camera";
+Vizi.Camera.prototype._componentPropertyType = "Camera";
+
 Vizi.Camera.prototype.realize = function() 
 {
 	Vizi.SceneComponent.prototype.realize.call(this);
