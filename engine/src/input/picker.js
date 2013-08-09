@@ -16,18 +16,12 @@ Vizi.Picker = function(param) {
 
 goog.inherits(Vizi.Picker, Vizi.Component);
 
+Vizi.Picker.prototype._componentProperty = "picker";
+Vizi.Picker.prototype._componentPropertyType = "Picker";
+
 Vizi.Picker.prototype.realize = function()
 {
 	Vizi.Component.prototype.realize.call(this);
-	
-	if (this._object)
-	{
-		var object = this._object.transform;
-		if (object)
-		{
-			object.picker = this;
-		}
-	}
 	
     this.lastHitPoint = new THREE.Vector3;
     this.lastHitNormal = new THREE.Vector3;

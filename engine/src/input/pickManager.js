@@ -85,9 +85,9 @@ Vizi.PickManager.objectFromMouse = function(event)
 		event.point = intersected.point;
 		event.object = intersected.object;
 		
-    	if (intersected.object.picker)
+    	if (intersected.object._object.picker)
     	{
-    		return intersected.object.picker;
+    		return intersected.object._object.picker;
     	}
     	else
     	{
@@ -104,9 +104,9 @@ Vizi.PickManager.findObjectPicker = function(object)
 {
 	while (object)
 	{
-		if (object.data && object.data.picker)
+		if (object.data && object.data._object.picker)
 		{
-			return object.data.picker;
+			return object.data._object.picker;
 		}
 		else
 		{
