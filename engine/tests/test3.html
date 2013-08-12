@@ -19,7 +19,7 @@
 	<script src="../build-debug/vizi.js"></script>
 	<script>
 
-	var rotator = null, bouncer = null;
+	var rotator = null, bouncer = null, mover = null;
 	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
@@ -42,14 +42,16 @@
 		picker.addEventListener("mouseout", onPickerMouseOut);
 		picker.addEventListener("mouseup", onPickerMouseUp);
 
-		rotator = new Vizi.RotateBehavior({once:false, velocity:Math.PI * 2});
-		bouncer = new Vizi.BounceBehavior({once:false, duration:1});
-		
+		rotator = new Vizi.RotateBehavior({once:true, velocity:Math.PI * 2});
+		bouncer = new Vizi.BounceBehavior({once:true, duration:1});
+		mover = new Vizi.MoveBehavior({duration:1, moveVector:new THREE.Vector3(2, 0, 0)});
+				
 		cube.addComponent(transform);
 		cube.addComponent(visual);
 		cube.addComponent(picker);
 		cube.addComponent(rotator);
 		cube.addComponent(bouncer);
+		cube.addComponent(mover);
 		app.addObject(cube);
 
 		app.run();
@@ -61,6 +63,7 @@
 		console.log("over");
 		rotator.start();
 		bouncer.start();
+		mover.start();
 	}
 		
 	function onPickerMouseOut(event)

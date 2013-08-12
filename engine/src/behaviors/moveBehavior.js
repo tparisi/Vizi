@@ -9,10 +9,9 @@ goog.require('Vizi.Behavior');
 
 Vizi.MoveBehavior = function(param) {
 	param = param || {};
-	this.bounceTime = (param.bounceTime !== undefined) ? param.bounceTime : 1;
-	this.bounceVector = (param.bounceVector !== undefined) ? param.bounceVector : new THREE.Vector3(0, 1, 0);
-	this.tweenUp = null;
-	this.tweenDown = null;
+	this.duration = (param.duration !== undefined) ? param.duration : 1;
+	this.moveVector = (param.moveVector !== undefined) ? param.moveVector : new THREE.Vector3(0, 1, 0);
+	this.tween = null;
     Vizi.Behavior.call(this, param);
 }
 
@@ -25,9 +24,9 @@ Vizi.MoveBehavior.prototype.start = function()
 	if (this.running)
 		return;
 	
-	this.bouncePosition = this._object.transform.position.clone();
-	this.bounceEndPosition = this.bouncePosition.clone().add(this.bounceVector);
-	this.tweenUp = new TWEEN.Tween(this.bouncePosition).to(this.bounceEndPosition, this.bounceTime / 2 * 1000)
+	this.movePosition = new THREE.Vector3;
+	this.moveEndPosition = this.movePosition.clone().add(this.moveVector);
+	this.tween = new TWEEN.Tween(this.movePosition).to(this.moveEndPosition, this.duration * 1000)
 	.easing(TWEEN.Easing.Quadratic.InOut)
 	.repeat(0)
 	.start();
@@ -37,33 +36,19 @@ Vizi.MoveBehavior.prototype.start = function()
 
 Vizi.MoveBehavior.prototype.evaluate = function(t)
 {
-	this._object.transform.position.copy(this.bouncePosition);
-	if (t >= (this.bounceTime / 2))
+	if (t >= this.duration)
 	{
-		if (this.tweenUp)
-		{
-			this.tweenUp.stop();
-			this.tweenUp = null;
-		}
-
-		if (!this.tweenDown)
-		{
-			this.bouncePosition = this._object.transform.position.clone();
-			this.bounceEndPosition = this.bouncePosition.clone().sub(this.bounceVector);
-			this.tweenDown = new TWEEN.Tween(this.bouncePosition).to(this.bounceEndPosition, this.bounceTime / 2 * 1000)
-			.easing(TWEEN.Easing.Quadratic.InOut)
-			.repeat(0)
-			.start();
-		}
+		this.stop();
 	}
 	
-	if (t >= this.bounceTime)
-	{
-		this.tweenDown.stop();
-		this.tweenDown = null;
-		this.stop();
-		
-		if (!this.once)
-			this.start();
-	}
+	this._object.transform.position.add(this.movePosition);
+}
+
+
+Vizi.MoveBehavior.prototype.stop = function()
+{
+	if (this.tween)
+		this.tween.stop();
+	
+	Vizi.Behavior.prototype.stop.call(this);
 }
