@@ -13,6 +13,7 @@ goog.require('Vizi.Services');
 goog.require('Vizi.TweenService');
 goog.require('Vizi.Behavior');
 goog.require('Vizi.BounceBehavior');
+goog.require('Vizi.HighlightBehavior');
 goog.require('Vizi.MoveBehavior');
 goog.require('Vizi.RotateBehavior');
 goog.require('Vizi.Camera');

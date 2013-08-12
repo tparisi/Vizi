@@ -40,6 +40,14 @@ Vizi.Behavior.prototype.stop = function()
 	this.running = false;
 }
 
+Vizi.Behavior.prototype.toggle = function()
+{
+	if (this.running)
+		this.stop();
+	else
+		this.start();
+}
+
 Vizi.Behavior.prototype.update = function()
 {
 	if (this.running)

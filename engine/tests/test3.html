@@ -31,21 +31,21 @@
 
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
-					material: new THREE.MeshBasicMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/board.png")})
+					material: new THREE.MeshBasicMaterial({color:0xeeeeee, map:THREE.ImageUtils.loadTexture("./images/board.png")})
 				});
 
 
 		var picker = new Vizi.Picker;
+		var highlight = new Vizi.HighlightBehavior({});
 		var rotator = new Vizi.RotateBehavior({loop:true, velocity:Math.PI * 2});
 		var bouncer = new Vizi.BounceBehavior({loop:true, duration:1});
 		var mover = new Vizi.MoveBehavior({loop:true, duration:1, moveVector:new THREE.Vector3(0, 0, -2)});
 
-		picker.connect("mouseover", rotator, "start");
-		picker.connect("mouseover", bouncer, "start");
-		picker.connect("mouseover", mover, "start");
-		picker.connect("mouseup", rotator, "stop");
-		picker.connect("mouseup", bouncer, "stop");
-		picker.connect("mouseup", mover, "stop");
+		picker.connect("mouseover", highlight, "start");
+		picker.connect("mouseout", highlight, "stop");
+		picker.connect("mouseup", rotator, "toggle");
+		picker.connect("mouseup", bouncer, "toggle");
+		picker.connect("mouseup", mover, "toggle");
 						
 		cube.addComponent(transform);
 		cube.addComponent(visual);
@@ -53,6 +53,7 @@
 		cube.addComponent(rotator);
 		cube.addComponent(bouncer);
 		cube.addComponent(mover);
+		cube.addComponent(highlight);
 		app.addObject(cube);
 
 		app.run();
