@@ -14,8 +14,7 @@ Vizi.Component = function(param) {
     Vizi.EventDispatcher.call(this);
 	
 	param = param || {};
-	this.param = param;
-    
+
     /**
      * @type {Vizi.Object}
      * @private

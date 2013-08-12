@@ -17,8 +17,6 @@ Vizi.RotateBehavior = function(param) {
 
 goog.inherits(Vizi.RotateBehavior, Vizi.Behavior);
 
-Vizi.RotateBehavior.prototype._componentCategory = "behaviors";
-
 Vizi.RotateBehavior.prototype.start = function()
 {
 	this.angle = 0;

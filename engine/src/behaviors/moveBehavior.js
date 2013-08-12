@@ -17,8 +17,6 @@ Vizi.MoveBehavior = function(param) {
 
 goog.inherits(Vizi.MoveBehavior, Vizi.Behavior);
 
-Vizi.MoveBehavior.prototype._componentCategory = "behaviors";
-
 Vizi.MoveBehavior.prototype.start = function()
 {
 	if (this.running)

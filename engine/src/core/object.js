@@ -154,6 +154,14 @@ Vizi.Object.prototype.addComponent = function(component) {
     	this[proto._componentProperty] = component;
     }
 
+    if (proto._componentCategory)
+    {
+    	if (!this[proto._componentCategory])
+    		this[proto._componentCategory] = [];
+    	
+    	this[proto._componentCategory].push(component);
+    }
+    
     this._components.push(component);
     component.setObject(this);
     

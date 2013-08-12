@@ -18,8 +18,6 @@ Vizi.BounceBehavior = function(param) {
 
 goog.inherits(Vizi.BounceBehavior, Vizi.Behavior);
 
-Vizi.BounceBehavior.prototype._componentCategory = "behaviors";
-
 Vizi.BounceBehavior.prototype.start = function()
 {
 	if (this.running)
