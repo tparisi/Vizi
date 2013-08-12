@@ -57,13 +57,20 @@ Vizi.GraphicsThreeJS.prototype.initPageElements = function(param)
     
     if (this.displayStats)
     {
-        var stats = new Stats();
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.top = '0px';
-        stats.domElement.style.left = '0px';
-        stats.domElement.style.height = '40px';
-        this.container.appendChild( stats.domElement );
-        this.stats = stats;
+    	if (window.Stats)
+    	{
+	        var stats = new Stats();
+	        stats.domElement.style.position = 'absolute';
+	        stats.domElement.style.top = '0px';
+	        stats.domElement.style.left = '0px';
+	        stats.domElement.style.height = '40px';
+	        this.container.appendChild( stats.domElement );
+	        this.stats = stats;
+    	}
+    	else
+    	{
+    		Vizi.System.warn("No Stats module found. Make sure to include stats.min.js");
+    	}
     }
 }
 
