@@ -467,4 +467,4 @@ Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
 	this.renderer.shadowMapCullFrontFaces = false;
 }
 
-Vizi.GraphicsThreeJS.default_display_stats = false,
+Vizi.GraphicsThreeJS.default_display_stats = false;

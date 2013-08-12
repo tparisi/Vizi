@@ -162,11 +162,12 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
 		}
 	}
 	
+	/*
 	if (data.skins && data.skins.length)
 	{
 		// result.meshAnimator = new Vizi.MeshAnimator({skins:data.skins});
 	}
-
+	*/
 	
 	if (success)
 		this.dispatchEvent("loaded", result);

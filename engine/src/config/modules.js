@@ -53,4 +53,5 @@ Vizi.Modules = function()
 {
 }
 
-        
+var CLOSURE_NO_DEPS = true;
+
