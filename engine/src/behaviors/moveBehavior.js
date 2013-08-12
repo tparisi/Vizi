@@ -23,9 +23,11 @@ Vizi.MoveBehavior.prototype.start = function()
 {
 	if (this.running)
 		return;
-	
+
 	this.movePosition = new THREE.Vector3;
-	this.moveEndPosition = this.movePosition.clone().add(this.moveVector);
+	this.moveEndPosition = this.moveVector.clone();
+	this.prevMovePosition = new THREE.Vector3;
+	this.moveDelta = new THREE.Vector3;
 	this.tween = new TWEEN.Tween(this.movePosition).to(this.moveEndPosition, this.duration * 1000)
 	.easing(TWEEN.Easing.Quadratic.InOut)
 	.repeat(0)
@@ -39,9 +41,13 @@ Vizi.MoveBehavior.prototype.evaluate = function(t)
 	if (t >= this.duration)
 	{
 		this.stop();
+		if (this.loop)
+			this.start();
 	}
 	
-	this._object.transform.position.add(this.movePosition);
+	this.moveDelta.copy(this.movePosition).sub(this.prevMovePosition);
+	this.prevMovePosition.copy(this.movePosition);
+	this._object.transform.position.add(this.moveDelta);
 }
 
 

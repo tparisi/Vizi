@@ -11,7 +11,7 @@ Vizi.Behavior = function(param) {
 	param = param || {};
 	this.startTime = 0;
 	this.running = false;
-	this.once = (param.once !== undefined) ? param.once : false;
+	this.loop = (param.loop !== undefined) ? param.loop : false;
 	this.autoStart = (param.autoStart !== undefined) ? param.autoStart : false;
     Vizi.Component.call(this, param);
 }

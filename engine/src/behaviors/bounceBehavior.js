@@ -25,8 +25,10 @@ Vizi.BounceBehavior.prototype.start = function()
 	if (this.running)
 		return;
 	
-	this.bouncePosition = this._object.transform.position.clone();
-	this.bounceEndPosition = this.bouncePosition.clone().add(this.bounceVector);
+	this.bouncePosition = new THREE.Vector3;
+	this.bounceEndPosition = this.bounceVector.clone();
+	this.prevBouncePosition = new THREE.Vector3;
+	this.bounceDelta = new THREE.Vector3;
 	this.tweenUp = new TWEEN.Tween(this.bouncePosition).to(this.bounceEndPosition, this.duration / 2 * 1000)
 	.easing(TWEEN.Easing.Quadratic.InOut)
 	.repeat(0)
@@ -37,7 +39,11 @@ Vizi.BounceBehavior.prototype.start = function()
 
 Vizi.BounceBehavior.prototype.evaluate = function(t)
 {
-	this._object.transform.position.copy(this.bouncePosition);
+	this.bounceDelta.copy(this.bouncePosition).sub(this.prevBouncePosition);
+	this.prevBouncePosition.copy(this.bouncePosition);
+	
+	this._object.transform.position.add(this.bounceDelta);
+	
 	if (t >= (this.duration / 2))
 	{
 		if (this.tweenUp)
@@ -50,6 +56,8 @@ Vizi.BounceBehavior.prototype.evaluate = function(t)
 		{
 			this.bouncePosition = this._object.transform.position.clone();
 			this.bounceEndPosition = this.bouncePosition.clone().sub(this.bounceVector);
+			this.prevBouncePosition = this.bouncePosition.clone();
+			this.bounceDelta = new THREE.Vector3;
 			this.tweenDown = new TWEEN.Tween(this.bouncePosition).to(this.bounceEndPosition, this.duration / 2 * 1000)
 			.easing(TWEEN.Easing.Quadratic.InOut)
 			.repeat(0)
@@ -63,7 +71,7 @@ Vizi.BounceBehavior.prototype.evaluate = function(t)
 		this.tweenDown = null;
 		this.stop();
 		
-		if (!this.once)
+		if (this.loop)
 			this.start();
 	}
 }

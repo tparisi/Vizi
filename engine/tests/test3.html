@@ -42,9 +42,9 @@
 		picker.addEventListener("mouseout", onPickerMouseOut);
 		picker.addEventListener("mouseup", onPickerMouseUp);
 
-		rotator = new Vizi.RotateBehavior({once:true, velocity:Math.PI * 2});
-		bouncer = new Vizi.BounceBehavior({once:true, duration:1});
-		mover = new Vizi.MoveBehavior({duration:1, moveVector:new THREE.Vector3(2, 0, 0)});
+		rotator = new Vizi.RotateBehavior({loop:true, velocity:Math.PI * 2});
+		bouncer = new Vizi.BounceBehavior({loop:true, duration:1});
+		mover = new Vizi.MoveBehavior({loop:true, duration:1, moveVector:new THREE.Vector3(0, 0, -2)});
 				
 		cube.addComponent(transform);
 		cube.addComponent(visual);
@@ -76,7 +76,8 @@
 	{
 		console.log("clicked");
 		rotator.stop();
-		bouncer.stop();		
+		bouncer.stop();
+		mover.stop();		
 	}
 
 	</script>
