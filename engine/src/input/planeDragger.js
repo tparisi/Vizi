@@ -45,7 +45,7 @@ Vizi.PlaneDragger.prototype.onMouseMove = function(event)
 		this.dispatchEvent("drag", {
 									type : "drag", 
 									object : this.dragObject, 
-									point : this.dragHitPoint
+									offset : this.dragHitPoint
 									}
 		);
 	}

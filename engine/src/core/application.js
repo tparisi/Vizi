@@ -40,6 +40,7 @@ Vizi.Application.prototype.initialize = function(param)
 	this.addOptionalServices();
 
 	// Add events and rendering services last - got to;
+	this.addService("tween");
 	this.addService("events");
 	this.addService("graphics");
 	

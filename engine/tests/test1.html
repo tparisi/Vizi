@@ -50,12 +50,13 @@
 		var transform = new Vizi.Transform;
 		
 		var dragger = new Vizi.PlaneDragger;
-		dragger.overCursor = 'pointer';
+//		dragger.overCursor = 'pointer';
 		dragger.addEventListener("mouseover", onDraggerMouseOver);
 		dragger.addEventListener("mouseout", onDraggerMouseOut);
 		dragger.addEventListener("mousedown", onDraggerMouseDown);
 		dragger.addEventListener("mousemove", onDraggerMouseMove);
 		dragger.addEventListener("mouseup", onDraggerMouseUp);
+		dragger.addEventListener("mousescroll", onDraggerMouseScroll);
 		dragger.addEventListener("drag", onDraggerDrag);
 		
 		var timer = new Vizi.Timer({duration: 5000, loop:true});
@@ -78,6 +79,13 @@
 		cube = createCube();
 		group.addChild(cube);
 
+		//dragger.connect("drag", "offset", cube.transform, "position");
+		var something = { setPosition: function(evt) {
+				cube.transform.position.copy(evt.offset);
+			}
+		};
+		
+		//dragger.connect("drag", "offset", something, "setPosition");
 		
 		cylinder = createCylinder();
 		cylinderTransform = cylinder.getComponent(Vizi.Transform);
@@ -195,17 +203,25 @@
 	
 	function onDraggerMouseUp(event)
 	{
+		return;
+		
 		if (camera1.active) {
 			camera2.active = true;
 		}
 		else {
 			camera1.active = true;
 		}
-	}	
+	}
+
+	function onDraggerMouseScroll(event)
+	{
+		console.log("Mouse scroll: ", event);	
+	}
 
 	function onDraggerDrag(event)
 	{
-		cube.transform.position.copy(event.point);
+		console.log("Mouse: ", event.offset);
+		cube.transform.position.copy(event.offset);
 	}	
 	</script>
 	

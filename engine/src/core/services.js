@@ -5,6 +5,7 @@
 goog.provide('Vizi.Services');
 goog.require('Vizi.Time');
 goog.require('Vizi.Input');
+goog.require('Vizi.TweenService');
 goog.require('Vizi.EventService');
 goog.require('Vizi.GraphicsThreeJS');
 
@@ -14,6 +15,7 @@ Vizi.Services._serviceMap =
 { 
 		"time" : { object : Vizi.Time },
 		"input" : { object : Vizi.Input },
+		"tween" : { object : Vizi.TweenService },
 		"events" : { object : Vizi.EventService },
 		"graphics" : { object : Vizi.GraphicsThreeJS },
 };

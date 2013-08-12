@@ -13,6 +13,7 @@ goog.require('Vizi.Time');
 Vizi.EventDispatcher = function() {
     this.eventTypes = {};
     this.timestamps = {};
+    this.connections = {};
 }
 
 Vizi.EventDispatcher.prototype.addEventListener = function(type, listener) {
@@ -67,9 +68,9 @@ Vizi.EventDispatcher.prototype.dispatchEvent = function(type) {
     		this.timestamps[type] = now;
 	    	Vizi.EventService.eventsPending = true;
 	    	
+    		[].shift.call(arguments);
 	    	for (var i = 0; i < listeners.length; i++)
 	        {
-	    		[].shift.call(arguments);
                 listeners[i].apply(this, arguments);
 	        }
     	}
@@ -83,3 +84,46 @@ Vizi.EventDispatcher.prototype.hasEventListener = function (subscribers, subscri
     else
     	return false;
 }
+
+Vizi.EventDispatcher.prototype.connect = function(type, sourceProp, target, targetProp) {
+    var connections = this.connections[type];
+    if (connections)
+    {
+    	/*
+        if (connections.indexOf(target) != -1)
+        {
+            return;
+        }
+        */
+    }
+    else
+    {
+    	connections = [];
+        this.connections[type] = connections;
+    }
+
+    var that = this;
+    var listener = (function() { return function() { that.handleConnection(sourceProp, target, targetProp, arguments); } }) ();
+    var connection = { listener : listener, sourceProp : sourceProp, target : target, 
+    		targetProp : targetProp };
+    connections.push(connection);
+    var connection = this.addEventListener(type, listener);
+}
+
+Vizi.EventDispatcher.prototype.handleConnection = function(sourceProp, target, targetProp, args) {
+	var targetValue = target[targetProp];
+	
+	if (typeof targetValue == "function") {
+		targetValue.apply(target, args);
+	}
+	else if (typeof targetValue == "object") {
+		if (targetValue.copy && typeof targetValue.copy == "function") {
+			targetValue.copy(sourceProp ? args[0][sourceProp] : args[0]);
+			}
+	}
+	else {
+		target[targetProp] = sourceProp ? args[0][sourceProp] : args[0];
+	}
+}
+
+    

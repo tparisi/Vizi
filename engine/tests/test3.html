@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+	<script>
+	var CLOSURE_NO_DEPS = true;
+	</script>
+    <script src="../libs/JQuery/jquery-1.6.4.js"></script>
+    <script src="../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js"></script>
+	<script src="../libs/three.js.r58/three.js"></script>
+	<script src="../libs/three.js.r58/stats.min.js"></script>
+	<script src="../libs/tween.js/tween.min.js"></script>
+	<script src="../libs/requestAnimationFrame/RequestAnimationFrame.js"></script>
+	<script src="../build-debug/vizi.js"></script>
+	<script>
+
+	var rotator = null, bouncer = null;
+	
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application();
+		app.initialize( { container : container, displayStats:true } );
+
+		var cube = new Vizi.Object;
+		var transform = new Vizi.Transform;
+		transform.rotation.x = Math.PI / 5;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshBasicMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/board.png")})
+				});
+
+
+		var picker = new Vizi.Picker;
+		picker.addEventListener("mouseover", onPickerMouseOver);
+		picker.addEventListener("mouseout", onPickerMouseOut);
+		picker.addEventListener("mouseup", onPickerMouseUp);
+
+		rotator = new Vizi.RotateBehavior({once:false, velocity:Math.PI * 2});
+		bouncer = new Vizi.BounceBehavior({once:false, duration:1});
+		
+		cube.addComponent(transform);
+		cube.addComponent(visual);
+		cube.addComponent(picker);
+		cube.addComponent(rotator);
+		cube.addComponent(bouncer);
+		app.addObject(cube);
+
+		app.run();
+	}
+	);
+
+	function onPickerMouseOver(event)
+	{
+		console.log("over");
+		rotator.start();
+		bouncer.start();
+	}
+		
+	function onPickerMouseOut(event)
+	{
+		console.log("out");
+		// rotator.stop();
+	}
+	
+	function onPickerMouseUp(event)
+	{
+		console.log("clicked");
+		rotator.stop();
+		bouncer.stop();		
+	}
+
+	</script>
+	
+</body>
+</html>
