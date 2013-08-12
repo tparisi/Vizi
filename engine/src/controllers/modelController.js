@@ -31,11 +31,11 @@ Vizi.Prefabs.ModelController = function(param)
 }
 
 goog.provide('Vizi.ModelControllerScript');
-goog.require('Vizi.Component');
+goog.require('Vizi.Script');
 
 Vizi.ModelControllerScript = function(param)
 {
-	Vizi.Component.call(this, param);
+	Vizi.Script.call(this, param);
 
 	this.radius = param.radius || Vizi.ModelControllerScript.default_radius;
 	this.minRadius = param.minRadius || Vizi.ModelControllerScript.default_min_radius;
@@ -55,7 +55,7 @@ Vizi.ModelControllerScript = function(param)
     });
 }
 
-goog.inherits(Vizi.ModelControllerScript, Vizi.Component);
+goog.inherits(Vizi.ModelControllerScript, Vizi.Script);
 
 Vizi.ModelControllerScript.prototype.realize = function()
 {
