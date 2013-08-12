@@ -54,5 +54,8 @@ Vizi.Behavior.prototype.update = function()
 
 Vizi.Behavior.prototype.evaluate = function(t)
 {
-	Vizi.System.warn("Abstract Behavior.evaluate called");
+	if (Vizi.Behavior.WARN_ON_ABSTRACT)
+		Vizi.System.warn("Abstract Behavior.evaluate called");
 }
+
+Vizi.Behavior.WARN_ON_ABSTRACT = true;

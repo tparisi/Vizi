@@ -85,7 +85,7 @@ Vizi.EventDispatcher.prototype.hasEventListener = function (subscribers, subscri
     	return false;
 }
 
-Vizi.EventDispatcher.prototype.connect = function(type, sourceProp, target, targetProp) {
+Vizi.EventDispatcher.prototype.connect = function(type, target, targetProp) {
     var connections = this.connections[type];
     if (connections)
     {
@@ -103,8 +103,8 @@ Vizi.EventDispatcher.prototype.connect = function(type, sourceProp, target, targ
     }
 
     var that = this;
-    var listener = (function() { return function() { that.handleConnection(sourceProp, target, targetProp, arguments); } }) ();
-    var connection = { listener : listener, sourceProp : sourceProp, target : target, 
+    var listener = (function() { return function() { that.handleConnection(null, target, targetProp, arguments); } }) ();
+    var connection = { listener : listener, sourceProp : null, target : target, 
     		targetProp : targetProp };
     connections.push(connection);
     var connection = this.addEventListener(type, listener);

@@ -19,8 +19,6 @@
 	<script src="../build-debug/vizi.js"></script>
 	<script>
 
-	var rotator = null, bouncer = null, mover = null;
-	
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
@@ -38,14 +36,17 @@
 
 
 		var picker = new Vizi.Picker;
-		picker.addEventListener("mouseover", onPickerMouseOver);
-		picker.addEventListener("mouseout", onPickerMouseOut);
-		picker.addEventListener("mouseup", onPickerMouseUp);
+		var rotator = new Vizi.RotateBehavior({loop:true, velocity:Math.PI * 2});
+		var bouncer = new Vizi.BounceBehavior({loop:true, duration:1});
+		var mover = new Vizi.MoveBehavior({loop:true, duration:1, moveVector:new THREE.Vector3(0, 0, -2)});
 
-		rotator = new Vizi.RotateBehavior({loop:true, velocity:Math.PI * 2});
-		bouncer = new Vizi.BounceBehavior({loop:true, duration:1});
-		mover = new Vizi.MoveBehavior({loop:true, duration:1, moveVector:new THREE.Vector3(0, 0, -2)});
-				
+		picker.connect("mouseover", rotator, "start");
+		picker.connect("mouseover", bouncer, "start");
+		picker.connect("mouseover", mover, "start");
+		picker.connect("mouseup", rotator, "stop");
+		picker.connect("mouseup", bouncer, "stop");
+		picker.connect("mouseup", mover, "stop");
+						
 		cube.addComponent(transform);
 		cube.addComponent(visual);
 		cube.addComponent(picker);
@@ -57,28 +58,6 @@
 		app.run();
 	}
 	);
-
-	function onPickerMouseOver(event)
-	{
-		console.log("over");
-		rotator.start();
-		bouncer.start();
-		mover.start();
-	}
-		
-	function onPickerMouseOut(event)
-	{
-		console.log("out");
-		// rotator.stop();
-	}
-	
-	function onPickerMouseUp(event)
-	{
-		console.log("clicked");
-		rotator.stop();
-		bouncer.stop();
-		mover.stop();		
-	}
 
 	</script>
 	
