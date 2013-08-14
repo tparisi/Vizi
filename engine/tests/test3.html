@@ -14,8 +14,7 @@
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
-		var app = new Vizi.Application();
-		app.initialize( { container : container, displayStats:true } );
+		var app = new Vizi.Application({ container : container });
 
 		var cube = new Vizi.Object;
 		var transform = new Vizi.Transform;
@@ -29,15 +28,15 @@
 
 		var picker = new Vizi.Picker;
 		var highlight = new Vizi.HighlightBehavior({});
-		var rotator = new Vizi.RotateBehavior({loop:true, velocity:Math.PI * 2});
-		var bouncer = new Vizi.BounceBehavior({loop:true, duration:1});
-		var mover = new Vizi.MoveBehavior({loop:true, duration:1, moveVector:new THREE.Vector3(0, 0, -2)});
+		var rotator = new Vizi.RotateBehavior({loop:true});
+		var bouncer = new Vizi.BounceBehavior({loop:true});
+		var mover = new Vizi.MoveBehavior({loop:true, duration:2, moveVector:new THREE.Vector3(0, 0, -2)});
 
-		picker.connect("mouseover", highlight, "start");
-		picker.connect("mouseout", highlight, "stop");
-		picker.connect("mouseup", rotator, "toggle");
-		picker.connect("mouseup", bouncer, "toggle");
-		picker.connect("mouseup", mover, "toggle");
+		picker.addEventListener("mouseover", function() { highlight.on(); });
+		picker.addEventListener("mouseout", function() { highlight.off(); });
+		picker.addEventListener("mouseup", function() { rotator.toggle(); });
+		picker.addEventListener("mouseup", function() { bouncer.toggle(); });
+		picker.addEventListener("mouseup", function() { mover.toggle(); });
 						
 		cube.addComponent(transform);
 		cube.addComponent(visual);

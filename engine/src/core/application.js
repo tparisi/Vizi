@@ -12,13 +12,14 @@ goog.require('Vizi.Services');
 /**
  * @constructor
  */
-Vizi.Application = function()
+Vizi.Application = function(param)
 {
 	// N.B.: freak out if somebody tries to make 2
 	// throw (...)
 
 	Vizi.EventDispatcher.call(this);
 	Vizi.Application.instance = this;
+	this.initialize(param);
 }
 
 goog.inherits(Vizi.Application, Vizi.EventDispatcher);

@@ -41,3 +41,7 @@ Vizi.HighlightBehavior.prototype.stop = function()
 	}
 
 }
+
+// Alias a few functions - syntactic sugar
+Vizi.HighlightBehavior.prototype.on = Vizi.HighlightBehavior.prototype.start;
+Vizi.HighlightBehavior.prototype.off = Vizi.HighlightBehavior.prototype.stop;

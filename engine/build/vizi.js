@@ -44157,7 +44157,8 @@ goog.require('Vizi.Behavior');
 
 Vizi.RotateBehavior = function(param) {
 	param = param || {};
-	this.velocity = (param.velocity !== undefined) ? param.velocity : Math.PI / 2;
+	this.duration = (param.duration !== undefined) ? param.duration : 1;
+	this.velocity = (param.velocity !== undefined) ? param.velocity : (Math.PI / 2 / this.duration);
 	this.startAngle = 0;
 	this.angle = 0;
     Vizi.Behavior.call(this, param);
@@ -45092,13 +45093,14 @@ goog.require('Vizi.Services');
 /**
  * @constructor
  */
-Vizi.Application = function()
+Vizi.Application = function(param)
 {
 	// N.B.: freak out if somebody tries to make 2
 	// throw (...)
 
 	Vizi.EventDispatcher.call(this);
 	Vizi.Application.instance = this;
+	this.initialize(param);
 }
 
 goog.inherits(Vizi.Application, Vizi.EventDispatcher);
@@ -45850,6 +45852,10 @@ Vizi.HighlightBehavior.prototype.stop = function()
 	}
 
 }
+
+// Alias a few functions - syntactic sugar
+Vizi.HighlightBehavior.prototype.on = Vizi.HighlightBehavior.prototype.start;
+Vizi.HighlightBehavior.prototype.off = Vizi.HighlightBehavior.prototype.stop;
 /**
  * @fileoverview BounceBehavior - simple angular rotation
  * 

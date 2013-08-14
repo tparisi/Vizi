@@ -9,7 +9,8 @@ goog.require('Vizi.Behavior');
 
 Vizi.RotateBehavior = function(param) {
 	param = param || {};
-	this.velocity = (param.velocity !== undefined) ? param.velocity : Math.PI / 2;
+	this.duration = (param.duration !== undefined) ? param.duration : 1;
+	this.velocity = (param.velocity !== undefined) ? param.velocity : (Math.PI / 2 / this.duration);
 	this.startAngle = 0;
 	this.angle = 0;
     Vizi.Behavior.call(this, param);
