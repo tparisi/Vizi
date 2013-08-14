@@ -43013,7 +43013,7 @@ goog.require('Vizi.EventDispatcher');
  * @constructor
  * @extends {Vizi.EventDispatcher}
  */
-Vizi.Object = function() {
+Vizi.Object = function(param) {
     Vizi.EventDispatcher.call(this);
     
     /**
@@ -43047,11 +43047,15 @@ Vizi.Object = function() {
      */
     this._realized = false;
     
-    /**
-     * @type {Boolean}
-     * @private
-     */
-    this._autoCreateTransform = true;
+    // Automatically create a transform component unless the caller says not to 
+    var autoCreateTransform = true;
+    if (param && param.autoCreateTransform !== undefined)
+    	autoCreateTransform = param.autoCreateTransform;
+    
+	if (autoCreateTransform)
+	{
+		this.addComponent(new Vizi.Transform);
+	}
 }
 
 goog.inherits(Vizi.Object, Vizi.EventDispatcher);
@@ -43243,11 +43247,6 @@ Vizi.Object.prototype.getComponents = function(type) {
 //---------------------------------------------------------------------
 
 Vizi.Object.prototype.realize = function() {
-	if (this._autoCreateTransform && !this.transform)
-	{
-		this.addComponent(new Vizi.Transform);
-	}
-	
     this.realizeComponents();
     this.realizeChildren();
         
@@ -45392,8 +45391,6 @@ Vizi.Prefabs.ModelController = function(param)
 	param = param || {};
 	
 	var controller = new Vizi.Object(param);
-	var transform = new Vizi.Transform;
-	controller.addComponent(transform);
 	var controllerScript = new Vizi.ModelControllerScript(param);
 	controller.addComponent(controllerScript);
 
@@ -45401,9 +45398,7 @@ Vizi.Prefabs.ModelController = function(param)
 	controller.addComponent(timer);
 
 	var viewpoint = new Vizi.Object;
-	var transform = new Vizi.Transform;
 	var camera = new Vizi.PerspectiveCamera({active:param.active, fov: param.fov});
-	viewpoint.addComponent(transform);
 	viewpoint.addComponent(camera);
 
 	controller.addChild(viewpoint);

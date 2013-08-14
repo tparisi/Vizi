@@ -11,7 +11,7 @@ goog.require('Vizi.EventDispatcher');
  * @constructor
  * @extends {Vizi.EventDispatcher}
  */
-Vizi.Object = function() {
+Vizi.Object = function(param) {
     Vizi.EventDispatcher.call(this);
     
     /**
@@ -45,11 +45,15 @@ Vizi.Object = function() {
      */
     this._realized = false;
     
-    /**
-     * @type {Boolean}
-     * @private
-     */
-    this._autoCreateTransform = true;
+    // Automatically create a transform component unless the caller says not to 
+    var autoCreateTransform = true;
+    if (param && param.autoCreateTransform !== undefined)
+    	autoCreateTransform = param.autoCreateTransform;
+    
+	if (autoCreateTransform)
+	{
+		this.addComponent(new Vizi.Transform);
+	}
 }
 
 goog.inherits(Vizi.Object, Vizi.EventDispatcher);
@@ -241,11 +245,6 @@ Vizi.Object.prototype.getComponents = function(type) {
 //---------------------------------------------------------------------
 
 Vizi.Object.prototype.realize = function() {
-	if (this._autoCreateTransform && !this.transform)
-	{
-		this.addComponent(new Vizi.Transform);
-	}
-	
     this.realizeComponents();
     this.realizeChildren();
         

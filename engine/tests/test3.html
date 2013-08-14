@@ -17,8 +17,7 @@
 		var app = new Vizi.Application({ container : container });
 
 		var cube = new Vizi.Object;
-		var transform = new Vizi.Transform;
-		transform.rotation.x = Math.PI / 5;
+		cube.transform.rotation.x = Math.PI / 5;
 
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
@@ -38,7 +37,6 @@
 		picker.addEventListener("mouseup", function() { bouncer.toggle(); });
 		picker.addEventListener("mouseup", function() { mover.toggle(); });
 						
-		cube.addComponent(transform);
 		cube.addComponent(visual);
 		cube.addComponent(picker);
 		cube.addComponent(rotator);

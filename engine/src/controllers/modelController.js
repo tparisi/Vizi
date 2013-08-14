@@ -6,8 +6,6 @@ Vizi.Prefabs.ModelController = function(param)
 	param = param || {};
 	
 	var controller = new Vizi.Object(param);
-	var transform = new Vizi.Transform;
-	controller.addComponent(transform);
 	var controllerScript = new Vizi.ModelControllerScript(param);
 	controller.addComponent(controllerScript);
 
@@ -15,9 +13,7 @@ Vizi.Prefabs.ModelController = function(param)
 	controller.addComponent(timer);
 
 	var viewpoint = new Vizi.Object;
-	var transform = new Vizi.Transform;
 	var camera = new Vizi.PerspectiveCamera({active:param.active, fov: param.fov});
-	viewpoint.addComponent(transform);
 	viewpoint.addComponent(camera);
 
 	controller.addChild(viewpoint);
