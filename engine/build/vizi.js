@@ -43046,6 +43046,12 @@ Vizi.Object = function() {
      * @private
      */
     this._realized = false;
+    
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._autoCreateTransform = true;
 }
 
 goog.inherits(Vizi.Object, Vizi.EventDispatcher);
@@ -43237,6 +43243,11 @@ Vizi.Object.prototype.getComponents = function(type) {
 //---------------------------------------------------------------------
 
 Vizi.Object.prototype.realize = function() {
+	if (this._autoCreateTransform && !this.transform)
+	{
+		this.addComponent(new Vizi.Transform);
+	}
+	
     this.realizeComponents();
     this.realizeChildren();
         
