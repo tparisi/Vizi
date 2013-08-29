@@ -20,23 +20,10 @@
 		var app = new Vizi.Application({ container : container, displayStats:true });
 
 		var root = new Vizi.Object;
-		var timer = new Vizi.Timer({duration: 10000, loop:true});
-		
-		timer.addEventListener("fraction", function(f) { onTimeFractionChanged(f, root); });
-		timer.start();
-		
-		root.addComponent(timer);
-
-		//root.addComponent(new Vizi.Visual({geometry: new THREE.CubeGeometry(2, 2, 2),
-		//								   material: new THREE.MeshBasicMaterial}));
 		 
 		var loader = new Vizi.Loader;
 		loader.addEventListener("loaded", function(data) { onSceneLoaded(data, root); });
 		loader.loadScene("./models/duck.dae");
-		  
-		var dirlight = new Vizi.Object;
-		dirlight.addComponent(new Vizi.DirectionalLight);
-		// root.addChild(dirlight);
 		
 		app.addObject(root);
 
@@ -54,13 +41,8 @@
 
 	function onSceneLoaded(data, root) {
 		root.addComponent(data.scene);
-//		root.transform.scale.set(.1, .1, .1);
 	}
 
-	function onTimeFractionChanged(f, root) {
-// 		root.transform.rotation.y = f * Math.PI * 2;
-	}
-	
 	</script>
 	
 </body>
