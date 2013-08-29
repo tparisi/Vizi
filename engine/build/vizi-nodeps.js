@@ -2320,21 +2320,24 @@ Vizi.SceneComponent.prototype.update = function()
 
 Vizi.SceneComponent.prototype.addToScene = function() {
 	var scene = this.layer ? this.layer.scene : Vizi.Graphics.instance.scene;
-	if (this._object)
-	{
-		var parent = this._object.transform ? this._object.transform.object : scene;
-		if (parent)
-		{
-		    parent.add(this.object);
-		    this.object.data = this; // backpointer for picking and such
-		}
-		else
-		{
-			// N.B.: throw something?
+	if (this._object) {
+		
+		// only add me if the object's transform component actually points
+		// to a different Three.js object than mine
+		if (this._object.transform.object != this.object) {
+
+			var parent = this._object.transform ? this._object.transform.object : scene;
+			
+			if (parent) {
+			    parent.add(this.object);
+			    this.object.data = this; // backpointer for picking and such
+			}
+			else {
+				// N.B.: throw something?
+			}
 		}
 	}
-	else
-	{
+	else {
 		// N.B.: throw something?
 	}
 }
@@ -2365,13 +2368,17 @@ Vizi.SceneComponent.prototype.removeFromScene = function() {
 goog.provide('Vizi.Transform');
 goog.require('Vizi.SceneComponent');
 
-Vizi.Transform = function(param)
-{
+Vizi.Transform = function(param) {
 	param = param || {};
     Vizi.SceneComponent.call(this, param);
 
-    this.object = new THREE.Object3D();
-} ;
+    if (param.object) {
+		this.object = param.object;    	
+    }
+    else {
+    	this.object = new THREE.Object3D();
+    }
+}
 
 goog.inherits(Vizi.Transform, Vizi.SceneComponent);
 
@@ -2539,8 +2546,13 @@ Vizi.PointLight = function(param)
 
 	Vizi.Light.call(this, param);
 	
-	this.object = new THREE.PointLight(param.color, param.intensity, distance);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.PointLight(param.color, param.intensity, distance);
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         distance: {
@@ -4254,8 +4266,13 @@ Vizi.SpotLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         angle: {
@@ -4404,18 +4421,23 @@ Vizi.Camera.DEFAULT_FAR = 4000;
 goog.provide('Vizi.PerspectiveCamera');
 goog.require('Vizi.Camera');
 
-Vizi.PerspectiveCamera = function(param)
-{
-	param = param || {};	
-	var fov = param.fov || 45;
-	var near = param.near || Vizi.Camera.DEFAULT_NEAR;
-	var far = param.far || Vizi.Camera.DEFAULT_FAR;
-	var container = Vizi.Graphics.instance.container;
-	var aspect = param.aspect || (container.offsetWidth / container.offsetHeight);
-	this.updateProjection = false;
+Vizi.PerspectiveCamera = function(param) {
+	param = param || {};
 	
-	this.object = new THREE.PerspectiveCamera( fov, aspect, near, far );
-
+	if (param.object) {
+		this.object = param.object;
+	}
+	else {		
+		var fov = param.fov || 45;
+		var near = param.near || Vizi.Camera.DEFAULT_NEAR;
+		var far = param.far || Vizi.Camera.DEFAULT_FAR;
+		var container = Vizi.Graphics.instance.container;
+		var aspect = param.aspect || (container.offsetWidth / container.offsetHeight);
+		this.updateProjection = false;
+		
+		this.object = new THREE.PerspectiveCamera( fov, aspect, near, far );
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         fov: {
@@ -4464,13 +4486,11 @@ Vizi.PerspectiveCamera = function(param)
 
 goog.inherits(Vizi.PerspectiveCamera, Vizi.Camera);
 
-Vizi.PerspectiveCamera.prototype.realize = function() 
-{
+Vizi.PerspectiveCamera.prototype.realize = function()  {
 	Vizi.Camera.prototype.realize.call(this);	
 }
 
-Vizi.PerspectiveCamera.prototype.update = function() 
-{
+Vizi.PerspectiveCamera.prototype.update = function()  {
 	if (this.updateProjection)
 	{
 		this.object.updateProjectionMatrix();
@@ -4750,8 +4770,12 @@ Vizi.DirectionalLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
+	}
 }
 
 goog.inherits(Vizi.DirectionalLight, Vizi.Light);

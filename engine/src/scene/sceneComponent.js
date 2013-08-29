@@ -69,21 +69,24 @@ Vizi.SceneComponent.prototype.update = function()
 
 Vizi.SceneComponent.prototype.addToScene = function() {
 	var scene = this.layer ? this.layer.scene : Vizi.Graphics.instance.scene;
-	if (this._object)
-	{
-		var parent = this._object.transform ? this._object.transform.object : scene;
-		if (parent)
-		{
-		    parent.add(this.object);
-		    this.object.data = this; // backpointer for picking and such
-		}
-		else
-		{
-			// N.B.: throw something?
+	if (this._object) {
+		
+		// only add me if the object's transform component actually points
+		// to a different Three.js object than mine
+		if (this._object.transform.object != this.object) {
+
+			var parent = this._object.transform ? this._object.transform.object : scene;
+			
+			if (parent) {
+			    parent.add(this.object);
+			    this.object.data = this; // backpointer for picking and such
+			}
+			else {
+				// N.B.: throw something?
+			}
 		}
 	}
-	else
-	{
+	else {
 		// N.B.: throw something?
 	}
 }

@@ -8,8 +8,12 @@ Vizi.DirectionalLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
+	}
 }
 
 goog.inherits(Vizi.DirectionalLight, Vizi.Light);

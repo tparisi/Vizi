@@ -9,8 +9,13 @@ Vizi.PointLight = function(param)
 
 	Vizi.Light.call(this, param);
 	
-	this.object = new THREE.PointLight(param.color, param.intensity, distance);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.PointLight(param.color, param.intensity, distance);
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         distance: {

@@ -4,13 +4,17 @@
 goog.provide('Vizi.Transform');
 goog.require('Vizi.SceneComponent');
 
-Vizi.Transform = function(param)
-{
+Vizi.Transform = function(param) {
 	param = param || {};
     Vizi.SceneComponent.call(this, param);
 
-    this.object = new THREE.Object3D();
-} ;
+    if (param.object) {
+		this.object = param.object;    	
+    }
+    else {
+    	this.object = new THREE.Object3D();
+    }
+}
 
 goog.inherits(Vizi.Transform, Vizi.SceneComponent);
 

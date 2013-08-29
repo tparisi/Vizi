@@ -17,8 +17,13 @@ Vizi.SpotLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
-
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         angle: {

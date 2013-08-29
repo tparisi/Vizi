@@ -1,18 +1,23 @@
 goog.provide('Vizi.PerspectiveCamera');
 goog.require('Vizi.Camera');
 
-Vizi.PerspectiveCamera = function(param)
-{
-	param = param || {};	
-	var fov = param.fov || 45;
-	var near = param.near || Vizi.Camera.DEFAULT_NEAR;
-	var far = param.far || Vizi.Camera.DEFAULT_FAR;
-	var container = Vizi.Graphics.instance.container;
-	var aspect = param.aspect || (container.offsetWidth / container.offsetHeight);
-	this.updateProjection = false;
+Vizi.PerspectiveCamera = function(param) {
+	param = param || {};
 	
-	this.object = new THREE.PerspectiveCamera( fov, aspect, near, far );
-
+	if (param.object) {
+		this.object = param.object;
+	}
+	else {		
+		var fov = param.fov || 45;
+		var near = param.near || Vizi.Camera.DEFAULT_NEAR;
+		var far = param.far || Vizi.Camera.DEFAULT_FAR;
+		var container = Vizi.Graphics.instance.container;
+		var aspect = param.aspect || (container.offsetWidth / container.offsetHeight);
+		this.updateProjection = false;
+		
+		this.object = new THREE.PerspectiveCamera( fov, aspect, near, far );
+	}
+	
     // Create accessors for all properties... just pass-throughs to Three.js
     Object.defineProperties(this, {
         fov: {
@@ -61,13 +66,11 @@ Vizi.PerspectiveCamera = function(param)
 
 goog.inherits(Vizi.PerspectiveCamera, Vizi.Camera);
 
-Vizi.PerspectiveCamera.prototype.realize = function() 
-{
+Vizi.PerspectiveCamera.prototype.realize = function()  {
 	Vizi.Camera.prototype.realize.call(this);	
 }
 
-Vizi.PerspectiveCamera.prototype.update = function() 
-{
+Vizi.PerspectiveCamera.prototype.update = function()  {
 	if (this.updateProjection)
 	{
 		this.object.updateProjectionMatrix();
