@@ -19,19 +19,25 @@
 		
 		var app = new Vizi.Application({ container : container, displayStats:true });
 
-		var root = new Vizi.Object;
-		 
+		var rotator = null;
 		var loader = new Vizi.Loader;
-		loader.addEventListener("loaded", function(data) { onSceneLoaded(data, app); });
+		loader.addEventListener("loaded", function(data) { 
+				var scene = data.scene;
+				app.addObject(scene);
+
+				rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
+				scene.addComponent(rotator);
+				
+			});
 		loader.loadScene("./models/duck.dae");
 		
-		app.addObject(root);
-
 		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
 
 		container.addEventListener("mouseup", function(e) {
 				var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
 				controllerScript.headlightOn = !controllerScript.headlightOn;
+				if (rotator)
+					rotator.toggle();
 			});
 		
 		app.addObject(controller);
