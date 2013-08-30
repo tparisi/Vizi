@@ -26,8 +26,10 @@
 				app.addObject(scene);
 
 				rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
-				scene.addComponent(rotator);
-				
+				var duck = scene.findNode("LOD3sp");
+				duck.addComponent(rotator);
+
+				var visuals = scene.findNodes(Vizi.Visual);
 			});
 		loader.loadScene("./models/duck.dae");
 		

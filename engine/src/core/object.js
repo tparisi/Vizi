@@ -315,3 +315,61 @@ Vizi.Object.prototype.updateChildren = function() {
         this._children[i].update();
     }
 }
+
+//---------------------------------------------------------------------
+// Traversal and query methods
+//---------------------------------------------------------------------
+
+Vizi.Object.prototype.traverse = function (callback) {
+
+	callback(this);
+
+    var i, count = this._children.length;
+	for (i = 0; i < count ; i ++ ) {
+
+		this._children[ i ].traverse( callback );
+	}
+}
+
+Vizi.Object.prototype.findCallback = function(n, query, found)
+{
+	if (typeof(query) == "string")
+	{
+		if (n.name == query)
+			found.push(n);
+	}
+	else if (query instanceof RegExp)
+	{
+		var match  = n.name.match(query);
+		if (match && match.length)
+			found.push(n);
+	}
+	else if (query instanceof Function) {
+		if (n instanceof query)
+			found.push(n);
+		else {
+			var components = n.getComponents(query);
+			var i, len = components.length;
+			for (i = 0; i < len; i++)
+				found.push(components[i]);
+		}
+	}
+}
+
+Vizi.Object.prototype.findNode = function(str)
+{
+	var that = this;
+	var found = [];
+	this.traverse(function (o) { that.findCallback(o, str, found); });
+	
+	return found[0];
+}
+
+Vizi.Object.prototype.findNodes = function(query)
+{
+	var that = this;
+	var found = [];
+	this.traverse(function (o) { that.findCallback(o, query, found); });
+	
+	return found;
+}

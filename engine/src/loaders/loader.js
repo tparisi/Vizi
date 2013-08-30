@@ -185,6 +185,7 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 	function convert(n) {
 		var o = new Vizi.Object({autoCreateTransform:false});
 		o.addComponent(new Vizi.Transform({object:n}));
+		o.name = n.name;
 		if (n instanceof THREE.Mesh) {
 			o.addComponent(new Vizi.Visual({object:n}));
 		}
