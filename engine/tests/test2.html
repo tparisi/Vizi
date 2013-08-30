@@ -34,8 +34,10 @@
 					var duck = scene.findNode(/LOD.*/);
 					if (duck) {
 						rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
-						//duck.addComponent(rotator);
-						duck.addComponent(new Vizi.BounceBehavior({loop:true, autoStart:true}));
+						duck.addComponent(rotator);
+						// coordinate space issue
+						duck.addComponent(new Vizi.BounceBehavior({bounceVector:new THREE.Vector3(0, 100, 0),
+							loop:true, autoStart:true}));
 					}
 				}
 				else {
