@@ -52,7 +52,7 @@
 		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
 		var wireframe = false;
 		container.addEventListener("mouseup", function(e) {
-				//controllerScript.headlightOn = !controllerScript.headlightOn;
+				controllerScript.headlightOn = !controllerScript.headlightOn;
 				if (rotator)
 					rotator.toggle();
 
@@ -60,7 +60,7 @@
 					wireframe = !wireframe;
 					scene.map(Vizi.Visual, function(v) {
 						if (v.material instanceof THREE.MeshFaceMaterial) {
-							var i, len = v.geometry.materials.length;
+							var i, len = v.material.materials.length;
 							for (i = 0; i < len; i++)
 								v.material.materials[i].wireframe = wireframe;
 						}
