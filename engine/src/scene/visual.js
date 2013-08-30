@@ -34,10 +34,7 @@ Vizi.Visual.prototype.realize = function()
 {
 	Vizi.SceneComponent.prototype.realize.call(this);
 	
-	if (this.object) {
-		this.addToScene();
-	}
-	else if (this.geometry && this.material) {
+	if (!this.object && this.geometry && this.material) {
 		this.object = new THREE.Mesh(this.geometry, this.material);
 	    this.addToScene();
 	}	

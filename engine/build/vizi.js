@@ -37347,7 +37347,8 @@ THREE.ColladaLoader = function () {
 
 				}
 
-				node.geometries.length > 1 ? obj.add( mesh ) : obj = mesh;
+				obj.add( mesh );
+				// node.geometries.length > 1 ? obj.add( mesh ) : obj = mesh;
 
 			}
 
@@ -37358,13 +37359,15 @@ THREE.ColladaLoader = function () {
 			var instance_camera = node.cameras[i];
 			var cparams = cameras[instance_camera.url];
 
-			obj = new THREE.PerspectiveCamera(cparams.fov, parseFloat(cparams.aspect_ratio), 
+			var cam = new THREE.PerspectiveCamera(cparams.fov, parseFloat(cparams.aspect_ratio), 
 					parseFloat(cparams.znear), parseFloat(cparams.zfar));
 
+			obj.add(cam);
 		}
 
 		for ( i = 0; i < node.lights.length; i ++ ) {
 
+			var light = null;
 			var instance_light = node.lights[i];
 			var lparams = lights[instance_light.url];
 
@@ -37380,28 +37383,31 @@ THREE.ColladaLoader = function () {
 
 					case 'directional':
 
-						obj = new THREE.DirectionalLight( color, intensity, distance );
+						light = new THREE.DirectionalLight( color, intensity, distance );
 						break;
 
 					case 'point':
 
-						obj = new THREE.PointLight( color, intensity, distance );
+						light = new THREE.PointLight( color, intensity, distance );
 						break;
 
 					case 'spot':
 
-						obj = new THREE.SpotLight( color, intensity, distance, angle, exponent );
+						light = new THREE.SpotLight( color, intensity, distance, angle, exponent );
 						break;
 
 					case 'ambient':
 
-						obj = new THREE.AmbientLight( color );
+						light = new THREE.AmbientLight( color );
 						break;
 
 				}
 
 			}
 
+			if (light) {
+				obj.add(light);
+			}
 		}
 
 		obj.name = node.name || node.id || "";
@@ -44019,10 +44025,7 @@ Vizi.Visual.prototype.realize = function()
 {
 	Vizi.SceneComponent.prototype.realize.call(this);
 	
-	if (this.object) {
-		this.addToScene();
-	}
-	else if (this.geometry && this.material) {
+	if (!this.object && this.geometry && this.material) {
 		this.object = new THREE.Mesh(this.geometry, this.material);
 	    this.addToScene();
 	}	
@@ -46434,7 +46437,7 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
 	{
 		var convertedScene = this.convertScene(data.scene);
 		
-		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene});
+		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
 		var that = this;
 		data.scene.traverse(function (n) { that.traverseCallback(n, result); });
 		success = true;
@@ -46471,38 +46474,41 @@ Vizi.Loader.prototype.handleSceneProgress = function(url, progress)
 Vizi.Loader.prototype.convertScene = function(scene) {
 
 	function convert(n) {
-		var o = new Vizi.Object({autoCreateTransform:false});
-		o.addComponent(new Vizi.Transform({object:n}));
-		o.name = n.name;
 		if (n instanceof THREE.Mesh) {
-			o.addComponent(new Vizi.Visual({object:n}));
+			return new Vizi.Visual({object:n});
 		}
 		else if (n instanceof THREE.Camera) {
 			if (n instanceof THREE.PerspectiveCamera) {
-				o.addComponent(new Vizi.PerspectiveCamera({object:n}));
+				return new Vizi.PerspectiveCamera({object:n});
 			}
 		}
 		else if (n instanceof THREE.Light) {
 			if (n instanceof THREE.AmbientLight) {
-				o.addComponent(new Vizi.AmbientLight({object:n}));
+				return new Vizi.AmbientLight({object:n});
 			}
 			else if (n instanceof THREE.DirectionalLight) {
-				o.addComponent(new Vizi.DirectionalLight({object:n}));
+				return new Vizi.DirectionalLight({object:n});
 			}
 			else if (n instanceof THREE.PointLight) {
-				o.addComponent(new Vizi.PointLight({object:n}));
+				return new Vizi.PointLight({object:n});
 			}
 			else if (n instanceof THREE.SpotLight) {
-				o.addComponent(new Vizi.SpotLight({object:n}));
+				return new Vizi.SpotLight({object:n});
 			}
 		}
 		else if (n.children) {
+			var o = new Vizi.Object({autoCreateTransform:false});
+			o.addComponent(new Vizi.Transform({object:n}));
+			o.name = n.name;
 			var i, len = n.children.length;
 			for (i = 0; i < len; i++) {
 				var childNode  = n.children[i];
-				var child = convert(childNode);
-				if (child) {
-					o.addChild(child);
+				var c = convert(childNode);
+				if (c instanceof Vizi.Object) {
+					o.addChild(c);
+				}
+				else if (c instanceof Vizi.Component) {
+					o.addComponent(c);
 				}
 				else {
 					// N.B.: what???

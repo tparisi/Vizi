@@ -18,24 +18,31 @@
 		var container = document.getElementById("container");
 		
 		var app = new Vizi.Application({ container : container, displayStats:true });
-
+		
 		var scene = null;
 		var rotator = null;
 		var loader = new Vizi.Loader;
+		
 		loader.addEventListener("loaded", function(data) { 
-				scene = data.scene;
-				app.addObject(scene);
-
-				scene.addComponent(new Vizi.BounceBehavior({loop:true, autoStart:true}));
-
-				var visuals = scene.findNodes(Vizi.Visual);
-
-				var duck = scene.findNode(/LOD.*/);
-				if (duck) {
-					rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
-					duck.addComponent(rotator);
+				if (true) {
+					scene = data.scene;
+					app.addObject(scene);
+	
+	
+					var visuals = scene.findNodes(Vizi.Visual);
+	
+					var duck = scene.findNode(/LOD.*/);
+					if (duck) {
+						rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
+						//duck.addComponent(rotator);
+						duck.addComponent(new Vizi.BounceBehavior({loop:true, autoStart:true}));
+					}
 				}
-
+				else {
+					var obj = new Vizi.Object;
+					obj.addComponent(data.scene);
+					app.addObject(obj);		
+				}
 			});
 		loader.loadScene("./models/duck.dae");
 		
