@@ -28,6 +28,7 @@ Vizi.Application.prototype.initialize = function(param)
 {
 	param = param || {};
 
+	this.running = false;
 	this.tabstop = param.tabstop;
 	
 	this._services = [];
@@ -80,6 +81,7 @@ Vizi.Application.prototype.run = function()
     // core game loop here
 	this.realizeObjects();
 	this.lastFrameTime = Date.now();
+	this.running = true;
 	this.runloop();
 }
 	        
@@ -119,13 +121,16 @@ Vizi.Application.prototype.updateObjects = function()
 	
 }
 
-Vizi.Application.prototype.addObject = function(e)
+Vizi.Application.prototype.addObject = function(o)
 {
-	this._objects.push(e);
+	this._objects.push(o);
+	if (this.running) {
+		o.realize();
+	}
 }
 
-Vizi.Application.prototype.removeObject = function(e) {
-    var i = this._objects.indexOf(e);
+Vizi.Application.prototype.removeObject = function(oe) {
+    var i = this._objects.indexOf(o);
     if (i != -1) {
     	// N.B.: I suppose we could be paranoid and check to see if I actually own this component
         this._objects.splice(i, 1);

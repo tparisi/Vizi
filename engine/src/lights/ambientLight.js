@@ -7,7 +7,12 @@ Vizi.AmbientLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.AmbientLight(param.color);
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.AmbientLight(param.color);
+	}
 }
 
 goog.inherits(Vizi.AmbientLight, Vizi.Light);

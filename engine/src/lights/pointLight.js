@@ -5,14 +5,13 @@ Vizi.PointLight = function(param)
 {
 	param = param || {};
 	
-	var distance = ( param.distance !== undefined ) ? param.distance : Vizi.PointLight.DEFAULT_DISTANCE;
-
 	Vizi.Light.call(this, param);
 	
 	if (param.object) {
 		this.object = param.object; 
 	}
 	else {
+		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.PointLight.DEFAULT_DISTANCE;
 		this.object = new THREE.PointLight(param.color, param.intensity, distance);
 	}
 	

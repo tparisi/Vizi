@@ -5,22 +5,26 @@ Vizi.SpotLight = function(param)
 {
 	param = param || {};
 
-	var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
-	var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
-	var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
-
-	this.direction = param.direction || new THREE.Vector3(0, 0, -1);
-	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
-	this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
-	this.targetPos = new THREE.Vector3;
 	this.scaledDir = new THREE.Vector3;
+	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
 	
 	Vizi.Light.call(this, param);
 
 	if (param.object) {
 		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
+		this.targetPos = param.object.target.clone();
+		this.shadowDarkness = param.object.shadowDarkness;
 	}
 	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
+		this.targetPos = new THREE.Vector3;
+		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
+
+		var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
+		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
+		var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
+
 		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
 	}
 	

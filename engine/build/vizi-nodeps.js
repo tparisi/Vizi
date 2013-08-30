@@ -2542,14 +2542,13 @@ Vizi.PointLight = function(param)
 {
 	param = param || {};
 	
-	var distance = ( param.distance !== undefined ) ? param.distance : Vizi.PointLight.DEFAULT_DISTANCE;
-
 	Vizi.Light.call(this, param);
 	
 	if (param.object) {
 		this.object = param.object; 
 	}
 	else {
+		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.PointLight.DEFAULT_DISTANCE;
 		this.object = new THREE.PointLight(param.color, param.intensity, distance);
 	}
 	
@@ -2606,6 +2605,7 @@ Vizi.Visual = function(param)
 	
 	this.geometry = param.geometry;
 	this.material = param.material;
+	this.object = param.object;
 }
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);
@@ -2617,8 +2617,10 @@ Vizi.Visual.prototype.realize = function()
 {
 	Vizi.SceneComponent.prototype.realize.call(this);
 	
-	if (this.geometry && this.material)
-	{
+	if (this.object) {
+		this.addToScene();
+	}
+	else if (this.geometry && this.material) {
 		this.object = new THREE.Mesh(this.geometry, this.material);
 	    this.addToScene();
 	}	
@@ -2891,7 +2893,12 @@ Vizi.AmbientLight = function(param)
 	
 	Vizi.Light.call(this, param);
 
-	this.object = new THREE.AmbientLight(param.color);
+	if (param.object) {
+		this.object = param.object; 
+	}
+	else {
+		this.object = new THREE.AmbientLight(param.color);
+	}
 }
 
 goog.inherits(Vizi.AmbientLight, Vizi.Light);
@@ -3883,6 +3890,7 @@ Vizi.Application.prototype.initialize = function(param)
 {
 	param = param || {};
 
+	this.running = false;
 	this.tabstop = param.tabstop;
 	
 	this._services = [];
@@ -3935,6 +3943,7 @@ Vizi.Application.prototype.run = function()
     // core game loop here
 	this.realizeObjects();
 	this.lastFrameTime = Date.now();
+	this.running = true;
 	this.runloop();
 }
 	        
@@ -3974,13 +3983,16 @@ Vizi.Application.prototype.updateObjects = function()
 	
 }
 
-Vizi.Application.prototype.addObject = function(e)
+Vizi.Application.prototype.addObject = function(o)
 {
-	this._objects.push(e);
+	this._objects.push(o);
+	if (this.running) {
+		o.realize();
+	}
 }
 
-Vizi.Application.prototype.removeObject = function(e) {
-    var i = this._objects.indexOf(e);
+Vizi.Application.prototype.removeObject = function(oe) {
+    var i = this._objects.indexOf(o);
     if (i != -1) {
     	// N.B.: I suppose we could be paranoid and check to see if I actually own this component
         this._objects.splice(i, 1);
@@ -4254,22 +4266,26 @@ Vizi.SpotLight = function(param)
 {
 	param = param || {};
 
-	var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
-	var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
-	var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
-
-	this.direction = param.direction || new THREE.Vector3(0, 0, -1);
-	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
-	this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
-	this.targetPos = new THREE.Vector3;
 	this.scaledDir = new THREE.Vector3;
+	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
 	
 	Vizi.Light.call(this, param);
 
 	if (param.object) {
 		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
+		this.targetPos = param.object.target.clone();
+		this.shadowDarkness = param.object.shadowDarkness;
 	}
 	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
+		this.targetPos = new THREE.Vector3;
+		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
+
+		var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
+		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
+		var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
+
 		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
 	}
 	
@@ -4766,14 +4782,15 @@ goog.require('Vizi.Light');
 Vizi.DirectionalLight = function(param)
 {
 	param = param || {};
-	this.direction = param.direction || new THREE.Vector3(0, 0, -1);
 	
 	Vizi.Light.call(this, param);
 
 	if (param.object) {
 		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
 	}
 	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
 		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
 	}
 }
@@ -5013,7 +5030,9 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
 	
 	if (data.scene)
 	{
-		result.scene = new Vizi.SceneVisual({scene:data.scene});
+		var convertedScene = this.convertScene(data.scene);
+		
+		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene});
 		var that = this;
 		data.scene.traverse(function (n) { that.traverseCallback(n, result); });
 		success = true;
@@ -5047,6 +5066,52 @@ Vizi.Loader.prototype.handleSceneProgress = function(url, progress)
 	this.dispatchEvent("progress", progress);
 }
 
+Vizi.Loader.prototype.convertScene = function(scene) {
+
+	function convert(n) {
+		var o = new Vizi.Object({autoCreateTransform:false});
+		o.addComponent(new Vizi.Transform({object:n}));
+		if (n instanceof THREE.Mesh) {
+			o.addComponent(new Vizi.Visual({object:n}));
+		}
+		else if (n instanceof THREE.Camera) {
+			if (n instanceof THREE.PerspectiveCamera) {
+				o.addComponent(new Vizi.PerspectiveCamera({object:n}));
+			}
+		}
+		else if (n instanceof THREE.Light) {
+			if (n instanceof THREE.AmbientLight) {
+				o.addComponent(new Vizi.AmbientLight({object:n}));
+			}
+			else if (n instanceof THREE.DirectionalLight) {
+				o.addComponent(new Vizi.DirectionalLight({object:n}));
+			}
+			else if (n instanceof THREE.PointLight) {
+				o.addComponent(new Vizi.PointLight({object:n}));
+			}
+			else if (n instanceof THREE.SpotLight) {
+				o.addComponent(new Vizi.SpotLight({object:n}));
+			}
+		}
+		else if (n.children) {
+			var i, len = n.children.length;
+			for (i = 0; i < len; i++) {
+				var childNode  = n.children[i];
+				var child = convert(childNode);
+				if (child) {
+					o.addChild(child);
+				}
+				else {
+					// N.B.: what???
+				}
+			}
+		}
+		
+		return o;
+	}
+
+	return convert(scene);
+}
 /**
  * @fileoverview Module Configuration
  * 

@@ -22,7 +22,7 @@
 		var root = new Vizi.Object;
 		 
 		var loader = new Vizi.Loader;
-		loader.addEventListener("loaded", function(data) { onSceneLoaded(data, root); });
+		loader.addEventListener("loaded", function(data) { onSceneLoaded(data, app); });
 		loader.loadScene("./models/duck.dae");
 		
 		app.addObject(root);
@@ -39,8 +39,9 @@
 	}
 	);
 
-	function onSceneLoaded(data, root) {
-		root.addComponent(data.scene);
+	function onSceneLoaded(data, app) {
+		// root.addComponent(data.scene);
+		app.addObject(data.scene);
 	}
 
 	</script>

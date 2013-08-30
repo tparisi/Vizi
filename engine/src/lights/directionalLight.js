@@ -4,14 +4,15 @@ goog.require('Vizi.Light');
 Vizi.DirectionalLight = function(param)
 {
 	param = param || {};
-	this.direction = param.direction || new THREE.Vector3(0, 0, -1);
 	
 	Vizi.Light.call(this, param);
 
 	if (param.object) {
 		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
 	}
 	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
 		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
 	}
 }
