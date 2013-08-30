@@ -26,12 +26,15 @@
 				scene = data.scene;
 				app.addObject(scene);
 
-				rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
-				var duck = scene.findNode("LOD3sp");
-				duck.addComponent(rotator);
 
 				var visuals = scene.findNodes(Vizi.Visual);
 
+				var duck = scene.findNode(/LOD.*/);
+				if (duck) {
+					rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
+					scene.addComponent(rotator);
+					scene.addComponent(new Vizi.BounceBehavior({loop:true, autoStart:true}));
+				}
 			});
 		loader.loadScene("./models/duck.dae");
 		
