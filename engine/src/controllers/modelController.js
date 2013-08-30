@@ -62,17 +62,16 @@ Vizi.ModelControllerScript.prototype.realize = function()
 		
 	this.camera.position.set(0, 0, this.radius);
 	
-	this.controls = null;
 	this.createControls();
-	this.controls.enabled = this.enabled;
-	this.controls.userMinY = this.minY;
-	this.controls.userMinZoom = this.minZoom;
-	this.controls.userMaxZoom = this.maxZoom;
 }
 
 Vizi.ModelControllerScript.prototype.createControls = function()
 {
 	this.controls = new Vizi.OrbitControls(this.camera.object, Vizi.Graphics.instance.container);
+	this.controls.enabled = this.enabled;
+	this.controls.userMinY = this.minY;
+	this.controls.userMinZoom = this.minZoom;
+	this.controls.userMaxZoom = this.maxZoom;
 }
 
 Vizi.ModelControllerScript.prototype.update = function()

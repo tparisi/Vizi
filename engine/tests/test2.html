@@ -49,9 +49,9 @@
 		loader.loadScene("./models/duck.dae");
 		
 		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
 
 		container.addEventListener("mouseup", function(e) {
-				var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
 				controllerScript.headlightOn = !controllerScript.headlightOn;
 				if (rotator)
 					rotator.toggle();
@@ -65,6 +65,7 @@
 		
 		app.addObject(controller);
 		app.run();
+		controllerScript.controls.userPanSpeed = 0.1;
 	}
 	);
 

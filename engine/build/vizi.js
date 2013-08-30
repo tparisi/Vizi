@@ -44383,9 +44383,10 @@ Vizi.RotateBehavior.prototype.evaluate = function(t)
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
  * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
  */
 
-/* Hacked-up version of Three.js orbit controls for Skybox
+/* Hacked-up version of Three.js orbit controls for Vizi
  * Adds mode for one-button operation and optional userMinY
  * 
  */
@@ -44399,6 +44400,8 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	// API
 
+	this.enabled = true;
+
 	this.center = new THREE.Vector3();
 
 	this.userZoom = true;
@@ -44407,9 +44410,24 @@ Vizi.OrbitControls = function ( object, domElement ) {
 	this.userRotate = true;
 	this.userRotateSpeed = 1.0;
 
+	this.userPan = true;
+	this.userPanSpeed = 2.0;
+
 	this.autoRotate = false;
 	this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
 
+	this.minPolarAngle = 0; // radians
+	this.maxPolarAngle = Math.PI; // radians
+
+	this.minDistance = 0;
+	this.maxDistance = Infinity;
+
+	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
+
+	this.oneButton = false;
+	
+	var self = this;
+	
 	// internals
 
 	var scope = this;
@@ -44431,7 +44449,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	var lastPosition = new THREE.Vector3();
 
-	var STATE = { NONE : -1, ROTATE : 0, ZOOM : 1 };
+	var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
 	var state = STATE.NONE;
 
 	// events
@@ -44511,10 +44529,20 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	};
 
+	this.pan = function ( distance ) {
+
+		distance.transformDirection( this.object.matrix );
+		distance.multiplyScalar( scope.userPanSpeed );
+
+		this.object.position.add( distance );
+		this.center.add( distance );
+
+	};
+
 	this.update = function () {
 
 		var position = this.object.position;
-		var offset = position.clone().sub( this.center )
+		var offset = position.clone().sub( this.center );
 
 		// angle from z-axis around y-axis
 
@@ -44533,33 +44561,23 @@ Vizi.OrbitControls = function ( object, domElement ) {
 		theta += thetaDelta;
 		phi += phiDelta;
 
-		// restrict phi to be betwee EPS and PI-EPS
+		// restrict phi to be between desired limits
+		phi = Math.max( this.minPolarAngle, Math.min( this.maxPolarAngle, phi ) );
 
+		// restrict phi to be betwee EPS and PI-EPS
 		phi = Math.max( EPS, Math.min( Math.PI - EPS, phi ) );
 
-		var radius = offset.length();
+		var radius = offset.length() * scale;
+
+		// restrict radius to be between desired limits
+		radius = Math.max( this.minDistance, Math.min( this.maxDistance, radius ) );
+
 		offset.x = radius * Math.sin( phi ) * Math.sin( theta );
 		offset.y = radius * Math.cos( phi );
 		offset.z = radius * Math.sin( phi ) * Math.cos( theta );
-		offset.multiplyScalar( scale );
 
-		// Keep y above userMinY if defined
-		var newposition = new THREE.Vector3;
-		newposition.copy( this.center ).add( offset );
-		if (this.userMinY === undefined || newposition.y >= this.userMinY)
-		{
-			var center2newpos = newposition.clone().sub(this.center);
-			var dist = center2newpos.length();
-			
-			if (this.userMinZoom === undefined || dist >= this.userMinZoom)
-			{
-				if (this.userMaxZoom === undefined || dist <= this.userMaxZoom)
-				{
-					position.copy( this.center ).add( offset );
-				}
-			}
-		}
-		
+		position.copy( this.center ).add( offset );
+
 		this.object.lookAt( this.center );
 
 		thetaDelta = 0;
@@ -44591,11 +44609,12 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	function onMouseDown( event ) {
 
-		if ( !scope.userRotate ) return;
+		if ( scope.enabled === false ) return;
+		if ( scope.userRotate === false ) return;
 
 		event.preventDefault();
 
-		if ( event.button === 0 || event.button === 2 ) {
+		if ( event.button === 0 || (self.oneButton && event.button === 2)) {
 
 			state = STATE.ROTATE;
 
@@ -44607,6 +44626,10 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 			zoomStart.set( event.clientX, event.clientY );
 
+		} else if ( event.button === 2 ) {
+
+			state = STATE.PAN;
+
 		}
 
 		document.addEventListener( 'mousemove', onMouseMove, false );
@@ -44615,6 +44638,8 @@ Vizi.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onMouseMove( event ) {
+
+		if ( scope.enabled === false ) return;
 
 		event.preventDefault();
 
@@ -44631,7 +44656,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 		} else if ( state === STATE.ZOOM ) {
 
 			zoomEnd.set( event.clientX, event.clientY );
-			zoomDelta.sub( zoomEnd, zoomStart );
+			zoomDelta.subVectors( zoomEnd, zoomStart );
 
 			if ( zoomDelta.y > 0 ) {
 
@@ -44645,13 +44670,21 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 			zoomStart.copy( zoomEnd );
 
+		} else if ( state === STATE.PAN ) {
+
+			var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+			var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+
+			scope.pan( new THREE.Vector3( - movementX, movementY, 0 ) );
+
 		}
 
 	}
 
 	function onMouseUp( event ) {
 
-		if ( ! scope.userRotate ) return;
+		if ( scope.enabled === false ) return;
+		if ( scope.userRotate === false ) return;
 
 		document.removeEventListener( 'mousemove', onMouseMove, false );
 		document.removeEventListener( 'mouseup', onMouseUp, false );
@@ -44662,17 +44695,23 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	function onMouseWheel( event ) {
 
-		if ( ! scope.userZoom ) return;
-
 		event.preventDefault();
+		if ( scope.enabled === false ) return;
+		if ( scope.userZoom === false ) return;
 
-		// WebKit: wheelDeltaY; Moz: -deltaY
-		var wheelDelta = (event.wheelDeltaY !== undefined) ? event.wheelDeltaY : -event.deltaY;
-		
-		// Gecko - old, use event.detail
-		if ( event.detail ) { wheelDelta = -event.detail/3; }
+		var delta = 0;
 
-		if ( wheelDelta > 0 ) {
+		if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
+
+			delta = event.wheelDelta;
+
+		} else if ( event.detail ) { // Firefox
+
+			delta = - event.detail;
+
+		}
+
+		if ( delta > 0 ) {
 
 			scope.zoomOut();
 
@@ -44684,16 +44723,39 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	}
 
+	function onKeyDown( event ) {
+
+		if ( scope.enabled === false ) return;
+		if ( scope.userPan === false ) return;
+
+		switch ( event.keyCode ) {
+
+			case scope.keys.UP:
+				scope.pan( new THREE.Vector3( 0, 1, 0 ) );
+				break;
+			case scope.keys.BOTTOM:
+				scope.pan( new THREE.Vector3( 0, - 1, 0 ) );
+				break;
+			case scope.keys.LEFT:
+				scope.pan( new THREE.Vector3( - 1, 0, 0 ) );
+				break;
+			case scope.keys.RIGHT:
+				scope.pan( new THREE.Vector3( 1, 0, 0 ) );
+				break;
+		}
+
+	}
+
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	this.domElement.addEventListener( 'mousedown', onMouseDown, false );
 	this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
-	this.domElement.addEventListener( 'wheel', onMouseWheel, false );
-	this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false );
+	this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
+	this.domElement.addEventListener( 'keydown', onKeyDown, false );
 
 };
 
-
-Vizi.OrbitControls.prototype = Object.create( THREE.EventDispatcher.prototype );/**
+Vizi.OrbitControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+/**
  * @fileoverview Main interface to the graphics and rendering subsystem
  * 
  * @author Tony Parisi
@@ -45628,17 +45690,16 @@ Vizi.ModelControllerScript.prototype.realize = function()
 		
 	this.camera.position.set(0, 0, this.radius);
 	
-	this.controls = null;
 	this.createControls();
-	this.controls.enabled = this.enabled;
-	this.controls.userMinY = this.minY;
-	this.controls.userMinZoom = this.minZoom;
-	this.controls.userMaxZoom = this.maxZoom;
 }
 
 Vizi.ModelControllerScript.prototype.createControls = function()
 {
 	this.controls = new Vizi.OrbitControls(this.camera.object, Vizi.Graphics.instance.container);
+	this.controls.enabled = this.enabled;
+	this.controls.userMinY = this.minY;
+	this.controls.userMinZoom = this.minZoom;
+	this.controls.userMaxZoom = this.maxZoom;
 }
 
 Vizi.ModelControllerScript.prototype.update = function()
