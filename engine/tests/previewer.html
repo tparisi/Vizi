@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi Test Load Scene</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+	<script>
+	var CLOSURE_NO_DEPS = true;
+	</script>
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container, displayStats:true });
+		
+		var scene = null;
+		var rotator = null;
+		var loader = new Vizi.Loader;
+		
+		loader.addEventListener("loaded", function(data) { 
+				if (true) {
+					scene = data.scene;
+					app.addObject(scene);
+	
+	
+					var visuals = scene.findNodes(Vizi.Visual);
+	
+					var duck = scene.findNode(/LOD.*/);
+					if (duck) {
+						rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
+						duck.addComponent(rotator);
+						// coordinate space issue
+						duck.addComponent(new Vizi.BounceBehavior({bounceVector:new THREE.Vector3(0, 1, 0),
+							loop:true, autoStart:true}));
+					}
+				}
+				else {
+					var obj = new Vizi.Object;
+					obj.addComponent(data.scene);
+					app.addObject(obj);		
+				}
+			});
+		loader.loadScene("./models/vizi_mobile/vizi_mobile_tc01.dae");
+		
+		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+		var wireframe = false;
+		container.addEventListener("mouseup", function(e) {
+				//controllerScript.headlightOn = !controllerScript.headlightOn;
+				if (rotator)
+					rotator.toggle();
+
+				if (scene) {
+					wireframe = !wireframe;
+					scene.map(Vizi.Visual, function(v) {
+						if (v.material instanceof THREE.MeshFaceMaterial) {
+							var i, len = v.geometry.materials.length;
+							for (i = 0; i < len; i++)
+								v.material.materials[i].wireframe = wireframe;
+						}
+						else {
+							v.material.wireframe = wireframe;
+						}
+					});
+				}
+			});
+		
+		app.addObject(controller);
+		app.run();
+
+		controllerScript.camera.near = 0.01;
+	}
+	);
+
+	function onSceneLoaded(data, app) {
+		// root.addComponent(data.scene);
+		app.addObject(data.scene);
+	}
+
+	</script>
+	
+</body>
+</html>
