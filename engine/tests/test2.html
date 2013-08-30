@@ -19,10 +19,11 @@
 		
 		var app = new Vizi.Application({ container : container, displayStats:true });
 
+		var scene = null;
 		var rotator = null;
 		var loader = new Vizi.Loader;
 		loader.addEventListener("loaded", function(data) { 
-				var scene = data.scene;
+				scene = data.scene;
 				app.addObject(scene);
 
 				rotator = new Vizi.RotateBehavior({autoStart:true, duration:2});
@@ -30,6 +31,7 @@
 				duck.addComponent(rotator);
 
 				var visuals = scene.findNodes(Vizi.Visual);
+
 			});
 		loader.loadScene("./models/duck.dae");
 		
@@ -40,6 +42,12 @@
 				controllerScript.headlightOn = !controllerScript.headlightOn;
 				if (rotator)
 					rotator.toggle();
+
+				if (scene) {
+					scene.map(Vizi.Visual, function(v) {
+						v.material.wireframe = !v.material.wireframe;
+					});
+				}
 			});
 		
 		app.addObject(controller);

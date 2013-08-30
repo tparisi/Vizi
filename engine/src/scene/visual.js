@@ -13,10 +13,16 @@ Vizi.Visual = function(param)
 	param = param || {};
 	
 	Vizi.SceneComponent.call(this, param);
-	
-	this.geometry = param.geometry;
-	this.material = param.material;
-	this.object = param.object;
+
+	if (param.object) {
+		this.object = param.object;
+		this.geometry = this.object.geometry;
+		this.material = this.object.material;
+	}
+	else {
+		this.geometry = param.geometry;
+		this.material = param.material;
+	}
 }
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);

@@ -2085,8 +2085,7 @@ Vizi.Object.prototype.traverse = function (callback) {
 	}
 }
 
-Vizi.Object.prototype.findCallback = function(n, query, found)
-{
+Vizi.Object.prototype.findCallback = function(n, query, found) {
 	if (typeof(query) == "string")
 	{
 		if (n.name == query)
@@ -2110,8 +2109,7 @@ Vizi.Object.prototype.findCallback = function(n, query, found)
 	}
 }
 
-Vizi.Object.prototype.findNode = function(str)
-{
+Vizi.Object.prototype.findNode = function(str) {
 	var that = this;
 	var found = [];
 	this.traverse(function (o) { that.findCallback(o, str, found); });
@@ -2119,13 +2117,21 @@ Vizi.Object.prototype.findNode = function(str)
 	return found[0];
 }
 
-Vizi.Object.prototype.findNodes = function(query)
-{
+Vizi.Object.prototype.findNodes = function(query) {
 	var that = this;
 	var found = [];
 	this.traverse(function (o) { that.findCallback(o, query, found); });
 	
 	return found;
+}
+
+Vizi.Object.prototype.map = function(query, callback){
+	var found = this.findNodes(query);
+	var i, len = found.length;
+	
+	for (i = 0; i < len; i++) {
+		callback(found[i]);
+	}
 }
 /**
  *
@@ -2660,10 +2666,16 @@ Vizi.Visual = function(param)
 	param = param || {};
 	
 	Vizi.SceneComponent.call(this, param);
-	
-	this.geometry = param.geometry;
-	this.material = param.material;
-	this.object = param.object;
+
+	if (param.object) {
+		this.object = param.object;
+		this.geometry = this.object.geometry;
+		this.material = this.object.material;
+	}
+	else {
+		this.geometry = param.geometry;
+		this.material = param.material;
+	}
 }
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);
