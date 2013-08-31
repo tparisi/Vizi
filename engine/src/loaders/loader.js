@@ -145,10 +145,9 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
 	if (data.scene)
 	{
 		var convertedScene = this.convertScene(data.scene);
-		
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
-		var that = this;
-		data.scene.traverse(function (n) { that.traverseCallback(n, result); });
+		result.cameras = convertedScene.findNodes(Vizi.Camera);
+		result.lights = convertedScene.findNodes(Vizi.Light);
 		success = true;
 	}
 	

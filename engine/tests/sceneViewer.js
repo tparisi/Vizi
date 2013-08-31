@@ -128,7 +128,6 @@ SceneViewer.prototype.replaceScene = function(data)
 		{
 			var camera = data.cameras[i];
 			camera.aspect = container.offsetWidth / container.offsetHeight;
-			camera.updateProjectionMatrix();
 			
 			this.cameras.push(camera);
 			this.cameraNames.push(camera.name);
@@ -213,7 +212,6 @@ SceneViewer.prototype.addToScene = function(data)
 		{
 			var camera = data.cameras[i];
 			camera.aspect = container.offsetWidth / container.offsetHeight;
-			camera.updateProjectionMatrix();
 			
 			this.cameras.push(camera);
 			this.cameraNames.push(camera.name);
@@ -311,7 +309,7 @@ SceneViewer.prototype.toggleLight = function(index)
 	if (this.lights && this.lights[index])
 	{
 		var light = this.lights[index];
-		if (light instanceof THREE.AmbientLight)
+		if (light instanceof Vizi.AmbientLight)
 		{
 			var color = light.color;
 			if (color.r != 0 || color.g != 0 || color.b != 0)
@@ -441,31 +439,21 @@ SceneViewer.prototype.fitToScene = function()
 		this.createGrid();
 }
 
-SceneViewer.prototype.sceneStatsCallback = function(n)
-{
-	if (n instanceof THREE.Mesh)
-	{
-		var geometry = n.geometry;
-		var nFaces = geometry.faces.length;
-		this.faceCount += nFaces;
-		this.meshCount++;
-		
-		if (n.name == "pPlane1" || n.name == "ServerBase" || n.name == "MotherBoardBase")
-			n.receiveShadow = true;
-		else
-			n.castShadow = true;
-			
-	}
-	
-}
-
 SceneViewer.prototype.calcSceneStats = function()
 {
 	this.meshCount = 0;
 	this.faceCount = 0;
 	
 	var that = this;
-	this.sceneRoot.transform.object.traverse(function (n) { that.sceneStatsCallback(n); });
+	var visuals = this.sceneRoot.findNodes(Vizi.Visual);
+	var i, len = visuals.length;
+	for (i = 0; i < len; i++) {
+		var visual = visuals[i];
+		var geometry = visual.geometry;
+		var nFaces = geometry.faces.length;
+		this.faceCount += nFaces;
+		this.meshCount++;		
+	}
 
 	if (this.sceneStats)
 	{
@@ -507,6 +495,8 @@ SceneViewer.prototype.addMouseCallback = function(node, callback)
 
 SceneViewer.prototype.handleMouse = function(type, pageX, pageY, eltX, eltY)
 {
+	return;
+	
 	var pick = Vizi.Graphics.instance.nodeFromMouse(eltX, eltY);
 	var node = pick ? pick.node : null;
 	
