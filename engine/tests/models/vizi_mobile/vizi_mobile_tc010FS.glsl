@@ -1,0 +1,33 @@
+precision highp float;
+varying vec3 v_normal;
+uniform float u_shininess;
+varying vec3 v_lightDirection;
+varying vec3 v_mPos;
+uniform vec3 u_diffuse;
+uniform vec3 u_emission;
+uniform vec3 u_reflective;
+uniform vec3 u_specular;
+void main(void) {
+vec3 normal = normalize(v_normal);
+if (gl_FrontFacing == false) normal = -normal;
+vec4 color = vec4(0., 0., 0., 1.);
+vec4 diffuse = vec4(0., 0., 0., 0.);
+vec4 emission;
+vec4 reflective;
+vec4 specular;
+vec3 l = normalize(v_lightDirection);
+                        vec3 v = normalize(v_mPos);
+                        vec3 h = normalize(l+v);
+                        float lambert = max(-dot(normal,l), 0.);
+                        float specLight = pow(max(0.0,-dot(normal,h)),u_shininess);
+diffuse.xyz = u_diffuse;
+emission.xyz = u_emission;
+reflective.xyz = u_reflective;
+specular.xyz = u_specular;
+diffuse.xyz += reflective.xyz;
+diffuse.xyz *= lambert;
+color.xyz += diffuse.xyz;
+color.xyz += emission.xyz;
+color.xyz += specular.xyz * specLight;
+gl_FragColor = vec4(color.rgb * color.a, color.a);
+}
