@@ -80,8 +80,6 @@ SceneViewer.prototype.runloop = function()
 SceneViewer.prototype.replaceScene = function(data)
 {
 	// hack for now - do this for real after computing scene bounds
-	this.controllerScript.camera.near = 0.01;
-	this.controllerScript.controls.userPanSpeed = 0.01;
 	
 	var i, len = this.scenes.length;
 	for (i = 0; i < len; i++)
@@ -102,7 +100,14 @@ SceneViewer.prototype.replaceScene = function(data)
 	}
 	
 	this.sceneRoot.addChild(data.scene);
-
+	var bbox = Vizi.SceneUtils.computeBoundingBox(data.scene);
+	
+	// heuristic, who knows ?
+	if (bbox.max.z < 1) {
+		this.controllerScript.camera.near = 0.01;
+		this.controllerScript.controls.userPanSpeed = 0.01;
+	}
+	
 	if (data.keyFrameAnimators)
 	{
 		var i, len = data.keyFrameAnimators.length;
@@ -450,7 +455,7 @@ SceneViewer.prototype.calcSceneStats = function()
 	for (i = 0; i < len; i++) {
 		var visual = visuals[i];
 		var geometry = visual.geometry;
-		var nFaces = geometry.faces.length;
+		var nFaces = geometry.faces ? geometry.faces.length : geometry.attributes.index.length / 3;
 		this.faceCount += nFaces;
 		this.meshCount++;		
 	}

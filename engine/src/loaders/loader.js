@@ -96,6 +96,9 @@ Vizi.Loader.prototype.loadScene = function(url)
 		case 'JS' :
 			loaderClass = THREE.SceneLoader;
 			break;
+		case 'JSON' :
+			loaderClass = THREE.glTFLoader;
+			break;
 		default :
 			break;
 	}

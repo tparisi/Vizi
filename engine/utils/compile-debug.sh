@@ -1,9 +1,13 @@
 BUILDDIR=../build
 TARGET="$BUILDDIR/vizi-nodeps.js"
 OUTPUT="$BUILDDIR/vizi.js"
-THREE=../libs/three.js.r58/three.js
-STATS=../libs/three.js.r58/stats.min.js
-LOADERS=../libs/three.js.r59/loaders/ColladaLoader.js
+THREE=../libs/three.js.r59/three.js
+STATS=../libs/three.js.r59/stats.min.js
+LOADERS="../libs/three.js.r59/loaders/ColladaLoader.js \
+../libs/three.js.r59/loaders/glTF/webgl-tf-loader.js \
+../libs/three.js.r59/loaders/glTF/glTFLoader.js \
+../libs/three.js.r59/loaders/glTF/glTFLoaderUtils.js \
+../libs/three.js.r59/loaders/glTF/glTFAnimation.js"
 RAF=../libs/requestAnimationFrame/RequestAnimationFrame.js
 MOUSEWHEEL=../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js
 TWEEN=../libs/tween.js/tween.min.js

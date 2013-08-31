@@ -1,11 +1,11 @@
 {
     "animations": {},
     "asset": {
-        "generator": "collada2gltf 0.1.0"
+        "generator": "collada2gltf@8ffb01efe30653c6a629c9403833575252cb5bec"
     },
     "attributes": {
-        "attribute_100": {
-            "bufferView": "bufferView_972",
+        "attribute_104": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 636672,
             "byteStride": 12,
             "count": 39754,
@@ -21,8 +21,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_102": {
-            "bufferView": "bufferView_972",
+        "attribute_106": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 1113720,
             "byteStride": 12,
             "count": 39754,
@@ -38,8 +38,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_104": {
-            "bufferView": "bufferView_972",
+        "attribute_108": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 1590768,
             "byteStride": 8,
             "count": 39754,
@@ -53,8 +53,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_146": {
-            "bufferView": "bufferView_972",
+        "attribute_151": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 1908800,
             "byteStride": 12,
             "count": 15552,
@@ -70,8 +70,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_148": {
-            "bufferView": "bufferView_972",
+        "attribute_153": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2095424,
             "byteStride": 12,
             "count": 15552,
@@ -87,8 +87,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_150": {
-            "bufferView": "bufferView_972",
+        "attribute_155": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2282048,
             "byteStride": 8,
             "count": 15552,
@@ -102,8 +102,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_172": {
-            "bufferView": "bufferView_972",
+        "attribute_178": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2406464,
             "byteStride": 12,
             "count": 1824,
@@ -119,8 +119,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_174": {
-            "bufferView": "bufferView_972",
+        "attribute_180": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2428352,
             "byteStride": 12,
             "count": 1824,
@@ -136,8 +136,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_176": {
-            "bufferView": "bufferView_972",
+        "attribute_182": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2450240,
             "byteStride": 8,
             "count": 1824,
@@ -151,8 +151,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_198": {
-            "bufferView": "bufferView_972",
+        "attribute_205": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2464832,
             "byteStride": 12,
             "count": 1152,
@@ -168,8 +168,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_200": {
-            "bufferView": "bufferView_972",
+        "attribute_207": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2478656,
             "byteStride": 12,
             "count": 1152,
@@ -185,8 +185,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_202": {
-            "bufferView": "bufferView_972",
+        "attribute_209": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2492480,
             "byteStride": 8,
             "count": 1152,
@@ -200,8 +200,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_22": {
-            "bufferView": "bufferView_972",
+        "attribute_23": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 0,
             "byteStride": 12,
             "count": 4032,
@@ -217,8 +217,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_224": {
-            "bufferView": "bufferView_972",
+        "attribute_232": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2501696,
             "byteStride": 12,
             "count": 75,
@@ -234,8 +234,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_226": {
-            "bufferView": "bufferView_972",
+        "attribute_234": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2502596,
             "byteStride": 12,
             "count": 75,
@@ -251,8 +251,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_228": {
-            "bufferView": "bufferView_972",
+        "attribute_236": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2503496,
             "byteStride": 8,
             "count": 75,
@@ -266,8 +266,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_24": {
-            "bufferView": "bufferView_972",
+        "attribute_25": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 48384,
             "byteStride": 12,
             "count": 4032,
@@ -283,8 +283,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_250": {
-            "bufferView": "bufferView_972",
+        "attribute_259": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2504096,
             "byteStride": 12,
             "count": 72,
@@ -300,8 +300,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_252": {
-            "bufferView": "bufferView_972",
+        "attribute_261": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2504960,
             "byteStride": 12,
             "count": 72,
@@ -317,8 +317,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_254": {
-            "bufferView": "bufferView_972",
+        "attribute_263": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2505824,
             "byteStride": 8,
             "count": 72,
@@ -332,8 +332,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_26": {
-            "bufferView": "bufferView_972",
+        "attribute_27": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 96768,
             "byteStride": 8,
             "count": 4032,
@@ -347,8 +347,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_276": {
-            "bufferView": "bufferView_972",
+        "attribute_286": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2506400,
             "byteStride": 12,
             "count": 1824,
@@ -364,8 +364,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_278": {
-            "bufferView": "bufferView_972",
+        "attribute_288": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2528288,
             "byteStride": 12,
             "count": 1824,
@@ -381,8 +381,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_280": {
-            "bufferView": "bufferView_972",
+        "attribute_290": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2550176,
             "byteStride": 8,
             "count": 1824,
@@ -396,8 +396,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_302": {
-            "bufferView": "bufferView_972",
+        "attribute_313": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2564768,
             "byteStride": 12,
             "count": 1152,
@@ -413,8 +413,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_304": {
-            "bufferView": "bufferView_972",
+        "attribute_315": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2578592,
             "byteStride": 12,
             "count": 1152,
@@ -430,8 +430,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_306": {
-            "bufferView": "bufferView_972",
+        "attribute_317": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2592416,
             "byteStride": 8,
             "count": 1152,
@@ -445,8 +445,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_328": {
-            "bufferView": "bufferView_972",
+        "attribute_340": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2601632,
             "byteStride": 12,
             "count": 288,
@@ -462,8 +462,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_330": {
-            "bufferView": "bufferView_972",
+        "attribute_342": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2605088,
             "byteStride": 12,
             "count": 288,
@@ -479,8 +479,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_332": {
-            "bufferView": "bufferView_972",
+        "attribute_344": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2608544,
             "byteStride": 8,
             "count": 288,
@@ -494,8 +494,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_354": {
-            "bufferView": "bufferView_972",
+        "attribute_367": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2610848,
             "byteStride": 12,
             "count": 288,
@@ -511,8 +511,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_356": {
-            "bufferView": "bufferView_972",
+        "attribute_369": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2614304,
             "byteStride": 12,
             "count": 288,
@@ -528,8 +528,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_358": {
-            "bufferView": "bufferView_972",
+        "attribute_371": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2617760,
             "byteStride": 8,
             "count": 288,
@@ -543,8 +543,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_380": {
-            "bufferView": "bufferView_972",
+        "attribute_394": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2620064,
             "byteStride": 12,
             "count": 4032,
@@ -560,8 +560,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_382": {
-            "bufferView": "bufferView_972",
+        "attribute_396": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2668448,
             "byteStride": 12,
             "count": 4032,
@@ -577,8 +577,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_384": {
-            "bufferView": "bufferView_972",
+        "attribute_398": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2716832,
             "byteStride": 8,
             "count": 4032,
@@ -592,8 +592,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_406": {
-            "bufferView": "bufferView_972",
+        "attribute_421": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2749088,
             "byteStride": 12,
             "count": 704,
@@ -609,8 +609,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_408": {
-            "bufferView": "bufferView_972",
+        "attribute_423": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2757536,
             "byteStride": 12,
             "count": 704,
@@ -626,8 +626,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_410": {
-            "bufferView": "bufferView_972",
+        "attribute_425": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2765984,
             "byteStride": 8,
             "count": 704,
@@ -641,8 +641,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_432": {
-            "bufferView": "bufferView_972",
+        "attribute_448": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2771616,
             "byteStride": 12,
             "count": 15160,
@@ -658,8 +658,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_434": {
-            "bufferView": "bufferView_972",
+        "attribute_450": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 2953536,
             "byteStride": 12,
             "count": 15160,
@@ -675,8 +675,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_436": {
-            "bufferView": "bufferView_972",
+        "attribute_452": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 3135456,
             "byteStride": 8,
             "count": 15160,
@@ -690,8 +690,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_458": {
-            "bufferView": "bufferView_972",
+        "attribute_475": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 3256736,
             "byteStride": 12,
             "count": 39752,
@@ -707,8 +707,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_460": {
-            "bufferView": "bufferView_972",
+        "attribute_477": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 3733760,
             "byteStride": 12,
             "count": 39752,
@@ -724,8 +724,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_462": {
-            "bufferView": "bufferView_972",
+        "attribute_479": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4210784,
             "byteStride": 8,
             "count": 39752,
@@ -739,8 +739,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_48": {
-            "bufferView": "bufferView_972",
+        "attribute_50": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 129024,
             "byteStride": 12,
             "count": 704,
@@ -756,8 +756,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_484": {
-            "bufferView": "bufferView_972",
+        "attribute_502": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4528800,
             "byteStride": 12,
             "count": 1824,
@@ -773,8 +773,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_486": {
-            "bufferView": "bufferView_972",
+        "attribute_504": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4550688,
             "byteStride": 12,
             "count": 1824,
@@ -790,8 +790,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_488": {
-            "bufferView": "bufferView_972",
+        "attribute_506": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4572576,
             "byteStride": 8,
             "count": 1824,
@@ -805,8 +805,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_50": {
-            "bufferView": "bufferView_972",
+        "attribute_52": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 137472,
             "byteStride": 12,
             "count": 704,
@@ -822,8 +822,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_510": {
-            "bufferView": "bufferView_972",
+        "attribute_529": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4587168,
             "byteStride": 12,
             "count": 1440,
@@ -839,8 +839,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_512": {
-            "bufferView": "bufferView_972",
+        "attribute_531": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4604448,
             "byteStride": 12,
             "count": 1440,
@@ -856,8 +856,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_514": {
-            "bufferView": "bufferView_972",
+        "attribute_533": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4621728,
             "byteStride": 8,
             "count": 1440,
@@ -871,8 +871,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_52": {
-            "bufferView": "bufferView_972",
+        "attribute_54": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 145920,
             "byteStride": 8,
             "count": 704,
@@ -886,8 +886,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_536": {
-            "bufferView": "bufferView_972",
+        "attribute_556": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4633248,
             "byteStride": 12,
             "count": 1824,
@@ -903,8 +903,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_538": {
-            "bufferView": "bufferView_972",
+        "attribute_558": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4655136,
             "byteStride": 12,
             "count": 1824,
@@ -920,8 +920,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_540": {
-            "bufferView": "bufferView_972",
+        "attribute_560": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4677024,
             "byteStride": 8,
             "count": 1824,
@@ -935,8 +935,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_562": {
-            "bufferView": "bufferView_972",
+        "attribute_583": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4691616,
             "byteStride": 12,
             "count": 1440,
@@ -952,8 +952,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_564": {
-            "bufferView": "bufferView_972",
+        "attribute_585": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4708896,
             "byteStride": 12,
             "count": 1440,
@@ -969,8 +969,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_566": {
-            "bufferView": "bufferView_972",
+        "attribute_587": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4726176,
             "byteStride": 8,
             "count": 1440,
@@ -984,8 +984,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_588": {
-            "bufferView": "bufferView_972",
+        "attribute_610": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4737696,
             "byteStride": 12,
             "count": 1824,
@@ -1001,8 +1001,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_590": {
-            "bufferView": "bufferView_972",
+        "attribute_612": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4759584,
             "byteStride": 12,
             "count": 1824,
@@ -1018,8 +1018,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_592": {
-            "bufferView": "bufferView_972",
+        "attribute_614": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4781472,
             "byteStride": 8,
             "count": 1824,
@@ -1033,8 +1033,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_614": {
-            "bufferView": "bufferView_972",
+        "attribute_637": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4796064,
             "byteStride": 12,
             "count": 1440,
@@ -1050,8 +1050,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_616": {
-            "bufferView": "bufferView_972",
+        "attribute_639": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4813344,
             "byteStride": 12,
             "count": 1440,
@@ -1067,8 +1067,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_618": {
-            "bufferView": "bufferView_972",
+        "attribute_641": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4830624,
             "byteStride": 8,
             "count": 1440,
@@ -1082,8 +1082,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_640": {
-            "bufferView": "bufferView_972",
+        "attribute_664": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4842144,
             "byteStride": 12,
             "count": 640,
@@ -1099,8 +1099,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_642": {
-            "bufferView": "bufferView_972",
+        "attribute_666": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4849824,
             "byteStride": 12,
             "count": 640,
@@ -1116,8 +1116,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_644": {
-            "bufferView": "bufferView_972",
+        "attribute_668": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4857504,
             "byteStride": 8,
             "count": 640,
@@ -1131,8 +1131,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_666": {
-            "bufferView": "bufferView_972",
+        "attribute_691": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4862624,
             "byteStride": 12,
             "count": 5936,
@@ -1148,8 +1148,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_668": {
-            "bufferView": "bufferView_972",
+        "attribute_693": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 4933856,
             "byteStride": 12,
             "count": 5936,
@@ -1165,8 +1165,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_670": {
-            "bufferView": "bufferView_972",
+        "attribute_695": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5005088,
             "byteStride": 8,
             "count": 5936,
@@ -1180,8 +1180,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_692": {
-            "bufferView": "bufferView_972",
+        "attribute_718": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5052576,
             "byteStride": 12,
             "count": 1824,
@@ -1197,8 +1197,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_694": {
-            "bufferView": "bufferView_972",
+        "attribute_720": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5074464,
             "byteStride": 12,
             "count": 1824,
@@ -1214,8 +1214,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_696": {
-            "bufferView": "bufferView_972",
+        "attribute_722": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5096352,
             "byteStride": 8,
             "count": 1824,
@@ -1229,8 +1229,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_718": {
-            "bufferView": "bufferView_972",
+        "attribute_745": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5110944,
             "byteStride": 12,
             "count": 1440,
@@ -1246,8 +1246,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_720": {
-            "bufferView": "bufferView_972",
+        "attribute_747": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5128224,
             "byteStride": 12,
             "count": 1440,
@@ -1263,8 +1263,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_722": {
-            "bufferView": "bufferView_972",
+        "attribute_749": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5145504,
             "byteStride": 8,
             "count": 1440,
@@ -1278,8 +1278,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_74": {
-            "bufferView": "bufferView_972",
+        "attribute_77": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 151552,
             "byteStride": 12,
             "count": 15160,
@@ -1295,8 +1295,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_744": {
-            "bufferView": "bufferView_972",
+        "attribute_772": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5157024,
             "byteStride": 12,
             "count": 1824,
@@ -1312,8 +1312,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_746": {
-            "bufferView": "bufferView_972",
+        "attribute_774": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5178912,
             "byteStride": 12,
             "count": 1824,
@@ -1329,8 +1329,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_748": {
-            "bufferView": "bufferView_972",
+        "attribute_776": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5200800,
             "byteStride": 8,
             "count": 1824,
@@ -1344,8 +1344,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_76": {
-            "bufferView": "bufferView_972",
+        "attribute_79": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 333472,
             "byteStride": 12,
             "count": 15160,
@@ -1361,8 +1361,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_770": {
-            "bufferView": "bufferView_972",
+        "attribute_799": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5215392,
             "byteStride": 12,
             "count": 1440,
@@ -1378,8 +1378,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_772": {
-            "bufferView": "bufferView_972",
+        "attribute_801": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5232672,
             "byteStride": 12,
             "count": 1440,
@@ -1395,8 +1395,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_774": {
-            "bufferView": "bufferView_972",
+        "attribute_803": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5249952,
             "byteStride": 8,
             "count": 1440,
@@ -1410,8 +1410,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_78": {
-            "bufferView": "bufferView_972",
+        "attribute_81": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 515392,
             "byteStride": 8,
             "count": 15160,
@@ -1425,8 +1425,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_796": {
-            "bufferView": "bufferView_972",
+        "attribute_826": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5261472,
             "byteStride": 12,
             "count": 1824,
@@ -1442,8 +1442,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_798": {
-            "bufferView": "bufferView_972",
+        "attribute_828": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5283360,
             "byteStride": 12,
             "count": 1824,
@@ -1459,8 +1459,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_800": {
-            "bufferView": "bufferView_972",
+        "attribute_830": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5305248,
             "byteStride": 8,
             "count": 1824,
@@ -1474,8 +1474,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_822": {
-            "bufferView": "bufferView_972",
+        "attribute_853": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5319840,
             "byteStride": 12,
             "count": 1440,
@@ -1491,8 +1491,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_824": {
-            "bufferView": "bufferView_972",
+        "attribute_855": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5337120,
             "byteStride": 12,
             "count": 1440,
@@ -1508,8 +1508,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_826": {
-            "bufferView": "bufferView_972",
+        "attribute_857": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5354400,
             "byteStride": 8,
             "count": 1440,
@@ -1523,8 +1523,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_888": {
-            "bufferView": "bufferView_972",
+        "attribute_920": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5365920,
             "byteStride": 12,
             "count": 3064,
@@ -1540,8 +1540,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_890": {
-            "bufferView": "bufferView_972",
+        "attribute_922": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5402688,
             "byteStride": 12,
             "count": 3064,
@@ -1557,8 +1557,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_892": {
-            "bufferView": "bufferView_972",
+        "attribute_924": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5439456,
             "byteStride": 8,
             "count": 3064,
@@ -1572,8 +1572,8 @@
             ],
             "type": "FLOAT_VEC2"
         },
-        "attribute_934": {
-            "bufferView": "bufferView_972",
+        "attribute_967": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5463968,
             "byteStride": 12,
             "count": 6469,
@@ -1589,8 +1589,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_936": {
-            "bufferView": "bufferView_972",
+        "attribute_969": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5541596,
             "byteStride": 12,
             "count": 6469,
@@ -1606,8 +1606,8 @@
             ],
             "type": "FLOAT_VEC3"
         },
-        "attribute_938": {
-            "bufferView": "bufferView_972",
+        "attribute_971": {
+            "bufferView": "bufferView_1005",
             "byteOffset": 5619224,
             "byteStride": 8,
             "count": 6469,
@@ -1623,13 +1623,13 @@
         }
     },
     "bufferViews": {
-        "bufferView_972": {
+        "bufferView_1005": {
             "buffer": "vizi_mobile_tc01.bin",
             "byteLength": 5670976,
             "byteOffset": 0,
             "target": "ARRAY_BUFFER"
         },
-        "bufferView_973": {
+        "bufferView_1006": {
             "buffer": "vizi_mobile_tc01.bin",
             "byteLength": 514320,
             "byteOffset": 5670976,
@@ -1659,284 +1659,294 @@
         }
     },
     "indices": {
-        "indices_141": {
-            "bufferView": "bufferView_973",
+        "indices_102": {
+            "bufferView": "bufferView_1006",
+            "byteOffset": 59532,
+            "count": 59628,
+            "type": "UNSIGNED_SHORT"
+        },
+        "indices_146": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 178788,
             "count": 12531,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_144": {
-            "bufferView": "bufferView_973",
+        "indices_149": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 203850,
             "count": 3021,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_170": {
-            "bufferView": "bufferView_973",
+        "indices_176": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 209892,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_196": {
-            "bufferView": "bufferView_973",
+        "indices_203": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 213540,
             "count": 1152,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_20": {
-            "bufferView": "bufferView_973",
+        "indices_21": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 0,
             "count": 6048,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_222": {
-            "bufferView": "bufferView_973",
+        "indices_230": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 215844,
             "count": 75,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_248": {
-            "bufferView": "bufferView_973",
+        "indices_257": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 215994,
             "count": 72,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_274": {
-            "bufferView": "bufferView_973",
+        "indices_284": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 216138,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_300": {
-            "bufferView": "bufferView_973",
+        "indices_311": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 219786,
             "count": 1152,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_326": {
-            "bufferView": "bufferView_973",
+        "indices_338": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 222090,
             "count": 288,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_352": {
-            "bufferView": "bufferView_973",
+        "indices_365": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 222666,
             "count": 288,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_378": {
-            "bufferView": "bufferView_973",
+        "indices_392": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 223242,
             "count": 6048,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_404": {
-            "bufferView": "bufferView_973",
+        "indices_419": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 235338,
             "count": 1056,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_430": {
-            "bufferView": "bufferView_973",
+        "indices_446": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 237450,
             "count": 22662,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_456": {
-            "bufferView": "bufferView_973",
+        "indices_473": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 282774,
             "count": 59628,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_46": {
-            "bufferView": "bufferView_973",
+        "indices_48": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 12096,
             "count": 1056,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_482": {
-            "bufferView": "bufferView_973",
+        "indices_500": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 402030,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_508": {
-            "bufferView": "bufferView_973",
+        "indices_527": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 405678,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_534": {
-            "bufferView": "bufferView_973",
+        "indices_554": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 408558,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_560": {
-            "bufferView": "bufferView_973",
+        "indices_581": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 412206,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_586": {
-            "bufferView": "bufferView_973",
+        "indices_608": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 415086,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_612": {
-            "bufferView": "bufferView_973",
+        "indices_635": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 418734,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_638": {
-            "bufferView": "bufferView_973",
+        "indices_662": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 421614,
             "count": 960,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_664": {
-            "bufferView": "bufferView_973",
+        "indices_689": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 423534,
             "count": 8904,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_690": {
-            "bufferView": "bufferView_973",
+        "indices_716": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 441342,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_716": {
-            "bufferView": "bufferView_973",
+        "indices_743": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 444990,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_72": {
-            "bufferView": "bufferView_973",
+        "indices_75": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 14208,
             "count": 22662,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_742": {
-            "bufferView": "bufferView_973",
+        "indices_770": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 447870,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_768": {
-            "bufferView": "bufferView_973",
+        "indices_797": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 451518,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_794": {
-            "bufferView": "bufferView_973",
+        "indices_824": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 454398,
             "count": 1824,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_820": {
-            "bufferView": "bufferView_973",
+        "indices_851": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 458046,
             "count": 1440,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_880": {
-            "bufferView": "bufferView_973",
+        "indices_912": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 460926,
             "count": 9846,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_883": {
-            "bufferView": "bufferView_973",
+        "indices_915": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 480618,
             "count": 2268,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_886": {
-            "bufferView": "bufferView_973",
+        "indices_918": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 485154,
             "count": 5022,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_929": {
-            "bufferView": "bufferView_973",
+        "indices_962": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 495198,
             "count": 8619,
             "type": "UNSIGNED_SHORT"
         },
-        "indices_932": {
-            "bufferView": "bufferView_973",
+        "indices_965": {
+            "bufferView": "bufferView_1006",
             "byteOffset": 512436,
             "count": 942,
             "type": "UNSIGNED_SHORT"
+        }
+    },
+    "lights": {
+        "pointLightShape1": {
+            "id": "pointLightShape1",
+            "point": {
+                "color": [
+                    1,
+                    1,
+                    1
+                ],
+                "constantAttenuation": 1,
+                "linearAttenuation": 0,
+                "quadraticAttenuation": 0
+            },
+            "type": "point"
         },
-        "indices_98": {
-            "bufferView": "bufferView_973",
-            "byteOffset": 59532,
-            "count": 59628,
-            "type": "UNSIGNED_SHORT"
+        "three_light_setup_pointLightShape1": {
+            "id": "three_light_setup_pointLightShape1",
+            "point": {
+                "color": [
+                    1,
+                    1,
+                    1
+                ],
+                "constantAttenuation": 1,
+                "linearAttenuation": 0,
+                "quadraticAttenuation": 0
+            },
+            "type": "point"
+        },
+        "three_light_setup_pointLightShape2": {
+            "id": "three_light_setup_pointLightShape2",
+            "point": {
+                "color": [
+                    1,
+                    1,
+                    1
+                ],
+                "constantAttenuation": 1,
+                "linearAttenuation": 0,
+                "quadraticAttenuation": 0
+            },
+            "type": "point"
         }
     },
     "materials": {
-        "material.1": {
-            "instanceTechnique": {
-                "technique": "technique1",
-                "values": [
-                    {
-                        "parameter": "diffuse",
-                        "value": [
-                            0.8,
-                            0.8,
-                            0.8
-                        ]
-                    },
-                    {
-                        "parameter": "emission",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "shininess",
-                        "value": 20
-                    },
-                    {
-                        "parameter": "specular",
-                        "value": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ]
-                    }
-                ]
-            },
-            "name": "white1"
-        },
-        "material.2": {
+        "glass2-fx": {
             "instanceTechnique": {
                 "technique": "technique2",
                 "values": [
+                    {
+                        "parameter": "ambient",
+                        "value": [
+                            0.324788,
+                            0.324788,
+                            0.324788,
+                            1
+                        ]
+                    },
                     {
                         "parameter": "diffuse",
                         "value": [
                             0.46175,
                             0.574362,
-                            0.574362
+                            0.574362,
+                            1
                         ]
                     },
                     {
@@ -1944,15 +1954,8 @@
                         "value": [
                             0.128206,
                             0.128206,
-                            0.128206
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
-                            0,
-                            0,
-                            0
+                            0.128206,
+                            1
                         ]
                     },
                     {
@@ -1964,67 +1967,34 @@
                         "value": [
                             0.5,
                             0.5,
-                            0.5
+                            0.5,
+                            1
                         ]
                     }
                 ]
             },
             "name": "glass2"
         },
-        "material.3": {
-            "instanceTechnique": {
-                "technique": "technique2",
-                "values": [
-                    {
-                        "parameter": "diffuse",
-                        "value": [
-                            0.102565,
-                            0.102565,
-                            0.102565
-                        ]
-                    },
-                    {
-                        "parameter": "emission",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "shininess",
-                        "value": 20
-                    },
-                    {
-                        "parameter": "specular",
-                        "value": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ]
-                    }
-                ]
-            },
-            "name": "trim"
-        },
-        "material.4": {
+        "metal3-fx": {
             "instanceTechnique": {
                 "technique": "technique1",
                 "values": [
                     {
+                        "parameter": "ambient",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
                         "parameter": "diffuse",
                         "value": [
                             0.464961,
                             0.464961,
-                            0.464961
+                            0.464961,
+                            1
                         ]
                     },
                     {
@@ -2032,15 +2002,8 @@
                         "value": [
                             0,
                             0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
                             0,
-                            0,
-                            0
+                            1
                         ]
                     },
                     {
@@ -2052,111 +2015,34 @@
                         "value": [
                             0.5,
                             0.5,
-                            0.5
+                            0.5,
+                            1
                         ]
                     }
                 ]
             },
             "name": "metal3"
         },
-        "material.5": {
+        "phong2-fx": {
             "instanceTechnique": {
                 "technique": "technique1",
                 "values": [
                     {
-                        "parameter": "diffuse",
-                        "value": [
-                            0.8,
-                            0.8,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "emission",
+                        "parameter": "ambient",
                         "value": [
                             0,
                             0,
-                            0
+                            0,
+                            1
                         ]
                     },
-                    {
-                        "parameter": "reflective",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "shininess",
-                        "value": 20
-                    },
-                    {
-                        "parameter": "specular",
-                        "value": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ]
-                    }
-                ]
-            },
-            "name": "phong3"
-        },
-        "material.6": {
-            "instanceTechnique": {
-                "technique": "technique1",
-                "values": [
-                    {
-                        "parameter": "diffuse",
-                        "value": [
-                            0.8,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "emission",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "shininess",
-                        "value": 20
-                    },
-                    {
-                        "parameter": "specular",
-                        "value": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ]
-                    }
-                ]
-            },
-            "name": "phong4"
-        },
-        "material.8": {
-            "instanceTechnique": {
-                "technique": "technique1",
-                "values": [
                     {
                         "parameter": "diffuse",
                         "value": [
                             0.59487,
                             0.59487,
-                            0.0699962
+                            0.0699962,
+                            1
                         ]
                     },
                     {
@@ -2164,15 +2050,8 @@
                         "value": [
                             0,
                             0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
                             0,
-                            0,
-                            0
+                            1
                         ]
                     },
                     {
@@ -2184,23 +2063,34 @@
                         "value": [
                             0.5,
                             0.5,
-                            0.5
+                            0.5,
+                            1
                         ]
                     }
                 ]
             },
             "name": "phong2"
         },
-        "material.9": {
+        "phong3-fx": {
             "instanceTechnique": {
                 "technique": "technique1",
                 "values": [
                     {
+                        "parameter": "ambient",
+                        "value": [
+                            0.307698,
+                            0.307698,
+                            0.307698,
+                            1
+                        ]
+                    },
+                    {
                         "parameter": "diffuse",
                         "value": [
-                            0.731627,
-                            0.731627,
-                            0.731627
+                            0.8,
+                            0.8,
+                            0,
+                            1
                         ]
                     },
                     {
@@ -2208,15 +2098,8 @@
                         "value": [
                             0,
                             0,
-                            0
-                        ]
-                    },
-                    {
-                        "parameter": "reflective",
-                        "value": [
                             0,
-                            0,
-                            0
+                            1
                         ]
                     },
                     {
@@ -2228,12 +2111,205 @@
                         "value": [
                             0.5,
                             0.5,
-                            0.5
+                            0.5,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "name": "phong3"
+        },
+        "phong4-fx": {
+            "instanceTechnique": {
+                "technique": "technique1",
+                "values": [
+                    {
+                        "parameter": "ambient",
+                        "value": [
+                            0.307698,
+                            0.307698,
+                            0.307698,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "diffuse",
+                        "value": [
+                            0.8,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "emission",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "shininess",
+                        "value": 20
+                    },
+                    {
+                        "parameter": "specular",
+                        "value": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "name": "phong4"
+        },
+        "rims-fx": {
+            "instanceTechnique": {
+                "technique": "technique1",
+                "values": [
+                    {
+                        "parameter": "ambient",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "diffuse",
+                        "value": [
+                            0.731627,
+                            0.731627,
+                            0.731627,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "emission",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "shininess",
+                        "value": 20
+                    },
+                    {
+                        "parameter": "specular",
+                        "value": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
                         ]
                     }
                 ]
             },
             "name": "rims"
+        },
+        "trim-fx": {
+            "instanceTechnique": {
+                "technique": "technique2",
+                "values": [
+                    {
+                        "parameter": "ambient",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "diffuse",
+                        "value": [
+                            0.102565,
+                            0.102565,
+                            0.102565,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "emission",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "shininess",
+                        "value": 20
+                    },
+                    {
+                        "parameter": "specular",
+                        "value": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "name": "trim"
+        },
+        "white1-fx": {
+            "instanceTechnique": {
+                "technique": "technique1",
+                "values": [
+                    {
+                        "parameter": "ambient",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "diffuse",
+                        "value": [
+                            0.8,
+                            0.8,
+                            0.8,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "emission",
+                        "value": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "parameter": "shininess",
+                        "value": 20
+                    },
+                    {
+                        "parameter": "specular",
+                        "value": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "name": "white1"
         }
     },
     "meshes": {
@@ -2241,33 +2317,33 @@
             "name": "bodyShape",
             "primitives": [
                 {
-                    "indices": "indices_880",
-                    "material": "material.1",
+                    "indices": "indices_912",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_890",
-                        "POSITION": "attribute_888",
-                        "TEXCOORD_0": "attribute_892"
+                        "NORMAL": "attribute_922",
+                        "POSITION": "attribute_920",
+                        "TEXCOORD_0": "attribute_924"
                     }
                 },
                 {
-                    "indices": "indices_883",
-                    "material": "material.2",
+                    "indices": "indices_915",
+                    "material": "glass2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_890",
-                        "POSITION": "attribute_888",
-                        "TEXCOORD_0": "attribute_892"
+                        "NORMAL": "attribute_922",
+                        "POSITION": "attribute_920",
+                        "TEXCOORD_0": "attribute_924"
                     }
                 },
                 {
-                    "indices": "indices_886",
-                    "material": "material.3",
+                    "indices": "indices_918",
+                    "material": "trim-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_890",
-                        "POSITION": "attribute_888",
-                        "TEXCOORD_0": "attribute_892"
+                        "NORMAL": "attribute_922",
+                        "POSITION": "attribute_920",
+                        "TEXCOORD_0": "attribute_924"
                     }
                 }
             ]
@@ -2276,13 +2352,13 @@
             "name": "break_disk_LShape",
             "primitives": [
                 {
-                    "indices": "indices_404",
-                    "material": "material.1",
+                    "indices": "indices_419",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_408",
-                        "POSITION": "attribute_406",
-                        "TEXCOORD_0": "attribute_410"
+                        "NORMAL": "attribute_423",
+                        "POSITION": "attribute_421",
+                        "TEXCOORD_0": "attribute_425"
                     }
                 }
             ]
@@ -2291,13 +2367,13 @@
             "name": "break_disk_RShape",
             "primitives": [
                 {
-                    "indices": "indices_46",
-                    "material": "material.1",
+                    "indices": "indices_48",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_50",
-                        "POSITION": "attribute_48",
-                        "TEXCOORD_0": "attribute_52"
+                        "NORMAL": "attribute_52",
+                        "POSITION": "attribute_50",
+                        "TEXCOORD_0": "attribute_54"
                     }
                 }
             ]
@@ -2306,13 +2382,13 @@
             "name": "break_pad_LShape",
             "primitives": [
                 {
-                    "indices": "indices_430",
-                    "material": "material.8",
+                    "indices": "indices_446",
+                    "material": "phong2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_434",
-                        "POSITION": "attribute_432",
-                        "TEXCOORD_0": "attribute_436"
+                        "NORMAL": "attribute_450",
+                        "POSITION": "attribute_448",
+                        "TEXCOORD_0": "attribute_452"
                     }
                 }
             ]
@@ -2321,13 +2397,13 @@
             "name": "break_pad_RShape",
             "primitives": [
                 {
-                    "indices": "indices_72",
-                    "material": "material.8",
+                    "indices": "indices_75",
+                    "material": "phong2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_76",
-                        "POSITION": "attribute_74",
-                        "TEXCOORD_0": "attribute_78"
+                        "NORMAL": "attribute_79",
+                        "POSITION": "attribute_77",
+                        "TEXCOORD_0": "attribute_81"
                     }
                 }
             ]
@@ -2336,13 +2412,13 @@
             "name": "head_light_LShape",
             "primitives": [
                 {
-                    "indices": "indices_508",
-                    "material": "material.5",
+                    "indices": "indices_527",
+                    "material": "phong3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_512",
-                        "POSITION": "attribute_510",
-                        "TEXCOORD_0": "attribute_514"
+                        "NORMAL": "attribute_531",
+                        "POSITION": "attribute_529",
+                        "TEXCOORD_0": "attribute_533"
                     }
                 }
             ]
@@ -2351,13 +2427,13 @@
             "name": "head_light_RShape",
             "primitives": [
                 {
-                    "indices": "indices_820",
-                    "material": "material.5",
+                    "indices": "indices_851",
+                    "material": "phong3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_824",
-                        "POSITION": "attribute_822",
-                        "TEXCOORD_0": "attribute_826"
+                        "NORMAL": "attribute_855",
+                        "POSITION": "attribute_853",
+                        "TEXCOORD_0": "attribute_857"
                     }
                 }
             ]
@@ -2366,13 +2442,13 @@
             "name": "head_light_frame_LShape",
             "primitives": [
                 {
-                    "indices": "indices_482",
-                    "material": "material.1",
+                    "indices": "indices_500",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_486",
-                        "POSITION": "attribute_484",
-                        "TEXCOORD_0": "attribute_488"
+                        "NORMAL": "attribute_504",
+                        "POSITION": "attribute_502",
+                        "TEXCOORD_0": "attribute_506"
                     }
                 }
             ]
@@ -2381,13 +2457,13 @@
             "name": "head_light_frame_RShape",
             "primitives": [
                 {
-                    "indices": "indices_794",
-                    "material": "material.1",
+                    "indices": "indices_824",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_798",
-                        "POSITION": "attribute_796",
-                        "TEXCOORD_0": "attribute_800"
+                        "NORMAL": "attribute_828",
+                        "POSITION": "attribute_826",
+                        "TEXCOORD_0": "attribute_830"
                     }
                 }
             ]
@@ -2396,13 +2472,13 @@
             "name": "rear_view_arm_LShape",
             "primitives": [
                 {
-                    "indices": "indices_664",
-                    "material": "material.4",
+                    "indices": "indices_689",
+                    "material": "metal3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_668",
-                        "POSITION": "attribute_666",
-                        "TEXCOORD_0": "attribute_670"
+                        "NORMAL": "attribute_693",
+                        "POSITION": "attribute_691",
+                        "TEXCOORD_0": "attribute_695"
                     }
                 }
             ]
@@ -2411,23 +2487,23 @@
             "name": "rear_view_arm_RShape",
             "primitives": [
                 {
-                    "indices": "indices_929",
-                    "material": "material.4",
+                    "indices": "indices_962",
+                    "material": "metal3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_936",
-                        "POSITION": "attribute_934",
-                        "TEXCOORD_0": "attribute_938"
+                        "NORMAL": "attribute_969",
+                        "POSITION": "attribute_967",
+                        "TEXCOORD_0": "attribute_971"
                     }
                 },
                 {
-                    "indices": "indices_932",
-                    "material": "material.1",
+                    "indices": "indices_965",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_936",
-                        "POSITION": "attribute_934",
-                        "TEXCOORD_0": "attribute_938"
+                        "NORMAL": "attribute_969",
+                        "POSITION": "attribute_967",
+                        "TEXCOORD_0": "attribute_971"
                     }
                 }
             ]
@@ -2436,13 +2512,13 @@
             "name": "rear_view_base_LShape",
             "primitives": [
                 {
-                    "indices": "indices_638",
-                    "material": "material.1",
+                    "indices": "indices_662",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_642",
-                        "POSITION": "attribute_640",
-                        "TEXCOORD_0": "attribute_644"
+                        "NORMAL": "attribute_666",
+                        "POSITION": "attribute_664",
+                        "TEXCOORD_0": "attribute_668"
                     }
                 }
             ]
@@ -2451,38 +2527,8 @@
             "name": "rear_view_frame_LShape",
             "primitives": [
                 {
-                    "indices": "indices_690",
-                    "material": "material.1",
-                    "primitive": "TRIANGLES",
-                    "semantics": {
-                        "NORMAL": "attribute_694",
-                        "POSITION": "attribute_692",
-                        "TEXCOORD_0": "attribute_696"
-                    }
-                }
-            ]
-        },
-        "rear_view_frame_RShape": {
-            "name": "rear_view_frame_RShape",
-            "primitives": [
-                {
-                    "indices": "indices_742",
-                    "material": "material.1",
-                    "primitive": "TRIANGLES",
-                    "semantics": {
-                        "NORMAL": "attribute_746",
-                        "POSITION": "attribute_744",
-                        "TEXCOORD_0": "attribute_748"
-                    }
-                }
-            ]
-        },
-        "rear_view_glass_LShape": {
-            "name": "rear_view_glass_LShape",
-            "primitives": [
-                {
                     "indices": "indices_716",
-                    "material": "material.2",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
                         "NORMAL": "attribute_720",
@@ -2492,17 +2538,47 @@
                 }
             ]
         },
+        "rear_view_frame_RShape": {
+            "name": "rear_view_frame_RShape",
+            "primitives": [
+                {
+                    "indices": "indices_770",
+                    "material": "white1-fx",
+                    "primitive": "TRIANGLES",
+                    "semantics": {
+                        "NORMAL": "attribute_774",
+                        "POSITION": "attribute_772",
+                        "TEXCOORD_0": "attribute_776"
+                    }
+                }
+            ]
+        },
+        "rear_view_glass_LShape": {
+            "name": "rear_view_glass_LShape",
+            "primitives": [
+                {
+                    "indices": "indices_743",
+                    "material": "glass2-fx",
+                    "primitive": "TRIANGLES",
+                    "semantics": {
+                        "NORMAL": "attribute_747",
+                        "POSITION": "attribute_745",
+                        "TEXCOORD_0": "attribute_749"
+                    }
+                }
+            ]
+        },
         "rear_view_glass_RShape": {
             "name": "rear_view_glass_RShape",
             "primitives": [
                 {
-                    "indices": "indices_768",
-                    "material": "material.2",
+                    "indices": "indices_797",
+                    "material": "glass2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_772",
-                        "POSITION": "attribute_770",
-                        "TEXCOORD_0": "attribute_774"
+                        "NORMAL": "attribute_801",
+                        "POSITION": "attribute_799",
+                        "TEXCOORD_0": "attribute_803"
                     }
                 }
             ]
@@ -2511,13 +2587,13 @@
             "name": "rim_LShape",
             "primitives": [
                 {
-                    "indices": "indices_456",
-                    "material": "material.9",
+                    "indices": "indices_473",
+                    "material": "rims-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_460",
-                        "POSITION": "attribute_458",
-                        "TEXCOORD_0": "attribute_462"
+                        "NORMAL": "attribute_477",
+                        "POSITION": "attribute_475",
+                        "TEXCOORD_0": "attribute_479"
                     }
                 }
             ]
@@ -2526,13 +2602,13 @@
             "name": "rim_RShape",
             "primitives": [
                 {
-                    "indices": "indices_98",
-                    "material": "material.9",
+                    "indices": "indices_102",
+                    "material": "rims-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_102",
-                        "POSITION": "attribute_100",
-                        "TEXCOORD_0": "attribute_104"
+                        "NORMAL": "attribute_106",
+                        "POSITION": "attribute_104",
+                        "TEXCOORD_0": "attribute_108"
                     }
                 }
             ]
@@ -2541,13 +2617,13 @@
             "name": "tail_arm_LShape",
             "primitives": [
                 {
-                    "indices": "indices_248",
-                    "material": "material.4",
+                    "indices": "indices_257",
+                    "material": "metal3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_252",
-                        "POSITION": "attribute_250",
-                        "TEXCOORD_0": "attribute_254"
+                        "NORMAL": "attribute_261",
+                        "POSITION": "attribute_259",
+                        "TEXCOORD_0": "attribute_263"
                     }
                 }
             ]
@@ -2556,13 +2632,13 @@
             "name": "tail_arm_RShape",
             "primitives": [
                 {
-                    "indices": "indices_222",
-                    "material": "material.4",
+                    "indices": "indices_230",
+                    "material": "metal3-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_226",
-                        "POSITION": "attribute_224",
-                        "TEXCOORD_0": "attribute_228"
+                        "NORMAL": "attribute_234",
+                        "POSITION": "attribute_232",
+                        "TEXCOORD_0": "attribute_236"
                     }
                 }
             ]
@@ -2571,13 +2647,13 @@
             "name": "tail_frame_LShape",
             "primitives": [
                 {
-                    "indices": "indices_274",
-                    "material": "material.1",
+                    "indices": "indices_284",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_278",
-                        "POSITION": "attribute_276",
-                        "TEXCOORD_0": "attribute_280"
+                        "NORMAL": "attribute_288",
+                        "POSITION": "attribute_286",
+                        "TEXCOORD_0": "attribute_290"
                     }
                 }
             ]
@@ -2586,13 +2662,13 @@
             "name": "tail_frame_RShape",
             "primitives": [
                 {
-                    "indices": "indices_170",
-                    "material": "material.1",
+                    "indices": "indices_176",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_174",
-                        "POSITION": "attribute_172",
-                        "TEXCOORD_0": "attribute_176"
+                        "NORMAL": "attribute_180",
+                        "POSITION": "attribute_178",
+                        "TEXCOORD_0": "attribute_182"
                     }
                 }
             ]
@@ -2601,13 +2677,13 @@
             "name": "tail_light_LShape",
             "primitives": [
                 {
-                    "indices": "indices_300",
-                    "material": "material.6",
+                    "indices": "indices_311",
+                    "material": "phong4-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_304",
-                        "POSITION": "attribute_302",
-                        "TEXCOORD_0": "attribute_306"
+                        "NORMAL": "attribute_315",
+                        "POSITION": "attribute_313",
+                        "TEXCOORD_0": "attribute_317"
                     }
                 }
             ]
@@ -2616,13 +2692,13 @@
             "name": "tail_light_RShape",
             "primitives": [
                 {
-                    "indices": "indices_196",
-                    "material": "material.6",
+                    "indices": "indices_203",
+                    "material": "phong4-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_200",
-                        "POSITION": "attribute_198",
-                        "TEXCOORD_0": "attribute_202"
+                        "NORMAL": "attribute_207",
+                        "POSITION": "attribute_205",
+                        "TEXCOORD_0": "attribute_209"
                     }
                 }
             ]
@@ -2631,13 +2707,13 @@
             "name": "tail_light_centerL1Shape",
             "primitives": [
                 {
-                    "indices": "indices_352",
-                    "material": "material.2",
+                    "indices": "indices_365",
+                    "material": "glass2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_356",
-                        "POSITION": "attribute_354",
-                        "TEXCOORD_0": "attribute_358"
+                        "NORMAL": "attribute_369",
+                        "POSITION": "attribute_367",
+                        "TEXCOORD_0": "attribute_371"
                     }
                 }
             ]
@@ -2646,13 +2722,13 @@
             "name": "tail_light_centerR1Shape",
             "primitives": [
                 {
-                    "indices": "indices_326",
-                    "material": "material.2",
+                    "indices": "indices_338",
+                    "material": "glass2-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_330",
-                        "POSITION": "attribute_328",
-                        "TEXCOORD_0": "attribute_332"
+                        "NORMAL": "attribute_342",
+                        "POSITION": "attribute_340",
+                        "TEXCOORD_0": "attribute_344"
                     }
                 }
             ]
@@ -2661,13 +2737,13 @@
             "name": "tire_LShape",
             "primitives": [
                 {
-                    "indices": "indices_378",
-                    "material": "material.3",
+                    "indices": "indices_392",
+                    "material": "trim-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_382",
-                        "POSITION": "attribute_380",
-                        "TEXCOORD_0": "attribute_384"
+                        "NORMAL": "attribute_396",
+                        "POSITION": "attribute_394",
+                        "TEXCOORD_0": "attribute_398"
                     }
                 }
             ]
@@ -2676,13 +2752,13 @@
             "name": "tire_RShape",
             "primitives": [
                 {
-                    "indices": "indices_20",
-                    "material": "material.3",
+                    "indices": "indices_21",
+                    "material": "trim-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_24",
-                        "POSITION": "attribute_22",
-                        "TEXCOORD_0": "attribute_26"
+                        "NORMAL": "attribute_25",
+                        "POSITION": "attribute_23",
+                        "TEXCOORD_0": "attribute_27"
                     }
                 }
             ]
@@ -2691,13 +2767,13 @@
             "name": "turn_light_LShape",
             "primitives": [
                 {
-                    "indices": "indices_612",
-                    "material": "material.6",
+                    "indices": "indices_635",
+                    "material": "phong4-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_616",
-                        "POSITION": "attribute_614",
-                        "TEXCOORD_0": "attribute_618"
+                        "NORMAL": "attribute_639",
+                        "POSITION": "attribute_637",
+                        "TEXCOORD_0": "attribute_641"
                     }
                 }
             ]
@@ -2706,13 +2782,13 @@
             "name": "turn_light_RShape",
             "primitives": [
                 {
-                    "indices": "indices_560",
-                    "material": "material.6",
+                    "indices": "indices_581",
+                    "material": "phong4-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_564",
-                        "POSITION": "attribute_562",
-                        "TEXCOORD_0": "attribute_566"
+                        "NORMAL": "attribute_585",
+                        "POSITION": "attribute_583",
+                        "TEXCOORD_0": "attribute_587"
                     }
                 }
             ]
@@ -2721,13 +2797,13 @@
             "name": "turn_light_frame_LShape",
             "primitives": [
                 {
-                    "indices": "indices_586",
-                    "material": "material.1",
+                    "indices": "indices_608",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_590",
-                        "POSITION": "attribute_588",
-                        "TEXCOORD_0": "attribute_592"
+                        "NORMAL": "attribute_612",
+                        "POSITION": "attribute_610",
+                        "TEXCOORD_0": "attribute_614"
                     }
                 }
             ]
@@ -2736,13 +2812,13 @@
             "name": "turn_light_frame_RShape",
             "primitives": [
                 {
-                    "indices": "indices_534",
-                    "material": "material.1",
+                    "indices": "indices_554",
+                    "material": "white1-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_538",
-                        "POSITION": "attribute_536",
-                        "TEXCOORD_0": "attribute_540"
+                        "NORMAL": "attribute_558",
+                        "POSITION": "attribute_556",
+                        "TEXCOORD_0": "attribute_560"
                     }
                 }
             ]
@@ -2751,23 +2827,23 @@
             "name": "wheel_frontShape",
             "primitives": [
                 {
-                    "indices": "indices_141",
-                    "material": "material.3",
+                    "indices": "indices_146",
+                    "material": "trim-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_148",
-                        "POSITION": "attribute_146",
-                        "TEXCOORD_0": "attribute_150"
+                        "NORMAL": "attribute_153",
+                        "POSITION": "attribute_151",
+                        "TEXCOORD_0": "attribute_155"
                     }
                 },
                 {
-                    "indices": "indices_144",
-                    "material": "material.9",
+                    "indices": "indices_149",
+                    "material": "rims-fx",
                     "primitive": "TRIANGLES",
                     "semantics": {
-                        "NORMAL": "attribute_148",
-                        "POSITION": "attribute_146",
-                        "TEXCOORD_0": "attribute_150"
+                        "NORMAL": "attribute_153",
+                        "POSITION": "attribute_151",
+                        "TEXCOORD_0": "attribute_155"
                     }
                 }
             ]
@@ -3024,6 +3100,9 @@
         },
         "pointLight1": {
             "children": [],
+            "lights": [
+                "pointLightShape1"
+            ],
             "matrix": [
                 1,
                 0,
@@ -3525,6 +3604,9 @@
         },
         "three_light_setup_pointLight1": {
             "children": [],
+            "lights": [
+                "three_light_setup_pointLightShape1"
+            ],
             "matrix": [
                 1,
                 0,
@@ -3547,6 +3629,9 @@
         },
         "three_light_setup_pointLight2": {
             "children": [],
+            "lights": [
+                "three_light_setup_pointLightShape2"
+            ],
             "matrix": [
                 1,
                 0,
@@ -3834,11 +3919,50 @@
     "techniques": {
         "technique1": {
             "parameters": {
+                "ambient": {
+                    "type": "FLOAT_VEC4"
+                },
                 "diffuse": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
                 },
                 "emission": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
+                },
+                "light0Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light0Transform": {
+                    "source": "pointLight1",
+                    "type": "FLOAT_MAT4"
+                },
+                "light1Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light1Transform": {
+                    "source": "three_light_setup_pointLight1",
+                    "type": "FLOAT_MAT4"
+                },
+                "light2Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light2Transform": {
+                    "source": "three_light_setup_pointLight2",
+                    "type": "FLOAT_MAT4"
                 },
                 "normal": {
                     "semantic": "NORMAL",
@@ -3856,14 +3980,11 @@
                     "semantic": "PROJECTION",
                     "type": "FLOAT_MAT4"
                 },
-                "reflective": {
-                    "type": "FLOAT_VEC3"
-                },
                 "shininess": {
                     "type": "FLOAT"
                 },
                 "specular": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
                 },
                 "worldViewMatrix": {
                     "semantic": "WORLDVIEW",
@@ -3873,6 +3994,31 @@
             "pass": "defaultPass",
             "passes": {
                 "defaultPass": {
+                    "details": {
+                        "commonProfile": {
+                            "extras": {
+                                "doubleSided": true
+                            },
+                            "lightingModel": "Phong",
+                            "parameters": [
+                                "ambient",
+                                "diffuse",
+                                "emission",
+                                "light0Color",
+                                "light0Transform",
+                                "light1Color",
+                                "light1Transform",
+                                "light2Color",
+                                "light2Transform",
+                                "normalMatrix",
+                                "projectionMatrix",
+                                "shininess",
+                                "specular",
+                                "worldViewMatrix"
+                            ]
+                        },
+                        "type": "COLLADA-1.4.1/commonProfile"
+                    },
                     "instanceProgram": {
                         "attributes": {
                             "a_normal": "normal",
@@ -3880,11 +4026,17 @@
                         },
                         "program": "program_0",
                         "uniforms": {
+                            "u_ambient": "ambient",
                             "u_diffuse": "diffuse",
                             "u_emission": "emission",
+                            "u_light0Color": "light0Color",
+                            "u_light0Transform": "light0Transform",
+                            "u_light1Color": "light1Color",
+                            "u_light1Transform": "light1Transform",
+                            "u_light2Color": "light2Color",
+                            "u_light2Transform": "light2Transform",
                             "u_normalMatrix": "normalMatrix",
                             "u_projectionMatrix": "projectionMatrix",
-                            "u_reflective": "reflective",
                             "u_shininess": "shininess",
                             "u_specular": "specular",
                             "u_worldViewMatrix": "worldViewMatrix"
@@ -3901,11 +4053,50 @@
         },
         "technique2": {
             "parameters": {
+                "ambient": {
+                    "type": "FLOAT_VEC4"
+                },
                 "diffuse": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
                 },
                 "emission": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
+                },
+                "light0Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light0Transform": {
+                    "source": "pointLight1",
+                    "type": "FLOAT_MAT4"
+                },
+                "light1Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light1Transform": {
+                    "source": "three_light_setup_pointLight1",
+                    "type": "FLOAT_MAT4"
+                },
+                "light2Color": {
+                    "type": "FLOAT_VEC3",
+                    "value": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "light2Transform": {
+                    "source": "three_light_setup_pointLight2",
+                    "type": "FLOAT_MAT4"
                 },
                 "normal": {
                     "semantic": "NORMAL",
@@ -3923,14 +4114,11 @@
                     "semantic": "PROJECTION",
                     "type": "FLOAT_MAT4"
                 },
-                "reflective": {
-                    "type": "FLOAT_VEC3"
-                },
                 "shininess": {
                     "type": "FLOAT"
                 },
                 "specular": {
-                    "type": "FLOAT_VEC3"
+                    "type": "FLOAT_VEC4"
                 },
                 "worldViewMatrix": {
                     "semantic": "WORLDVIEW",
@@ -3940,6 +4128,31 @@
             "pass": "defaultPass",
             "passes": {
                 "defaultPass": {
+                    "details": {
+                        "commonProfile": {
+                            "extras": {
+                                "doubleSided": false
+                            },
+                            "lightingModel": "Phong",
+                            "parameters": [
+                                "ambient",
+                                "diffuse",
+                                "emission",
+                                "light0Color",
+                                "light0Transform",
+                                "light1Color",
+                                "light1Transform",
+                                "light2Color",
+                                "light2Transform",
+                                "normalMatrix",
+                                "projectionMatrix",
+                                "shininess",
+                                "specular",
+                                "worldViewMatrix"
+                            ]
+                        },
+                        "type": "COLLADA-1.4.1/commonProfile"
+                    },
                     "instanceProgram": {
                         "attributes": {
                             "a_normal": "normal",
@@ -3947,11 +4160,17 @@
                         },
                         "program": "program_1",
                         "uniforms": {
+                            "u_ambient": "ambient",
                             "u_diffuse": "diffuse",
                             "u_emission": "emission",
+                            "u_light0Color": "light0Color",
+                            "u_light0Transform": "light0Transform",
+                            "u_light1Color": "light1Color",
+                            "u_light1Transform": "light1Transform",
+                            "u_light2Color": "light2Color",
+                            "u_light2Transform": "light2Transform",
                             "u_normalMatrix": "normalMatrix",
                             "u_projectionMatrix": "projectionMatrix",
-                            "u_reflective": "reflective",
                             "u_shininess": "shininess",
                             "u_specular": "specular",
                             "u_worldViewMatrix": "worldViewMatrix"
