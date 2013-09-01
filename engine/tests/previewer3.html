@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi Test Load Scene</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+	<script>
+	var CLOSURE_NO_DEPS = true;
+	</script>
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+    <script src="../libs/bootstrap-2.3.2/bootstrap.min.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script src="sceneViewer.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var viewer = new SceneViewer({ container : container, displayStats:true });
+		
+		var scene = null;
+		var loader = new Vizi.Loader;
+		
+		loader.addEventListener("loaded", function(data) { 
+				scene = data.scene;
+				viewer.replaceScene(data);
+			});
+		loader.loadScene("./models/vizi_mobile/vizi_mobile_tc01.json");
+		
+		viewer.run();
+	}
+	);
+
+	</script>
+	
+</body>
+</html>
