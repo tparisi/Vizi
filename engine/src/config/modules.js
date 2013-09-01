@@ -10,6 +10,8 @@ goog.require('Vizi.Object');
 goog.require('Vizi.Application');
 goog.require('Vizi.Service');
 goog.require('Vizi.Services');
+goog.require('Vizi.AnimationService');
+goog.require('Vizi.KeyFrameAnimator');
 goog.require('Vizi.TweenService');
 goog.require('Vizi.Behavior');
 goog.require('Vizi.BounceBehavior');

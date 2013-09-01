@@ -2136,6 +2136,47 @@ Vizi.Object.prototype.map = function(query, callback){
 /**
  *
  */
+goog.provide('Vizi.Keyboard');
+
+Vizi.Keyboard = function()
+{
+	// N.B.: freak out if somebody tries to make 2
+	// throw (...)
+
+	Vizi.Keyboard.instance = this;
+}
+
+Vizi.Keyboard.prototype.onKeyDown = function(event)
+{
+}
+
+Vizi.Keyboard.prototype.onKeyUp = function(event)
+{
+}
+
+Vizi.Keyboard.prototype.onKeyPress = function(event)
+{
+}	        
+
+Vizi.Keyboard.instance = null;
+
+/* key codes
+37: left
+38: up
+39: right
+40: down
+*/
+Vizi.Keyboard.KEY_LEFT  = 37;
+Vizi.Keyboard.KEY_UP  = 38;
+Vizi.Keyboard.KEY_RIGHT  = 39;
+Vizi.Keyboard.KEY_DOWN  = 40;
+/**
+ * @fileoverview Contains prefab assemblies for core Vizi package
+ * @author Tony Parisi
+ */
+goog.provide('Vizi.Prefabs');/**
+ *
+ */
 goog.provide('Vizi.Mouse');
 
 Vizi.Mouse = function()
@@ -2187,10 +2228,6 @@ Vizi.Mouse.prototype.getState = function()
 Vizi.Mouse.instance = null;
 Vizi.Mouse.NO_POSITION = Number.MIN_VALUE;
 /**
- * @fileoverview Contains prefab assemblies for core Vizi package
- * @author Tony Parisi
- */
-goog.provide('Vizi.Prefabs');/**
  * @fileoverview Component is the base class for defining capabilities used within an Object
  * 
  * @author Tony Parisi
@@ -2719,43 +2756,6 @@ Vizi.SceneVisual.prototype.realize = function()
 	
     this.addToScene();
 }
-/**
- *
- */
-goog.provide('Vizi.Keyboard');
-
-Vizi.Keyboard = function()
-{
-	// N.B.: freak out if somebody tries to make 2
-	// throw (...)
-
-	Vizi.Keyboard.instance = this;
-}
-
-Vizi.Keyboard.prototype.onKeyDown = function(event)
-{
-}
-
-Vizi.Keyboard.prototype.onKeyUp = function(event)
-{
-}
-
-Vizi.Keyboard.prototype.onKeyPress = function(event)
-{
-}	        
-
-Vizi.Keyboard.instance = null;
-
-/* key codes
-37: left
-38: up
-39: right
-40: down
-*/
-Vizi.Keyboard.KEY_LEFT  = 37;
-Vizi.Keyboard.KEY_UP  = 38;
-Vizi.Keyboard.KEY_RIGHT  = 39;
-Vizi.Keyboard.KEY_DOWN  = 40;
 /**
  * @fileoverview Main interface to the graphics and rendering subsystem
  * 
@@ -4261,6 +4261,43 @@ Vizi.Application.handleKeyPress = function(event)
     	Vizi.Application.instance.onKeyPress(event);	            	
 }	        
 /**
+ *
+ */
+goog.require('Vizi.Service');
+goog.provide('Vizi.AnimationService');
+
+/**
+ * The AnimationService.
+ *
+ * @extends {Vizi.Service}
+ */
+Vizi.AnimationService = function() {};
+
+goog.inherits(Vizi.AnimationService, Vizi.Service);
+
+//---------------------------------------------------------------------
+// Initialization/Termination
+//---------------------------------------------------------------------
+
+/**
+ * Initializes the events system.
+ */
+Vizi.AnimationService.prototype.initialize = function(param) {};
+
+/**
+ * Terminates the events world.
+ */
+Vizi.AnimationService.prototype.terminate = function() {};
+
+
+/**
+ * Updates the AnimationService.
+ */
+Vizi.AnimationService.prototype.update = function()
+{
+	if (window.TWEEN)
+		THREE.glTFAnimator.update();
+}/**
  * @fileoverview Behavior component - base class for time-based behaviors
  * 
  * @author Tony Parisi
@@ -4389,123 +4426,173 @@ Vizi.ModelControllerScript.MAX_X_ROTATION = 0; // Math.PI / 12;
 Vizi.ModelControllerScript.MIN_X_ROTATION = -Math.PI / 2;
 Vizi.ModelControllerScript.MAX_Y_ROTATION = Math.PI * 2;
 Vizi.ModelControllerScript.MIN_Y_ROTATION = -Math.PI * 2;
-goog.provide('Vizi.SpotLight');
-goog.require('Vizi.Light');
+/**
+ * @fileoverview General-purpose key frame animation
+ * @author Tony Parisi
+ */
+goog.provide('Vizi.KeyFrameAnimator');
+goog.require('Vizi.Component');
 
-Vizi.SpotLight = function(param)
+// KeyFrameAnimator class
+// Construction/initialization
+Vizi.KeyFrameAnimator = function(param) 
 {
+    Vizi.Component.call(this, param);
+	    		
 	param = param || {};
-
-	this.scaledDir = new THREE.Vector3;
-	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
 	
-	Vizi.Light.call(this, param);
-
-	if (param.object) {
-		this.object = param.object; 
-		this.direction = param.object.position.clone().normalize().negate();
-		this.targetPos = param.object.target.clone();
-		this.shadowDarkness = param.object.shadowDarkness;
-	}
-	else {
-		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
-		this.targetPos = new THREE.Vector3;
-		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
-
-		var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
-		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
-		var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
-
-		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
-	}
-	
-    // Create accessors for all properties... just pass-throughs to Three.js
-    Object.defineProperties(this, {
-        angle: {
-	        get: function() {
-	            return this.object.angle;
-	        },
-	        set: function(v) {
-	        	this.object.angle = v;
-	        }
-		},    	
-        distance: {
-	        get: function() {
-	            return this.object.distance;
-	        },
-	        set: function(v) {
-	        	this.object.distance = v;
-	        }
-    	},    	
-        exponent: {
-	        get: function() {
-	            return this.object.exponent;
-	        },
-	        set: function(v) {
-	        	this.object.exponent = v;
-	        }
-    	},    	
-
-    });
-	
+	this.interpdata = param.interps || [];
+	this.animationData = param.animations;
+	this.running = false;
+	this.duration = param.duration ? param.duration : Vizi.KeyFrameAnimator.default_duration;
+	this.loop = param.loop ? param.loop : false;
 }
 
-goog.inherits(Vizi.SpotLight, Vizi.Light);
-
-Vizi.SpotLight.prototype.realize = function() 
+goog.inherits(Vizi.KeyFrameAnimator, Vizi.Component);
+	
+Vizi.KeyFrameAnimator.prototype.realize = function()
 {
-	Vizi.Light.prototype.realize.call(this);
-}
-
-Vizi.SpotLight.prototype.update = function() 
-{
-	// D'oh Three.js doesn't seem to transform light directions automatically
-	// Really bizarre semantics
-	if (this.object)
+	Vizi.Component.prototype.realize.call(this);
+	
+	if (this.interpdata)
 	{
-		this.scaledDir.copy(this.direction);
-		this.scaledDir.multiplyScalar(Vizi.Light.DEFAULT_RANGE);
-		this.targetPos.copy(this.position);
-		this.targetPos.add(this.scaledDir);	
-		this.object.target.position.copy(this.targetPos);
-		
-		var worldmat = this.object.parent.matrixWorld;
-		this.position.applyMatrix4(worldmat);
-		this.object.target.position.applyMatrix4(worldmat);
-		
-		this.updateShadows();
+		this.createInterpolators(this.interpdata);
 	}
 	
-	// Update the rest
-	Vizi.Light.prototype.update.call(this);
-}
-
-Vizi.SpotLight.prototype.updateShadows = function()
-{
-	if (this.castShadows)
+	if (this.animationData)
 	{
-		this.object.castShadow = true;
-		this.object.shadowCameraNear = 1;
-		this.object.shadowCameraFar = Vizi.Light.DEFAULT_RANGE;
-		this.object.shadowCameraFov = 90;
-
-		// light.shadowCameraVisible = true;
-
-		this.object.shadowBias = 0.0001;
-		this.object.shadowDarkness = this.shadowDarkness;
-
-		this.object.shadowMapWidth = 2048;
-		this.object.shadowMapHeight = 2048;
-		
-		Vizi.Graphics.instance.enableShadows(true);
-	}	
+		this.animations = [];
+		var i, len = this.animationData.length;
+		for (i = 0; i < len; i++)
+		{				
+			var animdata = this.animationData[i];
+			if (animdata instanceof THREE.glTFAnimation) {
+				this.animations.push(animdata);
+			}
+			else {
+				
+				THREE.AnimationHandler.add(animdata);
+				var animation = new THREE.KeyFrameAnimation(animdata.node, animdata.name);
+//			animation.timeScale = .01; // why?
+				this.animations.push(animation);
+			}
+		}
+	}
 }
 
-Vizi.SpotLight.DEFAULT_DISTANCE = 0;
-Vizi.SpotLight.DEFAULT_ANGLE = Math.PI / 2;
-Vizi.SpotLight.DEFAULT_EXPONENT = 10;
-Vizi.SpotLight.DEFAULT_CAST_SHADOWS = false;
-Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS = 0.3;
+Vizi.KeyFrameAnimator.prototype.createInterpolators = function(interpdata)
+{
+	this.interps = [];
+	
+	var i, len = interpdata.length;
+	for (i = 0; i < len; i++)
+	{
+		var data = interpdata[i];
+		var interp = new Vizi.Interpolator({ keys: data.keys, values: data.values, target: data.target });
+		interp.realize();
+		this.interps.push(interp);
+	}
+}
+
+// Start/stop
+Vizi.KeyFrameAnimator.prototype.start = function()
+{
+	if (this.running)
+		return;
+	
+	this.startTime = Date.now();
+	this.lastTime = this.startTime;
+	this.running = true;
+	
+	if (this.animations)
+	{
+		var i, len = this.animations.length;
+		for (i = 0; i < len; i++)
+		{
+			this.animations.loop = this.loop;
+			this.animations[i].play(this.loop, 0);
+			this.endTime = this.startTime + this.animations[i].endTime / this.animations[i].timeScale;
+		}
+	}
+}
+
+Vizi.KeyFrameAnimator.prototype.stop = function()
+{
+	this.running = false;
+	this.dispatchEvent("complete");
+
+	if (this.animations)
+	{
+		var i, len = this.animations.length;
+		for (i = 0; i < len; i++)
+		{
+			this.animations[i].stop();
+		}
+	}
+
+}
+
+// Update - drive key frame evaluation
+Vizi.KeyFrameAnimator.prototype.update = function()
+{
+	if (!this.running)
+		return;
+	
+	if (this.animations)
+	{
+		this.updateAnimations();
+		return;
+	}
+	
+	var now = Date.now();
+	var deltat = (now - this.startTime) % this.duration;
+	var nCycles = Math.floor((now - this.startTime) / this.duration);
+	var fract = deltat / this.duration;
+
+	if (nCycles >= 1 && !this.loop)
+	{
+		this.running = false;
+		this.dispatchEvent("complete");
+		var i, len = this.interps.length;
+		for (i = 0; i < len; i++)
+		{
+			this.interps[i].interp(1);
+		}
+		return;
+	}
+	else
+	{
+		var i, len = this.interps.length;
+		for (i = 0; i < len; i++)
+		{
+			this.interps[i].interp(fract);
+		}
+	}
+}
+
+Vizi.KeyFrameAnimator.prototype.updateAnimations = function()
+{
+	var now = Date.now();
+	var deltat = now - this.lastTime;
+	var complete = false;
+	
+	var i, len = this.animations.length;
+	for (i = 0; i < len; i++)
+	{
+		this.animations[i].update(deltat);
+		if (!this.loop && (now >= this.endTime))
+			complete = true;
+	}
+	this.lastTime = now;	
+	
+	if (complete)
+	{
+		this.stop();
+	}
+}
+
+// Statics
+Vizi.KeyFrameAnimator.default_duration = 1000;
 goog.provide('Vizi.Camera');
 goog.require('Vizi.SceneComponent');
 
@@ -5343,6 +5430,123 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 
 	return convert(scene);
 }
+goog.provide('Vizi.SpotLight');
+goog.require('Vizi.Light');
+
+Vizi.SpotLight = function(param)
+{
+	param = param || {};
+
+	this.scaledDir = new THREE.Vector3;
+	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
+	
+	Vizi.Light.call(this, param);
+
+	if (param.object) {
+		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
+		this.targetPos = param.object.target.clone();
+		this.shadowDarkness = param.object.shadowDarkness;
+	}
+	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
+		this.targetPos = new THREE.Vector3;
+		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS;
+
+		var angle = ( param.angle !== undefined ) ? param.angle : Vizi.SpotLight.DEFAULT_ANGLE;
+		var distance = ( param.distance !== undefined ) ? param.distance : Vizi.SpotLight.DEFAULT_DISTANCE;
+		var exponent = ( param.exponent !== undefined ) ? param.exponent : Vizi.SpotLight.DEFAULT_EXPONENT;
+
+		this.object = new THREE.SpotLight(param.color, param.intensity, distance, angle, exponent);
+	}
+	
+    // Create accessors for all properties... just pass-throughs to Three.js
+    Object.defineProperties(this, {
+        angle: {
+	        get: function() {
+	            return this.object.angle;
+	        },
+	        set: function(v) {
+	        	this.object.angle = v;
+	        }
+		},    	
+        distance: {
+	        get: function() {
+	            return this.object.distance;
+	        },
+	        set: function(v) {
+	        	this.object.distance = v;
+	        }
+    	},    	
+        exponent: {
+	        get: function() {
+	            return this.object.exponent;
+	        },
+	        set: function(v) {
+	        	this.object.exponent = v;
+	        }
+    	},    	
+
+    });
+	
+}
+
+goog.inherits(Vizi.SpotLight, Vizi.Light);
+
+Vizi.SpotLight.prototype.realize = function() 
+{
+	Vizi.Light.prototype.realize.call(this);
+}
+
+Vizi.SpotLight.prototype.update = function() 
+{
+	// D'oh Three.js doesn't seem to transform light directions automatically
+	// Really bizarre semantics
+	if (this.object)
+	{
+		this.scaledDir.copy(this.direction);
+		this.scaledDir.multiplyScalar(Vizi.Light.DEFAULT_RANGE);
+		this.targetPos.copy(this.position);
+		this.targetPos.add(this.scaledDir);	
+		this.object.target.position.copy(this.targetPos);
+		
+		var worldmat = this.object.parent.matrixWorld;
+		this.position.applyMatrix4(worldmat);
+		this.object.target.position.applyMatrix4(worldmat);
+		
+		this.updateShadows();
+	}
+	
+	// Update the rest
+	Vizi.Light.prototype.update.call(this);
+}
+
+Vizi.SpotLight.prototype.updateShadows = function()
+{
+	if (this.castShadows)
+	{
+		this.object.castShadow = true;
+		this.object.shadowCameraNear = 1;
+		this.object.shadowCameraFar = Vizi.Light.DEFAULT_RANGE;
+		this.object.shadowCameraFov = 90;
+
+		// light.shadowCameraVisible = true;
+
+		this.object.shadowBias = 0.0001;
+		this.object.shadowDarkness = this.shadowDarkness;
+
+		this.object.shadowMapWidth = 2048;
+		this.object.shadowMapHeight = 2048;
+		
+		Vizi.Graphics.instance.enableShadows(true);
+	}	
+}
+
+Vizi.SpotLight.DEFAULT_DISTANCE = 0;
+Vizi.SpotLight.DEFAULT_ANGLE = Math.PI / 2;
+Vizi.SpotLight.DEFAULT_EXPONENT = 10;
+Vizi.SpotLight.DEFAULT_CAST_SHADOWS = false;
+Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS = 0.3;
 /**
  * @fileoverview Module Configuration
  * 
@@ -5355,6 +5559,8 @@ goog.require('Vizi.Object');
 goog.require('Vizi.Application');
 goog.require('Vizi.Service');
 goog.require('Vizi.Services');
+goog.require('Vizi.AnimationService');
+goog.require('Vizi.KeyFrameAnimator');
 goog.require('Vizi.TweenService');
 goog.require('Vizi.Behavior');
 goog.require('Vizi.BounceBehavior');
