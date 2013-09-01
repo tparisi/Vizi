@@ -353,7 +353,6 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 primitive.mesh = new THREE.Mesh(primitive.geometry, primitive.material);
             }*/
             var threeMesh = new THREE.Mesh(primitive.geometry.geometry, primitive.material);
-            primitive.material.side = THREE.FrontSide;
             threeMesh.castShadow = true;
             threeNode.add(threeMesh);
         });
