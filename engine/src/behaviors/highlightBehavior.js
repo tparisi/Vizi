@@ -10,7 +10,7 @@ goog.require('Vizi.Behavior');
 Vizi.HighlightBehavior = function(param) {
 	param = param || {};
 	this.highlightColor = (param.highlightColor !== undefined) ? param.highlightColor : 0xffffff;
-	this.savedColor = 0;
+	this.savedColors = [];
     Vizi.Behavior.call(this, param);
 }
 
@@ -20,10 +20,13 @@ Vizi.HighlightBehavior.prototype.start = function()
 {
 	Vizi.Behavior.prototype.start.call(this);
 	
-	if (this._realized && this._object.visual)
-	{
-		this.savedColor = this._object.visual.material.color.getHex();
-		this._object.visual.material.color.setHex(this.highlightColor);
+	if (this._realized && this._object.visual) {
+		var visuals = this._object.visuals;
+		var i, len = visuals.length;
+		for (i = 0; i < len; i++) {
+			this.savedColors.push(visuals[i].material.color.getHex());
+			visuals[i].material.color.setHex(this.highlightColor);
+		}	
 	}
 }
 
@@ -37,7 +40,11 @@ Vizi.HighlightBehavior.prototype.stop = function()
 
 	if (this._realized && this._object.visual)
 	{
-		this._object.visual.material.color.setHex(this.savedColor);
+		var visuals = this._object.visuals;
+		var i, len = visuals.length;
+		for (i = 0; i < len; i++) {
+			visuals[i].material.color.setHex(this.savedColors[i]);
+		}	
 	}
 
 }

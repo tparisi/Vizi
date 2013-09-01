@@ -27,8 +27,10 @@ Vizi.Visual = function(param)
 
 goog.inherits(Vizi.Visual, Vizi.SceneComponent);
 
-Vizi.Visual.prototype._componentProperty = "visual";
-Vizi.Visual.prototype._componentPropertyType = "Visual";
+// We're going to let this slide until we figure out the glTF mulit-material mesh
+//Vizi.Visual.prototype._componentProperty = "visual";
+//Vizi.Visual.prototype._componentPropertyType = "Visual";
+Vizi.Visual.prototype._componentCategory = "visuals";
 
 Vizi.Visual.prototype.realize = function()
 {

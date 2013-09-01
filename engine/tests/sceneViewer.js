@@ -107,6 +107,9 @@ SceneViewer.prototype.replaceScene = function(data)
 		this.controllerScript.camera.near = 0.01;
 		this.controllerScript.controls.userPanSpeed = 0.01;
 	}
+	else {
+		this.controllerScript.controls.userPanSpeed = 1;
+	}
 	
 	if (data.keyFrameAnimators)
 	{

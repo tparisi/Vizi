@@ -127,13 +127,13 @@
 	var savedColor = 0;
 	function onDraggerMouseOver(event)
 	{
-		savedColor = cube.visual.material.color.getHex();
-		cube.visual.material.color.setHex(0x00ff00);
+		savedColor = cube.visuals[0].material.color.getHex();
+		cube.visuals[0].material.color.setHex(0x00ff00);
 	}
 		
 	function onDraggerMouseOut(event)
 	{
-		cube.visual.material.color.setHex(savedColor);
+		cube.visuals[0].material.color.setHex(savedColor);
 	}
 
 	function onDraggerMouseDown(event)
