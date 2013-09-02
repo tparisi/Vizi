@@ -2,14 +2,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vizi Test Load Scene</title>
+<title>Vizi Model Previewer</title>
+	<link href="./css/previewer.css" rel="stylesheet" /> 
 </head>
 <body>
 	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
 
-	<script>
-	var CLOSURE_NO_DEPS = true;
-	</script>
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/bootstrap-2.3.2/bootstrap.min.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -31,11 +29,11 @@
 
 				var i, len = data.keyFrameAnimators.length;
 				for (i = 0; i < len; i++) {
-					data.keyFrameAnimators[i].loop = true;
+					data.keyFrameAnimators[i].loop = false; // true;
 					data.keyFrameAnimators[i].start();
 				}
 
-				data.cameras[1].active = true;
+				data.cameras[0].active = true;
 			});
 		loader.loadScene("./models/frigate/frigate.json");
 		
