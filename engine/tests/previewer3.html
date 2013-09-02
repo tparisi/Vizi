@@ -30,12 +30,14 @@
 				viewer.replaceScene(data);
 
 				var i, len = data.keyFrameAnimators.length;
-				for (i = 1; i < 2; i++) {
+				for (i = 0; i < len; i++) {
 					data.keyFrameAnimators[i].loop = true;
 					data.keyFrameAnimators[i].start();
 				}
+
+				data.cameras[1].active = true;
 			});
-		loader.loadScene("./models/frigate/frigate.dae");
+		loader.loadScene("./models/frigate/frigate.json");
 		
 		viewer.run();
 	}

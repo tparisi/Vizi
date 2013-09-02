@@ -44110,7 +44110,6 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            {
 	            	var anim = new THREE.glTFAnimation(interps);
 	            	this.animations.push(anim);
-	            	anim.loop = true;
 	            	anim.play();
 	            }
         	}
@@ -49328,7 +49327,7 @@ Vizi.KeyFrameAnimator.prototype.start = function()
 		var i, len = this.animations.length;
 		for (i = 0; i < len; i++)
 		{
-			this.animations.loop = this.loop;
+			this.animations[i].loop = this.loop;
 			this.animations[i].play(this.loop, 0);
 			this.endTime = this.startTime + this.animations[i].endTime / this.animations[i].timeScale;
 		}
