@@ -458,14 +458,16 @@ SceneViewer.prototype.calcSceneStats = function()
 	for (i = 0; i < len; i++) {
 		var visual = visuals[i];
 		var geometry = visual.geometry;
-		var nFaces = geometry.faces ? geometry.faces.length : geometry.attributes.index.length / 3;
+		var nFaces = geometry.faces ? geometry.faces.length : geometry.attributes.index.array.length / 3;
 		this.faceCount += nFaces;
 		this.meshCount++;		
 	}
 
 	if (this.sceneStats)
 	{
-		this.sceneStats.innerHTML = this.meshCount + " meshes<br>" + this.faceCount + " faces";
+		var meshesLabel = this.meshCount > 1 ? " meshes<br>" : " mesh<br>";
+		var facesLabel = this.faceCount > 1 ? " faces" : "face";
+		this.sceneStats.innerHTML = this.meshCount + meshesLabel + this.faceCount + facesLabel;
 	}
 }
 

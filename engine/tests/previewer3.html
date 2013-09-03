@@ -4,20 +4,103 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Vizi Model Previewer</title>
 	<link href="./css/previewer.css" rel="stylesheet" /> 
+	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+	<div id="toolbar" class="ui-widget-header ui-corner-all">
+	<button id="beginning">go to beginning</button>
+	<button id="rewind">rewind</button>
+	<button id="play">play</button>
+	<button id="stop">stop</button>
+	<button id="forward">fast forward</button>
+	<button id="end">go to end</button>
+	<input type="checkbox" id="shuffle" /><label for="shuffle">Shuffle</label>
+	<span id="repeat">
+	<input type="radio" id="repeat0" name="repeat" checked="checked" /><label for="repeat0">No Repeat</label>
+	<input type="radio" id="repeat1" name="repeat" /><label for="repeat1">Once</label>
+	<input type="radio" id="repeatall" name="repeat" /><label for="repeatall">All</label>
+	</span>
+	</div>
+	<div id="container" style="background-color:red"></div>
+	<div id="loadStatus" style="display:block">
+	Loading scene...
+	</div>
+	<div id="prompt">
+	</div>
+	<div id="listing">
+		<label id="listingLabel">uploaded scenes</label><br></br>
+		<select id="uploads" size="1"  ondblclick="selectUpload();">
+		</select>
+		<button id="loadButton" onclick="selectUpload();">Load</button><br></br>
+		<button id="updloadButton" onclick="location.href='../upload.html'">Upload More</button>		
+		<button id="homButton" onclick="location.href='../home.php'">Home</button>		
+		<button id="fileOpen" onclick="doFileOpen();">Open</button>		
+	 </div>
+	<div id="controls">
+		<div id="stats">Scene Stats
+		<div id="render_stats">0 FPS</div>
+		<div id="scene_stats">0 meshes<br>0 faces</div>
+		</div>
+		<div id="cameras">Cameras
+			<div>
+				<select id="cameras_list" size="5" ondblclick="selectCamera();">
+				</select>
+			</div>
+			<div id="camera_controls">
+				<button id="selectCameraButton" onclick="selectCamera();">Select</button>
+			</div>
+		</div>
+		<div id="lights">Lights
+			<div>
+				<select id="lights_list" size="5" ondblclick="toggleLight();">
+				</select>
+			</div>
+			<div id="light_controls">
+				<button id="selectLightsButton" onclick="toggleLight();">Toggle</button>
+			</div>
+		</div>
+		<div id="animations">Animations
+			<div>
+				<select id="animations_list" size="10" ondblclick="selectAnimation();">
+				</select>
+			</div>
+			<div id="animation_controls">
+				<button id="playButton" onclick="playAnimation();">Play</button>
+				<button id="stopButton" onclick="stopAnimation();">Stop</button>
+				<button id="playAllButton" onclick="playAllAnimations();">Play All</button>
+				<button id="stopAllButton" onclick="stopAllAnimations();">Stop All</button>
+			</div>
+		</div>
+		<div id="misc"> 
+		Miscellaneous
+			<div id="misc_controls">
+			<input type="checkbox" name="headlight" id="headlight" checked onClick="onHeadlightChecked(this);"/>Headlight
+			<input type="checkbox" name="grid" id="grid" checked onClick="onGridChecked(this);"/>Grid
+		<!-- 
+			<input type="checkbox" name="ambient_light" id="ambient_light" checked onClick="onAmbientLightChecked(this);"/>Ambient Light
+		 -->
+			</div>
+	 	</div>
+	</div>
 
+	<!--  file open dialog -->
+	<div id="fileOpenDialog" title="Open a File" style="display:none">
+	<p>Select a file in OBJ, DAE, JS (Three.js) or JSON (glTF)</p>
+	</div>
+	
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
-    <script src="../libs/bootstrap-2.3.2/bootstrap.min.js"></script>
+    <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="../build/vizi.js"></script>
 	<script src="sceneViewer.js"></script>
 	<script>
 
 	$(document).ready(function() {
-		var container = document.getElementById("container");
 		
-		var viewer = new SceneViewer({ container : container, displayStats:true });
+		var container = document.getElementById("container");
+		var renderStats = document.getElementById("render_stats");
+		var sceneStats = document.getElementById("scene_stats");
+		
+		var viewer = new SceneViewer({ container : container, renderStats: renderStats, sceneStats: sceneStats });
 		
 		var scene = null;
 		var loader = new Vizi.Loader;
@@ -40,6 +123,10 @@
 		viewer.run();
 	}
 	);
+
+	function doFileOpen() {
+		$('#fileOpenDialog').dialog({modal:true});
+	}
 
 	</script>
 	
