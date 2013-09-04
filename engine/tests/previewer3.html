@@ -104,23 +104,16 @@
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 		
-		var scene = null;
 		var loader = new Vizi.Loader;
-		var animators = [];
-		
-		loader.addEventListener("loaded", function(data) { 
-				scene = data.scene;
-				viewer.replaceScene(data);
 
-				var i, len = data.keyFrameAnimators.length;
-				for (i = 0; i < len; i++) {
-					data.keyFrameAnimators[i].loop = false; // true;
-					data.keyFrameAnimators[i].start();
-				}
-
-				data.cameras[0].active = true;
-			});
-		loader.loadScene("./models/frigate/frigate.json");
+		var loadStartTime = Date.now();
+		loader.addEventListener("loaded", function(data) { onLoadComplete(data, viewer, loadStartTime); }); 
+		loader.addEventListener("progress", function(progress) { onLoadProgress(progress, viewer); }); 
+		var url = "./models/vizi_mobile/vizi_mobile_tc01.json";
+		var url = "./models/vizi_mobile/vizi_mobile_tc01.dae";
+		var url = "./models/frigate/frigate.dae";
+		var url = "./models/frigate/frigate.json";
+		loader.loadScene(url);
 		
 		viewer.run();
 	}
@@ -128,6 +121,41 @@
 
 	function doFileOpen() {
 		$('#fileOpenDialog').dialog({modal:true});
+	}
+	
+	function onLoadComplete(data, viewer, loadStartTime)
+	{
+		// Hide the loader bar
+		var loadStatus = document.getElementById("loadStatus");
+		loadStatus.style.display = 'none';		
+
+		var scene = data.scene;
+		viewer.replaceScene(data);
+
+		var animators = [];
+		var i, len = data.keyFrameAnimators.length;
+		for (i = 0; i < len; i++) {
+			data.keyFrameAnimators[i].loop = false; // true;
+			data.keyFrameAnimators[i].start();
+		}
+
+		data.cameras[0].active = true;
+
+		var loadTime = (Date.now() - loadStartTime) / 1000;
+		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
+		
+		updateCamerasList(viewer);
+		updateLightsList(viewer);
+		updateAnimationsList(viewer);
+		updateMiscControls(viewer);
+	}
+
+	function onLoadProgress(progress, viewer)
+	{
+		// Update the laoder bar
+		var percentProgress = progress.loaded / progress.total * 100;
+		var loadStatus = document.getElementById("loadStatus");
+		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
 	}
 
 	function onRenderStats(stats, renderStats) {
@@ -139,7 +167,68 @@
 		var facesLabel = stats.faceCount > 1 ? " faces" : "face";
 		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel;
 	}
+
+	function updateCamerasList(viewer)
+	{
+		var elt = document.getElementById('cameras_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var cameraNames = viewer.cameraNames;
+		var i, len = cameraNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			option.text=cameraNames[i];
+			elt.add(option);
+		}		
+	}
+
+	function updateLightsList(viewer)
+	{
+		var elt = document.getElementById('lights_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var lightNames = viewer.lightNames;
+		var lights = viewer.lights;
+		var i, len = lightNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			var value = (lights[i] instanceof Vizi.AmbientLight) ? lights[i].color.getStyle() : 
+				lights[i].intensity;
+			option.text=lightNames[i] + "    [" + value + "]";
+			elt.add(option);
+		}		
+	}
 		
+	function updateAnimationsList(viewer)
+	{
+		var elt = document.getElementById('animations_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var animationNames = viewer.keyFrameAnimatorNames;
+		var i, len = animationNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			option.text=animationNames[i];
+			elt.add(option);
+		}		
+	}
+
+	function updateMiscControls(viewer)
+	{
+		var elt = document.getElementById('headlight');
+		elt.checked = viewer.headlightOn;
+	}
+
+	
 	</script>
 	
 </body>

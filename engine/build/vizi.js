@@ -44109,6 +44109,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            if (interps.length)
 	            {
 	            	var anim = new THREE.glTFAnimation(interps);
+	            	anim.name = animation.name;
 	            	this.animations.push(anim);
 	            	anim.play();
 	            }
@@ -44121,6 +44122,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         		var self = this;
 	            theLoader.animationsRequested++;
 	            var animation = new Animation();
+                animation.name = entryID;
 	            animation.onload = function() {
 	            	self.buildAnimation(animation);
 	            	theLoader.animationsLoaded++;

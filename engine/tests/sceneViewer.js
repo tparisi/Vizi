@@ -132,7 +132,7 @@ SceneViewer.prototype.replaceScene = function(data)
 			camera.aspect = container.offsetWidth / container.offsetHeight;
 			
 			this.cameras.push(camera);
-			this.cameraNames.push(camera.name);
+			this.cameraNames.push(camera._object.name);
 		}
 	}
 	
@@ -166,7 +166,7 @@ SceneViewer.prototype.replaceScene = function(data)
 			}
 			
 			this.lights.push(data.lights[i]);
-			this.lightNames.push(data.lights[i].name);
+			this.lightNames.push(data.lights[i]._object.name);
 			this.lightIntensities.push(data.lights[i].intensity);
 			this.lightColors.push(data.lights[i].color.clone());
 		}
