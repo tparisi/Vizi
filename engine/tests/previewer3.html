@@ -132,8 +132,8 @@
 
 			var loader = new Vizi.Loader;
 
-			loader.addEventListener("loaded", function(data) { onLoadComplete(data, viewer, loadStartTime); }); 
-			loader.addEventListener("progress", function(progress) { onLoadProgress(progress, viewer); }); 
+			loader.addEventListener("loaded", function(data) { onLoadComplete(data, loadStartTime); }); 
+			loader.addEventListener("progress", function(progress) { onLoadProgress(progress); }); 
 
 			var fileViewingName = document.getElementById("fileViewingName");
 			fileViewingName.innerHTML=url;
@@ -148,7 +148,7 @@
 		$('#fileOpenDialog').dialog("close");
 	}
 	
-	function onLoadComplete(data, viewer, loadStartTime)
+	function onLoadComplete(data, loadStartTime)
 	{
 		// Hide the loader bar
 		var loadStatus = document.getElementById("loadStatus");
@@ -175,7 +175,7 @@
 		updateMiscControls(viewer);
 	}
 
-	function onLoadProgress(progress, viewer)
+	function onLoadProgress(progress)
 	{
 		// Update the laoder bar
 		var percentProgress = progress.loaded / progress.total * 100;
@@ -253,6 +253,85 @@
 		elt.checked = viewer.headlightOn;
 	}
 
+	function selectCamera()
+	{
+	    var select = document.getElementById("cameras_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.bindCamera(index);
+			if (index > 0)
+				viewer.bindCamera(0, true);
+		}
+	}
+
+	function toggleLight()
+	{
+	    var select = document.getElementById("lights_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.toggleLight(index);
+			updateLightsList(app);
+			select.selectedIndex = index;
+		}
+	}
+		
+	function selectAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.playAnimation(index);
+		}
+	}
+		
+	function playAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.playAnimation(index);
+		}
+	}
+
+	function stopAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.stopAnimation(index);
+		}
+	}
+	
+	function playAllAnimations()
+	{
+		viewer.playAllAnimations();
+	}
+
+	function stopAllAnimations()
+	{
+		viewer.stopAllAnimations();
+	}
+
+	function onHeadlightChecked(elt)
+	{
+		viewer.setHeadlightOn(elt.checked);
+	}
+
+	function onAmbientLightChecked(elt)
+	{
+		viewer.setAmbientLightOn(elt.checked);
+	}
+		
+	function onGridChecked(elt)
+	{
+		viewer.setGridOn(elt.checked);
+	}
+	
 	
 	</script>
 	

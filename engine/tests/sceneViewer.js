@@ -118,7 +118,8 @@ SceneViewer.prototype.replaceScene = function(data)
 	
 	this.cameras = [];
 	this.cameraNames = [];
-	this.cameras.push(this.controllerScript.viewpoint.camera.object);
+	this.cameras.push(this.controllerScript.viewpoint.camera);
+	this.controllerScript.viewpoint.name = "[default]";
 	this.cameraNames.push("[default]");
 
 	this.controllerScript.viewpoint.camera.active = true;
@@ -191,7 +192,7 @@ SceneViewer.prototype.addToScene = function(data)
 	
 	if (!this.cameras.length)
 	{
-		this.cameras.push(this.controllerScript.viewpoint.camera.object);
+		this.cameras.push(this.controllerScript.viewpoint.camera);
 		this.cameraNames.push("[default]");
 		this.controllerScript.viewpoint.camera.setActive(true);
 	}
@@ -266,8 +267,9 @@ SceneViewer.prototype.addToScene = function(data)
 SceneViewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 {
 	// for now, assume newCamera is in world space, this is too friggin hard
-	oldCamera.updateMatrixWorld();
-	var components = oldCamera.matrixWorld.decompose();
+	var cam = oldCamera.object;
+	cam.updateMatrixWorld();
+	var components = cam.matrixWorld.decompose();
 	var translation = components[0];
 	var quaternion = components[1];
 	var rotation = new THREE.Vector3().setEulerFromQuaternion(quaternion);
@@ -280,18 +282,16 @@ SceneViewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 	newCamera.fullWidth = oldCamera.fullWidth;
 	newCamera.fullHeight = oldCamera.fullHeight;
 	newCamera.near = oldCamera.near;
-	newCamera.far = oldCamera.far;
-	
-	newCamera.updateMatrixWorld();
-	newCamera.updateProjectionMatrix();
+	newCamera.far = oldCamera.far;	
 }
 
 SceneViewer.prototype.bindCamera = function(index, copyValues)
 {
 	if (this.cameras && this.cameras[index])
 	{
-		var currentCamera = Vizi.Graphics.instance.camera;
-		Vizi.Graphics.instance.camera = camera = this.cameras[index];
+		var currentCamera = Vizi.CameraManager.activeCamera;
+		var camera = this.cameras[index];
+		camera.active = true;
 		
 		if (copyValues)
 		{
