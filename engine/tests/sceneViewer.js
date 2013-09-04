@@ -10,16 +10,9 @@ SceneViewer = function(param)
 	// Set up stats info
 	this.lastFPSUpdateTime = 0;
 	
-	if (param.renderStats)
-	{
-		this.renderStats = param.renderStats;
-	}
+	this.renderStats = { fps : 0 };
+	this.sceneStats = { meshCount : 0, faceCount : 0 };
 	
-	if (param.sceneStats)
-	{
-		this.sceneStats = param.sceneStats;
-	}
-
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : true;
@@ -65,13 +58,14 @@ SceneViewer.prototype.runloop = function()
 	var updateInterval = 1000;
 	
 	Vizi.Application.prototype.runloop.call(this);
-	if (this.renderStats && Vizi.Graphics.instance.frameRate)
+	if (Vizi.Graphics.instance.frameRate)
 	{
 		var now = Date.now();
 		var deltat = now - this.lastFPSUpdateTime;
 		if (deltat > updateInterval)
 		{
-			this.renderStats.innerHTML = Vizi.Graphics.instance.frameRate.toFixed(0) + " FPS";
+			this.renderStats.fps = Vizi.Graphics.instance.frameRate.toFixed(0);
+			this.dispatchEvent("renderstats", this.renderStats);
 			this.lastFPSUpdateTime = now;
 		}
 	}
@@ -463,12 +457,10 @@ SceneViewer.prototype.calcSceneStats = function()
 		this.meshCount++;		
 	}
 
-	if (this.sceneStats)
-	{
-		var meshesLabel = this.meshCount > 1 ? " meshes<br>" : " mesh<br>";
-		var facesLabel = this.faceCount > 1 ? " faces" : "face";
-		this.sceneStats.innerHTML = this.meshCount + meshesLabel + this.faceCount + facesLabel;
-	}
+	this.sceneStats.meshCount = this.meshCount;
+	this.sceneStats.faceCount = this.faceCount;
+	
+	this.dispatchEvent("scenestats", this.sceneStats);	
 }
 
 SceneViewer.prototype.findCallback = function(n, str, found)

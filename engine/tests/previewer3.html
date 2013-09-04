@@ -100,7 +100,9 @@
 		var renderStats = document.getElementById("render_stats");
 		var sceneStats = document.getElementById("scene_stats");
 		
-		var viewer = new SceneViewer({ container : container, renderStats: renderStats, sceneStats: sceneStats });
+		var viewer = new SceneViewer({ container : container });
+		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
+		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 		
 		var scene = null;
 		var loader = new Vizi.Loader;
@@ -128,6 +130,16 @@
 		$('#fileOpenDialog').dialog({modal:true});
 	}
 
+	function onRenderStats(stats, renderStats) {
+		renderStats.innerHTML = stats.fps + " FPS";
+	}
+
+	function onSceneStats(stats, sceneStats) {
+		var meshesLabel = stats.meshCount > 1 ? " meshes<br>" : " mesh<br>";
+		var facesLabel = stats.faceCount > 1 ? " faces" : "face";
+		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel;
+	}
+		
 	</script>
 	
 </body>
