@@ -4368,6 +4368,14 @@ Vizi.ModelControllerScript = function(param)
 	this._headlightOn = param.headlight;
 	
     Object.defineProperties(this, {
+    	center : {
+    		get: function() {
+    			return this.controls.center;
+    		},
+    		set: function(c) {
+    			this.controls.center.copy(c);
+    		}
+    	},
         headlightOn: {
 	        get: function() {
 	            return this._headlightOn;
@@ -4800,7 +4808,7 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 			}
 
 			obj.updateMatrix();
-			boundingBox.applyMatrix4(obj.matrix);
+			// boundingBox.applyMatrix4(obj.matrix);
 			return boundingBox;
 		}
 	}

@@ -68,7 +68,7 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 			}
 
 			obj.updateMatrix();
-			boundingBox.applyMatrix4(obj.matrix);
+			// boundingBox.applyMatrix4(obj.matrix);
 			return boundingBox;
 		}
 	}

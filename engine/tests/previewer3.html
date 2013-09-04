@@ -160,11 +160,11 @@
 		var animators = [];
 		var i, len = data.keyFrameAnimators.length;
 		for (i = 0; i < len; i++) {
-			data.keyFrameAnimators[i].loop = false; // true;
-			data.keyFrameAnimators[i].start();
+//			data.keyFrameAnimators[i].loop = false; // true;
+//			data.keyFrameAnimators[i].start();
 		}
 
-		data.cameras[0].active = true;
+		// data.cameras[1].active = true;
 
 		var loadTime = (Date.now() - loadStartTime) / 1000;
 		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
@@ -272,7 +272,7 @@
 		if (index >= 0)
 		{
 			viewer.toggleLight(index);
-			updateLightsList(app);
+			updateLightsList(viewer);
 			select.selectedIndex = index;
 		}
 	}

@@ -1125,7 +1125,6 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            	var anim = new THREE.glTFAnimation(interps);
 	            	anim.name = animation.name;
 	            	this.animations.push(anim);
-	            	anim.play();
 	            }
         	}
         },

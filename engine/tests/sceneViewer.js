@@ -181,7 +181,7 @@ SceneViewer.prototype.replaceScene = function(data)
 		this.headlightOn = true;
 	}
 	
-//	this.fitToScene();
+	this.fitToScene();
 	this.scenes.push(data.scene);
 	this.calcSceneStats();
 }
@@ -269,18 +269,17 @@ SceneViewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 	// for now, assume newCamera is in world space, this is too friggin hard
 	var cam = oldCamera.object;
 	cam.updateMatrixWorld();
-	var components = cam.matrixWorld.decompose();
-	var translation = components[0];
-	var quaternion = components[1];
-	var rotation = new THREE.Vector3().setEulerFromQuaternion(quaternion);
+	var position = new THREE.Vector3;
+	var quaternion = new THREE.Quaternion;
+	var scale = new THREE.Vector3;
+	cam.matrixWorld.decompose(position, quaternion, scale);
+	var rotation = new THREE.Euler().setFromQuaternion(quaternion);
 	
-	newCamera.position.copy(translation);
+	newCamera.position.copy(position);
 	newCamera.rotation.copy(rotation);
 	
 	newCamera.fov = oldCamera.fov;
 	newCamera.aspect = oldCamera.aspect;
-	newCamera.fullWidth = oldCamera.fullWidth;
-	newCamera.fullHeight = oldCamera.fullHeight;
 	newCamera.near = oldCamera.near;
 	newCamera.far = oldCamera.far;	
 }
@@ -296,13 +295,7 @@ SceneViewer.prototype.bindCamera = function(index, copyValues)
 		if (copyValues)
 		{
 			this.copyCameraValues(currentCamera, camera)
-		}
-		
-		// Hack, hack, hack need a NavigationInfo style paradigm here...
-		if (index == 0)
-			this.controllerScript.active = true;
-		else
-			this.controllerScript.active = false;
+		}		
 	}
 }
 
@@ -413,7 +406,21 @@ SceneViewer.prototype.fitToScene = function()
 		  return Math.log(val) / Math.LN10;
 		}
 
-	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot.transform.object);
+	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
+	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
+	this.controllerScript.center = center;
+	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
+	this.controllerScript.camera.position.copy(campos);
+	this.controllerScript.camera.position.z *= 2;
+	
+	var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
+			this.boundingBox.max.y - this.boundingBox.min.y,
+			this.boundingBox.max.z - this.boundingBox.min.z);
+	var mat = new THREE.MeshBasicMaterial({transparent:true, wireframe:true, opacity:.2})
+	var cube = new THREE.Mesh(geo, mat);
+	cube.position.add(center);
+	this.sceneRoot.transform.object.add(cube);
+	return;
 	
 	var extent = this.boundingBox.max.clone().subSelf(this.boundingBox.min);
 	
