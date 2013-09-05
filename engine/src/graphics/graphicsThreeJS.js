@@ -189,7 +189,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 	
     if ( intersects.length > 0 ) {
     	var i = 0;
-    	while(!intersects[i].object.visible)
+    	while(i < intersects.length && !intersects[i].object.visible)
     	{
     		i++;
     	}
@@ -201,7 +201,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
         	return { object : null, point : null, normal : null };
     	}
     	
-    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face.normal));        	    	                             
+    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face ? intersected.face.normal : null));        	    	                             
     }
     else
     {

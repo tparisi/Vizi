@@ -33,13 +33,15 @@ SceneViewer.prototype.initScene = function()
 {
 	this.sceneRoot = new Vizi.Object;
 	this.addObject(this.sceneRoot);
+
+	this.gridRoot = new Vizi.Object;
+	this.addObject(this.gridRoot);
+	this.grid = null;	
+	this.createGrid();
 	
 	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
-
-	if (this.showGrid)
-		this.createGrid();
 
 	this.scenes = [];
 	this.keyFrameAnimators = [];
@@ -328,7 +330,7 @@ SceneViewer.prototype.playAnimation = function(index)
 {
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
-		// this.keyFrameAnimators[index].stop();
+		this.keyFrameAnimators[index].stop();
 		this.keyFrameAnimators[index].start();
 	}
 }
@@ -388,16 +390,32 @@ SceneViewer.prototype.setAmbientLightOn = function(on)
 
 SceneViewer.prototype.createGrid = function()
 {
-	return;
-	
-	if (this.grid)
+	if (this.gridRoot && this.grid)
 	{
-		this.root.removeComponent(this.grid);
+		 this.gridRoot.removeComponent(this.grid);
 	}
-		
-	this.grid = new Vizi.Grid({color: 0x202020, size: this.gridSize, stepSize: this.gridStepSize});
 
-	this.root.addComponent(this.grid);
+	// Create a line geometry for the grid pattern
+	var floor = -0.04, step = this.gridStepSize, size = this.gridSize;
+	var geometry = new THREE.Geometry();
+
+	for ( var i = 0; i <= size / step * 2; i ++ )
+	{
+		geometry.vertices.push( new THREE.Vector3( - size, floor, i * step - size ) );
+		geometry.vertices.push( new THREE.Vector3(   size, floor, i * step - size ) );
+	
+		geometry.vertices.push( new THREE.Vector3( i * step - size, floor, -size ) );
+		geometry.vertices.push( new THREE.Vector3( i * step - size, floor,  size ) );
+	}
+
+	var line_material = new THREE.LineBasicMaterial( { color: SceneViewer.GRID_COLOR, 
+		opacity:SceneViewer.GRID_OPACITY } );
+	
+	var gridObject = new THREE.Line( geometry, line_material, THREE.LinePieces );
+	gridObject.visible = this.showGrid;
+	this.grid = new Vizi.Visual({ object : gridObject });
+
+	this.gridRoot.addComponent(this.grid);
 }
 
 SceneViewer.prototype.fitToScene = function()
@@ -407,6 +425,9 @@ SceneViewer.prototype.fitToScene = function()
 		}
 
 	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
+	var scale = this.sceneRoot._children[0].transform.object.scale;
+	var mat = new THREE.Matrix4().scale(scale);
+	// this.boundingBox.applyMatrix4(mat);
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
 	this.controllerScript.center = center;
 	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
@@ -416,7 +437,7 @@ SceneViewer.prototype.fitToScene = function()
 	var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 			this.boundingBox.max.y - this.boundingBox.min.y,
 			this.boundingBox.max.z - this.boundingBox.min.z);
-	var mat = new THREE.MeshBasicMaterial({transparent:true, wireframe:true, opacity:.2})
+	var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
 	var cube = new THREE.Mesh(geo, mat);
 	cube.position.add(center);
 	this.sceneRoot.transform.object.add(cube);
@@ -444,8 +465,7 @@ SceneViewer.prototype.fitToScene = function()
 	this.controllerScript.setCameraTilt(new THREE.Vector3);
 	this.controllerScript.walkSpeed = this.gridStepSize;	
 	
-	if (this.showGrid)
-		this.createGrid();
+	this.createGrid();
 }
 
 SceneViewer.prototype.calcSceneStats = function()
@@ -584,3 +604,5 @@ SceneViewer.prototype.onMouseUp = function(pageX, pageY, eltX, eltY)
 
 SceneViewer.DEFAULT_GRID_SIZE = 100;
 SceneViewer.DEFAULT_GRID_STEP_SIZE = 1;
+SceneViewer.GRID_COLOR = 0x202020;
+SceneViewer.GRID_OPACITY = 0.2;

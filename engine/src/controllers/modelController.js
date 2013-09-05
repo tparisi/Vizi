@@ -68,7 +68,7 @@ Vizi.ModelControllerScript.prototype.realize = function()
 	this.viewpoint = this._object.getChild(0);
 	this.camera = this.viewpoint.camera;
 		
-	this.camera.position.set(0, 0, this.radius);
+	this.camera.position.set(0, this.radius / 2, this.radius);
 	
 	this.createControls();
 }
@@ -99,7 +99,7 @@ Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
 	}
 }
 
-Vizi.ModelControllerScript.default_radius = 5;
+Vizi.ModelControllerScript.default_radius = 10;
 Vizi.ModelControllerScript.default_min_radius = 1;
 Vizi.ModelControllerScript.MAX_X_ROTATION = 0; // Math.PI / 12;
 Vizi.ModelControllerScript.MIN_X_ROTATION = -Math.PI / 2;

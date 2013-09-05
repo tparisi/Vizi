@@ -48429,7 +48429,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 	
     if ( intersects.length > 0 ) {
     	var i = 0;
-    	while(!intersects[i].object.visible)
+    	while(i < intersects.length && !intersects[i].object.visible)
     	{
     		i++;
     	}
@@ -48441,7 +48441,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
         	return { object : null, point : null, normal : null };
     	}
     	
-    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face.normal));        	    	                             
+    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face ? intersected.face.normal : null));        	    	                             
     }
     else
     {
@@ -49216,7 +49216,7 @@ Vizi.ModelControllerScript.prototype.realize = function()
 	this.viewpoint = this._object.getChild(0);
 	this.camera = this.viewpoint.camera;
 		
-	this.camera.position.set(0, 0, this.radius);
+	this.camera.position.set(0, this.radius / 2, this.radius);
 	
 	this.createControls();
 }
@@ -49247,7 +49247,7 @@ Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
 	}
 }
 
-Vizi.ModelControllerScript.default_radius = 5;
+Vizi.ModelControllerScript.default_radius = 10;
 Vizi.ModelControllerScript.default_min_radius = 1;
 Vizi.ModelControllerScript.MAX_X_ROTATION = 0; // Math.PI / 12;
 Vizi.ModelControllerScript.MIN_X_ROTATION = -Math.PI / 2;

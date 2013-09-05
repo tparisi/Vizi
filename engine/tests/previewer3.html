@@ -12,7 +12,7 @@
 	<label id="fileViewingName"></label>
 	<button id="fileOpenButton" onclick="doFileOpen();">Open</button>
 	</div>
-	<div id="container" style="background-color:red"></div>
+	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
 	Loading scene...
 	</div>
@@ -43,7 +43,7 @@
 		</div>
 		<div id="animations">Animations
 			<div>
-				<select id="animations_list" size="10" ondblclick="selectAnimation();">
+				<select id="animations_list" size="7" ondblclick="selectAnimation();">
 				</select>
 			</div>
 			<div id="animation_controls">
@@ -56,11 +56,21 @@
 		<div id="misc"> 
 		Miscellaneous
 			<div id="misc_controls">
-			<input type="checkbox" name="headlight" id="headlight" checked onClick="onHeadlightChecked(this);"/>Headlight
-			<input type="checkbox" name="grid" id="grid" checked onClick="onGridChecked(this);"/>Grid
-		<!-- 
-			<input type="checkbox" name="ambient_light" id="ambient_light" checked onClick="onAmbientLightChecked(this);"/>Ambient Light
-		 -->
+			<div id="headlight">
+				<input type="checkbox" name="headlight_cb" id="headlight_cb" checked onClick="onHeadlightChecked(this);"/><label>Headlight</label>
+			</div>
+			<div id="ambient_light">
+				<input type="checkbox" name="ambient_light_cb" id="ambient_light_cb" checked onClick="onAmbientLightChecked(this);"/><label>Ambient Light</label>
+			</div>
+			<div id="grid">
+				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
+			</div>
+			<div id="ground">
+				<input type="checkbox" name="ground_cb" id="ground_cb" checked onClick="onGroundChecked(this);"/><label>Ground</label>
+			</div>			
+			<div id="shadows">
+				<input type="checkbox" name="shadows_cb" id="shadows_cb" checked onClick="onShadowsChecked(this);"/><label>Shadows</label>
+			</div>			
 			</div>
 	 	</div>
 	</div>
@@ -96,7 +106,7 @@
 		var renderStats = document.getElementById("render_stats");
 		var sceneStats = document.getElementById("scene_stats");
 		
-		viewer = new SceneViewer({ container : container });
+		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
@@ -249,7 +259,7 @@
 
 	function updateMiscControls(viewer)
 	{
-		var elt = document.getElementById('headlight');
+		var elt = document.getElementById('headlight_cb');
 		elt.checked = viewer.headlightOn;
 	}
 
