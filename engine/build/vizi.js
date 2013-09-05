@@ -44577,7 +44577,7 @@ THREE.glTFAnimation.prototype.update = function()
 		{
 			this.interps[i].interp(this.duration);
 		}
-		THREE.glTFAnimator.remove(this);
+		this.stop();
 		return;
 	}
 	else
@@ -49339,6 +49339,8 @@ Vizi.KeyFrameAnimator.prototype.start = function()
 			this.animations[i].loop = this.loop;
 			this.animations[i].play(this.loop, 0);
 			this.endTime = this.startTime + this.animations[i].endTime / this.animations[i].timeScale;
+			if (isNaN(this.endTime))
+				this.endTime = this.startTime + this.animations[i].duration * 1000;
 		}
 	}
 }

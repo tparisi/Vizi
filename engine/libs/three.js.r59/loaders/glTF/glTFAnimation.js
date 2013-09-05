@@ -94,7 +94,7 @@ THREE.glTFAnimation.prototype.update = function()
 		{
 			this.interps[i].interp(this.duration);
 		}
-		THREE.glTFAnimator.remove(this);
+		this.stop();
 		return;
 	}
 	else
