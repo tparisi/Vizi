@@ -16,6 +16,7 @@ SceneViewer = function(param)
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : true;
+	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
 	this.gridSize = param.gridSize || SceneViewer.DEFAULT_GRID_SIZE;
 	this.gridStepSize = param.gridStepSize || SceneViewer.DEFAULT_GRID_STEP_SIZE;	
@@ -96,9 +97,10 @@ SceneViewer.prototype.replaceScene = function(data)
 	}
 	
 	this.sceneRoot.addChild(data.scene);
+	
 	var bbox = Vizi.SceneUtils.computeBoundingBox(data.scene);
 	
-	// heuristic, who knows ?
+/*	// heuristic, who knows ?
 	if (bbox.max.z < 1) {
 		this.controllerScript.camera.near = 0.01;
 		this.controllerScript.controls.userPanSpeed = 0.01;
@@ -106,7 +108,7 @@ SceneViewer.prototype.replaceScene = function(data)
 	else {
 		this.controllerScript.controls.userPanSpeed = 1;
 	}
-	
+*/	
 	if (data.keyFrameAnimators)
 	{
 		var i, len = data.keyFrameAnimators.length;
@@ -433,14 +435,17 @@ SceneViewer.prototype.fitToScene = function()
 	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
 	this.controllerScript.camera.position.copy(campos);
 	this.controllerScript.camera.position.z *= 2;
-	
-	var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
-			this.boundingBox.max.y - this.boundingBox.min.y,
-			this.boundingBox.max.z - this.boundingBox.min.z);
-	var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
-	var cube = new THREE.Mesh(geo, mat);
-	cube.position.add(center);
-	this.sceneRoot.transform.object.add(cube);
+
+	if (this.showBoundingBox) {
+		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
+				this.boundingBox.max.y - this.boundingBox.min.y,
+				this.boundingBox.max.z - this.boundingBox.min.z);
+		var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
+		var cube = new THREE.Mesh(geo, mat);
+		cube.position.add(center);
+		this.sceneRoot.transform.object.add(cube);
+	}
+
 	return;
 	
 	var extent = this.boundingBox.max.clone().subSelf(this.boundingBox.min);

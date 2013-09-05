@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi Model Previewer</title>
+<!--  http://www.google.com/fonts#UsePlace:use/Collection:PT+Sans  -->
+	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
+	<link href='./css/fonts.css' rel='stylesheet' type='text/css'>
+	<link href="./css/futurgo.css" rel="stylesheet" type='text/css'/> 
+</head>
+<body>
+	<div id="menubar" class="ui-widget-header ui-corner-all">
+	<label id="menuORDER">ORDER</label>
+	<label id="menuTEST_DRIVE">TEST DRIVE</label>
+	<label id="menuFEATURES">FEATURES</label>
+	<label id="menuSPECS">SPECS</label>
+	<label id="menuCHARGING">CHARGING</label>
+	<label id="menuGALLERY">GALLERY</label>
+	<label id="menuVIDEO">VIDEO</label>
+	<label id="menuFAQ">QUESTIONS?</label>
+	</div>
+	<div id="container"></div>
+	<div id="loadStatus" style="display:none">
+	Loading scene...
+	</div>
+	<div id="prompt">
+	</div>
+	<div id="controls">
+		<div id="stats">Scene Stats
+		<div id="render_stats">0 FPS</div>
+		<div id="scene_stats">0 meshes<br>0 faces</div>
+		</div>
+		<div id="cameras">Cameras
+			<div>
+				<select id="cameras_list" size="5" ondblclick="selectCamera();">
+				</select>
+			</div>
+			<div id="camera_controls">
+				<button id="selectCameraButton" onclick="selectCamera();">Select</button>
+			</div>
+		</div>
+		<div id="lights">Lights
+			<div>
+				<select id="lights_list" size="5" ondblclick="toggleLight();">
+				</select>
+			</div>
+			<div id="light_controls">
+				<button id="selectLightsButton" onclick="toggleLight();">Toggle</button>
+			</div>
+		</div>
+		<div id="animations">Animations
+			<div>
+				<select id="animations_list" size="7" ondblclick="selectAnimation();">
+				</select>
+			</div>
+			<div id="animation_controls">
+				<button id="playButton" onclick="playAnimation();">Play</button>
+				<button id="stopButton" onclick="stopAnimation();">Stop</button>
+				<button id="playAllButton" onclick="playAllAnimations();">Play All</button>
+				<button id="stopAllButton" onclick="stopAllAnimations();">Stop All</button>
+			</div>
+		</div>
+		<div id="misc"> 
+		Miscellaneous
+			<div id="misc_controls">
+			<div id="headlight">
+				<input type="checkbox" name="headlight_cb" id="headlight_cb" checked onClick="onHeadlightChecked(this);"/><label>Headlight</label>
+			</div>
+			<div id="ambient_light">
+				<input type="checkbox" name="ambient_light_cb" id="ambient_light_cb" checked onClick="onAmbientLightChecked(this);"/><label>Ambient Light</label>
+			</div>
+			<div id="grid">
+				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
+			</div>
+			<div id="ground">
+				<input type="checkbox" name="ground_cb" id="ground_cb" checked onClick="onGroundChecked(this);"/><label>Ground</label>
+			</div>			
+			<div id="shadows">
+				<input type="checkbox" name="shadows_cb" id="shadows_cb" checked onClick="onShadowsChecked(this);"/><label>Shadows</label>
+			</div>			
+			</div>
+	 	</div>
+	</div>
+
+	<!--  file open dialog -->
+	<div id="fileOpenDialog" title="Open a File" style="display:none">
+	<p>Select a file in OBJ, DAE, JS (Three.js) or JSON (glTF)</p>
+	<div id="listing">
+		<label id="listingLabel">Available Scenes</label><br></br>
+		<select id="files" size="8"  ondblclick="openFile();">
+		</select>
+		<button id="loadButton" onclick="openFile();">Open</button><br></br>
+	 </div>
+	</div>
+	
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+    <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script src="sceneViewer.js"></script>
+	<script>
+
+   	var viewer = null;
+	$(document).ready(function() {
+		
+		var container = document.getElementById("container");
+		var renderStats = document.getElementById("render_stats");
+		var sceneStats = document.getElementById("scene_stats");
+		
+		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
+		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
+		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
+
+		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
+		
+		viewer.run();
+	}
+	);
+
+	function openFile(url)
+	{
+		var loader = new Vizi.Loader;
+
+		loader.addEventListener("loaded", function(data) { onLoadComplete(data, loadStartTime); }); 
+		loader.addEventListener("progress", function(progress) { onLoadProgress(progress); }); 
+
+		var loadStartTime = Date.now();
+		loader.loadScene(url);
+		
+		var loadStatus = document.getElementById("loadStatus");
+		loadStatus.style.display = 'block';		
+	}
+	
+	function onLoadComplete(data, loadStartTime)
+	{
+		// Hide the loader bar
+		var loadStatus = document.getElementById("loadStatus");
+		loadStatus.style.display = 'none';		
+
+		var scene = data.scene;
+		viewer.replaceScene(data);
+
+		var loadTime = (Date.now() - loadStartTime) / 1000;
+		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
+		
+		updateCamerasList(viewer);
+		updateLightsList(viewer);
+		updateAnimationsList(viewer);
+		updateMiscControls(viewer);
+
+		bindCamera("setup");
+	}
+
+	function onLoadProgress(progress)
+	{
+		// Update the laoder bar
+		var percentProgress = progress.loaded / progress.total * 100;
+		var loadStatus = document.getElementById("loadStatus");
+		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
+	}
+
+	function onRenderStats(stats, renderStats) {
+		renderStats.innerHTML = stats.fps + " FPS";
+	}
+
+	function onSceneStats(stats, sceneStats) {
+		var meshesLabel = stats.meshCount > 1 ? " meshes<br>" : " mesh<br>";
+		var facesLabel = stats.faceCount > 1 ? " faces" : "face";
+		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel;
+	}
+
+	function updateCamerasList(viewer)
+	{
+		var elt = document.getElementById('cameras_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var cameraNames = viewer.cameraNames;
+		var i, len = cameraNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			option.text=cameraNames[i];
+			elt.add(option);
+		}		
+	}
+
+	function updateLightsList(viewer)
+	{
+		var elt = document.getElementById('lights_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var lightNames = viewer.lightNames;
+		var lights = viewer.lights;
+		var i, len = lightNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			var value = (lights[i] instanceof Vizi.AmbientLight) ? lights[i].color.getStyle() : 
+				lights[i].intensity;
+			option.text=lightNames[i] + "    [" + value + "]";
+			elt.add(option);
+		}		
+	}
+		
+	function updateAnimationsList(viewer)
+	{
+		var elt = document.getElementById('animations_list');
+		while( elt.hasChildNodes() ){
+		    elt.removeChild(elt.lastChild);
+		}
+
+		var animationNames = viewer.keyFrameAnimatorNames;
+		var i, len = animationNames.length;
+		for (i = 0; i < len; i++)
+		{
+			option = document.createElement("option");
+			option.text=animationNames[i];
+			elt.add(option);
+		}		
+	}
+
+	function updateMiscControls(viewer)
+	{
+		var elt = document.getElementById('headlight_cb');
+		elt.checked = viewer.headlightOn;
+	}
+
+	function bindCamera(name) {
+		var cameraNames = viewer.cameraNames;
+		var i, len = cameraNames.length;
+		for (i = 0; i < len; i++) {
+			if (cameraNames[i] == name) {
+				viewer.bindCamera(i);
+				if (i > 0)
+					viewer.bindCamera(0, true);
+				break;
+			}
+		}		
+	}
+	
+	function selectCamera()
+	{
+	    var select = document.getElementById("cameras_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.bindCamera(index);
+			if (index > 0)
+				viewer.bindCamera(0, true);
+		}
+	}
+
+	function toggleLight()
+	{
+	    var select = document.getElementById("lights_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.toggleLight(index);
+			updateLightsList(viewer);
+			select.selectedIndex = index;
+		}
+	}
+		
+	function selectAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.playAnimation(index);
+		}
+	}
+		
+	function playAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.playAnimation(index);
+		}
+	}
+
+	function stopAnimation()
+	{
+	    var select = document.getElementById("animations_list");
+	    var index = select.selectedIndex;
+		if (index >= 0)
+		{
+			viewer.stopAnimation(index);
+		}
+	}
+	
+	function playAllAnimations()
+	{
+		viewer.playAllAnimations();
+	}
+
+	function stopAllAnimations()
+	{
+		viewer.stopAllAnimations();
+	}
+
+	function onHeadlightChecked(elt)
+	{
+		viewer.setHeadlightOn(elt.checked);
+	}
+
+	function onAmbientLightChecked(elt)
+	{
+		viewer.setAmbientLightOn(elt.checked);
+	}
+		
+	function onGridChecked(elt)
+	{
+		viewer.setGridOn(elt.checked);
+	}
+	
+	
+	</script>
+	
+</body>
+</html>

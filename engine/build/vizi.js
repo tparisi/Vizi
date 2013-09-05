@@ -50257,6 +50257,9 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 		return o;
 	}
 
+	// Pump through updates once so converted scene can pick up all the values
+	scene.updateMatrixWorld();
+
 	return convert(scene);
 }
 goog.provide('Vizi.SpotLight');
