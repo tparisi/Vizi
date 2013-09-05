@@ -100,15 +100,6 @@ SceneViewer.prototype.replaceScene = function(data)
 	
 	var bbox = Vizi.SceneUtils.computeBoundingBox(data.scene);
 	
-/*	// heuristic, who knows ?
-	if (bbox.max.z < 1) {
-		this.controllerScript.camera.near = 0.01;
-		this.controllerScript.controls.userPanSpeed = 0.01;
-	}
-	else {
-		this.controllerScript.controls.userPanSpeed = 1;
-	}
-*/	
 	if (data.keyFrameAnimators)
 	{
 		var i, len = data.keyFrameAnimators.length;
@@ -429,7 +420,17 @@ SceneViewer.prototype.fitToScene = function()
 	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
 	var scale = this.sceneRoot._children[0].transform.object.scale;
 	var mat = new THREE.Matrix4().scale(scale);
-	// this.boundingBox.applyMatrix4(mat);
+	this.boundingBox.applyMatrix4(mat);
+	// heuristic, who knows ?
+	if (this.boundingBox.max.z < 1) {
+		this.controllerScript.camera.near = 0.01;
+		this.controllerScript.controls.userPanSpeed = 0.01;
+	}
+	else {
+		this.controllerScript.controls.userPanSpeed = 1;
+	}
+	
+	
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
 	this.controllerScript.center = center;
 	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
