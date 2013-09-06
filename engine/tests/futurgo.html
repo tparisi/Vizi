@@ -147,7 +147,22 @@
 		updateAnimationsList(viewer);
 		updateMiscControls(viewer);
 
-		bindCamera("setup");
+		useCamera("setup");
+		
+		var glassObjects = [
+			"windows_front",
+			"windows_rear"
+		];
+
+		setTimeout(function() {
+			scene.map(/windows_front|windows_rear/, function(v) {
+				console.log(v.name);
+				var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
+				v.addComponent(fader);
+				fader.start();
+			});
+		}, 1000);
+
 	}
 
 	function onLoadProgress(progress)
@@ -228,14 +243,12 @@
 		elt.checked = viewer.headlightOn;
 	}
 
-	function bindCamera(name) {
+	function useCamera(name) {
 		var cameraNames = viewer.cameraNames;
 		var i, len = cameraNames.length;
 		for (i = 0; i < len; i++) {
 			if (cameraNames[i] == name) {
-				viewer.bindCamera(i);
-				if (i > 0)
-					viewer.bindCamera(0, true);
+				viewer.useCamera(i);
 				break;
 			}
 		}		
@@ -245,11 +258,8 @@
 	{
 	    var select = document.getElementById("cameras_list");
 	    var index = select.selectedIndex;
-		if (index >= 0)
-		{
-			viewer.bindCamera(index);
-			if (index > 0)
-				viewer.bindCamera(0, true);
+		if (index >= 0) {
+			viewer.useCamera(index);
 		}
 	}
 

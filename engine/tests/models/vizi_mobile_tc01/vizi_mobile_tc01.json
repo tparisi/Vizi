@@ -639,7 +639,7 @@
             "bufferView": "bufferView_1843",
             "byteOffset": 5147936,
             "byteStride": 12,
-            "count": 2802,
+            "count": 2804,
             "max": [
                 3.57619,
                 12.3099,
@@ -654,9 +654,9 @@
         },
         "attribute_1111": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5181560,
+            "byteOffset": 5181584,
             "byteStride": 12,
-            "count": 2802,
+            "count": 2804,
             "max": [
                 1,
                 0.999977,
@@ -671,9 +671,9 @@
         },
         "attribute_1113": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5215184,
+            "byteOffset": 5215232,
             "byteStride": 8,
-            "count": 2802,
+            "count": 2804,
             "max": [
                 137.824,
                 59.1999
@@ -686,7 +686,7 @@
         },
         "attribute_1156": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5237600,
+            "byteOffset": 5237664,
             "byteStride": 12,
             "count": 1894,
             "max": [
@@ -703,7 +703,7 @@
         },
         "attribute_1158": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5260328,
+            "byteOffset": 5260392,
             "byteStride": 12,
             "count": 1894,
             "max": [
@@ -720,7 +720,7 @@
         },
         "attribute_1160": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5283056,
+            "byteOffset": 5283120,
             "byteStride": 8,
             "count": 1894,
             "max": [
@@ -735,7 +735,7 @@
         },
         "attribute_1183": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5298208,
+            "byteOffset": 5298272,
             "byteStride": 12,
             "count": 1010,
             "max": [
@@ -752,7 +752,7 @@
         },
         "attribute_1185": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5310328,
+            "byteOffset": 5310392,
             "byteStride": 12,
             "count": 1010,
             "max": [
@@ -769,7 +769,7 @@
         },
         "attribute_1187": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5322448,
+            "byteOffset": 5322512,
             "byteStride": 8,
             "count": 1010,
             "max": [
@@ -784,7 +784,7 @@
         },
         "attribute_1210": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5330528,
+            "byteOffset": 5330592,
             "byteStride": 12,
             "count": 930,
             "max": [
@@ -801,7 +801,7 @@
         },
         "attribute_1212": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5341688,
+            "byteOffset": 5341752,
             "byteStride": 12,
             "count": 930,
             "max": [
@@ -818,7 +818,7 @@
         },
         "attribute_1214": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5352848,
+            "byteOffset": 5352912,
             "byteStride": 8,
             "count": 930,
             "max": [
@@ -833,7 +833,7 @@
         },
         "attribute_1237": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5360288,
+            "byteOffset": 5360352,
             "byteStride": 12,
             "count": 326,
             "max": [
@@ -850,7 +850,7 @@
         },
         "attribute_1239": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5364200,
+            "byteOffset": 5364264,
             "byteStride": 12,
             "count": 326,
             "max": [
@@ -867,7 +867,7 @@
         },
         "attribute_1241": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5368112,
+            "byteOffset": 5368176,
             "byteStride": 8,
             "count": 326,
             "max": [
@@ -882,7 +882,7 @@
         },
         "attribute_1264": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5370720,
+            "byteOffset": 5370784,
             "byteStride": 12,
             "count": 324,
             "max": [
@@ -899,7 +899,7 @@
         },
         "attribute_1266": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5374608,
+            "byteOffset": 5374672,
             "byteStride": 12,
             "count": 324,
             "max": [
@@ -916,7 +916,7 @@
         },
         "attribute_1268": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5378496,
+            "byteOffset": 5378560,
             "byteStride": 8,
             "count": 324,
             "max": [
@@ -931,7 +931,7 @@
         },
         "attribute_1291": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5381088,
+            "byteOffset": 5381152,
             "byteStride": 12,
             "count": 16,
             "max": [
@@ -948,7 +948,7 @@
         },
         "attribute_1293": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5381280,
+            "byteOffset": 5381344,
             "byteStride": 12,
             "count": 16,
             "max": [
@@ -965,7 +965,7 @@
         },
         "attribute_1295": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5381472,
+            "byteOffset": 5381536,
             "byteStride": 8,
             "count": 16,
             "max": [
@@ -997,7 +997,7 @@
         },
         "attribute_1318": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5381600,
+            "byteOffset": 5381664,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1014,7 +1014,7 @@
         },
         "attribute_1320": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5403488,
+            "byteOffset": 5403552,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1031,7 +1031,7 @@
         },
         "attribute_1322": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5425376,
+            "byteOffset": 5425440,
             "byteStride": 8,
             "count": 1824,
             "max": [
@@ -1063,7 +1063,7 @@
         },
         "attribute_1345": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5439968,
+            "byteOffset": 5440032,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1080,7 +1080,7 @@
         },
         "attribute_1347": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5457248,
+            "byteOffset": 5457312,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1097,7 +1097,7 @@
         },
         "attribute_1349": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5474528,
+            "byteOffset": 5474592,
             "byteStride": 8,
             "count": 1440,
             "max": [
@@ -1127,7 +1127,7 @@
         },
         "attribute_1372": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5486048,
+            "byteOffset": 5486112,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1144,7 +1144,7 @@
         },
         "attribute_1374": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5507936,
+            "byteOffset": 5508000,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1161,7 +1161,7 @@
         },
         "attribute_1376": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5529824,
+            "byteOffset": 5529888,
             "byteStride": 8,
             "count": 1824,
             "max": [
@@ -1176,7 +1176,7 @@
         },
         "attribute_1399": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5544416,
+            "byteOffset": 5544480,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1193,7 +1193,7 @@
         },
         "attribute_1401": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5561696,
+            "byteOffset": 5561760,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1210,7 +1210,7 @@
         },
         "attribute_1403": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5578976,
+            "byteOffset": 5579040,
             "byteStride": 8,
             "count": 1440,
             "max": [
@@ -1225,7 +1225,7 @@
         },
         "attribute_1426": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5590496,
+            "byteOffset": 5590560,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1242,7 +1242,7 @@
         },
         "attribute_1428": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5612384,
+            "byteOffset": 5612448,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1259,7 +1259,7 @@
         },
         "attribute_1430": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5634272,
+            "byteOffset": 5634336,
             "byteStride": 8,
             "count": 1824,
             "max": [
@@ -1274,7 +1274,7 @@
         },
         "attribute_1453": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5648864,
+            "byteOffset": 5648928,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1291,7 +1291,7 @@
         },
         "attribute_1455": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5666144,
+            "byteOffset": 5666208,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1308,7 +1308,7 @@
         },
         "attribute_1457": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5683424,
+            "byteOffset": 5683488,
             "byteStride": 8,
             "count": 1440,
             "max": [
@@ -1323,7 +1323,7 @@
         },
         "attribute_1480": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5694944,
+            "byteOffset": 5695008,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1340,7 +1340,7 @@
         },
         "attribute_1482": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5712224,
+            "byteOffset": 5712288,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1357,7 +1357,7 @@
         },
         "attribute_1484": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5729504,
+            "byteOffset": 5729568,
             "byteStride": 8,
             "count": 1440,
             "max": [
@@ -1372,7 +1372,7 @@
         },
         "attribute_1507": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5741024,
+            "byteOffset": 5741088,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1389,7 +1389,7 @@
         },
         "attribute_1509": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5758304,
+            "byteOffset": 5758368,
             "byteStride": 12,
             "count": 1440,
             "max": [
@@ -1406,7 +1406,7 @@
         },
         "attribute_1511": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5775584,
+            "byteOffset": 5775648,
             "byteStride": 8,
             "count": 1440,
             "max": [
@@ -1421,7 +1421,7 @@
         },
         "attribute_1534": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5787104,
+            "byteOffset": 5787168,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1438,7 +1438,7 @@
         },
         "attribute_1536": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5808992,
+            "byteOffset": 5809056,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1455,7 +1455,7 @@
         },
         "attribute_1538": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5830880,
+            "byteOffset": 5830944,
             "byteStride": 8,
             "count": 1824,
             "max": [
@@ -1487,7 +1487,7 @@
         },
         "attribute_1581": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5845472,
+            "byteOffset": 5845536,
             "byteStride": 12,
             "count": 6576,
             "max": [
@@ -1504,7 +1504,7 @@
         },
         "attribute_1583": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 5924384,
+            "byteOffset": 5924448,
             "byteStride": 12,
             "count": 6576,
             "max": [
@@ -1521,7 +1521,7 @@
         },
         "attribute_1585": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6003296,
+            "byteOffset": 6003360,
             "byteStride": 8,
             "count": 6576,
             "max": [
@@ -1553,7 +1553,7 @@
         },
         "attribute_1608": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6055904,
+            "byteOffset": 6055968,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1570,7 +1570,7 @@
         },
         "attribute_1610": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6077792,
+            "byteOffset": 6077856,
             "byteStride": 12,
             "count": 1824,
             "max": [
@@ -1587,7 +1587,7 @@
         },
         "attribute_1612": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6099680,
+            "byteOffset": 6099744,
             "byteStride": 8,
             "count": 1824,
             "max": [
@@ -1617,7 +1617,7 @@
         },
         "attribute_1655": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6114272,
+            "byteOffset": 6114336,
             "byteStride": 12,
             "count": 6469,
             "max": [
@@ -1634,7 +1634,7 @@
         },
         "attribute_1657": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6191900,
+            "byteOffset": 6191964,
             "byteStride": 12,
             "count": 6469,
             "max": [
@@ -1651,7 +1651,7 @@
         },
         "attribute_1659": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6269528,
+            "byteOffset": 6269592,
             "byteStride": 8,
             "count": 6469,
             "max": [
@@ -1666,13 +1666,13 @@
         },
         "attribute_1682": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6321280,
+            "byteOffset": 6321344,
             "byteStride": 12,
             "count": 306,
             "max": [
                 3.06811,
                 11.9477,
-                1.73218
+                1.91339
             ],
             "min": [
                 -3.06147,
@@ -1683,13 +1683,13 @@
         },
         "attribute_1684": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6324952,
+            "byteOffset": 6325016,
             "byteStride": 12,
             "count": 306,
             "max": [
-                0.999288,
+                0.999608,
                 0.999794,
-                0.246911
+                0.189326
             ],
             "min": [
                 -0.999186,
@@ -1700,7 +1700,7 @@
         },
         "attribute_1686": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6328624,
+            "byteOffset": 6328688,
             "byteStride": 8,
             "count": 306,
             "max": [
@@ -1715,7 +1715,7 @@
         },
         "attribute_1709": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6331072,
+            "byteOffset": 6331136,
             "byteStride": 12,
             "count": 158,
             "max": [
@@ -1732,7 +1732,7 @@
         },
         "attribute_1711": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6332968,
+            "byteOffset": 6333032,
             "byteStride": 12,
             "count": 158,
             "max": [
@@ -1749,7 +1749,7 @@
         },
         "attribute_1713": {
             "bufferView": "bufferView_1843",
-            "byteOffset": 6334864,
+            "byteOffset": 6334928,
             "byteStride": 8,
             "count": 158,
             "max": [
@@ -2995,14 +2995,14 @@
             "byteStride": 12,
             "count": 4826,
             "max": [
-                0.999838,
-                0.999975,
-                0.998693
+                0.999851,
+                0.999778,
+                0.998722
             ],
             "min": [
-                -0.999861,
-                -0.996823,
-                -0.999875
+                -0.999882,
+                -0.99673,
+                -0.999869
             ],
             "type": "FLOAT_VEC3"
         },
@@ -3383,25 +3383,25 @@
     "bufferViews": {
         "bufferView_1843": {
             "buffer": "vizi_mobile_tc01.bin",
-            "byteLength": 6336128,
+            "byteLength": 6336192,
             "byteOffset": 0,
             "target": "ARRAY_BUFFER"
         },
         "bufferView_1844": {
             "buffer": "vizi_mobile_tc01.bin",
             "byteLength": 577110,
-            "byteOffset": 6336128,
+            "byteOffset": 6336192,
             "target": "ELEMENT_ARRAY_BUFFER"
         },
         "bufferView_1845": {
             "buffer": "vizi_mobile_tc01.bin",
             "byteLength": 15092,
-            "byteOffset": 6913238
+            "byteOffset": 6913302
         }
     },
     "buffers": {
         "vizi_mobile_tc01.bin": {
-            "byteLength": 6928330,
+            "byteLength": 6928394,
             "path": "vizi_mobile_tc01.bin"
         }
     },
@@ -5456,7 +5456,7 @@
                 0,
                 1,
                 0,
-                0,
+                -0.193041,
                 0,
                 0,
                 1
@@ -5481,7 +5481,7 @@
                 0,
                 1,
                 0,
-                0,
+                0.12507,
                 0,
                 0,
                 1
@@ -5915,21 +5915,21 @@
             "camera": "camera_1",
             "children": [],
             "matrix": [
-                -0.72176,
+                -0.982935,
                 0,
-                -0.692143,
+                -0.183951,
                 0,
-                0.0682825,
-                0.995122,
-                -0.0712043,
+                0.00469219,
+                0.999675,
+                -0.0250725,
                 0,
-                0.688767,
-                -0.0986537,
-                -0.718239,
+                0.183892,
+                -0.0255078,
+                -0.982615,
                 0,
-                17.6646,
-                3.25054,
-                -20.5825,
+                7.68931,
+                5.49001,
+                -23.2884,
                 1
             ],
             "name": "persp1"
@@ -6265,21 +6265,21 @@
             "camera": "camera_0",
             "children": [],
             "matrix": [
-                -0.768283,
+                -0.258819,
                 0,
-                0.64011,
+                0.965926,
                 0,
-                0.169321,
-                0.964381,
-                0.203225,
+                0.22612,
+                0.972213,
+                0.0605885,
                 0,
-                -0.617309,
-                0.264519,
-                -0.740918,
+                -0.939086,
+                0.234096,
+                -0.251627,
                 0,
-                -14.9736,
-                11.8046,
-                -17.5959,
+                -24.14,
+                10.9379,
+                -3.65758,
                 1
             ],
             "name": "setup"
@@ -7152,7 +7152,7 @@
                 1,
                 0,
                 0,
-                0.0174533
+                0
             ],
             "scale": [
                 1,
@@ -7161,8 +7161,8 @@
             ],
             "translation": [
                 0,
-                0.0437944,
-                -0.0398937
+                0,
+                0
             ]
         },
         "wheel_R": {
@@ -7176,7 +7176,7 @@
                 1,
                 0,
                 0,
-                0.0174533
+                0
             ],
             "scale": [
                 1,
@@ -7185,8 +7185,8 @@
             ],
             "translation": [
                 0,
-                0.0437944,
-                -0.0398937
+                0,
+                0
             ]
         },
         "wheel_front": {
@@ -7199,7 +7199,7 @@
                 1,
                 0,
                 0,
-                0.0174533
+                0
             ],
             "scale": [
                 1,
@@ -7208,8 +7208,8 @@
             ],
             "translation": [
                 0,
-                -0.0459017,
-                -0.0268151
+                0,
+                0
             ]
         },
         "window_front_close": {
@@ -7236,8 +7236,8 @@
             ],
             "translation": [
                 0,
-                -1.96446,
-                5.81449
+                0,
+                0
             ]
         },
         "window_front_close_rear_view_glass_L": {
@@ -7308,8 +7308,8 @@
             ],
             "translation": [
                 0,
-                1.96675,
-                -5.81135
+                0,
+                0
             ]
         },
         "window_rear_close": {
@@ -7330,8 +7330,8 @@
             ],
             "translation": [
                 0,
-                -1.33746,
-                -3.66648
+                0,
+                0
             ]
         },
         "window_rear_open": {
@@ -7352,8 +7352,8 @@
             ],
             "translation": [
                 0,
-                1.33746,
-                3.66648
+                0,
+                0
             ]
         },
         "windows_front": {

@@ -15,6 +15,7 @@ goog.require('Vizi.KeyFrameAnimator');
 goog.require('Vizi.TweenService');
 goog.require('Vizi.Behavior');
 goog.require('Vizi.BounceBehavior');
+goog.require('Vizi.FadeBehavior');
 goog.require('Vizi.HighlightBehavior');
 goog.require('Vizi.MoveBehavior');
 goog.require('Vizi.RotateBehavior');

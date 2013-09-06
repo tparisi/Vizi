@@ -20,7 +20,7 @@ Vizi.HighlightBehavior.prototype.start = function()
 {
 	Vizi.Behavior.prototype.start.call(this);
 	
-	if (this._realized && this._object.visual) {
+	if (this._realized && this._object.visuals) {
 		var visuals = this._object.visuals;
 		var i, len = visuals.length;
 		for (i = 0; i < len; i++) {
@@ -38,7 +38,7 @@ Vizi.HighlightBehavior.prototype.stop = function()
 {
 	Vizi.Behavior.prototype.stop.call(this);
 
-	if (this._realized && this._object.visual)
+	if (this._realized && this._object.visuals)
 	{
 		var visuals = this._object.visuals;
 		var i, len = visuals.length;
