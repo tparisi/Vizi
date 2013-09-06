@@ -74,7 +74,7 @@ body {
 
 #left_banner_copy {
 	color:#C3F9FA;
-	font-size:16px;
+	font-size:14px;
 	left:33px;
 	padding:8px;
 	top:550px;
@@ -98,6 +98,17 @@ body {
 	background:url(../images/Futurgo_site_assets/tab01.png);
 	background-size:100% 100%;
 	position:absolute;
+}
+
+.tabLink {
+	top:8%;
+	width:100%;
+	height:84%;
+	position:absolute;
+}
+
+.tabLink:hover {
+	cursor:pointer;
 }
 
 #tab02 {
@@ -144,16 +155,20 @@ body {
 	position:absolute;
 }
 
+#vizi_powered {
+	bottom:15px;
+	right:33px;
+	width:148px;
+	height:17px;
+	background:url(../images/Futurgo_site_assets/vizi_powered.png);
+	background-size:100% 100%;
+	position:absolute;
+}
 
 #menubar {
 	font-size:18px;
 	color:Black;
 	padding-left:4px;
-}
-
-#fileOpenDialog {
-	font-size:12px;
-	color:Black;
 }
 
 #container {
@@ -169,149 +184,11 @@ body {
 :focus { outline: none; }
 
 #loadStatus {
+	color:#C3F9FA;
 	width: 95%;
 	height: 6%;
 	top: 200px;
 	text-align:center;
-	position:absolute;
-}
-
-#prompt {
-	width: 95%;
-	height: 6%;
-	bottom: 30px;
-	text-align:center;
-	position:absolute;
-}
-
-#listing {
-	width: 256px;
-	height: 60%;
-	text-align:center;
-	position:absolute;
-	border:1px solid;
-}
-
-#files {
-	width:90%;
-}
-
-#loadButton {
-	top:80%;
-	left:45%;
-	position:absolute;
-}
-
-#controls {
-	font-size:14px;
-	font-weight:bold;
-	border:1px solid;
-	width: 14%;
-	height:92%;
-	top:6%;
-	right:1%;
-	position:absolute;
-	box-shadow: 4px 4px 2px #888888;
-}
-	
-#stats {
-	height: 60px;
-	position:absolute;
-	margin:2px;
-}
-
-#render_stats {
-	padding-top: 3px;
-	padding-left: 6px;
-}
-
-#scene_stats {
-	padding-left: 6px;
-}
-
-#cameras {
-	height: 120px;
-	top: 100px;
-	position:absolute;
-	width: 98%;
-	margin:2px;
-}
-
-#cameras_list {
-	width: 100%;
-}
-
-#camera_controls {
-	padding-left: 6px;
-}
-
-#lights {
-	height: 120px;
-	top: 240px;
-	position:absolute;
-	width: 98%;
-	margin:2px;
-}
-
-#lights_list {
-	width: 100%;
-}
-
-#light_controls {
-	padding-left: 6px;
-}
-
-#animations {
-	height: 120px;
-	top: 360px;
-	position:absolute;
-	width: 98%;
-	margin:2px;
-}
-
-#animations_list {
-	width: 100%;
-}
-
-#animation_controls {
-	padding-left: 6px;
-}
-
-#misc {
-	height: 40px;
-	top: 540px;
-	position:absolute;
-	margin:2px;
-}
-
-#misc_controls {
-	padding-left: 6px;
-	width:100%;
-}
-
-#headlight {
-	top: 20px;
-	position:absolute;
-}
-
-#ambient_light {
-	top: 40px;
-	width:200px;
-	position:absolute;
-}
-
-#grid {
-	top: 60px;
-	position:absolute;
-}
-
-#ground {
-	top: 80px;
-	position:absolute;
-}
-
-#shadows {
-	top: 100px;
 	position:absolute;
 }
 

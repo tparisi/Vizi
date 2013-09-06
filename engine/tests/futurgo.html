@@ -5,6 +5,7 @@
 <title>Futurgo LTD</title>
 <!--  http://www.google.com/fonts#UsePlace:use/Collection:PT+Sans  -->
 	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="../libs/colorpicker/css/colorpicker.css" />
 	<link href='./css/fonts.css' rel='stylesheet' type='text/css'>
 	<link href="./css/futurgo.css" rel="stylesheet" type='text/css'/> 
 </head>
@@ -23,15 +24,16 @@
 	Experience the future in personal transportation... TODAY!<p></p>
 	</div>
 	<div id="tabbar_right">
-		<div id="tab01"></div>
-		<div id="tab02"></div>
-		<div id="tab03"></div>
-		<div id="tab04"></div>
-		<div id="tab05"></div>
+		<div id="tab01"><div class="tabLink" onclick=""></div></div>
+		<div id="tab02"><div class="tabLink" onclick=""></div></div>
+		<div id="tab03"><div class="tabLink" onclick="toggleOpenClosed();"></div></div>
+		<div id="tab04"><div class="tabLink" onclick=""></div></div>
+		<div id="tab05"><div class="tabLink" onclick=""></div></div>
 	</div>
 	<div id="bottom_legend">The World's First All-Electric Personal Vehicle. 
 	Zero Emissions. 4.9 Sec 0-60 Max Acceleration.
 	</div>
+	<div id="vizi_powered"></div>
 	<!-- 
 	<div id="menubar" class="ui-widget-header ui-corner-all">
 	<label id="menuORDER">ORDER</label>
@@ -51,28 +53,48 @@
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
+	<script src="../libs/colorpicker/js/colorpicker.js"></script>
 	<script src="../build/vizi.js"></script>
 	<script src="sceneViewer.js"></script>
 	<script>
 
    	var viewer = null;
    	var container = null;
+   	var part_materials = [];
+   	
 	$(document).ready(function() {
-		
-		container = document.getElementById("container");
-		var renderStats = document.getElementById("render_stats");
-		var sceneStats = document.getElementById("scene_stats");
-		
-		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
 
+		initControls();
+		container = document.getElementById("container");		
+		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
-		
 		viewer.run();
 	}
 	);
 
-	function openFile(url)
-	{
+	function initControls() {
+		$('#tab02').ColorPicker({
+			color: '#ffffff',
+			onShow: function (colpkr) {
+				$(colpkr).fadeIn(250);
+				return false;
+			},
+			onHide: function (colpkr) {
+				$(colpkr).fadeOut(250);
+				return false;
+			},
+			onChange: function (hsb, hex, rgb) {
+				setBodyColor(rgb.r, rgb.g, rgb.b);
+			},
+			onSubmit: function(hsb, hex, rgb, el) {
+				$(el).val(hex);
+				setBodyColor(rgb.r, rgb.g, rgb.b);
+				$(el).ColorPickerHide();
+			},
+		});
+	}
+	
+	function openFile(url) {
 		var loader = new Vizi.Loader;
 
 		loader.addEventListener("loaded", function(data) { onLoadComplete(data, loadStartTime); }); 
@@ -102,7 +124,6 @@
 		var faders = [];
 		setTimeout(function() {
 			scene.map(/windows_front|windows_rear/, function(v) {
-				console.log(v.name);
 				var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
 				v.addComponent(fader);
 				faders.push(fader);
@@ -110,19 +131,17 @@
 			});
 		}, 2000);
 
+		var frame_parts_exp =
+			/rear_view_arm_L/;
+
+		scene.map(frame_parts_exp, function(o) {
+			o.map(Vizi.Visual, function(v) {
+				part_materials.push(v.material);
+			});
+		});
+		
 		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
 		viewer.controller.addComponent(carousel);
-
-		container.addEventListener("mouseup", function(e) { 
-				/*carousel.toggle(); */
-				/*
-				var i, len = faders.length;
-				for (i = 0; i < len; i++) {
-					faders[i].toggle();
-				}
-				*/
-				toggleOpenClosed();
-			});
 	}
 
 	function onLoadProgress(progress)
@@ -132,71 +151,6 @@
 		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
 	}
-
-	function onRenderStats(stats, renderStats) {
-		renderStats.innerHTML = stats.fps + " FPS";
-	}
-
-	function onSceneStats(stats, sceneStats) {
-		var meshesLabel = stats.meshCount > 1 ? " meshes<br>" : " mesh<br>";
-		var facesLabel = stats.faceCount > 1 ? " faces" : "face";
-		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel;
-	}
-
-	function updateCamerasList(viewer)
-	{
-		var elt = document.getElementById('cameras_list');
-		while( elt.hasChildNodes() ){
-		    elt.removeChild(elt.lastChild);
-		}
-
-		var cameraNames = viewer.cameraNames;
-		var i, len = cameraNames.length;
-		for (i = 0; i < len; i++)
-		{
-			option = document.createElement("option");
-			option.text=cameraNames[i];
-			elt.add(option);
-		}		
-	}
-
-	function updateLightsList(viewer)
-	{
-		var elt = document.getElementById('lights_list');
-		while( elt.hasChildNodes() ){
-		    elt.removeChild(elt.lastChild);
-		}
-
-		var lightNames = viewer.lightNames;
-		var lights = viewer.lights;
-		var i, len = lightNames.length;
-		for (i = 0; i < len; i++)
-		{
-			option = document.createElement("option");
-			var value = (lights[i] instanceof Vizi.AmbientLight) ? lights[i].color.getStyle() : 
-				lights[i].intensity;
-			option.text=lightNames[i] + "    [" + value + "]";
-			elt.add(option);
-		}		
-	}
-		
-	function updateAnimationsList(viewer)
-	{
-		var elt = document.getElementById('animations_list');
-		while( elt.hasChildNodes() ){
-		    elt.removeChild(elt.lastChild);
-		}
-
-		var animationNames = viewer.keyFrameAnimatorNames;
-		var i, len = animationNames.length;
-		for (i = 0; i < len; i++)
-		{
-			option = document.createElement("option");
-			option.text=animationNames[i];
-			elt.add(option);
-		}		
-	}
-
 
 	function useCamera(name) {
 		var cameraNames = viewer.cameraNames;
@@ -247,7 +201,21 @@
 			playCloseAnimations();
 		}
 	}
+
+	function setBodyColor(r, g, b) {
+
+		// Convert from hex rgb to float
+		r /= 255;
+		g /= 255;
+		b /= 255;
 		
+		var i, len = part_materials.length;
+		for (i = 0; i < len; i++) {
+			part_materials[i].color.setRGB(r, g, b);
+		}
+			
+	}
+	
 	</script>
 	
 </body>
