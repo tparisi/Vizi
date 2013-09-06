@@ -6,6 +6,29 @@
 body {
 	background-color:#eeeeee;
 	color:#212121;
+	padding:0;
+	margin-left:0;
+	margin-right:0;
+}
+
+#top_frame {
+	top:13px;
+	left:13px;
+	width:99%;
+	height:99px;
+	background:url(../images/Futurgo_site_assets/top_frame.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#bot_frame {
+	bottom:13px;
+	left:6px;
+	width:99%;
+	height:46px;
+	background:url(../images/Futurgo_site_assets/bot_frame.png);
+	background-size:100% 100%;
+	position:absolute;
 }
 
 #menubar {

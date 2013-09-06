@@ -617,5 +617,5 @@ SceneViewer.prototype.onMouseUp = function(pageX, pageY, eltX, eltY)
 
 SceneViewer.DEFAULT_GRID_SIZE = 100;
 SceneViewer.DEFAULT_GRID_STEP_SIZE = 1;
-SceneViewer.GRID_COLOR = 0x000000;
+SceneViewer.GRID_COLOR = 0x202020;
 SceneViewer.GRID_OPACITY = 0.2;
