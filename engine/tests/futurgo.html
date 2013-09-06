@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vizi Model Previewer</title>
+<title>Futurgo LTD</title>
 <!--  http://www.google.com/fonts#UsePlace:use/Collection:PT+Sans  -->
 	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 	<link href='./css/fonts.css' rel='stylesheet' type='text/css'>
@@ -13,6 +13,17 @@
 	<div id="bot_frame"></div>
 	<div id="left_banner_bg"></div>
 	<div id="futurgo_logo"></div>
+	<div id="ltd_model"></div>
+	<div id="left_banner_title">Lifestyle Transportation Device</div>
+	<div id="left_banner_copy">
+	Get where you need to go in style, in <i>Futurgo&trade;</i>'s revolutionary
+	new personal transportation system<p></p>
+	The LTD&reg; features sleek styling, ergonomic design and a 
+	patent-pending drive train that really moves.<p></p>
+	Experience the future in personal transportation... TODAY!<p></p>
+	</div>
+	<div id="bottom_legend">The World's First All-Electric Personal Vehicle. 
+	Zero Emissions. 4.9 Sec 0-60 Max Acceleration.</div>
 	<!-- 
 	<div id="menubar" class="ui-widget-header ui-corner-all">
 	<label id="menuORDER">ORDER</label>
@@ -29,6 +40,7 @@
 	<div id="loadStatus" style="display:none">
 	Loading scene...
 	</div>
+	<!-- 
 	<div id="prompt">
 	</div>
 	<div id="controls">
@@ -87,18 +99,8 @@
 			</div>
 	 	</div>
 	</div>
+	 -->
 
-	<!--  file open dialog -->
-	<div id="fileOpenDialog" title="Open a File" style="display:none">
-	<p>Select a file in OBJ, DAE, JS (Three.js) or JSON (glTF)</p>
-	<div id="listing">
-		<label id="listingLabel">Available Scenes</label><br></br>
-		<select id="files" size="8"  ondblclick="openFile();">
-		</select>
-		<button id="loadButton" onclick="openFile();">Open</button><br></br>
-	 </div>
-	</div>
-	
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -113,8 +115,6 @@
 		var sceneStats = document.getElementById("scene_stats");
 		
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
-		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
-		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
 		
@@ -147,28 +147,33 @@
 
 		var loadTime = (Date.now() - loadStartTime) / 1000;
 		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
-		
-		updateCamerasList(viewer);
-		updateLightsList(viewer);
-		updateAnimationsList(viewer);
-		updateMiscControls(viewer);
 
 		useCamera("setup");
-		
-		var glassObjects = [
-			"windows_front",
-			"windows_rear"
-		];
 
+		var faders = [];
 		setTimeout(function() {
 			scene.map(/windows_front|windows_rear/, function(v) {
 				console.log(v.name);
 				var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
 				v.addComponent(fader);
+				faders.push(fader);
 				fader.start();
 			});
-		}, 1000);
+		}, 2000);
 
+		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
+		viewer.controller.addComponent(carousel);
+
+		window.addEventListener("mouseup", function(e) { 
+				/*carousel.toggle(); */
+				/*
+				var i, len = faders.length;
+				for (i = 0; i < len; i++) {
+					faders[i].toggle();
+				}
+				*/
+				toggleOpenClosed();
+			});
 	}
 
 	function onLoadProgress(progress)
@@ -243,11 +248,6 @@
 		}		
 	}
 
-	function updateMiscControls(viewer)
-	{
-		var elt = document.getElementById('headlight_cb');
-		elt.checked = viewer.headlightOn;
-	}
 
 	function useCamera(name) {
 		var cameraNames = viewer.cameraNames;
@@ -259,84 +259,46 @@
 			}
 		}		
 	}
-	
-	function selectCamera()
-	{
-	    var select = document.getElementById("cameras_list");
-	    var index = select.selectedIndex;
-		if (index >= 0) {
-			viewer.useCamera(index);
-		}
-	}
 
-	function toggleLight()
-	{
-	    var select = document.getElementById("lights_list");
-	    var index = select.selectedIndex;
-		if (index >= 0)
-		{
-			viewer.toggleLight(index);
-			updateLightsList(viewer);
-			select.selectedIndex = index;
-		}
-	}
-		
-	function selectAnimation()
-	{
-	    var select = document.getElementById("animations_list");
-	    var index = select.selectedIndex;
+	/*
+	Animation names
+	window_rear_open.matrix_window_rear_open
+	window_rear_close.matrix_window_rear_close
+	window_front_open.matrix_window_front_open
+	window_front_close.matrix_window_front_close
+	*/
+	
+	
+	function playAnimation(name) {
+		var animationNames = viewer.keyFrameAnimatorNames;
+		var index = animationNames.indexOf(name);
 		if (index >= 0)
 		{
 			viewer.playAnimation(index);
 		}
 	}
-		
-	function playAnimation()
-	{
-	    var select = document.getElementById("animations_list");
-	    var index = select.selectedIndex;
-		if (index >= 0)
-		{
-			viewer.playAnimation(index);
+	
+	function playOpenAnimations() {	
+		playAnimation("window_rear_open.matrix_window_rear_open");
+		playAnimation("window_front_open.matrix_window_front_open");
+	}
+
+	function playCloseAnimations() {	
+		playAnimation("window_rear_close.matrix_window_rear_close");
+		playAnimation("window_front_close.matrix_window_front_close");
+	}
+
+	var vehicleOpen = false;
+	function toggleOpenClosed() {
+		vehicleOpen = !vehicleOpen;
+		if (vehicleOpen) {
+			playOpenAnimations();
+		}
+		else {
+			playCloseAnimations();
 		}
 	}
-
-	function stopAnimation()
-	{
-	    var select = document.getElementById("animations_list");
-	    var index = select.selectedIndex;
-		if (index >= 0)
-		{
-			viewer.stopAnimation(index);
-		}
-	}
-	
-	function playAllAnimations()
-	{
-		viewer.playAllAnimations();
-	}
-
-	function stopAllAnimations()
-	{
-		viewer.stopAllAnimations();
-	}
-
-	function onHeadlightChecked(elt)
-	{
-		viewer.setHeadlightOn(elt.checked);
-	}
-
-	function onAmbientLightChecked(elt)
-	{
-		viewer.setAmbientLightOn(elt.checked);
-	}
 		
-	function onGridChecked(elt)
-	{
-		viewer.setGridOn(elt.checked);
-	}
-	
-	
 	</script>
 	
 </body>

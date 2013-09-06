@@ -52,6 +52,45 @@ body {
 	position:absolute;
 }
 
+#ltd_model {
+	top:166px;
+	left:53px;
+	width:260px;
+	height:338px;
+	background:url(../images/Futurgo_site_assets/ltd_model.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#left_banner_title {
+	color:#C3F9FA;
+	font-size:22px;
+	font-style:normal;
+	left:33px;
+	top:520px;
+	width:300px;
+	position:absolute;
+}
+
+#left_banner_copy {
+	color:#C3F9FA;
+	font-size:16px;
+	left:33px;
+	padding:8px;
+	top:550px;
+	width:290px;
+	position:absolute;
+}
+
+#bottom_legend {
+	color:lightgray;
+	font-size:18px;
+	left:233px;
+	bottom:33px;
+	position:absolute;
+}
+
+
 #menubar {
 	font-size:18px;
 	color:Black;
