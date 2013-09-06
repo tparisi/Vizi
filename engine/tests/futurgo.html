@@ -22,8 +22,16 @@
 	patent-pending drive train that really moves.<p></p>
 	Experience the future in personal transportation... TODAY!<p></p>
 	</div>
+	<div id="tabbar_right">
+		<div id="tab01"></div>
+		<div id="tab02"></div>
+		<div id="tab03"></div>
+		<div id="tab04"></div>
+		<div id="tab05"></div>
+	</div>
 	<div id="bottom_legend">The World's First All-Electric Personal Vehicle. 
-	Zero Emissions. 4.9 Sec 0-60 Max Acceleration.</div>
+	Zero Emissions. 4.9 Sec 0-60 Max Acceleration.
+	</div>
 	<!-- 
 	<div id="menubar" class="ui-widget-header ui-corner-all">
 	<label id="menuORDER">ORDER</label>
@@ -40,66 +48,6 @@
 	<div id="loadStatus" style="display:none">
 	Loading scene...
 	</div>
-	<!-- 
-	<div id="prompt">
-	</div>
-	<div id="controls">
-		<div id="stats">Scene Stats
-		<div id="render_stats">0 FPS</div>
-		<div id="scene_stats">0 meshes<br>0 faces</div>
-		</div>
-		<div id="cameras">Cameras
-			<div>
-				<select id="cameras_list" size="5" ondblclick="selectCamera();">
-				</select>
-			</div>
-			<div id="camera_controls">
-				<button id="selectCameraButton" onclick="selectCamera();">Select</button>
-			</div>
-		</div>
-		<div id="lights">Lights
-			<div>
-				<select id="lights_list" size="5" ondblclick="toggleLight();">
-				</select>
-			</div>
-			<div id="light_controls">
-				<button id="selectLightsButton" onclick="toggleLight();">Toggle</button>
-			</div>
-		</div>
-		<div id="animations">Animations
-			<div>
-				<select id="animations_list" size="7" ondblclick="selectAnimation();">
-				</select>
-			</div>
-			<div id="animation_controls">
-				<button id="playButton" onclick="playAnimation();">Play</button>
-				<button id="stopButton" onclick="stopAnimation();">Stop</button>
-				<button id="playAllButton" onclick="playAllAnimations();">Play All</button>
-				<button id="stopAllButton" onclick="stopAllAnimations();">Stop All</button>
-			</div>
-		</div>
-		<div id="misc"> 
-		Miscellaneous
-			<div id="misc_controls">
-			<div id="headlight">
-				<input type="checkbox" name="headlight_cb" id="headlight_cb" checked onClick="onHeadlightChecked(this);"/><label>Headlight</label>
-			</div>
-			<div id="ambient_light">
-				<input type="checkbox" name="ambient_light_cb" id="ambient_light_cb" checked onClick="onAmbientLightChecked(this);"/><label>Ambient Light</label>
-			</div>
-			<div id="grid">
-				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
-			</div>
-			<div id="ground">
-				<input type="checkbox" name="ground_cb" id="ground_cb" checked onClick="onGroundChecked(this);"/><label>Ground</label>
-			</div>			
-			<div id="shadows">
-				<input type="checkbox" name="shadows_cb" id="shadows_cb" checked onClick="onShadowsChecked(this);"/><label>Shadows</label>
-			</div>			
-			</div>
-	 	</div>
-	</div>
-	 -->
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
@@ -108,9 +56,10 @@
 	<script>
 
    	var viewer = null;
+   	var container = null;
 	$(document).ready(function() {
 		
-		var container = document.getElementById("container");
+		container = document.getElementById("container");
 		var renderStats = document.getElementById("render_stats");
 		var sceneStats = document.getElementById("scene_stats");
 		
@@ -164,7 +113,7 @@
 		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
 		viewer.controller.addComponent(carousel);
 
-		window.addEventListener("mouseup", function(e) { 
+		container.addEventListener("mouseup", function(e) { 
 				/*carousel.toggle(); */
 				/*
 				var i, len = faders.length;

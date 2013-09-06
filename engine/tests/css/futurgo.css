@@ -14,7 +14,7 @@ body {
 #top_frame {
 	top:13px;
 	left:13px;
-	width:99%;
+	width:98%;
 	height:99px;
 	background:url(../images/Futurgo_site_assets/top_frame.png);
 	background-size:100% 100%;
@@ -22,9 +22,9 @@ body {
 }
 
 #bot_frame {
-	bottom:13px;
-	left:6px;
-	width:99%;
+	bottom:5px;
+	left:13px;
+	width:98%;
 	height:46px;
 	background:url(../images/Futurgo_site_assets/bot_frame.png);
 	background-size:100% 100%;
@@ -79,6 +79,60 @@ body {
 	padding:8px;
 	top:550px;
 	width:290px;
+	overflow:hidden;
+	position:absolute;
+}
+
+#tabbar_right {
+	top:0%;
+	width:14.8%;
+	height:100%;
+	left:84%;
+	position:absolute;
+}
+	
+#tab01 {
+	top:13.5%;
+	height:16.9%;
+	width:100%;
+	background:url(../images/Futurgo_site_assets/tab01.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#tab02 {
+	top:30.4%;
+	height:16.9%;
+	width:100%;
+	background:url(../images/Futurgo_site_assets/tab02.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#tab03 {
+	top:47.3%;
+	height:16.9%;
+	width:100%;
+	background:url(../images/Futurgo_site_assets/tab03.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#tab04 {
+	top:64.2%;
+	height:16.9%;
+	width:100%;
+	background:url(../images/Futurgo_site_assets/tab04.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#tab05 {
+	top:81.1%;
+	height:11.8%;
+	width:100%;
+	background:url(../images/Futurgo_site_assets/tab05.png);
+	background-size:100% 100%;
 	position:absolute;
 }
 
@@ -86,7 +140,7 @@ body {
 	color:lightgray;
 	font-size:18px;
 	left:233px;
-	bottom:33px;
+	bottom:25px;
 	position:absolute;
 }
 
