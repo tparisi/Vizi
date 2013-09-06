@@ -117,6 +117,7 @@ Vizi.Object.prototype.removeChild = function(child) {
     if (i != -1)
     {
         this._children.splice(i, 1);
+        child.removeAllComponents();
         child.setParent(null);
     }
 }
@@ -196,6 +197,25 @@ Vizi.Object.prototype.removeComponent = function(component) {
     	}
     	
         this._components.splice(i, 1);
+        component.setObject(null);
+    }
+}
+
+/**
+ * Removes all Components from the Object in one call
+ * @param {Vizi.Component} component.
+ */
+Vizi.Object.prototype.removeAllComponents = function() {
+    var i, len = this._components.length;
+
+    for (i = 0; i < len; i++)
+    {
+    	var component = this._components[i];
+    	if (component.removeFromScene)
+    	{
+    		component.removeFromScene();
+    	}
+    	
         component.setObject(null);
     }
 }

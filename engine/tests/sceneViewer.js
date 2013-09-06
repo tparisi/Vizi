@@ -83,7 +83,12 @@ SceneViewer.prototype.replaceScene = function(data)
 	{
 		this.sceneRoot.removeChild(this.scenes[i]);
 	}
-
+	
+	this.scenes = [data.scene];
+	this.sceneRoot.addChild(data.scene);
+	
+	var bbox = Vizi.SceneUtils.computeBoundingBox(data.scene);
+	
 	if (this.keyFrameAnimators)
 	{
 		var i, len = this.keyFrameAnimators.length;
@@ -95,10 +100,6 @@ SceneViewer.prototype.replaceScene = function(data)
 		this.keyFrameAnimators = [];
 		this.keyFrameAnimatorNames = [];
 	}
-	
-	this.sceneRoot.addChild(data.scene);
-	
-	var bbox = Vizi.SceneUtils.computeBoundingBox(data.scene);
 	
 	if (data.keyFrameAnimators)
 	{
@@ -177,7 +178,6 @@ SceneViewer.prototype.replaceScene = function(data)
 	}
 	
 	this.fitToScene();
-	this.scenes.push(data.scene);
 	this.calcSceneStats();
 }
 

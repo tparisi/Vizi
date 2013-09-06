@@ -263,15 +263,23 @@
 		elt.checked = viewer.headlightOn;
 	}
 
+	function useCamera(name) {
+		var cameraNames = viewer.cameraNames;
+		var i, len = cameraNames.length;
+		for (i = 0; i < len; i++) {
+			if (cameraNames[i] == name) {
+				viewer.useCamera(i);
+				break;
+			}
+		}		
+	}
+	
 	function selectCamera()
 	{
 	    var select = document.getElementById("cameras_list");
 	    var index = select.selectedIndex;
-		if (index >= 0)
-		{
-			viewer.bindCamera(index);
-			if (index > 0)
-				viewer.bindCamera(0, true);
+		if (index >= 0) {
+			viewer.useCamera(index);
 		}
 	}
 
