@@ -124,6 +124,8 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         }
 
         // Allow Three.js to calculate some values for us
+        geometry.computeBoundingBox();
+        geometry.computeBoundingSphere();
         geometry.computeCentroids();
         if(!normals) {
             geometry.computeFaceNormals();

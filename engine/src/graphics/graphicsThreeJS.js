@@ -189,7 +189,8 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 	
     if ( intersects.length > 0 ) {
     	var i = 0;
-    	while(i < intersects.length && !intersects[i].object.visible)
+    	while(i < intersects.length && (!intersects[i].object.visible || 
+    			intersects[i].object.ignorePick))
     	{
     		i++;
     	}

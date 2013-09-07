@@ -106,6 +106,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 	if (loaderClass)
 	{
 		var loader = new loaderClass;
+		loader.useBufferGeometry = false;
 		var that = this;
 		
 		loader.load(url, 

@@ -31,7 +31,7 @@
 	<div id="left_banner_title">Lifestyle Transportation Device</div>
 	<div id="left_banner_copy">
 	Get where you need to go in style, in <i>Futurgo&trade;</i>'s revolutionary
-	new personal transportation system<p></p>
+	new personal transportation system!<p></p>
 	The LTD&reg; features sleek styling, ergonomic design and a 
 	patent-pending drive train that really moves.<p></p>
 	Experience the future in personal transportation... TODAY!<p></p>
@@ -68,7 +68,7 @@
 		initControls();
 		container = document.getElementById("container");		
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
-		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
+		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.dae");
 		viewer.run();
 	}
 	);
@@ -136,15 +136,19 @@
 		});
 
 		var frame_parts_exp =
-			/rear_view_arm_L/;
+			/body|rear_view_arm_L|rear_view_arm_R|rear_view_frame_L|rear_view_frame_R/;
 
 		scene.map(frame_parts_exp, function(o) {
 			o.map(Vizi.Visual, function(v) {
 				part_materials.push(v.material);
 			});
+			var picker = new Vizi.Picker;
+			picker.addEventListener("mouseover", onBodyMouseOver);
+			picker.addEventListener("mouseout", onBodyMouseOut);
+			o.addComponent(picker);
 		});
 		
-		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
+		var carousel = new Vizi.RotateBehavior({autoStart:false, duration:20});
 		viewer.controller.addComponent(carousel);
 	}
 
@@ -196,11 +200,15 @@
 	function playOpenAnimations() {	
 		playAnimation("window_rear_open.matrix_window_rear_open");
 		playAnimation("window_front_open.matrix_window_front_open");
+		playAnimation("animation_window_front_open");
+		playAnimation("animation_window_rear_open");
 	}
 
 	function playCloseAnimations() {	
 		playAnimation("window_rear_close.matrix_window_rear_close");
 		playAnimation("window_front_close.matrix_window_front_close");
+		playAnimation("animation_window_front_close");
+		playAnimation("animation_window_rear_close");
 	}
 
 	var vehicleOpen = false;
@@ -208,11 +216,15 @@
 		vehicleOpen = !vehicleOpen;
 		if (vehicleOpen) {
 			playOpenAnimations();
-			useCamera("interior");
+			setTimeout(function() {
+				useCamera("interior");
+			}, 2000);
 		}
 		else {
 			playCloseAnimations();
-			useCamera("setup");
+			setTimeout(function() {
+				useCamera("setup");
+			}, 2000);
 		}
 	}
 
@@ -248,19 +260,35 @@
 		
 		var i, len = part_materials.length;
 		for (i = 0; i < len; i++) {
-			part_materials[i].color.setRGB(r, g, b);
+			var material = part_materials[i];
+			if (material instanceof THREE.MeshFaceMaterial) {
+				var j, mlen = material.materials.length;
+				for (j = 0; j < mlen; j++) {
+					material.materials[j].color.setRGB(r, g, b);
+				}
+			}
+			else {
+				material.color.setRGB(r, g, b);
+			}
 		}
 			
 	}
 
 	function onGlassMouseOver(e) {
-		console.log("Mouse over glass", e);
+		//console.log("Mouse over glass", e);
 	}
 
 	function onGlassMouseOut(e) {
-		console.log("Mouse out glass", e);
+		//console.log("Mouse out glass", e);
 	}
-	
+
+	function onBodyMouseOver(e) {
+		console.log("Mouse over body", e);
+	}
+
+	function onBodyMouseOut(e) {
+		console.log("Mouse out body", e);
+	}	
 	</script>
 	
 </body>

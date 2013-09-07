@@ -416,6 +416,7 @@ SceneViewer.prototype.createGrid = function()
 		opacity:SceneViewer.GRID_OPACITY } );
 	
 	var gridObject = new THREE.Line( geometry, line_material, THREE.LinePieces );
+	gridObject.ignorePick = true;
 	gridObject.visible = this.showGrid;
 	this.grid = new Vizi.Visual({ object : gridObject });
 

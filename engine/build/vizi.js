@@ -43110,6 +43110,8 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         }
 
         // Allow Three.js to calculate some values for us
+        geometry.computeBoundingBox();
+        geometry.computeBoundingSphere();
         geometry.computeCentroids();
         if(!normals) {
             geometry.computeFaceNormals();
@@ -48523,7 +48525,8 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 	
     if ( intersects.length > 0 ) {
     	var i = 0;
-    	while(i < intersects.length && !intersects[i].object.visible)
+    	while(i < intersects.length && (!intersects[i].object.visible || 
+    			intersects[i].object.ignorePick))
     	{
     		i++;
     	}
@@ -50227,6 +50230,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 	if (loaderClass)
 	{
 		var loader = new loaderClass;
+		loader.useBufferGeometry = false;
 		var that = this;
 		
 		loader.load(url, 
