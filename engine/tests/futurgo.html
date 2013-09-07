@@ -11,6 +11,19 @@
 </head>
 <body>
 	<div id="top_frame"></div>
+	<div id="menubar">
+	    <label id="menuORDER" class="menuItem">ORDER</label>
+	    <label id="menuTEST_DRIVE" class="menuItem">TEST DRIVE</label>
+	    <label id="menuFEATURES" class="menuItem">FEATURES</label>
+	    <label id="menuSPECS" class="menuItem">SPECS</label>
+	    <label id="menuCHARGING" class="menuItem">CHARGING</label>
+	    <label id="menuGALLERY" class="menuItem">GALLERY</label>
+	    <label id="menuVIDEO" class="menuItem">VIDEO</label>
+	    <label id="menuFAQ" class="menuItem"><a href="foo.html">QUESTIONS?</a></label>
+<span>
+</span>		
+	
+  	</div>
 	<div id="bot_frame"></div>
 	<div id="left_banner_bg"></div>
 	<div id="futurgo_logo"></div>
@@ -26,26 +39,14 @@
 	<div id="tabbar_right">
 		<div id="tab01"><div class="tabLink" onclick=""></div></div>
 		<div id="tab02"><div class="tabLink" onclick=""></div></div>
-		<div id="tab03"><div class="tabLink" onclick="toggleOpenClosed();"></div></div>
-		<div id="tab04"><div class="tabLink" onclick=""></div></div>
+		<div id="tab03"><div class="tabLink" onclick="toggleInterior();"></div></div>
+		<div id="tab04"><div class="tabLink" onclick="toggleWheelAnimations();"></div></div>
 		<div id="tab05"><div class="tabLink" onclick=""></div></div>
 	</div>
 	<div id="bottom_legend">The World's First All-Electric Personal Vehicle. 
 	Zero Emissions. 4.9 Sec 0-60 Max Acceleration.
 	</div>
 	<div id="vizi_powered"></div>
-	<!-- 
-	<div id="menubar" class="ui-widget-header ui-corner-all">
-	<label id="menuORDER">ORDER</label>
-	<label id="menuTEST_DRIVE">TEST DRIVE</label>
-	<label id="menuFEATURES">FEATURES</label>
-	<label id="menuSPECS">SPECS</label>
-	<label id="menuCHARGING">CHARGING</label>
-	<label id="menuGALLERY">GALLERY</label>
-	<label id="menuVIDEO">VIDEO</label>
-	<label id="menuFAQ">QUESTIONS?</label>
-	</div>
-	 -->
 	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
 	Loading scene...
@@ -66,7 +67,7 @@
 
 		initControls();
 		container = document.getElementById("container");		
-		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
+		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
 		viewer.run();
 	}
@@ -121,15 +122,18 @@
 
 		useCamera("setup");
 
-		var faders = [];
-		setTimeout(function() {
-			scene.map(/windows_front|windows_rear/, function(v) {
-				var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
-				v.addComponent(fader);
-				faders.push(fader);
+		scene.map(/windows_front|windows_rear/, function(o) {
+			var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
+			o.addComponent(fader);
+			setTimeout(function() {
 				fader.start();
-			});
-		}, 2000);
+			}, 2000);
+
+			var picker = new Vizi.Picker;
+			picker.addEventListener("mouseover", onGlassMouseOver);
+			picker.addEventListener("mouseout", onGlassMouseOut);
+			o.addComponent(picker);
+		});
 
 		var frame_parts_exp =
 			/rear_view_arm_L/;
@@ -171,13 +175,21 @@
 	window_front_close.matrix_window_front_close
 	*/
 	
-	
-	function playAnimation(name) {
+	function playAnimation(name, loop) {
 		var animationNames = viewer.keyFrameAnimatorNames;
 		var index = animationNames.indexOf(name);
 		if (index >= 0)
 		{
-			viewer.playAnimation(index);
+			viewer.playAnimation(index, loop);
+		}
+	}
+
+	function stopAnimation(name) {
+		var animationNames = viewer.keyFrameAnimatorNames;
+		var index = animationNames.indexOf(name);
+		if (index >= 0)
+		{
+			viewer.stopAnimation(index);
 		}
 	}
 	
@@ -192,16 +204,41 @@
 	}
 
 	var vehicleOpen = false;
-	function toggleOpenClosed() {
+	function toggleInterior() {
 		vehicleOpen = !vehicleOpen;
 		if (vehicleOpen) {
 			playOpenAnimations();
+			useCamera("interior");
 		}
 		else {
 			playCloseAnimations();
+			useCamera("setup");
 		}
 	}
 
+	function playWheelAnimations() {
+		playAnimation("wheel_L.matrix_wheel_L", true);
+		playAnimation("wheel_R.matrix_wheel_R", true);
+		playAnimation("wheel_front.matrix_wheel_front", true);
+	}
+
+	function stopWheelAnimations() {
+		stopAnimation("wheel_L.matrix_wheel_L");
+		stopAnimation("wheel_R.matrix_wheel_R");
+		stopAnimation("wheel_front.matrix_wheel_front");
+	}
+	
+	var wheelsMoving = false;
+	function toggleWheelAnimations() {
+		wheelsMoving = !wheelsMoving;
+		if (wheelsMoving) {
+			playWheelAnimations();
+		}
+		else {
+			stopWheelAnimations();
+		}
+	}
+	
 	function setBodyColor(r, g, b) {
 
 		// Convert from hex rgb to float
@@ -214,6 +251,14 @@
 			part_materials[i].color.setRGB(r, g, b);
 		}
 			
+	}
+
+	function onGlassMouseOver(e) {
+		console.log("Mouse over glass", e);
+	}
+
+	function onGlassMouseOut(e) {
+		console.log("Mouse out glass", e);
 	}
 	
 	</script>

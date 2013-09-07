@@ -12,6 +12,7 @@ body {
 }
 
 #top_frame {
+	z-index:0;
 	top:13px;
 	left:13px;
 	width:98%;
@@ -168,7 +169,34 @@ body {
 #menubar {
 	font-size:18px;
 	color:Black;
-	padding-left:4px;
+	text-align: justify;
+	width:60%;
+	padding-left:380px;
+	padding-top:30px;
+}
+
+#menubar * {
+	display: inline;
+}
+
+#menubar div {
+	display: inline-block;
+	font-style:normal;
+}
+
+#menubar span {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.menuItem {
+	z-index:100;
+}
+
+.menuItem:hover {
+	cursor:pointer;
 }
 
 #container {

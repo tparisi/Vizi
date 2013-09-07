@@ -326,11 +326,15 @@ SceneViewer.prototype.toggleLight = function(index)
 	}
 }
 
-SceneViewer.prototype.playAnimation = function(index)
+SceneViewer.prototype.playAnimation = function(index, loop)
 {
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
-		this.keyFrameAnimators[index].stop();
+		if (loop)
+			this.keyFrameAnimators[index].loop = true;
+		else
+			this.keyFrameAnimators[index].stop();
+
 		this.keyFrameAnimators[index].start();
 	}
 }
