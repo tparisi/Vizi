@@ -74,6 +74,19 @@
 	function initControls() {
 		$('#tab02').ColorPicker({
 			color: '#ffffff',
+			onBeforeShow: function () {
+				var hex = '#ffffff';
+				if (part_materials.length) {
+					var material = part_materials[0];
+					if (material instanceof THREE.MeshFaceMaterial) {
+						hex = '#' + material.materials[0].color.getHexString();
+					}
+					else {
+						hex = '#' + material.color.getHexString();
+					}
+				}
+				$(this).ColorPickerSetColor(hex);
+			},
 			onShow: function (colpkr) {
 				$(colpkr).fadeIn(250);
 				return false;
