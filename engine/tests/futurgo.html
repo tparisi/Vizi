@@ -49,6 +49,9 @@
 	<div id="loadStatus" style="display:none">
 	Loading scene...
 	</div>
+	<div id="overlay" style="display:none">
+	Overlay text
+	</div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
@@ -59,11 +62,13 @@
 
    	var viewer = null;
    	var container = null;
+   	var overlay = null;
    	var part_materials = [];
    	
 	$(document).ready(function() {
 
 		initControls();
+		overlay = document.getElementById("overlay");
 		container = document.getElementById("container");		
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
@@ -309,28 +314,48 @@
 			
 	}
 
+	var glassHTML = "GLASS";
+	var bodyHTML = "BODY";
+	var wheelsHTML = "WHEELS";
+	function showOverlay(html, e) {
+		overlay.style.display = 'block';
+		overlay.innerHTML=html;
+		overlay.style.left = e.pageX + "px";
+		overlay.style.top = e.pageY + "px";
+	}
+
+	function hideOverlay() {
+		overlay.style.display = 'none';
+	}
+
 	function onGlassMouseOver(e) {
 		console.log("Mouse over glass", e);
+		showOverlay(glassHTML, e);
 	}
 
 	function onGlassMouseOut(e) {
 		console.log("Mouse out glass", e);
+		hideOverlay();
 	}
 
 	function onBodyMouseOver(e) {
 		console.log("Mouse over body", e);
+		showOverlay(bodyHTML, e);
 	}
 
 	function onBodyMouseOut(e) {
 		console.log("Mouse out body", e);
+		hideOverlay();
 	}	
 
 	function onWheelsMouseOver(e) {
 		console.log("Mouse over wheels", e);
+		showOverlay(wheelsHTML,e);
 	}
 
 	function onWheelsMouseOut(e) {
 		console.log("Mouse out wheels", e);
+		hideOverlay();
 	}
 
 	</script>

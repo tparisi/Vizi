@@ -9,6 +9,7 @@ body {
 	padding:0;
 	margin-left:0;
 	margin-right:0;
+	overflow:hidden;
 }
 
 #top_frame {
@@ -220,6 +221,10 @@ body {
 }
 
 #overlay {
-	border:none;
+	z-index:2;
+	display:none;
+	border:1px solid;
+	width:150px;
+	height:200px;
 	position:absolute;
 }
