@@ -42991,7 +42991,8 @@ var global = window;
 
 THREE.glTFLoader = function ( container, showStatus ) {
 	this.container = container;
-	this.useBufferGeometry = true;
+	this.useBufferGeometry = (THREE.glTFLoader.useBufferGeometry !== undefined ) ?
+			THREE.glTFLoader.useBufferGeometry : true;
     this.meshesRequested = 0;
     this.meshesLoaded = 0;
     this.animationsRequested = 0;
@@ -50232,7 +50233,6 @@ Vizi.Loader.prototype.loadScene = function(url)
 		var loader = new loaderClass;
 		var that = this;
 		
-		loader.useBufferGeometry = false;
 		loader.load(url, 
 				function (data) {
 					that.handleSceneLoaded(url, data);

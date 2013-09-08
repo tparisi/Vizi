@@ -5,7 +5,8 @@
 
 THREE.glTFLoader = function ( container, showStatus ) {
 	this.container = container;
-	this.useBufferGeometry = true;
+	this.useBufferGeometry = (THREE.glTFLoader.useBufferGeometry !== undefined ) ?
+			THREE.glTFLoader.useBufferGeometry : true;
     this.meshesRequested = 0;
     this.meshesLoaded = 0;
     this.animationsRequested = 0;
