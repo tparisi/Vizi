@@ -50311,7 +50311,10 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 
 	function convert(n) {
 		if (n instanceof THREE.Mesh) {
+			// cheap fixes for picking and animation; need to investigate
+			// the general case longer-term for glTF loader
 			n.matrixAutoUpdate = true;
+			n.geometry.dynamic = true;
 			return new Vizi.Visual({object:n});
 		}
 		else if (n instanceof THREE.Camera) {

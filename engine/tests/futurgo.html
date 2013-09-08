@@ -112,8 +112,6 @@
 		loader.addEventListener("loaded", function(data) { onLoadComplete(data, loadStartTime); }); 
 		loader.addEventListener("progress", function(progress) { onLoadProgress(progress); }); 
 
-		THREE.glTFLoader.useBufferGeometry = true;
-		
 		var loadStartTime = Date.now();
 		loader.loadScene(url);
 		
