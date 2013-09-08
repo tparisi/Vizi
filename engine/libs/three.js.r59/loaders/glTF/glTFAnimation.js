@@ -120,7 +120,6 @@ THREE.glTFInterpolator = function(param)
 	
 	var node = param.target;
 	node.matrixAutoUpdate = true;
-	node.useQuaternion = true;
 	
 	switch (param.path) {
 		case "translation" :

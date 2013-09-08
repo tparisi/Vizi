@@ -12,17 +12,15 @@
 <body>
 	<div id="top_frame"></div>
 	<div id="menubar">
-	    <label id="menuORDER" class="menuItem">ORDER</label>
-	    <label id="menuTEST_DRIVE" class="menuItem">TEST DRIVE</label>
-	    <label id="menuFEATURES" class="menuItem">FEATURES</label>
-	    <label id="menuSPECS" class="menuItem">SPECS</label>
-	    <label id="menuCHARGING" class="menuItem">CHARGING</label>
-	    <label id="menuGALLERY" class="menuItem">GALLERY</label>
-	    <label id="menuVIDEO" class="menuItem">VIDEO</label>
-	    <label id="menuFAQ" class="menuItem"><a href="foo.html">QUESTIONS?</a></label>
-<span>
-</span>		
-	
+	    <div id="menuORDER" class="menuItem" onclick="onMenuCommand(this.id);">ORDER</div>
+	    <div id="menuTEST_DRIVE" class="menuItem" onclick="onMenuCommand(this.id);">TEST DRIVE</div>
+	    <div id="menuFEATURES" class="menuItem" onclick="onMenuCommand(this.id);">FEATURES</div>
+	    <div id="menuSPECS" class="menuItem" onclick="onMenuCommand(this.id);">SPECS</div>
+	    <div id="menuCHARGING" class="menuItem" onclick="onMenuCommand(this.id);">CHARGING</div>
+	    <div id="menuGALLERY" class="menuItem" onclick="onMenuCommand(this.id);">GALLERY</div>
+	    <div id="menuVIDEO" class="menuItem" onclick="onMenuCommand(this.id);">VIDEO</div>
+	    <div id="menuFAQ" class="menuItem" onclick="onMenuCommand(this.id);">QUESTIONS?</div>
+	    <span></span>
   	</div>
 	<div id="bot_frame"></div>
 	<div id="left_banner_bg"></div>
@@ -68,7 +66,7 @@
 		initControls();
 		container = document.getElementById("container");		
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
-		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.dae");
+		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
 		viewer.run();
 	}
 	);
@@ -136,7 +134,7 @@
 		});
 
 		var frame_parts_exp =
-			/body|rear_view_arm_L|rear_view_arm_R|rear_view_frame_L|rear_view_frame_R/;
+			/rear_view_arm_L|rear_view_arm_R|rear_view_frame_L|rear_view_frame_R/;
 
 		scene.map(frame_parts_exp, function(o) {
 			o.map(Vizi.Visual, function(v) {
@@ -147,9 +145,10 @@
 			picker.addEventListener("mouseout", onBodyMouseOut);
 			o.addComponent(picker);
 		});
-		
-		var carousel = new Vizi.RotateBehavior({autoStart:false, duration:20});
-		viewer.controller.addComponent(carousel);
+
+		var main = scene.findNode("vizi_mobile");
+		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
+		main.addComponent(carousel);
 	}
 
 	function onLoadProgress(progress)
@@ -158,6 +157,10 @@
 		var percentProgress = progress.loaded / progress.total * 100;
 		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
+	}
+
+	function onMenuCommand(id) {
+		console.log("Menu command: ", id);
 	}
 
 	function useCamera(name) {
@@ -216,12 +219,14 @@
 		vehicleOpen = !vehicleOpen;
 		if (vehicleOpen) {
 			playOpenAnimations();
+			return;
 			setTimeout(function() {
 				useCamera("interior");
 			}, 2000);
 		}
 		else {
 			playCloseAnimations();
+			return;
 			setTimeout(function() {
 				useCamera("setup");
 			}, 2000);
@@ -232,12 +237,18 @@
 		playAnimation("wheel_L.matrix_wheel_L", true);
 		playAnimation("wheel_R.matrix_wheel_R", true);
 		playAnimation("wheel_front.matrix_wheel_front", true);
+		playAnimation("animation_wheel_front", true);
+		playAnimation("animation_wheel_L", true);
+		playAnimation("animation_wheel_R", true);
 	}
 
 	function stopWheelAnimations() {
 		stopAnimation("wheel_L.matrix_wheel_L");
 		stopAnimation("wheel_R.matrix_wheel_R");
 		stopAnimation("wheel_front.matrix_wheel_front");
+		stopAnimation("animation_wheel_front");
+		stopAnimation("animation_wheel_L");
+		stopAnimation("animation_wheel_R");
 	}
 	
 	var wheelsMoving = false;

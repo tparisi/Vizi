@@ -12,7 +12,7 @@ body {
 }
 
 #top_frame {
-	z-index:0;
+	z-index:-1;
 	top:13px;
 	left:13px;
 	width:98%;
@@ -55,9 +55,9 @@ body {
 
 #ltd_model {
 	top:166px;
-	left:53px;
-	width:260px;
-	height:338px;
+	left:72px;
+	width:215px;
+	height:280px;
 	background:url(../images/Futurgo_site_assets/ltd_model.png);
 	background-size:100% 100%;
 	position:absolute;
@@ -68,7 +68,7 @@ body {
 	font-size:22px;
 	font-style:normal;
 	left:33px;
-	top:520px;
+	top:470px;
 	width:300px;
 	position:absolute;
 }
@@ -78,7 +78,7 @@ body {
 	font-size:14px;
 	left:33px;
 	padding:8px;
-	top:550px;
+	top:500px;
 	width:290px;
 	overflow:hidden;
 	position:absolute;
@@ -170,8 +170,8 @@ body {
 	font-size:18px;
 	color:Black;
 	text-align: justify;
-	width:60%;
-	padding-left:380px;
+	width:55%;
+	padding-left:360px;
 	padding-top:30px;
 }
 
@@ -192,7 +192,6 @@ body {
 }
 
 .menuItem {
-	z-index:100;
 }
 
 .menuItem:hover {
@@ -200,7 +199,7 @@ body {
 }
 
 #container {
-	z-index:-1;
+	z-index:-2;
 	width: 99%;
 	height:100%;
 	top:0%;

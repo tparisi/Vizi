@@ -44605,7 +44605,6 @@ THREE.glTFInterpolator = function(param)
 	
 	var node = param.target;
 	node.matrixAutoUpdate = true;
-	node.useQuaternion = true;
 	
 	switch (param.path) {
 		case "translation" :
@@ -50230,7 +50229,6 @@ Vizi.Loader.prototype.loadScene = function(url)
 	if (loaderClass)
 	{
 		var loader = new loaderClass;
-		loader.useBufferGeometry = false;
 		var that = this;
 		
 		loader.load(url, 
@@ -50311,6 +50309,7 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 
 	function convert(n) {
 		if (n instanceof THREE.Mesh) {
+			n.matrixAutoUpdate = true;
 			return new Vizi.Visual({object:n});
 		}
 		else if (n instanceof THREE.Camera) {
@@ -50336,6 +50335,7 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 			var o = new Vizi.Object({autoCreateTransform:false});
 			o.addComponent(new Vizi.Transform({object:n}));
 			o.name = n.name;
+			n.matrixAutoUpdate = true;
 			var i, len = n.children.length;
 			for (i = 0; i < len; i++) {
 				var childNode  = n.children[i];
