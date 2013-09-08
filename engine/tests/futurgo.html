@@ -153,12 +153,23 @@
 			o.map(Vizi.Visual, function(v) {
 				part_materials.push(v.material);
 			});
+		});
+
+		scene.map("body2", function(o) {
 			var picker = new Vizi.Picker;
 			picker.addEventListener("mouseover", onBodyMouseOver);
 			picker.addEventListener("mouseout", onBodyMouseOut);
 			o.addComponent(picker);
 		});
 
+		scene.map("wheels", function(o) {
+
+			var picker = new Vizi.Picker;
+			picker.addEventListener("mouseover", onWheelsMouseOver);
+			picker.addEventListener("mouseout", onWheelsMouseOut);
+			o.addComponent(picker);
+		});
+		
 		var main = scene.findNode("vizi_mobile");
 		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
 		main.addComponent(carousel);
@@ -299,11 +310,11 @@
 	}
 
 	function onGlassMouseOver(e) {
-		//console.log("Mouse over glass", e);
+		console.log("Mouse over glass", e);
 	}
 
 	function onGlassMouseOut(e) {
-		//console.log("Mouse out glass", e);
+		console.log("Mouse out glass", e);
 	}
 
 	function onBodyMouseOver(e) {
@@ -313,6 +324,15 @@
 	function onBodyMouseOut(e) {
 		console.log("Mouse out body", e);
 	}	
+
+	function onWheelsMouseOver(e) {
+		console.log("Mouse over wheels", e);
+	}
+
+	function onWheelsMouseOut(e) {
+		console.log("Mouse out wheels", e);
+	}
+
 	</script>
 	
 </body>

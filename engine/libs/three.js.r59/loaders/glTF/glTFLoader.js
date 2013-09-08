@@ -127,8 +127,9 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         geometry.computeBoundingBox();
         geometry.computeBoundingSphere();
         geometry.computeCentroids();
+        geometry.computeFaceNormals();
         if(!normals) {
-            geometry.computeFaceNormals();
+            geometry.computeVertexNormals();
         }
 
     }
