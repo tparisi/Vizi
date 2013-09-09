@@ -3,25 +3,25 @@
  * @author Tony Parisi
  */
 
-futurgo = function(param) {
+Futurgo = function(param) {
 
 	this.container = param.container;
-	this.loadStatus = param.loadStatus;
-	this.overlay = param.overlay;
-	this.overlayContents = param.overlayContents;
-	this.rolloverCallback = param.rolloverCallback;
+	this.loadCallback = param.loadCallback;
+	this.loadProgressCallback = param.loadProgressCallback;
+	this.mouseOverCallback = param.mouseOverCallback;
+	this.mouseOutCallback = param.mouseOutCallback;
 	this.part_materials = [];
 	this.vehicleOpen = false;
 	this.wheelsMoving = false;
 }
 
-futurgo.prototype.go = function() {
+Futurgo.prototype.go = function() {
 	this.viewer = new SceneViewer({ container : this.container, showGrid : true });
-	this.loadURL(futurgo.URL);
+	this.loadURL(Futurgo.URL);
 	this.viewer.run();
 }
 
-futurgo.prototype.openFile = function(url) {
+Futurgo.prototype.loadURL = function(url) {
 
 	var that = this;
 	
@@ -29,23 +29,14 @@ futurgo.prototype.openFile = function(url) {
 	loader.addEventListener("loaded", function(data) { that.onLoadComplete(data, loadStartTime); }); 
 	loader.addEventListener("progress", function(progress) { that.onLoadProgress(progress); }); 
 
-	this.loadStartTime = Date.now();
-	loader.loadScene(url);
-	
-	if (this.loadStatus)
-		this.loadStatus.style.display = 'block';		
+	var loadStartTime = Date.now();
+	loader.loadScene(url);	
 }
 
-futurgo.prototype.onLoadComplete = function(data, loadStartTime)
+Futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 {
-	// Hide the loader bar
-	this.loadStatus.style.display = 'none';		
-
 	var scene = data.scene;
 	this.viewer.replaceScene(data);
-
-	var loadTime = (Date.now() - this.loadStartTime) / 1000;
-	Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
 
 	this.useCamera("setup");
 
@@ -58,8 +49,8 @@ futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 		}, 2000);
 
 		var picker = new Vizi.Picker;
-		picker.addEventListener("mouseover", that.onMouseOver("glass"));
-		picker.addEventListener("mouseout", that.onMouseOut("glass"));
+		picker.addEventListener("mouseover", function(event) { that.onMouseOver("glass", event); });
+		picker.addEventListener("mouseout", function(event) { that.onMouseOut("glass", event); });
 		o.addComponent(picker);
 	});
 
@@ -68,39 +59,44 @@ futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 
 	scene.map(frame_parts_exp, function(o) {
 		o.map(Vizi.Visual, function(v) {
-			this.part_materials.push(v.material);
+			that.part_materials.push(v.material);
 		});
 	});
 
 	scene.map(/body2|rear_view_arm_L|rear_view_arm_R/, function(o) {
 		var picker = new Vizi.Picker;
-		picker.addEventListener("mouseover", that.onMouseOver("body"));
-		picker.addEventListener("mouseout", that.onMouseOut("body"));
+		picker.addEventListener("mouseover", function(event) { that.onMouseOver("body", event); });
+		picker.addEventListener("mouseout", function(event) { that.onMouseOut("body", event); });
 		o.addComponent(picker);
 	});
 
 	scene.map("wheels", function(o) {
 
 		var picker = new Vizi.Picker;
-		picker.addEventListener("mouseover", that.onMouseOver("wheels"));
-		picker.addEventListener("mouseout", that.onMouseOut("wheels"));
+		picker.addEventListener("mouseover", function(event) { that.onMouseOver("wheels", event); });
+		picker.addEventListener("mouseout", function(event) { that.onMouseOut("wheels", event); });
 		o.addComponent(picker);
 	});
 	
 	var main = scene.findNode("vizi_mobile");
 	var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
 	main.addComponent(carousel);
+	
+	if (this.loadCallback) {
+		var loadTime = (Date.now() - loadStartTime) / 1000;
+		this.loadCallback(loadTime);
+	}
 }
 
-futurgo.prototype.onLoadProgress = function(progress)
+Futurgo.prototype.onLoadProgress = function(progress)
 {
 	// Update the laoder bar
 	var percentProgress = progress.loaded / progress.total * 100;
-	var loadStatus = document.getElementById("loadStatus");
-	this.loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
+	if (this.loadProgressCallback)
+		this.loadProgressCallback(percentProgress);
 }
 
-futurgo.prototype.useCamera = function(name) {
+Futurgo.prototype.useCamera = function(name) {
 	var cameraNames = this.viewer.cameraNames;
 	var i, len = cameraNames.length;
 	for (i = 0; i < len; i++) {
@@ -111,7 +107,15 @@ futurgo.prototype.useCamera = function(name) {
 	}		
 }
 
-futurgo.prototype.playAnimation = function(name, loop) {
+/*
+Animation names
+window_rear_open.matrix_window_rear_open
+window_rear_close.matrix_window_rear_close
+window_front_open.matrix_window_front_open
+window_front_close.matrix_window_front_close
+*/
+
+Futurgo.prototype.playAnimation = function(name, loop) {
 	var animationNames = this.viewer.keyFrameAnimatorNames;
 	var index = animationNames.indexOf(name);
 	if (index >= 0)
@@ -120,7 +124,7 @@ futurgo.prototype.playAnimation = function(name, loop) {
 	}
 }
 
-futurgo.prototype.stopAnimation = function(name) {
+Futurgo.prototype.stopAnimation = function(name) {
 	var animationNames = this.viewer.keyFrameAnimatorNames;
 	var index = animationNames.indexOf(name);
 	if (index >= 0)
@@ -129,39 +133,40 @@ futurgo.prototype.stopAnimation = function(name) {
 	}
 }
 
-futurgo.prototype.playOpenAnimations = function() {	
+Futurgo.prototype.playOpenAnimations = function() {	
 	this.playAnimation("window_rear_open.matrix_window_rear_open");
 	this.playAnimation("window_front_open.matrix_window_front_open");
 	this.playAnimation("animation_window_front_open");
 	this.playAnimation("animation_window_rear_open");
 }
 
-futurgo.prototype.playCloseAnimations = function() {	
+Futurgo.prototype.playCloseAnimations = function() {	
 	this.playAnimation("window_rear_close.matrix_window_rear_close");
 	this.playAnimation("window_front_close.matrix_window_front_close");
 	this.playAnimation("animation_window_front_close");
 	this.playAnimation("animation_window_rear_close");
 }
 
-futurgo.prototype.toggleInterior = function() {
+Futurgo.prototype.toggleInterior = function() {
 	this.vehicleOpen = !this.vehicleOpen;
+	var that = this;
 	if (this.vehicleOpen) {
 		this.playOpenAnimations();
 		return;
 		setTimeout(function() {
-			this.useCamera("interior");
+			that.useCamera("interior");
 		}, 2000);
 	}
 	else {
 		this.playCloseAnimations();
 		return;
 		setTimeout(function() {
-			this.useCamera("setup");
+			that.useCamera("setup");
 		}, 2000);
 	}
 }
 
-futurgo.prototype.playWheelAnimations = function() {
+Futurgo.prototype.playWheelAnimations = function() {
 	this.playAnimation("wheel_L.matrix_wheel_L", true);
 	this.playAnimation("wheel_R.matrix_wheel_R", true);
 	this.playAnimation("wheel_front.matrix_wheel_front", true);
@@ -170,7 +175,7 @@ futurgo.prototype.playWheelAnimations = function() {
 	this.playAnimation("animation_wheel_R", true);
 }
 
-futurgo.prototype.stopWheelAnimations = function() {
+Futurgo.prototype.stopWheelAnimations = function() {
 	this.stopAnimation("wheel_L.matrix_wheel_L");
 	this.stopAnimation("wheel_R.matrix_wheel_R");
 	this.stopAnimation("wheel_front.matrix_wheel_front");
@@ -179,7 +184,7 @@ futurgo.prototype.stopWheelAnimations = function() {
 	this.stopAnimation("animation_wheel_R");
 }
 
-futurgo.prototype.toggleWheelAnimations = function() {
+Futurgo.prototype.toggleWheelAnimations = function() {
 	this.wheelsMoving = !this.wheelsMoving;
 	if (this.wheelsMoving) {
 		this.playWheelAnimations();
@@ -189,14 +194,52 @@ futurgo.prototype.toggleWheelAnimations = function() {
 	}
 }
 
-futurgo.prototype.onMouseOver = function(what) {
+Futurgo.prototype.getBodyColor = function() {
+	var color = '#ffffff';
+	if (this.part_materials.length) {
+		var material = this.part_materials[0];
+		if (material instanceof THREE.MeshFaceMaterial) {
+			color = '#' + material.materials[0].color.getHexString();
+		}
+		else {
+			color = '#' + material.color.getHexString();
+		}
+	}
+
+	return color;
+}
+
+Futurgo.prototype.setBodyColor = function(r, g, b) {
+
+	// Convert from hex rgb to float
+	r /= 255;
+	g /= 255;
+	b /= 255;
+	
+	var i, len = this.part_materials.length;
+	for (i = 0; i < len; i++) {
+		var material = this.part_materials[i];
+		if (material instanceof THREE.MeshFaceMaterial) {
+			var j, mlen = material.materials.length;
+			for (j = 0; j < mlen; j++) {
+				material.materials[j].color.setRGB(r, g, b);
+			}
+		}
+		else {
+			material.color.setRGB(r, g, b);
+		}
+	}		
+}
+
+
+Futurgo.prototype.onMouseOver = function(what, event) {
 	if (this.mouseOverCallback)
-		this.mouseOverCallback(what);
+		this.mouseOverCallback(what, event);
 }
 
-futurgo.prototype.onMouseOut = function(what) {
+Futurgo.prototype.onMouseOut = function(what, event) {
 	if (this.mouseOutCallback)
-		this.mouseOutCallback(what);
+		this.mouseOutCallback(what, event);
 }
 
-futurgo.URL = "./models/vizi_mobile_tc01/vizi_mobile_tc01.json";
+Futurgo.URL = "./models/vizi_mobile_tc01/vizi_mobile_tc01.json";
