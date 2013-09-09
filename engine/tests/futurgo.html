@@ -59,12 +59,14 @@
 	<script src="../libs/colorpicker/js/colorpicker.js"></script>
 	<script src="../build/vizi.js"></script>
 	<script src="sceneViewer.js"></script>
+	<script src="futurgo.js"></script>
 	<script>
 
    	var viewer = null;
    	var container = null;
    	var overlay = null;
    	var overlayContents = null;
+   	var loadStatus = null;
    	var part_materials = [];
    	
 	$(document).ready(function() {
@@ -73,6 +75,7 @@
 		overlay = document.getElementById("overlay");
 		overlayContents = document.getElementById("overlayContents");
 		container = document.getElementById("container");		
+		loadStatus = document.getElementById("loadStatus");
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
 		viewer.run();
@@ -83,17 +86,8 @@
 		$('#tab02').ColorPicker({
 			color: '#ffffff',
 			onBeforeShow: function () {
-				var hex = '#ffffff';
-				if (part_materials.length) {
-					var material = part_materials[0];
-					if (material instanceof THREE.MeshFaceMaterial) {
-						hex = '#' + material.materials[0].color.getHexString();
-					}
-					else {
-						hex = '#' + material.color.getHexString();
-					}
-				}
-				$(this).ColorPickerSetColor(hex);
+				var color = getBodyColor();
+				$(this).ColorPickerSetColor(color);
 			},
 			onShow: function (colpkr) {
 				$(colpkr).fadeIn(250);
@@ -123,14 +117,12 @@
 		var loadStartTime = Date.now();
 		loader.loadScene(url);
 		
-		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.style.display = 'block';		
 	}
 	
 	function onLoadComplete(data, loadStartTime)
 	{
 		// Hide the loader bar
-		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.style.display = 'none';		
 
 		var scene = data.scene;
@@ -293,7 +285,22 @@
 			stopWheelAnimations();
 		}
 	}
-	
+
+	function getBodyColor() {
+		var color = '#ffffff';
+		if (part_materials.length) {
+			var material = part_materials[0];
+			if (material instanceof THREE.MeshFaceMaterial) {
+				color = '#' + material.materials[0].color.getHexString();
+			}
+			else {
+				color = '#' + material.color.getHexString();
+			}
+		}
+
+		return color;
+	}
+
 	function setBodyColor(r, g, b) {
 
 		// Convert from hex rgb to float
@@ -313,10 +320,9 @@
 			else {
 				material.color.setRGB(r, g, b);
 			}
-		}
-			
+		}		
 	}
-
+	
 	var glassHTML = "LightAdjust&trade; Windshield<br>Automatically Changes to Match Day/Night Conditions";
 	var bodyHTML = "LightFrame&trade; Titanium Alloy<br>Built for Speed, with the Highest Safety Rating";
 	var wheelsHTML = "LightSpeed&trade; Drive Train<br>Ride in High Style at High Speeds";
