@@ -317,13 +317,16 @@
 			
 	}
 
-	var glassHTML = "LightAdjust&trade; Windshield - Automatically Changes to Match Day/Night Conditions";
-	var bodyHTML = "Titanium Alloy Frame - Lightweight for Speed, with the Highest Safety Rating";
-	var wheelsHTML = "LightSpeed&trade; Drive Train - Ride in High Style at High Speeds";
+	var glassHTML = "LightAdjust&trade; Windshield<br>Automatically Changes to Match Day/Night Conditions";
+	var bodyHTML = "LightFrame&trade; Titanium Alloy<br>Built for Speed, with the Highest Safety Rating";
+	var wheelsHTML = "LightSpeed&trade; Drive Train<br>Ride in High Style at High Speeds";
+	var overlayFadeDuration = 1000; // ms
+	var overlayFadeDelay = 3000; // ms
+	
 	function showOverlay(html, e) {
 		overlay.style.display = 'block';
 		overlayContents.innerHTML=html;
-		overlay.style.top = e.pageY + 40 + "px";
+		overlay.style.top = e.pageY + "px";
 	}
 
 	function hideOverlay() {
