@@ -62,8 +62,7 @@
 	<script src="futurgo.js"></script>
 	<script>
 
-   	var viewer = null;
-   	var container = null;
+   	var futurgo = null;
    	var overlay = null;
    	var overlayContents = null;
    	var loadStatus = null;
@@ -74,11 +73,17 @@
 		initControls();
 		overlay = document.getElementById("overlay");
 		overlayContents = document.getElementById("overlayContents");
-		container = document.getElementById("container");		
 		loadStatus = document.getElementById("loadStatus");
-		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
-		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
-		viewer.run();
+		var container = document.getElementById("container");
+		futurgo = new Futurgo({ container : container,
+				loadCallback : onLoadComplete,
+				loadProgressCallback : onLoadProgress,
+				mouseOverCallback : onMouseOver,
+				mouseOutCallback : onMouseOut,
+			 });	
+
+		loadStatus.style.display = 'block';
+		futurgo.go();
 	}
 	);
 
@@ -86,7 +91,7 @@
 		$('#tab02').ColorPicker({
 			color: '#ffffff',
 			onBeforeShow: function () {
-				var color = getBodyColor();
+				var color = futurgo.getBodyColor();
 				$(this).ColorPickerSetColor(color);
 			},
 			onShow: function (colpkr) {
@@ -98,88 +103,25 @@
 				return false;
 			},
 			onChange: function (hsb, hex, rgb) {
-				setBodyColor(rgb.r, rgb.g, rgb.b);
+				futurgo.setBodyColor(rgb.r, rgb.g, rgb.b);
 			},
 			onSubmit: function(hsb, hex, rgb, el) {
 				$(el).val(hex);
-				setBodyColor(rgb.r, rgb.g, rgb.b);
+				futurgo.setBodyColor(rgb.r, rgb.g, rgb.b);
 				$(el).ColorPickerHide();
 			},
 		});
 	}
 	
-	function openFile(url) {
-		var loader = new Vizi.Loader;
-
-		loader.addEventListener("loaded", function(data) { onLoadComplete(data, loadStartTime); }); 
-		loader.addEventListener("progress", function(progress) { onLoadProgress(progress); }); 
-
-		var loadStartTime = Date.now();
-		loader.loadScene(url);
-		
-		loadStatus.style.display = 'block';		
-	}
-	
-	function onLoadComplete(data, loadStartTime)
+	function onLoadComplete(loadTime)
 	{
 		// Hide the loader bar
 		loadStatus.style.display = 'none';		
-
-		var scene = data.scene;
-		viewer.replaceScene(data);
-
-		var loadTime = (Date.now() - loadStartTime) / 1000;
-		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
-
-		useCamera("setup");
-
-		scene.map(/windows_front|windows_rear/, function(o) {
-			var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
-			o.addComponent(fader);
-			setTimeout(function() {
-				fader.start();
-			}, 2000);
-
-			var picker = new Vizi.Picker;
-			picker.addEventListener("mouseover", onGlassMouseOver);
-			picker.addEventListener("mouseout", onGlassMouseOut);
-			o.addComponent(picker);
-		});
-
-		var frame_parts_exp =
-			/rear_view_arm_L|rear_view_arm_R|rear_view_frame_L|rear_view_frame_R/;
-
-		scene.map(frame_parts_exp, function(o) {
-			o.map(Vizi.Visual, function(v) {
-				part_materials.push(v.material);
-			});
-		});
-
-		scene.map(/body2|rear_view_arm_L|rear_view_arm_R/, function(o) {
-			var picker = new Vizi.Picker;
-			picker.addEventListener("mouseover", onBodyMouseOver);
-			picker.addEventListener("mouseout", onBodyMouseOut);
-			o.addComponent(picker);
-		});
-
-		scene.map("wheels", function(o) {
-
-			var picker = new Vizi.Picker;
-			picker.addEventListener("mouseover", onWheelsMouseOver);
-			picker.addEventListener("mouseout", onWheelsMouseOut);
-			o.addComponent(picker);
-		});
-		
-		var main = scene.findNode("vizi_mobile");
-		var carousel = new Vizi.RotateBehavior({autoStart:true, duration:20});
-		main.addComponent(carousel);
+		console.log("Loaded " + loadTime.toFixed(2) + " seconds.");
 	}
 
-	function onLoadProgress(progress)
+	function onLoadProgress(percentProgress)
 	{
-		// Update the laoder bar
-		var percentProgress = progress.loaded / progress.total * 100;
-		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
 	}
 
@@ -187,185 +129,46 @@
 		console.log("Menu command: ", id);
 	}
 
-	function useCamera(name) {
-		var cameraNames = viewer.cameraNames;
-		var i, len = cameraNames.length;
-		for (i = 0; i < len; i++) {
-			if (cameraNames[i] == name) {
-				viewer.useCamera(i);
-				break;
-			}
-		}		
-	}
-
-	/*
-	Animation names
-	window_rear_open.matrix_window_rear_open
-	window_rear_close.matrix_window_rear_close
-	window_front_open.matrix_window_front_open
-	window_front_close.matrix_window_front_close
-	*/
-	
-	function playAnimation(name, loop) {
-		var animationNames = viewer.keyFrameAnimatorNames;
-		var index = animationNames.indexOf(name);
-		if (index >= 0)
-		{
-			viewer.playAnimation(index, loop);
-		}
-	}
-
-	function stopAnimation(name) {
-		var animationNames = viewer.keyFrameAnimatorNames;
-		var index = animationNames.indexOf(name);
-		if (index >= 0)
-		{
-			viewer.stopAnimation(index);
-		}
-	}
-	
-	function playOpenAnimations() {	
-		playAnimation("window_rear_open.matrix_window_rear_open");
-		playAnimation("window_front_open.matrix_window_front_open");
-		playAnimation("animation_window_front_open");
-		playAnimation("animation_window_rear_open");
-	}
-
-	function playCloseAnimations() {	
-		playAnimation("window_rear_close.matrix_window_rear_close");
-		playAnimation("window_front_close.matrix_window_front_close");
-		playAnimation("animation_window_front_close");
-		playAnimation("animation_window_rear_close");
-	}
-
-	var vehicleOpen = false;
 	function toggleInterior() {
-		vehicleOpen = !vehicleOpen;
-		if (vehicleOpen) {
-			playOpenAnimations();
-			return;
-			setTimeout(function() {
-				useCamera("interior");
-			}, 2000);
-		}
-		else {
-			playCloseAnimations();
-			return;
-			setTimeout(function() {
-				useCamera("setup");
-			}, 2000);
-		}
+		futurgo.toggleInterior();
 	}
 
-	function playWheelAnimations() {
-		playAnimation("wheel_L.matrix_wheel_L", true);
-		playAnimation("wheel_R.matrix_wheel_R", true);
-		playAnimation("wheel_front.matrix_wheel_front", true);
-		playAnimation("animation_wheel_front", true);
-		playAnimation("animation_wheel_L", true);
-		playAnimation("animation_wheel_R", true);
-	}
-
-	function stopWheelAnimations() {
-		stopAnimation("wheel_L.matrix_wheel_L");
-		stopAnimation("wheel_R.matrix_wheel_R");
-		stopAnimation("wheel_front.matrix_wheel_front");
-		stopAnimation("animation_wheel_front");
-		stopAnimation("animation_wheel_L");
-		stopAnimation("animation_wheel_R");
-	}
-	
-	var wheelsMoving = false;
 	function toggleWheelAnimations() {
-		wheelsMoving = !wheelsMoving;
-		if (wheelsMoving) {
-			playWheelAnimations();
-		}
-		else {
-			stopWheelAnimations();
-		}
-	}
-
-	function getBodyColor() {
-		var color = '#ffffff';
-		if (part_materials.length) {
-			var material = part_materials[0];
-			if (material instanceof THREE.MeshFaceMaterial) {
-				color = '#' + material.materials[0].color.getHexString();
-			}
-			else {
-				color = '#' + material.color.getHexString();
-			}
-		}
-
-		return color;
-	}
-
-	function setBodyColor(r, g, b) {
-
-		// Convert from hex rgb to float
-		r /= 255;
-		g /= 255;
-		b /= 255;
-		
-		var i, len = part_materials.length;
-		for (i = 0; i < len; i++) {
-			var material = part_materials[i];
-			if (material instanceof THREE.MeshFaceMaterial) {
-				var j, mlen = material.materials.length;
-				for (j = 0; j < mlen; j++) {
-					material.materials[j].color.setRGB(r, g, b);
-				}
-			}
-			else {
-				material.color.setRGB(r, g, b);
-			}
-		}		
+		futurgo.toggleWheelAnimations();
 	}
 	
 	var glassHTML = "LightAdjust&trade; Windshield<br>Automatically Changes to Match Day/Night Conditions";
 	var bodyHTML = "LightFrame&trade; Titanium Alloy<br>Built for Speed, with the Highest Safety Rating";
 	var wheelsHTML = "LightSpeed&trade; Drive Train<br>Ride in High Style at High Speeds";
+	var overlayCopy = {
+		glass : glassHTML,
+		body : bodyHTML,
+		wheels : wheelsHTML,
+	};
+	
 	var overlayFadeDuration = 1000; // ms
 	var overlayFadeDelay = 3000; // ms
 	
-	function showOverlay(html, e) {
-		overlay.style.display = 'block';
-		overlayContents.innerHTML=html;
-		overlay.style.top = e.pageY + "px";
+	function showOverlay(what, e) {
+		var html = overlayCopy[what];
+		if (html) {
+			overlay.style.display = 'block';
+			overlayContents.innerHTML= html;
+			overlay.style.top = e.pageY + "px";
+		}
 	}
 
 	function hideOverlay() {
 		overlay.style.display = 'none';
 	}
 
-	function onGlassMouseOver(e) {
-		console.log("Mouse over glass", e);
-		showOverlay(glassHTML, e);
+	function onMouseOver(what, event) {
+		//console.log("Mouse over", what, event);
+		showOverlay(what, event);
 	}
 
-	function onGlassMouseOut(e) {
-		console.log("Mouse out glass", e);
-		hideOverlay();
-	}
-
-	function onBodyMouseOver(e) {
-		console.log("Mouse over body", e);
-		showOverlay(bodyHTML, e);
-	}
-
-	function onBodyMouseOut(e) {
-		console.log("Mouse out body", e);
-		hideOverlay();
-	}	
-
-	function onWheelsMouseOver(e) {
-		console.log("Mouse over wheels", e);
-		showOverlay(wheelsHTML,e);
-	}
-
-	function onWheelsMouseOut(e) {
-		console.log("Mouse out wheels", e);
+	function onMouseOut(what, event) {
+		//console.log("Mouse out", what, event);
 		hideOverlay();
 	}
 
