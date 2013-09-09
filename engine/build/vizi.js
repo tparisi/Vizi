@@ -38745,6 +38745,7 @@ THREE.ColladaLoader = function () {
 					case 'directional':
 
 						light = new THREE.DirectionalLight( color, intensity, distance );
+						light.position.set(0, 0, 1);
 						break;
 
 					case 'point':
@@ -43899,6 +43900,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
             		switch (type) {
             			case "directional" :
             				light = new THREE.DirectionalLight(color);
+    						light.position.set(0, 0, 1);
             			break;
             			
             			case "point" :
@@ -50047,7 +50049,7 @@ Vizi.DirectionalLight = function(param)
 
 	if (param.object) {
 		this.object = param.object; 
-		this.direction = param.object.position.clone().normalize().negate();
+		this.direction = param.object.position.clone().negate();
 	}
 	else {
 		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
@@ -50067,7 +50069,7 @@ Vizi.DirectionalLight.prototype.update = function()
 	// D'oh Three.js doesn't seem to transform light directions automatically
 	// Really bizarre semantics
 	this.position.copy(this.direction).negate();
-	this.object.target.position.copy(this.direction).multiplyScalar(Vizi.Light.DEFAULT_RANGE);
+ 	this.object.target.position.copy(this.direction).multiplyScalar(Vizi.Light.DEFAULT_RANGE);
 	var worldmat = this.object.parent.matrixWorld;
 	this.position.applyMatrix4(worldmat);
 	this.object.target.position.applyMatrix4(worldmat);

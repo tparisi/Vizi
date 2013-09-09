@@ -864,6 +864,7 @@ THREE.ColladaLoader = function () {
 					case 'directional':
 
 						light = new THREE.DirectionalLight( color, intensity, distance );
+						light.position.set(0, 0, 1);
 						break;
 
 					case 'point':

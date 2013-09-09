@@ -913,6 +913,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
             		switch (type) {
             			case "directional" :
             				light = new THREE.DirectionalLight(color);
+    						light.position.set(0, 0, 1);
             			break;
             			
             			case "point" :
