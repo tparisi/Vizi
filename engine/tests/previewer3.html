@@ -89,7 +89,6 @@
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="../build/vizi.js"></script>
-	<script src="sceneViewer.js"></script>
 	<script>
 
 	var urllist = [
@@ -110,7 +109,7 @@
 		var renderStats = document.getElementById("render_stats");
 		var sceneStats = document.getElementById("scene_stats");
 		
-		viewer = new SceneViewer({ container : container, showGrid : true, headlight : true });
+		viewer = new Vizi.Viewer({ container : container, showGrid : true, headlight : true });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 

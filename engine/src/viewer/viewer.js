@@ -1,8 +1,11 @@
 /**
+ * @fileoverview Viewer class - Application Subclass for Model/Scene Viewer
  * @author Tony Parisi / http://www.tonyparisi.com
  */
 
-SceneViewer = function(param)
+goog.provide('Vizi.Viewer');
+
+Vizi.Viewer = function(param)
 {
 	// Chain to superclass
 	Vizi.Application.call(this, param);
@@ -18,8 +21,8 @@ SceneViewer = function(param)
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : true;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
-	this.gridSize = param.gridSize || SceneViewer.DEFAULT_GRID_SIZE;
-	this.gridStepSize = param.gridStepSize || SceneViewer.DEFAULT_GRID_STEP_SIZE;	
+	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
+	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;	
 
 	// Set up backdrop objects for empty scene
 	this.initScene();
@@ -28,9 +31,9 @@ SceneViewer = function(param)
 	Vizi.Graphics.instance.enableShadows(true);
 }
 
-goog.inherits(SceneViewer, Vizi.Application);
+goog.inherits(Vizi.Viewer, Vizi.Application);
 
-SceneViewer.prototype.initScene = function()
+Vizi.Viewer.prototype.initScene = function()
 {
 	this.sceneRoot = new Vizi.Object;
 	this.addObject(this.sceneRoot);
@@ -56,7 +59,7 @@ SceneViewer.prototype.initScene = function()
 	this.mouseCallbacks = {};	
 }
 
-SceneViewer.prototype.runloop = function()
+Vizi.Viewer.prototype.runloop = function()
 {
 	var updateInterval = 1000;
 	
@@ -74,7 +77,7 @@ SceneViewer.prototype.runloop = function()
 	}
 }
 
-SceneViewer.prototype.replaceScene = function(data)
+Vizi.Viewer.prototype.replaceScene = function(data)
 {
 	// hack for now - do this for real after computing scene bounds
 	
@@ -182,7 +185,7 @@ SceneViewer.prototype.replaceScene = function(data)
 	this.calcSceneStats();
 }
 
-SceneViewer.prototype.addToScene = function(data)
+Vizi.Viewer.prototype.addToScene = function(data)
 {	
 	this.sceneRoot.addChild(data.scene);
 	
@@ -261,7 +264,7 @@ SceneViewer.prototype.addToScene = function(data)
 	this.calcSceneStats();
 }
 
-SceneViewer.prototype.createDefaultCamera = function() {
+Vizi.Viewer.prototype.createDefaultCamera = function() {
 	
 	var cam = this.controllerScript.viewpoint.camera.object;
 	cam.updateMatrixWorld();
@@ -275,7 +278,7 @@ SceneViewer.prototype.createDefaultCamera = function() {
 	return new Vizi.PerspectiveCamera({object:newCamera});
 }
 
-SceneViewer.prototype.copyCameraValues = function(oldCamera, newCamera)
+Vizi.Viewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 {
 	// for now, assume newCamera is in world space, this is too friggin hard
 	var cam = oldCamera.object;
@@ -295,13 +298,13 @@ SceneViewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 	newCamera.far = oldCamera.far;	
 }
 
-SceneViewer.prototype.useCamera = function(index) {
+Vizi.Viewer.prototype.useCamera = function(index) {
 	if (this.cameras && this.cameras[index]) {
 		this.copyCameraValues(this.cameras[index], this.camera);
 	}
 }
 
-SceneViewer.prototype.toggleLight = function(index)
+Vizi.Viewer.prototype.toggleLight = function(index)
 {
 	if (this.lights && this.lights[index])
 	{
@@ -326,7 +329,7 @@ SceneViewer.prototype.toggleLight = function(index)
 	}
 }
 
-SceneViewer.prototype.playAnimation = function(index, loop)
+Vizi.Viewer.prototype.playAnimation = function(index, loop)
 {
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
@@ -339,7 +342,7 @@ SceneViewer.prototype.playAnimation = function(index, loop)
 	}
 }
 
-SceneViewer.prototype.stopAnimation = function(index)
+Vizi.Viewer.prototype.stopAnimation = function(index)
 {
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
@@ -347,7 +350,7 @@ SceneViewer.prototype.stopAnimation = function(index)
 	}
 }
 
-SceneViewer.prototype.playAllAnimations = function()
+Vizi.Viewer.prototype.playAllAnimations = function()
 {
 	if (this.keyFrameAnimators)
 	{
@@ -360,7 +363,7 @@ SceneViewer.prototype.playAllAnimations = function()
 	}
 }
 
-SceneViewer.prototype.stopAllAnimations = function()
+Vizi.Viewer.prototype.stopAllAnimations = function()
 {
 	if (this.keyFrameAnimators)
 	{
@@ -372,13 +375,13 @@ SceneViewer.prototype.stopAllAnimations = function()
 	}
 }
 
-SceneViewer.prototype.setHeadlightOn = function(on)
+Vizi.Viewer.prototype.setHeadlightOn = function(on)
 {
 	this.controllerScript.headlight.intensity = on ? 1 : 0;
 	this.headlightOn = on;
 }
 
-SceneViewer.prototype.setGridOn = function(on)
+Vizi.Viewer.prototype.setGridOn = function(on)
 {
 	if (this.grid)
 	{
@@ -386,13 +389,13 @@ SceneViewer.prototype.setGridOn = function(on)
 	}
 }
 
-SceneViewer.prototype.setAmbientLightOn = function(on)
+Vizi.Viewer.prototype.setAmbientLightOn = function(on)
 {
 	this.ambientLight.intensity = on ? 1 : 0;
 	this.ambientLightOn = on;
 }
 
-SceneViewer.prototype.createGrid = function()
+Vizi.Viewer.prototype.createGrid = function()
 {
 	if (this.gridRoot && this.grid)
 	{
@@ -412,8 +415,8 @@ SceneViewer.prototype.createGrid = function()
 		geometry.vertices.push( new THREE.Vector3( i * step - size, floor,  size ) );
 	}
 
-	var line_material = new THREE.LineBasicMaterial( { color: SceneViewer.GRID_COLOR, 
-		opacity:SceneViewer.GRID_OPACITY } );
+	var line_material = new THREE.LineBasicMaterial( { color: Vizi.Viewer.GRID_COLOR, 
+		opacity:Vizi.Viewer.GRID_OPACITY } );
 	
 	var gridObject = new THREE.Line( geometry, line_material, THREE.LinePieces );
 	gridObject.ignorePick = true;
@@ -423,7 +426,7 @@ SceneViewer.prototype.createGrid = function()
 	this.gridRoot.addComponent(this.grid);
 }
 
-SceneViewer.prototype.fitToScene = function()
+Vizi.Viewer.prototype.fitToScene = function()
 {
 	function log10(val) {
 		  return Math.log(val) / Math.LN10;
@@ -487,7 +490,7 @@ SceneViewer.prototype.fitToScene = function()
 	this.createGrid();
 }
 
-SceneViewer.prototype.calcSceneStats = function()
+Vizi.Viewer.prototype.calcSceneStats = function()
 {
 	this.meshCount = 0;
 	this.faceCount = 0;
@@ -509,7 +512,7 @@ SceneViewer.prototype.calcSceneStats = function()
 	this.dispatchEvent("scenestats", this.sceneStats);	
 }
 
-SceneViewer.DEFAULT_GRID_SIZE = 100;
-SceneViewer.DEFAULT_GRID_STEP_SIZE = 1;
-SceneViewer.GRID_COLOR = 0x202020;
-SceneViewer.GRID_OPACITY = 0.2;
+Vizi.Viewer.DEFAULT_GRID_SIZE = 100;
+Vizi.Viewer.DEFAULT_GRID_STEP_SIZE = 1;
+Vizi.Viewer.GRID_COLOR = 0x202020;
+Vizi.Viewer.GRID_OPACITY = 0.2;

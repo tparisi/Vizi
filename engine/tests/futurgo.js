@@ -16,7 +16,7 @@ Futurgo = function(param) {
 }
 
 Futurgo.prototype.go = function() {
-	this.viewer = new SceneViewer({ container : this.container, showGrid : true });
+	this.viewer = new Vizi.Viewer({ container : this.container, showGrid : true });
 	this.loadURL(Futurgo.URL);
 	this.viewer.run();
 }

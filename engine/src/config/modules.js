@@ -44,11 +44,12 @@ goog.require('Vizi.SceneComponent');
 goog.require('Vizi.SceneUtils');
 goog.require('Vizi.SceneVisual');
 goog.require('Vizi.Transform');
+goog.require('Vizi.Visual');
 goog.require('Vizi.Script');
 goog.require('Vizi.System');
 goog.require('Vizi.Time');
 goog.require('Vizi.Timer');
-goog.require('Vizi.Visual');
+goog.require('Vizi.Viewer');
 
 /**
  * @constructor

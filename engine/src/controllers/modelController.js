@@ -39,6 +39,14 @@ Vizi.ModelControllerScript = function(param)
 	this._headlightOn = param.headlight;
 	
     Object.defineProperties(this, {
+    	camera: {
+			get : function() {
+				return this._camera;
+			},
+			set: function(camera) {
+				this.setCamera(camera);
+			}
+		},
     	center : {
     		get: function() {
     			return this.controls.center;
@@ -66,16 +74,17 @@ Vizi.ModelControllerScript.prototype.realize = function()
 	this.headlight = this._object.getComponent(Vizi.DirectionalLight);
 	this.headlight.intensity = this._headlightOn ? 1 : 0;
 	this.viewpoint = this._object.getChild(0);
-	this.camera = this.viewpoint.camera;
-		
-	this.camera.position.set(0, this.radius / 2, this.radius);
+	this._camera = this.viewpoint.camera;
+	this.defaultCamera = this._camera;
+	
+	this._camera.position.set(0, this.radius / 2, this.radius);
 	
 	this.createControls();
 }
 
 Vizi.ModelControllerScript.prototype.createControls = function()
 {
-	this.controls = new Vizi.OrbitControls(this.camera.object, Vizi.Graphics.instance.container);
+	this.controls = new Vizi.OrbitControls(this._camera.object, Vizi.Graphics.instance.container);
 	this.controls.enabled = this.enabled;
 	this.controls.userMinY = this.minY;
 	this.controls.userMinZoom = this.minZoom;
@@ -87,8 +96,13 @@ Vizi.ModelControllerScript.prototype.update = function()
 	this.controls.update();
 	if (this._headlightOn)
 	{
-		this.headlight.direction.copy(this.camera.position).negate();
+		this.headlight.direction.copy(this._camera.position).negate();
 	}	
+}
+
+Vizi.ModelControllerScript.prototype.setCamera = function(camera) {
+	this._camera = camera;
+	this.createControls();
 }
 
 Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
