@@ -50,7 +50,8 @@
 	Loading scene...
 	</div>
 	<div id="overlay" style="display:none">
-	Overlay text
+		<div id="overlayContents">overlay contents</div>
+		<div id="overlayLogo"></div>
 	</div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
@@ -63,12 +64,14 @@
    	var viewer = null;
    	var container = null;
    	var overlay = null;
+   	var overlayContents = null;
    	var part_materials = [];
    	
 	$(document).ready(function() {
 
 		initControls();
 		overlay = document.getElementById("overlay");
+		overlayContents = document.getElementById("overlayContents");
 		container = document.getElementById("container");		
 		viewer = new SceneViewer({ container : container, showGrid : true, headlight : false });
 		openFile("./models/vizi_mobile_tc01/vizi_mobile_tc01.json");
@@ -160,7 +163,7 @@
 			});
 		});
 
-		scene.map("body2", function(o) {
+		scene.map(/body2|rear_view_arm_L|rear_view_arm_R/, function(o) {
 			var picker = new Vizi.Picker;
 			picker.addEventListener("mouseover", onBodyMouseOver);
 			picker.addEventListener("mouseout", onBodyMouseOut);
@@ -314,14 +317,13 @@
 			
 	}
 
-	var glassHTML = "GLASS";
-	var bodyHTML = "BODY";
-	var wheelsHTML = "WHEELS";
+	var glassHTML = "LightAdjust&trade; Windshield - Automatically Changes to Match Day/Night Conditions";
+	var bodyHTML = "Titanium Alloy Frame - Lightweight for Speed, with the Highest Safety Rating";
+	var wheelsHTML = "LightSpeed&trade; Drive Train - Ride in High Style at High Speeds";
 	function showOverlay(html, e) {
 		overlay.style.display = 'block';
-		overlay.innerHTML=html;
-		overlay.style.left = e.pageX + "px";
-		overlay.style.top = e.pageY + "px";
+		overlayContents.innerHTML=html;
+		overlay.style.top = e.pageY + 40 + "px";
 	}
 
 	function hideOverlay() {

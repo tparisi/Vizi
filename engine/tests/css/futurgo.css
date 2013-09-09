@@ -221,10 +221,27 @@ body {
 }
 
 #overlay {
+	font-size:14px;
+	color:#CC0000;
 	z-index:2;
 	display:none;
-	border:1px solid;
-	width:150px;
-	height:200px;
+	width:180px;
+	left:66%;
 	position:absolute;
+	border:1px solid;
+}
+
+#overlayContents {
+	top:0px;
+	position:absolute;
+}
+
+#overlayLogo {
+	width: 100px;
+	height:22px;
+	bottom:0px;
+	left:1%;
+	position:absolute;
+	background:url(../images/Futurgo_site_assets/futurgo_logo_sm.png);
+	background-size:100% 100%;
 }
