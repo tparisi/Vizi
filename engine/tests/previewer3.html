@@ -59,18 +59,9 @@
 			<div id="headlight">
 				<input type="checkbox" name="headlight_cb" id="headlight_cb" checked onClick="onHeadlightChecked(this);"/><label>Headlight</label>
 			</div>
-			<div id="ambient_light">
-				<input type="checkbox" name="ambient_light_cb" id="ambient_light_cb" checked onClick="onAmbientLightChecked(this);"/><label>Ambient Light</label>
-			</div>
 			<div id="grid">
 				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
 			</div>
-			<div id="ground">
-				<input type="checkbox" name="ground_cb" id="ground_cb" checked onClick="onGroundChecked(this);"/><label>Ground</label>
-			</div>			
-			<div id="shadows">
-				<input type="checkbox" name="shadows_cb" id="shadows_cb" checked onClick="onShadowsChecked(this);"/><label>Shadows</label>
-			</div>			
 			</div>
 	 	</div>
 	</div>
@@ -78,12 +69,12 @@
 	<!--  file open dialog -->
 	<div id="fileOpenDialog" title="Open a File" style="display:none">
 	<p>Select a file in OBJ, DAE, JS (Three.js) or JSON (glTF)</p>
-	<div id="listing">
-		<label id="listingLabel">Available Scenes</label><br></br>
-		<select id="files" size="8"  ondblclick="openFile();">
-		</select>
+		<div id="listing">
+			<label id="listingLabel">Available Scenes</label><br></br>
+			<select id="files" size="8"  ondblclick="openFile();">
+			</select>
+		</div>
 		<button id="loadButton" onclick="openFile();">Open</button><br></br>
-	 </div>
 	</div>
 	
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
@@ -100,6 +91,8 @@
 	    		"./models/duck/duck.json",
 	    		"./models/rectangle/rectangle.dae",
 	    		"./models/rectangle/rectangle.json",
+	    		"./models/ball_chair/ball_chair.js",
+	    		"./models/egg_chair/eggchair.js",
 	           	];
 
    	var viewer = null;

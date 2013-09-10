@@ -50200,20 +50200,25 @@ Vizi.Loader.prototype.loadModel = function(url)
 		var loader = new loaderClass;
 		var that = this;
 		
-		loader.load(url, function (data) {
-			that.handleModelLoaded(url, data);
+		loader.load(url, function (geometry, materials) {
+			that.handleModelLoaded(url, geometry, materials);
 		});		
 	}
 }
 
-Vizi.Loader.prototype.handleModelLoaded = function(url, data)
+Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
 {
-	if (data.scene)
-	{
-		var material = new THREE.MeshFaceMaterial();
-		var mesh = new Vizi.Visual({geometry:data, material:material});
-		this.dispatchEvent("loaded", mesh);
-	}
+	// Create a new mesh with per-face materials
+	var material = new THREE.MeshFaceMaterial(materials);
+	var mesh = new THREE.Mesh( geometry, material  );
+	
+	var obj = new Vizi.Object;
+	var visual = new Vizi.Visual({object:mesh});
+	obj.addComponent(visual);
+
+	var result = { scene : obj, cameras: [], lights: [], keyFrameAnimators:[] };
+	
+	this.dispatchEvent("loaded", result);
 }
 
 Vizi.Loader.prototype.loadScene = function(url)
@@ -50242,7 +50247,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 			loaderClass = THREE.ColladaLoader;
 			break;
 		case 'JS' :
-			loaderClass = THREE.SceneLoader;
+			return this.loadModel(url);
 			break;
 		case 'JSON' :
 			loaderClass = THREE.glTFLoader;
@@ -50408,7 +50413,9 @@ Vizi.Viewer = function(param)
 	
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
+	this.ambientOn = (param.ambient !== undefined) ? param.ambient : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
+	this.showGround = (param.showGround !== undefined) ? param.showGround : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
@@ -50431,12 +50438,20 @@ Vizi.Viewer.prototype.initScene = function()
 	this.gridRoot = new Vizi.Object;
 	this.addObject(this.gridRoot);
 	this.grid = null;	
+	this.groundRoot = new Vizi.Object;
+	this.addObject(this.groundRoot);
+	this.ground = null;	
 	this.createGrid();
+	this.createGround();
 	
 	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
 
+	var ambientLightObject = new Vizi.Object;
+	this.ambientLight = new Vizi.AmbientLight({color:0xFFFFFF, intensity : this.ambientOn ? 1 : 0 });
+	this.addObject(ambientLightObject);
+	
 	this.scenes = [];
 	this.keyFrameAnimators = [];
 	this.keyFrameAnimatorNames = [];
@@ -50771,6 +50786,12 @@ Vizi.Viewer.prototype.setHeadlightOn = function(on)
 	this.headlightOn = on;
 }
 
+Vizi.Viewer.prototype.setAmbientLightOn = function(on)
+{
+	this.ambientLight.intensity = on ? 1 : 0;
+	this.ambientOn = on;
+}
+
 Vizi.Viewer.prototype.setGridOn = function(on)
 {
 	if (this.grid)
@@ -50814,6 +50835,31 @@ Vizi.Viewer.prototype.createGrid = function()
 	this.grid = new Vizi.Visual({ object : gridObject });
 
 	this.gridRoot.addComponent(this.grid);
+}
+
+Vizi.Viewer.prototype.createGround = function()
+{
+	if (this.groundRoot && this.ground)
+	{
+		 this.groundRoot.removeComponent(this.ground);
+	}
+
+	// ground
+	var groundMaterial = new THREE.MeshPhongMaterial({
+	        color: 0xffffff,
+	        ambient: 0x555555,
+	        shading: THREE.SmoothShading,
+	    });
+	var groundObject = new THREE.Mesh( new THREE.PlaneGeometry(1024, 1024), groundMaterial);
+	
+	groundObject.ignorePick = true;
+	groundObject.visible = this.showGround;
+	this.ground = new Vizi.Visual({ object : groundObject });
+	
+	this.groundRoot.addComponent(this.ground);
+	
+	this.groundRoot.transform.rotation.x = -Math.PI / 2;
+	this.groundRoot.transform.position.y = -0.05;
 }
 
 Vizi.Viewer.prototype.fitToScene = function()
@@ -50878,6 +50924,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 	this.controllerScript.walkSpeed = this.gridStepSize;	
 	
 	this.createGrid();
+	this.createGround();
 }
 
 Vizi.Viewer.prototype.calcSceneStats = function()

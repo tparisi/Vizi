@@ -18,6 +18,7 @@ Vizi.Viewer = function(param)
 	
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
+	this.ambientOn = (param.ambient !== undefined) ? param.ambient : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
@@ -47,6 +48,10 @@ Vizi.Viewer.prototype.initScene = function()
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
 
+	var ambientLightObject = new Vizi.Object;
+	this.ambientLight = new Vizi.AmbientLight({color:0xFFFFFF, intensity : this.ambientOn ? 1 : 0 });
+	this.addObject(ambientLightObject);
+	
 	this.scenes = [];
 	this.keyFrameAnimators = [];
 	this.keyFrameAnimatorNames = [];
@@ -379,6 +384,12 @@ Vizi.Viewer.prototype.setHeadlightOn = function(on)
 {
 	this.controllerScript.headlight.intensity = on ? 1 : 0;
 	this.headlightOn = on;
+}
+
+Vizi.Viewer.prototype.setAmbientLightOn = function(on)
+{
+	this.ambientLight.intensity = on ? 1 : 0;
+	this.ambientOn = on;
 }
 
 Vizi.Viewer.prototype.setGridOn = function(on)

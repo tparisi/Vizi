@@ -157,24 +157,8 @@ body {
 	position:absolute;
 }
 
-#ambient_light {
-	top: 40px;
-	width:200px;
-	position:absolute;
-}
-
 #grid {
-	top: 60px;
-	position:absolute;
-}
-
-#ground {
-	top: 80px;
-	position:absolute;
-}
-
-#shadows {
-	top: 100px;
+	top: 40px;
 	position:absolute;
 }
 
