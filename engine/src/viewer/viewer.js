@@ -18,7 +18,7 @@ Vizi.Viewer = function(param)
 	
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
-	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : true;
+	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
