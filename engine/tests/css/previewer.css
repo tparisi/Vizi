@@ -92,6 +92,12 @@ body {
 	padding-left: 6px;
 }
 
+#load_time_stats {
+	top:76px;
+	position:absolute;
+	padding-left: 8px;
+}
+
 #cameras {
 	height: 120px;
 	top: 100px;
