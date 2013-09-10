@@ -50409,13 +50409,12 @@ Vizi.Viewer = function(param)
 	this.lastFPSUpdateTime = 0;
 	
 	this.renderStats = { fps : 0 };
-	this.sceneStats = { meshCount : 0, faceCount : 0 };
+	this.sceneStats = { meshCount : 0, faceCount : 0, boundingBox:new THREE.Box3 };
 	
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.ambientOn = (param.ambient !== undefined) ? param.ambient : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
-	this.showGround = (param.showGround !== undefined) ? param.showGround : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
@@ -50438,11 +50437,7 @@ Vizi.Viewer.prototype.initScene = function()
 	this.gridRoot = new Vizi.Object;
 	this.addObject(this.gridRoot);
 	this.grid = null;	
-	this.groundRoot = new Vizi.Object;
-	this.addObject(this.groundRoot);
-	this.ground = null;	
 	this.createGrid();
-	this.createGround();
 	
 	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
@@ -50837,31 +50832,6 @@ Vizi.Viewer.prototype.createGrid = function()
 	this.gridRoot.addComponent(this.grid);
 }
 
-Vizi.Viewer.prototype.createGround = function()
-{
-	if (this.groundRoot && this.ground)
-	{
-		 this.groundRoot.removeComponent(this.ground);
-	}
-
-	// ground
-	var groundMaterial = new THREE.MeshPhongMaterial({
-	        color: 0xffffff,
-	        ambient: 0x555555,
-	        shading: THREE.SmoothShading,
-	    });
-	var groundObject = new THREE.Mesh( new THREE.PlaneGeometry(1024, 1024), groundMaterial);
-	
-	groundObject.ignorePick = true;
-	groundObject.visible = this.showGround;
-	this.ground = new Vizi.Visual({ object : groundObject });
-	
-	this.groundRoot.addComponent(this.ground);
-	
-	this.groundRoot.transform.rotation.x = -Math.PI / 2;
-	this.groundRoot.transform.position.y = -0.05;
-}
-
 Vizi.Viewer.prototype.fitToScene = function()
 {
 	function log10(val) {
@@ -50924,7 +50894,6 @@ Vizi.Viewer.prototype.fitToScene = function()
 	this.controllerScript.walkSpeed = this.gridStepSize;	
 	
 	this.createGrid();
-	this.createGround();
 }
 
 Vizi.Viewer.prototype.calcSceneStats = function()
@@ -50945,6 +50914,7 @@ Vizi.Viewer.prototype.calcSceneStats = function()
 
 	this.sceneStats.meshCount = this.meshCount;
 	this.sceneStats.faceCount = this.faceCount;
+	this.sceneStats.boundingBox = this.boundingBox;
 	
 	this.dispatchEvent("scenestats", this.sceneStats);	
 }

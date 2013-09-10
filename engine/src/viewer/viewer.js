@@ -14,7 +14,7 @@ Vizi.Viewer = function(param)
 	this.lastFPSUpdateTime = 0;
 	
 	this.renderStats = { fps : 0 };
-	this.sceneStats = { meshCount : 0, faceCount : 0 };
+	this.sceneStats = { meshCount : 0, faceCount : 0, boundingBox:new THREE.Box3 };
 	
 	// Tuck away prefs based on param
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
@@ -519,6 +519,7 @@ Vizi.Viewer.prototype.calcSceneStats = function()
 
 	this.sceneStats.meshCount = this.meshCount;
 	this.sceneStats.faceCount = this.faceCount;
+	this.sceneStats.boundingBox = this.boundingBox;
 	
 	this.dispatchEvent("scenestats", this.sceneStats);	
 }

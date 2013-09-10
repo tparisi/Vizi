@@ -21,7 +21,7 @@
 	<div id="controls">
 		<div id="stats">Scene Stats
 		<div id="render_stats">0 FPS</div>
-		<div id="scene_stats">0 meshes<br>0 faces</div>
+		<div id="scene_stats">0 meshes<br>0 faces<br></div>
 		</div>
 		<div id="cameras">Cameras
 			<div>
@@ -163,15 +163,6 @@
 		var scene = data.scene;
 		viewer.replaceScene(data);
 
-		var animators = [];
-		var i, len = data.keyFrameAnimators.length;
-		for (i = 0; i < len; i++) {
-//			data.keyFrameAnimators[i].loop = false; // true;
-//			data.keyFrameAnimators[i].start();
-		}
-
-		// data.cameras[1].active = true;
-
 		var loadTime = (Date.now() - loadStartTime) / 1000;
 		Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
 		
@@ -179,6 +170,11 @@
 		updateLightsList(viewer);
 		updateAnimationsList(viewer);
 		updateMiscControls(viewer);
+
+		if (viewer.cameraNames.length > 1) {
+			selectCamera(1);
+		}
+			
 	}
 
 	function onLoadProgress(progress)
@@ -194,9 +190,20 @@
 	}
 
 	function onSceneStats(stats, sceneStats) {
-		var meshesLabel = stats.meshCount > 1 ? " meshes<br>" : " mesh<br>";
-		var facesLabel = stats.faceCount > 1 ? " faces" : "face";
-		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel;
+		var meshesLabel = (stats.meshCount > 1 ? " meshes" : " mesh") + "<br>";
+		var facesLabel = (stats.faceCount > 1 ? " faces" : "face") + "<br>";
+		var boundingBoxLabel = "Bounds ";
+		var boundingBoxSize = "unknown<br>";
+		if (stats.boundingBox) {
+			var size = stats.boundingBox.size();
+			boundingBoxSize = 
+				"[" + size.x.toFixed(2) + ", " + 
+			size.y.toFixed(2) + ", " + 
+			size.z.toFixed(2) +
+			"]<br>";
+		}
+		sceneStats.innerHTML = stats.meshCount + meshesLabel + stats.faceCount + facesLabel +
+			boundingBoxLabel + boundingBoxSize;
 	}
 
 	function updateCamerasList(viewer)
@@ -229,9 +236,21 @@
 		for (i = 0; i < len; i++)
 		{
 			option = document.createElement("option");
-			var value = (lights[i] instanceof Vizi.AmbientLight) ? lights[i].color.getStyle() : 
+			var lightType = "unknown";
+			if (lights[i] instanceof Vizi.AmbientLight)
+				lightType = "Ambient";
+			else if (lights[i] instanceof Vizi.DirectionalLight)
+				lightType = "Directional";
+			else if (lights[i] instanceof Vizi.PointLight)
+				lightType = "Point";
+			else if (lights[i] instanceof Vizi.SpotLight)
+				lightType = "Spot";
+				
+			var value = (lights[i] instanceof Vizi.AmbientLight) ? lights[i].color.getHex() : 
 				lights[i].intensity;
-			option.text=lightNames[i] + "    [" + value + "]";
+			value = value ? "on" : "off";
+			
+			option.text=lightNames[i] + " [" + lightType + ", " + value + "]";
 			elt.add(option);
 		}		
 	}
@@ -270,10 +289,16 @@
 		}		
 	}
 	
-	function selectCamera()
+	function selectCamera(index)
 	{
 	    var select = document.getElementById("cameras_list");
-	    var index = select.selectedIndex;
+	    if (index === undefined) {
+		    index = select.selectedIndex;
+	    }
+	    else {
+		    select.selectedIndex = index;
+	    }
+	    
 		if (index >= 0) {
 			viewer.useCamera(index);
 		}
