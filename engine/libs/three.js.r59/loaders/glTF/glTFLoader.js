@@ -11,6 +11,7 @@ THREE.glTFLoader = function ( container, showStatus ) {
     this.meshesLoaded = 0;
     this.animationsRequested = 0;
     this.animationsLoaded = 0;
+    this.animations = [];
     THREE.Loader.call( this, showStatus );
 }
 
@@ -1142,8 +1143,9 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            var animation = new Animation();
                 animation.name = entryID;
 	            animation.onload = function() {
-	            	self.buildAnimation(animation);
+	            	// self.buildAnimation(animation);
 	            	theLoader.animationsLoaded++;
+	            	theLoader.animations.push(animation);
                     theLoader.checkComplete();
 	            };	            
 	            
@@ -1292,6 +1294,10 @@ THREE.glTFLoader.prototype.checkComplete = function() {
 	if (this.meshesLoaded == this.meshesRequested 
 			&& this.animationsLoaded == this.animationsRequested)
 	{
+		for (var i = 0; i < this.animationsLoaded; i++) {
+			var animation = this.animations[i];
+			this.loader.buildAnimation(animation);
+		}
 		this.callLoadedCallback();
 	}
 }
