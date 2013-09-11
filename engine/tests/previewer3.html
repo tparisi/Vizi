@@ -52,6 +52,7 @@
 				<button id="stopButton" onclick="stopAnimation();">Stop</button>
 				<button id="playAllButton" onclick="playAllAnimations();">Play All</button>
 				<button id="stopAllButton" onclick="stopAllAnimations();">Stop All</button>
+				<input type="checkbox" name="loop_cb" id="loop_cb" unchecked onClick="onLoopChecked(this);"/><label>Loop</label>
 			</div>
 		</div>
 		<div id="misc"> 
@@ -360,16 +361,16 @@
 		viewer.stopAllAnimations();
 	}
 
+	function onLoopChecked(elt)
+	{
+		viewer.setLoopAnimations(elt.checked);
+	}
+	
 	function onHeadlightChecked(elt)
 	{
 		viewer.setHeadlightOn(elt.checked);
 	}
 
-	function onAmbientLightChecked(elt)
-	{
-		viewer.setAmbientLightOn(elt.checked);
-	}
-		
 	function onGridChecked(elt)
 	{
 		viewer.setGridOn(elt.checked);

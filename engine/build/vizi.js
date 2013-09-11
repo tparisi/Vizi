@@ -50412,11 +50412,11 @@ Vizi.Viewer = function(param)
 	this.sceneStats = { meshCount : 0, faceCount : 0, boundingBox:new THREE.Box3 };
 	
 	// Tuck away prefs based on param
+	this.loopAnimations = (param.loopAnimations !== undefined) ? param.loopAnimations : false;
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
-	this.ambientOn = (param.ambient !== undefined) ? param.ambient : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
-
+	
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
 	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;	
 
@@ -50731,11 +50731,13 @@ Vizi.Viewer.prototype.toggleLight = function(index)
 
 Vizi.Viewer.prototype.playAnimation = function(index, loop)
 {
+	if (loop === undefined)
+		loop = this.loopAnimations;
+	
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
-		if (loop)
-			this.keyFrameAnimators[index].loop = true;
-		else
+		this.keyFrameAnimators[index].loop = loop;
+		if (!loop)
 			this.keyFrameAnimators[index].stop();
 
 		this.keyFrameAnimators[index].start();
@@ -50758,6 +50760,10 @@ Vizi.Viewer.prototype.playAllAnimations = function()
 		for (i = 0; i < len; i++)
 		{
 			this.keyFrameAnimators[i].stop();
+			
+			if (this.loopAnimations)
+				this.keyFrameAnimators[i].loop = true;
+			
 			this.keyFrameAnimators[i].start();
 		}
 	}
@@ -50775,16 +50781,15 @@ Vizi.Viewer.prototype.stopAllAnimations = function()
 	}
 }
 
+Vizi.Viewer.prototype.setLoopAnimations = function(on)
+{
+	this.loopAnimations = on;
+}
+
 Vizi.Viewer.prototype.setHeadlightOn = function(on)
 {
 	this.controllerScript.headlight.intensity = on ? 1 : 0;
 	this.headlightOn = on;
-}
-
-Vizi.Viewer.prototype.setAmbientLightOn = function(on)
-{
-	this.ambientLight.intensity = on ? 1 : 0;
-	this.ambientOn = on;
 }
 
 Vizi.Viewer.prototype.setGridOn = function(on)
