@@ -6023,6 +6023,8 @@ Vizi.Viewer.prototype.fitToScene = function()
 	var scale = this.sceneRoot._children[0].transform.object.scale;
 	var mat = new THREE.Matrix4().scale(scale);
 	this.boundingBox.applyMatrix4(mat);
+	
+	// For default camera setup-- small scenes (COLLADA, cm)
 	// heuristic, who knows ?
 	if (this.boundingBox.max.z < 1) {
 		this.controllerScript.camera.near = 0.01;
@@ -6032,7 +6034,6 @@ Vizi.Viewer.prototype.fitToScene = function()
 		this.controllerScript.controls.userPanSpeed = 1;
 	}
 	
-	
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
 	this.controllerScript.center = center;
 	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
@@ -6040,6 +6041,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 	this.controllerScript.camera.position.z *= 2;
 	this.cameras[0].position.copy(this.controllerScript.camera.position);
 
+	// Bounding box display
 	if (this.showBoundingBox) {
 		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 				this.boundingBox.max.y - this.boundingBox.min.y,
@@ -6050,9 +6052,8 @@ Vizi.Viewer.prototype.fitToScene = function()
 		this.sceneRoot.transform.object.add(cube);
 	}
 
-	return;
-	
-	var extent = this.boundingBox.max.clone().subSelf(this.boundingBox.min);
+	// Resize the grid
+	var extent = this.boundingBox.max.clone().sub(this.boundingBox.min);
 	
 	this.sceneRadius = extent.length();
 	
@@ -6060,20 +6061,6 @@ Vizi.Viewer.prototype.fitToScene = function()
 	
 	this.gridSize = scope;
 	this.gridStepSize = scope / 100;
-
-	var cx = (this.boundingBox.max.x + this.boundingBox.min.x) / 2;
-	var cy = (this.boundingBox.max.y + this.boundingBox.min.y) / 2;
-	var cz = (this.boundingBox.max.z + this.boundingBox.min.z) / 2;
-
-	var x = cx;
-	var y = cy + 1.6; //  + this.boundingBox.min.y;
-	var z = this.boundingBox.max.z + 10;
-	
-	this.controller.transform.position.set(cx, y, this.sceneRadius);
-	this.controllerScript.setCameraTurn(new THREE.Vector3);
-	this.controllerScript.setCameraTilt(new THREE.Vector3);
-	this.controllerScript.walkSpeed = this.gridStepSize;	
-	
 	this.createGrid();
 }
 
