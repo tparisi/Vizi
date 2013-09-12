@@ -1082,6 +1082,19 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
             }
         },
         
+        addNodeAnimationChannel : {
+        	value : function(name, channel) {
+        		if (!this.nodeAnimationChannels)
+        			this.nodeAnimationChannels = {};
+        		
+        		if (!this.nodeAnimationChannels[name]) {
+        			this.nodeAnimationChannels[name] = [];
+        		}
+        		
+        		this.nodeAnimationChannels[name].push(channel);
+        	},
+        },
+        
         buildAnimation: {
         	value : function(animation) {
         	
@@ -1119,6 +1132,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 			            					type : sampler.interpolation
 			            			};
 			            			
+			            			this.addNodeAnimationChannel(target.id, channel);
 			            			interps.push(interp);
 	            				}
 	            			}
