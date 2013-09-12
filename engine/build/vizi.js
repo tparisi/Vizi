@@ -44082,6 +44082,19 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         	},
         },
         
+        createAnimations : {
+        	value : function() {
+        		for (var name in this.nodeAnimationChannels) {
+        			var nodeAnimationChannels = this.nodeAnimationChannels[name];
+        			var i, len = nodeAnimationChannels.length;
+        			console.log(len + " animation channels for node " + name);
+        			console.log(nodeAnimationChannels);
+        			for (i = 0; i < len; i++) {
+        			}
+        		}
+        	}
+        },
+        
         buildAnimation: {
         	value : function(animation) {
         	
@@ -44299,6 +44312,7 @@ THREE.glTFLoader.prototype.checkComplete = function() {
 			var animation = this.animations[i];
 			this.loader.buildAnimation(animation);
 		}
+		this.loader.createAnimations();
 		this.callLoadedCallback();
 	}
 }
