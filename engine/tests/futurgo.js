@@ -16,7 +16,8 @@ Futurgo = function(param) {
 }
 
 Futurgo.prototype.go = function() {
-	this.viewer = new Vizi.Viewer({ container : this.container, showGrid : true });
+	this.viewer = new Vizi.Viewer({ container : this.container, showGrid : true,
+		allowPan: false, oneButton: true });
 	this.loadURL(Futurgo.URL);
 	this.viewer.run();
 }
@@ -115,12 +116,12 @@ window_front_open.matrix_window_front_open
 window_front_close.matrix_window_front_close
 */
 
-Futurgo.prototype.playAnimation = function(name, loop) {
+Futurgo.prototype.playAnimation = function(name, loop, reverse) {
 	var animationNames = this.viewer.keyFrameAnimatorNames;
 	var index = animationNames.indexOf(name);
 	if (index >= 0)
 	{
-		this.viewer.playAnimation(index, loop);
+		this.viewer.playAnimation(index, loop, reverse);
 	}
 }
 
@@ -136,15 +137,11 @@ Futurgo.prototype.stopAnimation = function(name) {
 Futurgo.prototype.playOpenAnimations = function() {	
 	this.playAnimation("window_rear_open.matrix_window_rear_open");
 	this.playAnimation("window_front_open.matrix_window_front_open");
-	this.playAnimation("animation_window_front_open");
-	this.playAnimation("animation_window_rear_open");
 }
 
 Futurgo.prototype.playCloseAnimations = function() {	
-	this.playAnimation("window_rear_close.matrix_window_rear_close");
-	this.playAnimation("window_front_close.matrix_window_front_close");
-	this.playAnimation("animation_window_front_close");
-	this.playAnimation("animation_window_rear_close");
+	this.playAnimation("window_rear_open.matrix_window_rear_open", false, true);
+	this.playAnimation("window_front_open.matrix_window_front_open", false, true);
 }
 
 Futurgo.prototype.toggleInterior = function() {
@@ -170,18 +167,12 @@ Futurgo.prototype.playWheelAnimations = function() {
 	this.playAnimation("wheel_L.matrix_wheel_L", true);
 	this.playAnimation("wheel_R.matrix_wheel_R", true);
 	this.playAnimation("wheel_front.matrix_wheel_front", true);
-	this.playAnimation("animation_wheel_front", true);
-	this.playAnimation("animation_wheel_L", true);
-	this.playAnimation("animation_wheel_R", true);
 }
 
 Futurgo.prototype.stopWheelAnimations = function() {
 	this.stopAnimation("wheel_L.matrix_wheel_L");
 	this.stopAnimation("wheel_R.matrix_wheel_R");
 	this.stopAnimation("wheel_front.matrix_wheel_front");
-	this.stopAnimation("animation_wheel_front");
-	this.stopAnimation("animation_wheel_L");
-	this.stopAnimation("animation_wheel_R");
 }
 
 Futurgo.prototype.toggleWheelAnimations = function() {
@@ -242,4 +233,4 @@ Futurgo.prototype.onMouseOut = function(what, event) {
 		this.mouseOutCallback(what, event);
 }
 
-Futurgo.URL = "./models/vizi_mobile_tc01/vizi_mobile_tc01.json";
+Futurgo.URL = "./models/vizi_mobile_tc01_new/vizi_mobile_tc01.json";

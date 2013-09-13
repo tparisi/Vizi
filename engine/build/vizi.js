@@ -43945,6 +43945,26 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                         m[3],  m[7],  m[11], m[15]
                     ));                    
                 }
+                else {
+                	var t = description.translation;
+                	var r = description.rotation;
+                	var s = description.scale;
+                	
+                	var position = t ? new THREE.Vector3(t[0], t[1], t[2]) :
+                		new THREE.Vector3;
+                	if (r) {
+                		convertAxisAngleToQuaternion(r, 1);
+                	}
+                	var rotation = r ? new THREE.Quaternion(r[0], r[1], r[2], r[3]) :
+                		new THREE.Quaternion;
+                	var scale = s ? new THREE.Vector3(s[0], s[1], s[2]) :
+                		new THREE.Vector3;
+                	
+                	var matrix = new THREE.Matrix4;
+                	matrix.compose(position, rotation, scale);
+                    threeNode.matrixAutoUpdate = false;
+                    threeNode.applyMatrix(matrix);                    
+                }
 
                 var self = this;
                 
@@ -44560,6 +44580,7 @@ THREE.glTFAnimation = function(interps)
 {
 	this.running = false;
 	this.loop = false;
+	this.direction = THREE.glTFAnimation.FORWARD_DIRECTION;
 	this.duration = 0;
 	this.startTime = 0;
 	this.interps = [];
@@ -44608,6 +44629,9 @@ THREE.glTFAnimation.prototype.update = function()
 	var deltat = (now - this.startTime) / 1000;
 	var t = deltat % this.duration;
 	var nCycles = Math.floor(deltat / this.duration);
+	if (this.direction == THREE.glTFAnimation.REVERSE_DIRECTION) {
+		t = this.duration - t;
+	}
 	
 	if (nCycles >= 1 && !this.loop)
 	{
@@ -44615,7 +44639,10 @@ THREE.glTFAnimation.prototype.update = function()
 		var i, len = this.interps.length;
 		for (i = 0; i < len; i++)
 		{
-			this.interps[i].interp(this.duration);
+			if (this.direction == THREE.glTFAnimation.REVERSE_DIRECTION)
+				this.interps[i].interp(0);
+			else
+				this.interps[i].interp(this.duration);
 		}
 		this.stop();
 		return;
@@ -44743,6 +44770,9 @@ THREE.glTFInterpolator.prototype.copyValue = function(target) {
 		target.copy(this.vec3);
 	}		
 }
+
+THREE.glTFAnimation.FORWARD_DIRECTION = 0;
+THREE.glTFAnimation.REVERSE_DIRECTION = 1;
 // tween.js - http://github.com/sole/tween.js
 'use strict';var TWEEN=TWEEN||function(){var a=[];return{REVISION:"10",getAll:function(){return a},removeAll:function(){a=[]},add:function(c){a.push(c)},remove:function(c){c=a.indexOf(c);-1!==c&&a.splice(c,1)},update:function(c){if(0===a.length)return!1;for(var b=0,d=a.length,c=void 0!==c?c:void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();b<d;)a[b].update(c)?b++:(a.splice(b,1),d--);return!0}}}();
 TWEEN.Tween=function(a){var c={},b={},d={},e=1E3,g=0,i=0,k=null,u=TWEEN.Easing.Linear.None,v=TWEEN.Interpolation.Linear,p=[],q=null,r=!1,s=null,t=null,j;for(j in a)c[j]=parseFloat(a[j],10);this.to=function(a,c){void 0!==c&&(e=c);b=a;return this};this.start=function(e){TWEEN.add(this);r=!1;k=void 0!==e?e:void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();k+=i;for(var f in b){if(b[f]instanceof Array){if(0===b[f].length)continue;b[f]=[a[f]].concat(b[f])}c[f]=
@@ -48042,8 +48072,6 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.oneButton = false;
 	
-	var self = this;
-	
 	// internals
 
 	var scope = this;
@@ -48230,19 +48258,19 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		event.preventDefault();
 
-		if ( event.button === 0 || (self.oneButton && event.button === 2)) {
+		if ( event.button === 0 || (scope.oneButton && event.button === 2)) {
 
 			state = STATE.ROTATE;
 
 			rotateStart.set( event.clientX, event.clientY );
 
-		} else if ( event.button === 1 ) {
+		} else if ( event.button === 1 && (scope.userZoom)) {
 
 			state = STATE.ZOOM;
 
 			zoomStart.set( event.clientX, event.clientY );
 
-		} else if ( event.button === 2 ) {
+		} else if ( event.button === 2 && (scope.userPan)) {
 
 			state = STATE.PAN;
 
@@ -49318,6 +49346,9 @@ Vizi.ModelControllerScript = function(param)
 	this.radius = param.radius || Vizi.ModelControllerScript.default_radius;
 	this.minRadius = param.minRadius || Vizi.ModelControllerScript.default_min_radius;
 	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
+	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
+	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this._headlightOn = param.headlight;
 	
     Object.defineProperties(this, {
@@ -49371,6 +49402,9 @@ Vizi.ModelControllerScript.prototype.createControls = function()
 	this.controls.userMinY = this.minY;
 	this.controls.userMinZoom = this.minZoom;
 	this.controls.userMaxZoom = this.maxZoom;
+	this.controls.oneButton = this.oneButton;
+	this.controls.userPan = this.allowPan;
+	this.controls.userZoom = this.allowZoom;
 }
 
 Vizi.ModelControllerScript.prototype.update = function()
@@ -49419,6 +49453,7 @@ Vizi.KeyFrameAnimator = function(param)
 	this.interpdata = param.interps || [];
 	this.animationData = param.animations;
 	this.running = false;
+	this.direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
 	this.duration = param.duration ? param.duration : Vizi.KeyFrameAnimator.default_duration;
 	this.loop = param.loop ? param.loop : false;
 }
@@ -49485,6 +49520,12 @@ Vizi.KeyFrameAnimator.prototype.start = function()
 		for (i = 0; i < len; i++)
 		{
 			this.animations[i].loop = this.loop;
+			if (this.animations[i] instanceof THREE.glTFAnimation) {
+				this.animations[i].direction = 
+					(this.direction == Vizi.KeyFrameAnimator.FORWARD_DIRECTION) ?
+						THREE.glTFAnimation.FORWARD_DIRECTION : 
+						THREE.glTFAnimation.REVERSE_DIRECTION;
+			}
 			this.animations[i].play(this.loop, 0);
 			this.endTime = this.startTime + this.animations[i].endTime / this.animations[i].timeScale;
 			if (isNaN(this.endTime))
@@ -49570,7 +49611,8 @@ Vizi.KeyFrameAnimator.prototype.updateAnimations = function()
 
 // Statics
 Vizi.KeyFrameAnimator.default_duration = 1000;
-goog.provide('Vizi.Camera');
+Vizi.KeyFrameAnimator.FORWARD_DIRECTION = 0;
+Vizi.KeyFrameAnimator.REVERSE_DIRECTION = 1;goog.provide('Vizi.Camera');
 goog.require('Vizi.SceneComponent');
 
 Vizi.Camera = function(param)
@@ -50450,7 +50492,9 @@ Vizi.Viewer = function(param)
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
-	
+	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
+	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
+	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
 	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;	
 
@@ -50473,7 +50517,8 @@ Vizi.Viewer.prototype.initScene = function()
 	this.grid = null;	
 	this.createGrid();
 	
-	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
+		allowPan:this.allowPan, allowZoom:this.allowZoom, oneButton:this.oneButton});
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
 
@@ -50763,7 +50808,7 @@ Vizi.Viewer.prototype.toggleLight = function(index)
 	}
 }
 
-Vizi.Viewer.prototype.playAnimation = function(index, loop)
+Vizi.Viewer.prototype.playAnimation = function(index, loop, reverse)
 {
 	if (loop === undefined)
 		loop = this.loopAnimations;
@@ -50771,6 +50816,13 @@ Vizi.Viewer.prototype.playAnimation = function(index, loop)
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
 		this.keyFrameAnimators[index].loop = loop;
+		if (reverse) {
+			this.keyFrameAnimators[index].direction = Vizi.KeyFrameAnimator.REVERSE_DIRECTION;
+		}
+		else {
+			this.keyFrameAnimators[index].direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
+		}
+		
 		if (!loop)
 			this.keyFrameAnimators[index].stop();
 
@@ -50786,8 +50838,11 @@ Vizi.Viewer.prototype.stopAnimation = function(index)
 	}
 }
 
-Vizi.Viewer.prototype.playAllAnimations = function()
+Vizi.Viewer.prototype.playAllAnimations = function(loop, reverse)
 {
+	if (loop === undefined)
+		loop = this.loopAnimations;
+	
 	if (this.keyFrameAnimators)
 	{
 		var i, len = this.keyFrameAnimators.length;
@@ -50795,8 +50850,15 @@ Vizi.Viewer.prototype.playAllAnimations = function()
 		{
 			this.keyFrameAnimators[i].stop();
 			
-			if (this.loopAnimations)
+			if (loop)
 				this.keyFrameAnimators[i].loop = true;
+
+			if (reverse) {
+				this.keyFrameAnimators[i].direction = Vizi.KeyFrameAnimator.REVERSE_DIRECTION;
+			}
+			else {
+				this.keyFrameAnimators[i].direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
+			}
 			
 			this.keyFrameAnimators[i].start();
 		}

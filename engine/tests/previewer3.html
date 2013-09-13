@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vizi Model Previewer</title>
+<title>Vizi Scene Previewer</title>
 	<link href="./css/previewer.css" rel="stylesheet" /> 
 	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 </head>
@@ -85,8 +85,8 @@
 	<script>
 
 	var urllist = [
-	       		"./models/vizi_mobile_tc01/vizi_mobile_tc01.json",
-	    		"./models/vizi_mobile_tc01/vizi_mobile_tc01.dae",
+	       		"./models/vizi_mobile_tc01_new/vizi_mobile_tc01.json",
+	    		"./models/vizi_mobile_tc01_new/vizi_mobile_tc01.dae",
 	    		"./models/frigate/frigate.dae",
 	    		"./models/frigate/frigate.json",
 	    		"./models/duck/duck.dae",
@@ -327,7 +327,7 @@
 	    var index = select.selectedIndex;
 		if (index >= 0)
 		{
-			viewer.playAnimation(index);
+			viewer.playAnimation(index, viewer.loopAnimations);
 		}
 	}
 		
@@ -337,7 +337,7 @@
 	    var index = select.selectedIndex;
 		if (index >= 0)
 		{
-			viewer.playAnimation(index);
+			viewer.playAnimation(index, viewer.loopAnimations);
 		}
 	}
 
@@ -353,7 +353,7 @@
 	
 	function playAllAnimations()
 	{
-		viewer.playAllAnimations();
+		viewer.playAllAnimations(viewer.loopAnimations);
 	}
 
 	function stopAllAnimations()

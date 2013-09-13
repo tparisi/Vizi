@@ -21,7 +21,9 @@ Vizi.Viewer = function(param)
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
-	
+	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
+	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
+	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
 	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;	
 
@@ -44,7 +46,8 @@ Vizi.Viewer.prototype.initScene = function()
 	this.grid = null;	
 	this.createGrid();
 	
-	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
+		allowPan:this.allowPan, allowZoom:this.allowZoom, oneButton:this.oneButton});
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
 
@@ -334,7 +337,7 @@ Vizi.Viewer.prototype.toggleLight = function(index)
 	}
 }
 
-Vizi.Viewer.prototype.playAnimation = function(index, loop)
+Vizi.Viewer.prototype.playAnimation = function(index, loop, reverse)
 {
 	if (loop === undefined)
 		loop = this.loopAnimations;
@@ -342,6 +345,13 @@ Vizi.Viewer.prototype.playAnimation = function(index, loop)
 	if (this.keyFrameAnimators && this.keyFrameAnimators[index])
 	{
 		this.keyFrameAnimators[index].loop = loop;
+		if (reverse) {
+			this.keyFrameAnimators[index].direction = Vizi.KeyFrameAnimator.REVERSE_DIRECTION;
+		}
+		else {
+			this.keyFrameAnimators[index].direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
+		}
+		
 		if (!loop)
 			this.keyFrameAnimators[index].stop();
 
@@ -357,8 +367,11 @@ Vizi.Viewer.prototype.stopAnimation = function(index)
 	}
 }
 
-Vizi.Viewer.prototype.playAllAnimations = function()
+Vizi.Viewer.prototype.playAllAnimations = function(loop, reverse)
 {
+	if (loop === undefined)
+		loop = this.loopAnimations;
+	
 	if (this.keyFrameAnimators)
 	{
 		var i, len = this.keyFrameAnimators.length;
@@ -366,8 +379,15 @@ Vizi.Viewer.prototype.playAllAnimations = function()
 		{
 			this.keyFrameAnimators[i].stop();
 			
-			if (this.loopAnimations)
+			if (loop)
 				this.keyFrameAnimators[i].loop = true;
+
+			if (reverse) {
+				this.keyFrameAnimators[i].direction = Vizi.KeyFrameAnimator.REVERSE_DIRECTION;
+			}
+			else {
+				this.keyFrameAnimators[i].direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
+			}
 			
 			this.keyFrameAnimators[i].start();
 		}

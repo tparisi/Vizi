@@ -45,8 +45,6 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.oneButton = false;
 	
-	var self = this;
-	
 	// internals
 
 	var scope = this;
@@ -233,19 +231,19 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		event.preventDefault();
 
-		if ( event.button === 0 || (self.oneButton && event.button === 2)) {
+		if ( event.button === 0 || (scope.oneButton && event.button === 2)) {
 
 			state = STATE.ROTATE;
 
 			rotateStart.set( event.clientX, event.clientY );
 
-		} else if ( event.button === 1 ) {
+		} else if ( event.button === 1 && (scope.userZoom)) {
 
 			state = STATE.ZOOM;
 
 			zoomStart.set( event.clientX, event.clientY );
 
-		} else if ( event.button === 2 ) {
+		} else if ( event.button === 2 && (scope.userPan)) {
 
 			state = STATE.PAN;
 

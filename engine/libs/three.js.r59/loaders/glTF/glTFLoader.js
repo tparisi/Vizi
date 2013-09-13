@@ -958,6 +958,26 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                         m[3],  m[7],  m[11], m[15]
                     ));                    
                 }
+                else {
+                	var t = description.translation;
+                	var r = description.rotation;
+                	var s = description.scale;
+                	
+                	var position = t ? new THREE.Vector3(t[0], t[1], t[2]) :
+                		new THREE.Vector3;
+                	if (r) {
+                		convertAxisAngleToQuaternion(r, 1);
+                	}
+                	var rotation = r ? new THREE.Quaternion(r[0], r[1], r[2], r[3]) :
+                		new THREE.Quaternion;
+                	var scale = s ? new THREE.Vector3(s[0], s[1], s[2]) :
+                		new THREE.Vector3;
+                	
+                	var matrix = new THREE.Matrix4;
+                	matrix.compose(position, rotation, scale);
+                    threeNode.matrixAutoUpdate = false;
+                    threeNode.applyMatrix(matrix);                    
+                }
 
                 var self = this;
                 

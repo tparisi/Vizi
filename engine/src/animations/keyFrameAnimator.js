@@ -16,6 +16,7 @@ Vizi.KeyFrameAnimator = function(param)
 	this.interpdata = param.interps || [];
 	this.animationData = param.animations;
 	this.running = false;
+	this.direction = Vizi.KeyFrameAnimator.FORWARD_DIRECTION;
 	this.duration = param.duration ? param.duration : Vizi.KeyFrameAnimator.default_duration;
 	this.loop = param.loop ? param.loop : false;
 }
@@ -82,6 +83,12 @@ Vizi.KeyFrameAnimator.prototype.start = function()
 		for (i = 0; i < len; i++)
 		{
 			this.animations[i].loop = this.loop;
+			if (this.animations[i] instanceof THREE.glTFAnimation) {
+				this.animations[i].direction = 
+					(this.direction == Vizi.KeyFrameAnimator.FORWARD_DIRECTION) ?
+						THREE.glTFAnimation.FORWARD_DIRECTION : 
+						THREE.glTFAnimation.REVERSE_DIRECTION;
+			}
 			this.animations[i].play(this.loop, 0);
 			this.endTime = this.startTime + this.animations[i].endTime / this.animations[i].timeScale;
 			if (isNaN(this.endTime))
@@ -167,3 +174,5 @@ Vizi.KeyFrameAnimator.prototype.updateAnimations = function()
 
 // Statics
 Vizi.KeyFrameAnimator.default_duration = 1000;
+Vizi.KeyFrameAnimator.FORWARD_DIRECTION = 0;
+Vizi.KeyFrameAnimator.REVERSE_DIRECTION = 1;

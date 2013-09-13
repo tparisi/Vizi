@@ -36,6 +36,9 @@ Vizi.ModelControllerScript = function(param)
 	this.radius = param.radius || Vizi.ModelControllerScript.default_radius;
 	this.minRadius = param.minRadius || Vizi.ModelControllerScript.default_min_radius;
 	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
+	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
+	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this._headlightOn = param.headlight;
 	
     Object.defineProperties(this, {
@@ -89,6 +92,9 @@ Vizi.ModelControllerScript.prototype.createControls = function()
 	this.controls.userMinY = this.minY;
 	this.controls.userMinZoom = this.minZoom;
 	this.controls.userMaxZoom = this.maxZoom;
+	this.controls.oneButton = this.oneButton;
+	this.controls.userPan = this.allowPan;
+	this.controls.userZoom = this.allowZoom;
 }
 
 Vizi.ModelControllerScript.prototype.update = function()
