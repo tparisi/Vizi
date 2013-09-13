@@ -164,6 +164,30 @@ THREE.glTFInterpolator.prototype.interp = function(t)
 			this.vec3.set(this.values[0], this.values[1], this.values[2]);
 		}
 	}
+	else if (t < this.keys[0])
+	{
+		if (this.isRot) {
+			this.quat1.set(this.values[0],
+					this.values[01],
+					this.values[2],
+					this.values[3]);
+			this.quat2.set(this.values[4],
+					this.values[5],
+					this.values[6],
+					this.values[7]);
+			THREE.Quaternion.slerp(this.quat1, this.quat2, this.quat3, t / this.keys[0]);
+		}
+		else {
+			this.vec3.set(this.values[0],
+					this.values[1],
+					this.values[2]);
+			this.vec2.set(this.values[3],
+					this.values[4],
+					this.values[5]);
+
+			this.vec3.lerp(this.vec2, t / this.keys[0]);
+		}
+	}
 	else if (t >= this.keys[this.count - 1])
 	{
 		if (this.isRot) {

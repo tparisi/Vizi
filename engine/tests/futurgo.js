@@ -233,4 +233,4 @@ Futurgo.prototype.onMouseOut = function(what, event) {
 		this.mouseOutCallback(what, event);
 }
 
-Futurgo.URL = "./models/vizi_mobile_tc01_new/vizi_mobile_tc01.json";
+Futurgo.URL = "./models/futurgo/futurgo.json";
