@@ -2739,6 +2739,8 @@ Vizi.PointLight = function(param)
 	
 	Vizi.Light.call(this, param);
 	
+	this.positionVec = new THREE.Vector3;
+	
 	if (param.object) {
 		this.object = param.object; 
 	}
@@ -2773,8 +2775,10 @@ Vizi.PointLight.prototype.update = function()
 {
 	if (this.object)
 	{
-		//var worldmat = this.object.parent.matrixWorld;
-		//this.position.applyMatrix4(worldmat);
+		this.positionVec.set(0, 0, 0);
+		var worldmat = this.object.parent.matrixWorld;
+		this.positionVec.applyMatrix4(worldmat);
+		this.position.copy(this.positionVec);
 	}
 	
 	// Update the rest
