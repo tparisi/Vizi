@@ -41,8 +41,8 @@ Vizi.PointLight.prototype.update = function()
 {
 	if (this.object)
 	{
-		var worldmat = this.object.parent.matrixWorld;
-		this.position.applyMatrix4(worldmat);
+		//var worldmat = this.object.parent.matrixWorld;
+		//this.position.applyMatrix4(worldmat);
 	}
 	
 	// Update the rest

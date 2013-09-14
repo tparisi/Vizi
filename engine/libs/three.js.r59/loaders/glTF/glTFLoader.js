@@ -1120,10 +1120,10 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         		for (var name in this.nodeAnimationChannels) {
         			var nodeAnimationChannels = this.nodeAnimationChannels[name];
         			var i, len = nodeAnimationChannels.length;
-        			console.log(" animation channels for node " + name);
-        			for (i = 0; i < len; i++) {
-        				console.log(nodeAnimationChannels[i]);
-        			}
+        			//console.log(" animation channels for node " + name);
+        			//for (i = 0; i < len; i++) {
+        			//	console.log(nodeAnimationChannels[i]);
+        			//}
 	            	var anim = new THREE.glTFAnimation(nodeAnimationChannels);
 	            	anim.name = "animation_" + name;
 	            	this.animations.push(anim);        				
