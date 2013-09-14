@@ -283,17 +283,6 @@
 		elt.checked = viewer.headlightOn;
 	}
 
-	function useCamera(name) {
-		var cameraNames = viewer.cameraNames;
-		var i, len = cameraNames.length;
-		for (i = 0; i < len; i++) {
-			if (cameraNames[i] == name) {
-				viewer.useCamera(i);
-				break;
-			}
-		}		
-	}
-	
 	function selectCamera(index)
 	{
 	    var select = document.getElementById("cameras_list");

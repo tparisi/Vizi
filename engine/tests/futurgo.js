@@ -98,14 +98,7 @@ Futurgo.prototype.onLoadProgress = function(progress)
 }
 
 Futurgo.prototype.useCamera = function(name) {
-	var cameraNames = this.viewer.cameraNames;
-	var i, len = cameraNames.length;
-	for (i = 0; i < len; i++) {
-		if (cameraNames[i] == name) {
-			this.viewer.useCamera(i);
-			break;
-		}
-	}		
+	this.viewer.useCamera(name);
 }
 
 /*
@@ -149,14 +142,14 @@ Futurgo.prototype.toggleInterior = function() {
 	var that = this;
 	if (this.vehicleOpen) {
 		this.playOpenAnimations();
-		return;
+//		return;
 		setTimeout(function() {
 			that.useCamera("interior");
 		}, 2000);
 	}
 	else {
 		this.playCloseAnimations();
-		return;
+//		return;
 		setTimeout(function() {
 			that.useCamera("setup");
 		}, 2000);

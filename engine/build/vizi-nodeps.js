@@ -5889,8 +5889,18 @@ Vizi.Viewer.prototype.copyCameraValues = function(oldCamera, newCamera)
 	newCamera.far = oldCamera.far;	
 }
 
-Vizi.Viewer.prototype.useCamera = function(index) {
-	if (this.cameras && this.cameras[index]) {
+Vizi.Viewer.prototype.useCamera = function(id) {
+
+	var index = id;
+	
+	if (typeof(id) == "string") {
+		var cameraNames = this.cameraNames;
+		if (this.cameraNames) {
+			index = this.cameraNames.indexOf(id);
+		}
+	}
+
+	if (index >= 0 && this.cameras && this.cameras[index]) {
 		this.copyCameraValues(this.cameras[index], this.camera);
 	}
 }
