@@ -128,13 +128,13 @@ Futurgo.prototype.stopAnimation = function(name) {
 }
 
 Futurgo.prototype.playOpenAnimations = function() {	
-	this.playAnimation("window_rear_open.matrix_window_rear_open");
-	this.playAnimation("window_front_open.matrix_window_front_open");
+	this.playAnimation("animation_window_rear_open");
+	this.playAnimation("animation_window_front_open");
 }
 
 Futurgo.prototype.playCloseAnimations = function() {	
-	this.playAnimation("window_rear_open.matrix_window_rear_open", false, true);
-	this.playAnimation("window_front_open.matrix_window_front_open", false, true);
+	this.playAnimation("animation_window_rear_open", false, true);
+	this.playAnimation("animation_window_front_open", false, true);
 }
 
 Futurgo.prototype.toggleInterior = function() {
@@ -142,14 +142,14 @@ Futurgo.prototype.toggleInterior = function() {
 	var that = this;
 	if (this.vehicleOpen) {
 		this.playOpenAnimations();
-//		return;
+		return;
 		setTimeout(function() {
 			that.useCamera("interior");
 		}, 2000);
 	}
 	else {
 		this.playCloseAnimations();
-//		return;
+		return;
 		setTimeout(function() {
 			that.useCamera("setup");
 		}, 2000);
@@ -157,15 +157,15 @@ Futurgo.prototype.toggleInterior = function() {
 }
 
 Futurgo.prototype.playWheelAnimations = function() {
-	this.playAnimation("wheel_L.matrix_wheel_L", true);
-	this.playAnimation("wheel_R.matrix_wheel_R", true);
-	this.playAnimation("wheel_front.matrix_wheel_front", true);
+	this.playAnimation("animation_wheel_L", true);
+	this.playAnimation("animation_wheel_R", true);
+	this.playAnimation("animation_wheel_front", true);
 }
 
 Futurgo.prototype.stopWheelAnimations = function() {
-	this.stopAnimation("wheel_L.matrix_wheel_L");
-	this.stopAnimation("wheel_R.matrix_wheel_R");
-	this.stopAnimation("wheel_front.matrix_wheel_front");
+	this.stopAnimation("animation_wheel_L");
+	this.stopAnimation("animation_wheel_R");
+	this.stopAnimation("animation_wheel_front");
 }
 
 Futurgo.prototype.toggleWheelAnimations = function() {

@@ -44133,6 +44133,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            			if (output && output.data) {
 	            				
 	            				var target = channel.target;
+	            				animation.name = "animation_" + target.id;
 	            				var node = this.resources.getEntry(target.id);
 	            				if (node) {
 
