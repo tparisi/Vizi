@@ -1103,7 +1103,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         },
         
         addNodeAnimationChannel : {
-        	value : function(name, channel) {
+        	value : function(name, channel, interp) {
         		if (!this.nodeAnimationChannels)
         			this.nodeAnimationChannels = {};
         		
@@ -1111,7 +1111,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         			this.nodeAnimationChannels[name] = [];
         		}
         		
-        		this.nodeAnimationChannels[name].push(channel);
+        		this.nodeAnimationChannels[name].push(interp);
         	},
         },
         
@@ -1120,10 +1120,13 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         		for (var name in this.nodeAnimationChannels) {
         			var nodeAnimationChannels = this.nodeAnimationChannels[name];
         			var i, len = nodeAnimationChannels.length;
-        			console.log(len + " animation channels for node " + name);
-        			console.log(nodeAnimationChannels);
+        			console.log(" animation channels for node " + name);
         			for (i = 0; i < len; i++) {
+        				console.log(nodeAnimationChannels[i]);
         			}
+	            	var anim = new THREE.glTFAnimation(nodeAnimationChannels);
+	            	anim.name = "animation_" + name;
+	            	this.animations.push(anim);        				
         		}
         	}
         },
@@ -1146,7 +1149,6 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 	            			if (output && output.data) {
 	            				
 	            				var target = channel.target;
-	            				animation.name = "animation_" + target.id;
 	            				var node = this.resources.getEntry(target.id);
 	            				if (node) {
 
@@ -1166,20 +1168,13 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 			            					type : sampler.interpolation
 			            			};
 			            			
-			            			this.addNodeAnimationChannel(target.id, channel);
+			            			this.addNodeAnimationChannel(target.id, channel, interp);
 			            			interps.push(interp);
 	            				}
 	            			}
 	            		}
 	            	}
-	            }
-	            
-	            if (interps.length)
-	            {
-	            	var anim = new THREE.glTFAnimation(interps);
-	            	anim.name = animation.name;
-	            	this.animations.push(anim);
-	            }
+	            }	            
         	}
         },
         
