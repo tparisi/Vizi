@@ -50518,6 +50518,7 @@ Vizi.Viewer = function(param)
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
+	this.showBoundingBoxes = (param.showBoundingBoxes !== undefined) ? param.showBoundingBoxes : false;
 	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : false;
@@ -50591,6 +50592,8 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 	{
 		this.sceneRoot.removeChild(this.scenes[i]);
 	}
+	
+	this.sceneRoot.removeComponent(this.sceneRoot.findNode(Vizi.Decoration));
 	
 	this.scenes = [data.scene];
 	this.sceneRoot.addChild(data.scene);
@@ -50932,6 +50935,15 @@ Vizi.Viewer.prototype.setGridOn = function(on)
 	}
 }
 
+Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
+{
+	this.showBoundingBoxes = !this.showBoundingBoxes;
+	var that = this;
+	this.sceneRoot.map(Vizi.Decoration, function(o) {
+		o.object.visible = that.showBoundingBoxes;
+	});
+}
+
 Vizi.Viewer.prototype.setAmbientLightOn = function(on)
 {
 	this.ambientLight.intensity = on ? 1 : 0;
@@ -50998,7 +51010,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 	this.cameras[0].position.copy(this.controllerScript.camera.position);
 
 	// Bounding box display
-	if (this.showBoundingBox) {
+	if (true) {
 		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 				this.boundingBox.max.y - this.boundingBox.min.y,
 				this.boundingBox.max.z - this.boundingBox.min.z);
@@ -51009,6 +51021,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 //		cube.position.add(center);
 		this.sceneRoot.addComponent(decoration);
 		decoration.position.add(center);
+		decoration.object.visible = this.showBoundingBoxes;
 		
 		this.sceneRoot.map(Vizi.Object, function(o) {
 			var visuals = o.visuals;
@@ -51030,6 +51043,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 
 					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
 					decoration.position.add(center);
+					decoration.object.visible = this.showBoundingBoxes;
 				}
 			}
 		});

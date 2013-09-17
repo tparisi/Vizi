@@ -64,6 +64,9 @@
 			<div id="grid">
 				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
 			</div>
+			<div id="boundingBoxes">
+				<input type="checkbox" name="bbox_cb" id="bbox_cb" unchecked onClick="onBoundingBoxesChecked(this);"/><label>Bounding Box</label>
+			</div>
 			</div>
 	 	</div>
 	</div>
@@ -370,6 +373,11 @@
 		viewer.setGridOn(elt.checked);
 	}
 	
+	function onBoundingBoxesChecked(elt)
+	{
+		viewer.setBoundingBoxesOn(elt.checked);
+	}
+
 	
 	</script>
 	
