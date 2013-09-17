@@ -49695,7 +49695,7 @@ Vizi.Camera.prototype.lookAt = function(v)
 
 Vizi.Camera.DEFAULT_POSITION = new THREE.Vector3(0, 0, 10);
 Vizi.Camera.DEFAULT_NEAR = 1;
-Vizi.Camera.DEFAULT_FAR = 4000;
+Vizi.Camera.DEFAULT_FAR = 10000;
 goog.provide('Vizi.PerspectiveCamera');
 goog.require('Vizi.Camera');
 
