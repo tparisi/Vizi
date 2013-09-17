@@ -506,9 +506,36 @@ Vizi.Viewer.prototype.fitToScene = function()
 				this.boundingBox.max.y - this.boundingBox.min.y,
 				this.boundingBox.max.z - this.boundingBox.min.z);
 		var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
-		var cube = new THREE.Mesh(geo, mat);
-		cube.position.add(center);
-		this.sceneRoot.transform.object.add(cube);
+		var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+		// decoration.position.add(center);
+//		var cube = new THREE.Mesh(geo, mat);
+//		cube.position.add(center);
+		this.sceneRoot.addComponent(decoration);
+		decoration.position.add(center);
+		
+		this.sceneRoot.map(Vizi.Object, function(o) {
+			var visuals = o.visuals;
+				if (visuals) {
+				var i, len = visuals.length;
+				for (i = 0; i < len; i++) {
+					var visual = visuals[i];
+					if (!visual.geometry.boundingBox)
+						visual.geometry.computeBoundingBox();
+
+					var bbox = visual.geometry.boundingBox;
+					
+					var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+							bbox.max.y - bbox.min.y,
+							bbox.max.z - bbox.min.z);
+					var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
+					var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+					o.addComponent(decoration);
+
+					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+					decoration.position.add(center);
+				}
+			}
+		});
 	}
 
 	// Resize the grid
