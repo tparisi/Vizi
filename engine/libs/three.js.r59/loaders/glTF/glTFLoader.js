@@ -923,6 +923,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
             			
             			case "spot " :
             				light = new THREE.SpotLight(color);
+    						light.position.set(0, 0, 1);
             			break;
             			
             			case "ambient" : 

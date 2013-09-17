@@ -87,6 +87,10 @@
 	var urllist = [
 	    		"./models/futurgo/futurgo.dae",
 	       		"./models/futurgo/futurgo.json",
+	       		"./models/missile/missile.dae",
+	       		"./models/missile/missile-fixed.dae",
+	       		"./models/missile/missile.json",
+	       		"./models/missile/missile-fixed.json",
 	    		"./models/vizi_mobile_tc01_newer/vizi_mobile_tc01.dae",
 	    		"./models/vizi_mobile_tc01_newer/vizi_mobile_tc01.json",
 	    		"./models/frigate/frigate.dae",
@@ -107,7 +111,7 @@
 		var sceneStats = document.getElementById("scene_stats");
 		
 		viewer = new Vizi.Viewer({ container : container, showGrid : true, headlight : true,
-			showBoundingBox : false });
+			showBoundingBox : true });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
@@ -165,7 +169,6 @@
 		var loadStatus = document.getElementById("loadStatus");
 		loadStatus.style.display = 'none';		
 
-		var scene = data.scene;
 		viewer.replaceScene(data);
 
 		var loadTime = (Date.now() - loadStartTime) / 1000;

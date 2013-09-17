@@ -6,6 +6,7 @@ Vizi.SpotLight = function(param)
 	param = param || {};
 
 	this.scaledDir = new THREE.Vector3;
+	this.positionVec = new THREE.Vector3;
 	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.SpotLight.DEFAULT_CAST_SHADOWS;
 	
 	Vizi.Light.call(this, param);
@@ -13,7 +14,7 @@ Vizi.SpotLight = function(param)
 	if (param.object) {
 		this.object = param.object; 
 		this.direction = param.object.position.clone().normalize().negate();
-		this.targetPos = param.object.target.clone();
+		this.targetPos = param.object.target.position.clone();
 		this.shadowDarkness = param.object.shadowDarkness;
 	}
 	else {
@@ -72,15 +73,16 @@ Vizi.SpotLight.prototype.update = function()
 	// Really bizarre semantics
 	if (this.object)
 	{
+		this.positionVec.set(0, 0, 0);
+		var worldmat = this.object.parent.matrixWorld;
+		this.positionVec.applyMatrix4(worldmat);
+		this.position.copy(this.positionVec);
+
 		this.scaledDir.copy(this.direction);
 		this.scaledDir.multiplyScalar(Vizi.Light.DEFAULT_RANGE);
 		this.targetPos.copy(this.position);
 		this.targetPos.add(this.scaledDir);	
-		this.object.target.position.copy(this.targetPos);
-		
-		var worldmat = this.object.parent.matrixWorld;
-		this.position.applyMatrix4(worldmat);
-		this.object.target.position.applyMatrix4(worldmat);
+		// this.object.target.position.copy(this.targetPos);
 		
 		this.updateShadows();
 	}

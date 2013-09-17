@@ -875,6 +875,7 @@ THREE.ColladaLoader = function () {
 					case 'spot':
 
 						light = new THREE.SpotLight( color, intensity, distance, angle, exponent );
+						light.position.set(0, 0, 1);
 						break;
 
 					case 'ambient':
