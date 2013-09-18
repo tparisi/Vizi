@@ -873,7 +873,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 		{
                 			// N.B.: if no aspect ratio supplied, assume 1?
 	                		if (!aspect_ratio)
-	                			aspect_ratio = 4 / 3; // container.offsetWidth / container.offsetHeight;
+	                			aspect_ratio = container.offsetWidth / container.offsetHeight; // 4 / 3; // 
 	                		
                 			// According to COLLADA spec...
                 			// aspect_ratio = xfov / yfov
