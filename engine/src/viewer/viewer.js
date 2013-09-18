@@ -128,7 +128,7 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 	
 	this.cameras = [];
 	this.cameraNames = [];
-	this.cameras.push(this.createDefaultCamera());
+	this.cameras.push(this.controllerScript.viewpoint.camera); // this.createDefaultCamera());
 	this.camera = this.controllerScript.viewpoint.camera;
 	this.controllerScript.viewpoint.name = "[default]";
 	this.cameraNames.push("[default]");
@@ -321,7 +321,9 @@ Vizi.Viewer.prototype.useCamera = function(id) {
 	}
 
 	if (index >= 0 && this.cameras && this.cameras[index]) {
-		this.copyCameraValues(this.cameras[index], this.camera);
+		this.cameras[index].active = true;
+//		this.controllerScript.camera = this.cameras[index];
+//		this.copyCameraValues(this.cameras[index], this.camera);
 	}
 }
 

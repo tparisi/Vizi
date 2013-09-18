@@ -78,7 +78,10 @@ Vizi.SceneComponent.prototype.addToScene = function() {
 			var parent = this._object.transform ? this._object.transform.object : scene;
 			
 			if (parent) {
-			    parent.add(this.object);
+				
+			    if (parent != this.object.parent)
+			    	 parent.add(this.object);
+			    
 			    this.object.data = this; // backpointer for picking and such
 			}
 			else {

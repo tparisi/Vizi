@@ -26,7 +26,7 @@ Vizi.Camera = function(param)
 	
 	this._active = param.active || false;
 	var position = param.position || Vizi.Camera.DEFAULT_POSITION;
-    this.position.copy(position);	
+    //this.position.copy(position);	
 }
 
 goog.inherits(Vizi.Camera, Vizi.SceneComponent);

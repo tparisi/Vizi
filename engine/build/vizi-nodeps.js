@@ -2450,7 +2450,10 @@ Vizi.SceneComponent.prototype.addToScene = function() {
 			var parent = this._object.transform ? this._object.transform.object : scene;
 			
 			if (parent) {
-			    parent.add(this.object);
+				
+			    if (parent != this.object.parent)
+			    	 parent.add(this.object);
+			    
 			    this.object.data = this; // backpointer for picking and such
 			}
 			else {
@@ -4753,7 +4756,7 @@ Vizi.Camera = function(param)
 	
 	this._active = param.active || false;
 	var position = param.position || Vizi.Camera.DEFAULT_POSITION;
-    this.position.copy(position);	
+    //this.position.copy(position);	
 }
 
 goog.inherits(Vizi.Camera, Vizi.SceneComponent);
@@ -5712,7 +5715,7 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 	
 	this.cameras = [];
 	this.cameraNames = [];
-	this.cameras.push(this.createDefaultCamera());
+	this.cameras.push(this.controllerScript.viewpoint.camera); // this.createDefaultCamera());
 	this.camera = this.controllerScript.viewpoint.camera;
 	this.controllerScript.viewpoint.name = "[default]";
 	this.cameraNames.push("[default]");
@@ -5905,7 +5908,9 @@ Vizi.Viewer.prototype.useCamera = function(id) {
 	}
 
 	if (index >= 0 && this.cameras && this.cameras[index]) {
-		this.copyCameraValues(this.cameras[index], this.camera);
+		this.cameras[index].active = true;
+//		this.controllerScript.camera = this.cameras[index];
+//		this.copyCameraValues(this.cameras[index], this.camera);
 	}
 }
 

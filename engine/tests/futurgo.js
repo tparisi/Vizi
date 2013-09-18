@@ -39,7 +39,7 @@ Futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 	var scene = data.scene;
 	this.viewer.replaceScene(data);
 
-	this.useCamera("setup");
+	// this.useCamera("setup");
 
 	// Add entry fade behavior to the windows
 	var that = this;
