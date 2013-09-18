@@ -49345,9 +49345,6 @@ Vizi.Prefabs.ModelController = function(param)
 	var controllerScript = new Vizi.ModelControllerScript(param);
 	controller.addComponent(controllerScript);
 
-	var timer = new Vizi.Timer( { duration : 3333 } );
-	controller.addComponent(timer);
-
 	var viewpoint = new Vizi.Object;
 	var camera = new Vizi.PerspectiveCamera({active:param.active, fov: param.fov});
 	viewpoint.addComponent(camera);
