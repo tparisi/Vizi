@@ -52,6 +52,14 @@ Vizi.Viewer.prototype.initScene = function()
 	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
 	this.addObject(this.controller);
 
+	var viewpoint = new Vizi.Object;
+	this.defaultCamera = new Vizi.PerspectiveCamera({active:true});
+	viewpoint.addComponent(this.defaultCamera);
+	viewpoint.name = "[default]";
+	this.addObject(viewpoint);
+
+	this.controllerScript.addCamera(this.defaultCamera);
+	
 	var ambientLightObject = new Vizi.Object;
 	this.ambientLight = new Vizi.AmbientLight({color:0xFFFFFF, intensity : this.ambientOn ? 1 : 0 });
 	this.addObject(ambientLightObject);
@@ -128,12 +136,11 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 	
 	this.cameras = [];
 	this.cameraNames = [];
-	this.cameras.push(this.controllerScript.viewpoint.camera); // this.createDefaultCamera());
-	this.camera = this.controllerScript.viewpoint.camera;
-	this.controllerScript.viewpoint.name = "[default]";
+	this.cameras.push(this.defaultCamera);
+	this.camera = this.defaultCamera;
 	this.cameraNames.push("[default]");
 
-	this.controllerScript.viewpoint.camera.active = true;
+	this.controllerScript.camera.active = true;
 	
 	if (data.cameras)
 	{
@@ -146,6 +153,8 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 			this.cameras.push(camera);
 			this.cameraNames.push(camera._object.name);
 		}
+		
+		this.controllerScript.addCameras(data.cameras);
 	}
 	
 	this.lights = [];
