@@ -61,6 +61,9 @@
 			<div id="headlight">
 				<input type="checkbox" name="headlight_cb" id="headlight_cb" checked onClick="onHeadlightChecked(this);"/><label>Headlight</label>
 			</div>
+			<div id="flipY">
+				<input type="checkbox" name="flipY_cb" id="flipY_cb" unchecked onClick="onFlipYChecked(this);"/><label>Flip Y</label>
+			</div>
 			<div id="grid">
 				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
 			</div>
@@ -116,7 +119,7 @@
 		var sceneStats = document.getElementById("scene_stats");
 		
 		viewer = new Vizi.Viewer({ container : container, showGrid : true, headlight : true,
-			showBoundingBox : true });
+			showBoundingBox : true, flipY : false });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
@@ -370,6 +373,11 @@
 		viewer.setHeadlightOn(elt.checked);
 	}
 
+	function onFlipYChecked(elt)
+	{
+		viewer.setFlipY(elt.checked);
+	}
+		
 	function onGridChecked(elt)
 	{
 		viewer.setGridOn(elt.checked);

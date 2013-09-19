@@ -50528,7 +50528,8 @@ Vizi.Viewer = function(param)
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : false;
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
-	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;	
+	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;
+	this.flipY = (param.flipY !== undefined) ? param.flipY : false;
 
 	// Set up backdrop objects for empty scene
 	this.initScene();
@@ -50543,6 +50544,9 @@ Vizi.Viewer.prototype.initScene = function()
 {
 	this.sceneRoot = new Vizi.Object;
 	this.addObject(this.sceneRoot);
+	if (this.flipY) {
+		this.sceneRoot.transform.rotation.x = -Math.PI / 2;
+	}
 
 	this.gridRoot = new Vizi.Object;
 	this.addObject(this.gridRoot);
@@ -50962,6 +50966,16 @@ Vizi.Viewer.prototype.setAmbientLightOn = function(on)
 {
 	this.ambientLight.intensity = on ? 1 : 0;
 	this.ambientLightOn = on;
+}
+
+Vizi.Viewer.prototype.setFlipY = function(flip) {
+	this.flipY = flip;
+	if (this.flipY) {
+		this.sceneRoot.transform.rotation.x = -Math.PI / 2;
+	}
+	else {
+		this.sceneRoot.transform.rotation.x = 0;
+	}
 }
 
 Vizi.Viewer.prototype.createGrid = function()

@@ -164,6 +164,12 @@ body {
 	position:absolute;
 }
 
+#flipY {
+	top: 20px;
+	left: 80px;
+	position:absolute;
+}
+
 #grid {
 	top: 40px;
 	position:absolute;
