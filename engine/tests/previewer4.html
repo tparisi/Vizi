@@ -5,6 +5,7 @@
 <title>Vizi Scene Previewer</title>
 	<link href="./css/previewer.css" rel="stylesheet" /> 
 	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
+	<link href="../libs/dynatree-1.2.4/ui.dynatree.vizi.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="menubar" class="ui-widget-header ui-corner-all">
@@ -19,11 +20,14 @@
 	<div id="prompt">
 	</div>
 	<div id="controls">
-		<div id="stats">Scene Stats
+		<div id="stats">Stats
 		<div id="render_stats">0 FPS</div>
-		<div id="scene_stats">0 meshes<br>0 faces<br></div>
+		<div id="scene_stats">0 meshes<br>0 faces<br>Bounds [ ]<br></div>
 		</div>
-		<div id="load_time_stats"></div>
+		<div id="load_time_stats">Load time:</div>
+		<div id="scene_graph">Scene
+			<div id="scene_tree"></div>
+		</div>
 		<div id="cameras">Cameras
 			<div>
 				<select id="cameras_list" size="5" ondblclick="selectCamera();">
@@ -87,7 +91,9 @@
 	
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
+    <script src="../libs/dynatree-1.2.4/jquery.dynatree-1.2.4.js"></script>
 	<script src="../build/vizi.js"></script>
+	<script src="sceneTree.js"></script>
 	<script>
 
 	var urllist = [
@@ -124,7 +130,8 @@
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
 		buildFileList();
-		
+		initSceneTree();
+				
 		viewer.run();
 	}
 	);
@@ -183,7 +190,8 @@
 		var loadTimeStats = document.getElementById("load_time_stats");
 		loadTimeStats.innerHTML = "Load time: " + loadTime.toFixed(2) + " seconds."
 		// Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
-		
+
+		updateSceneTree(viewer);
 		updateCamerasList(viewer);
 		updateLightsList(viewer);
 		updateAnimationsList(viewer);
@@ -203,6 +211,46 @@
 		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
 	}
 
+	function initSceneTree() {
+		// Initialize the tree inside the <div>element.
+		// The tree structure is read from the contained <ul> tag.
+		$("#scene_tree").dynatree({
+			imagePath: "./images/previewer_skin/",
+			title: "Scene Graph",
+			minExpandLevel: 2,
+			onActivate: function(node) {
+				$("#echoActive").text(node.data.title);
+//				alert(node.getKeyPath());
+				if( node.data.url )
+					window.open(node.data.url, node.data.target);
+			},
+			onDeactivate: function(node) {
+				$("#echoSelected").text("-");
+			},
+			onFocus: function(node) {
+				$("#echoFocused").text(node.data.title);
+			},
+			onBlur: function(node) {
+				$("#echoFocused").text("-");
+			},
+			onLazyRead: function(node){
+				var fakeJsonResult = [
+					{ title: 'Lazy node 1', isLazy: true },
+					{ title: 'Simple node 2', select: true }
+				];
+//				alert ("Let's pretend we're using this AJAX response to load the branch:\n " + jsonResult);
+				function fakeAjaxResponse() {
+					return function() {
+						node.addChild(fakeJsonResult);
+						// Remove the 'loading...' status:
+						node.setLazyNodeStatus(DTNodeStatus_Ok);
+					};
+				}
+				window.setTimeout(fakeAjaxResponse(), 1500);
+			}
+		});
+	}
+	
 	function onRenderStats(stats, renderStats) {
 		renderStats.innerHTML = stats.fps + " FPS";
 	}
@@ -224,6 +272,24 @@
 			boundingBoxLabel + boundingBoxSize;
 	}
 
+	function updateSceneTree(viewer) {
+
+		// Sample: add an hierarchic branch using code.
+		// This is how we would add tree nodes programatically
+		var rootNode = $("#scene_tree").dynatree("getRoot");
+		rootNode.removeChildren();
+		var initMessage = rootNode.addChild({
+			title: "Initializing...",
+			isFolder: false,
+		});
+		
+		setTimeout(function() {
+			rootNode.removeChild(initMessage);
+			rootNode.expand(false);
+			buildSceneTree(viewer.scenes[0], rootNode);
+		}, 1000);
+	}
+	
 	function updateCamerasList(viewer)
 	{
 		var elt = document.getElementById('cameras_list');

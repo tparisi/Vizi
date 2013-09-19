@@ -86,21 +86,39 @@ body {
 #render_stats {
 	padding-top: 3px;
 	padding-left: 6px;
+	font-weight:normal;
 }
 
 #scene_stats {
 	padding-left: 6px;
+	font-weight:normal;
 }
 
 #load_time_stats {
-	top:76px;
+	top:88px;
 	position:absolute;
 	padding-left: 8px;
+	font-weight:normal;
+}
+
+#scene_graph {
+	height: 150px;
+	top: 110px;
+	position:absolute;
+	width: 98%;
+	margin:2px;
+}
+
+#scene_tree {
+	position:absolute;
+	width: 98%;
+	height:98%;
+	border:1px solid;
 }
 
 #cameras {
 	height: 120px;
-	top: 100px;
+	top: 280px;
 	position:absolute;
 	width: 98%;
 	margin:2px;
@@ -116,7 +134,7 @@ body {
 
 #lights {
 	height: 120px;
-	top: 240px;
+	top: 390px;
 	position:absolute;
 	width: 98%;
 	margin:2px;
@@ -132,7 +150,7 @@ body {
 
 #animations {
 	height: 120px;
-	top: 360px;
+	top: 500px;
 	position:absolute;
 	width: 98%;
 	margin:2px;
@@ -148,7 +166,7 @@ body {
 
 #misc {
 	height: 40px;
-	top: 520px;
+	top: 670px;
 	position:absolute;
 	margin:2px;
 	width:98%;
