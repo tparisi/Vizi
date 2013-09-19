@@ -4455,10 +4455,10 @@ Vizi.ModelControllerScript = function(param)
 
 	this.radius = param.radius || Vizi.ModelControllerScript.default_radius;
 	this.minRadius = param.minRadius || Vizi.ModelControllerScript.default_min_radius;
-	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
+	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this._headlightOn = param.headlight;
 	this.cameras = [];
 	this.controlsList = [];
@@ -4478,6 +4478,14 @@ Vizi.ModelControllerScript = function(param)
     		},
     		set: function(c) {
     			this.controls.center.copy(c);
+    		}
+    	},
+    	enabled : {
+    		get: function() {
+    			return this._enabled;
+    		},
+    		set: function(v) {
+    			this.setEnabled(v);
     		}
     	},
         headlightOn: {
@@ -4500,45 +4508,9 @@ Vizi.ModelControllerScript.prototype.realize = function()
 	this.headlight.intensity = this._headlightOn ? 1 : 0;
 }
 
-Vizi.ModelControllerScript.prototype.addCamera = function(camera) {
-	this.cameras.push(camera);
-	if (this.camera == null) {
-		this._camera = camera;
-		
-		this._camera.position.set(0, this.radius / 2, this.radius);
-		
-	}
-	
-	var controls = this.createControls(camera);
-	this.controlsList.push(controls);
-	if (this.controls == null) {
-		this.controls = controls;
-	}
-}
-
-Vizi.ModelControllerScript.prototype.addCameras = function(cameras) {
-	this.cameras = this.cameras.concat(cameras);
-	if (this.camera == null) {
-		this._camera = cameras[0];
-		
-		this._camera.position.set(0, this.radius / 2, this.radius);
-	}
-	
-	var i, len = this.cameras.length;
-	for (i = 0; i < len; i++) {
-		var controls = this.createControls(this.cameras[i]);
-
-		this.controlsList.push(controls);
-		if (this.controls == null) {
-			this.controls = controls;
-		}
-	}
-}
-
 Vizi.ModelControllerScript.prototype.createControls = function(camera)
 {
 	var controls = new Vizi.OrbitControls(camera.object, Vizi.Graphics.instance.container);
-	controls.enabled = this.enabled;
 	controls.userMinY = this.minY;
 	controls.userMinZoom = this.minZoom;
 	controls.userMaxZoom = this.maxZoom;
@@ -4554,24 +4526,14 @@ Vizi.ModelControllerScript.prototype.update = function()
 	this.controls.update();
 	if (this._headlightOn)
 	{
-//		this.headlight.direction.copy(this._camera.position).negate();
+		this.headlight.direction.copy(this._camera.position).negate();
 	}	
 }
 
 Vizi.ModelControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
-	this.createControls();
-}
-
-Vizi.ModelControllerScript.prototype.useCamera = function(camera) {
-	this._camera = camera;
-	this._camera.active = true;
-	var index = this.cameras.indexOf(camera);
-	if (index) {
-		this.controls.enabled = false;
-		this.controls = this.controlsList[index];
-		this.controls.enabled = true;
-	}
+	this._camera.position.set(0, this.radius / 2, this.radius);
+	this.controls = this.createControls(camera);
 }
 
 Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
@@ -4580,6 +4542,12 @@ Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
 	if (this.headlight) {
 		this.headlight.intensity = on ? 1 : 0;
 	}
+}
+
+Vizi.ModelControllerScript.prototype.setEnabled = function(enabled)
+{
+	this._enabled = enabled;
+	this.controls.enabled = enabled;
 }
 
 Vizi.ModelControllerScript.default_radius = 10;
@@ -5682,7 +5650,7 @@ Vizi.Viewer.prototype.initScene = function()
 	viewpoint.name = "[default]";
 	this.addObject(viewpoint);
 
-	this.controllerScript.addCamera(this.defaultCamera);
+	this.controllerScript.camera = this.defaultCamera;
 	
 	var ambientLightObject = new Vizi.Object;
 	this.ambientLight = new Vizi.AmbientLight({color:0xFFFFFF, intensity : this.ambientOn ? 1 : 0 });
@@ -5764,6 +5732,7 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 	this.camera = this.defaultCamera;
 	this.cameraNames.push("[default]");
 
+	this.controllerScript.camera = this.defaultCamera;
 	this.controllerScript.camera.active = true;
 	
 	if (data.cameras)
@@ -5776,9 +5745,7 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 			
 			this.cameras.push(camera);
 			this.cameraNames.push(camera._object.name);
-		}
-		
-		this.controllerScript.addCameras(data.cameras);
+		}		
 	}
 	
 	this.lights = [];
@@ -5954,9 +5921,8 @@ Vizi.Viewer.prototype.useCamera = function(id) {
 	}
 
 	if (index >= 0 && this.cameras && this.cameras[index]) {
-		this.controllerScript.useCamera(this.cameras[index]);
-//		this.controllerScript.camera = this.cameras[index];
-//		this.copyCameraValues(this.cameras[index], this.camera);
+		this.cameras[index].active = true;
+		this.controllerScript.enabled = (index == 0);
 	}
 }
 
