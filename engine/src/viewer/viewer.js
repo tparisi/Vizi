@@ -330,7 +330,7 @@ Vizi.Viewer.prototype.useCamera = function(id) {
 	}
 
 	if (index >= 0 && this.cameras && this.cameras[index]) {
-		this.cameras[index].active = true;
+		this.controllerScript.useCamera(this.cameras[index]);
 //		this.controllerScript.camera = this.cameras[index];
 //		this.copyCameraValues(this.cameras[index], this.camera);
 	}

@@ -32,6 +32,7 @@ Vizi.ModelControllerScript = function(param)
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this._headlightOn = param.headlight;
 	this.cameras = [];
+	this.controlsList = [];
 	
     Object.defineProperties(this, {
     	camera: {
@@ -77,7 +78,12 @@ Vizi.ModelControllerScript.prototype.addCamera = function(camera) {
 		
 		this._camera.position.set(0, this.radius / 2, this.radius);
 		
-		this.createControls();
+	}
+	
+	var controls = this.createControls(camera);
+	this.controlsList.push(controls);
+	if (this.controls == null) {
+		this.controls = controls;
 	}
 }
 
@@ -87,21 +93,31 @@ Vizi.ModelControllerScript.prototype.addCameras = function(cameras) {
 		this._camera = cameras[0];
 		
 		this._camera.position.set(0, this.radius / 2, this.radius);
-		
-		this.createControls();
+	}
+	
+	var i, len = this.cameras.length;
+	for (i = 0; i < len; i++) {
+		var controls = this.createControls(this.cameras[i]);
+
+		this.controlsList.push(controls);
+		if (this.controls == null) {
+			this.controls = controls;
+		}
 	}
 }
 
-Vizi.ModelControllerScript.prototype.createControls = function()
+Vizi.ModelControllerScript.prototype.createControls = function(camera)
 {
-	this.controls = new Vizi.OrbitControls(this._camera.object, Vizi.Graphics.instance.container);
-	this.controls.enabled = this.enabled;
-	this.controls.userMinY = this.minY;
-	this.controls.userMinZoom = this.minZoom;
-	this.controls.userMaxZoom = this.maxZoom;
-	this.controls.oneButton = this.oneButton;
-	this.controls.userPan = this.allowPan;
-	this.controls.userZoom = this.allowZoom;
+	var controls = new Vizi.OrbitControls(camera.object, Vizi.Graphics.instance.container);
+	controls.enabled = this.enabled;
+	controls.userMinY = this.minY;
+	controls.userMinZoom = this.minZoom;
+	controls.userMaxZoom = this.maxZoom;
+	controls.oneButton = this.oneButton;
+	controls.userPan = this.allowPan;
+	controls.userZoom = this.allowZoom;
+	
+	return controls;
 }
 
 Vizi.ModelControllerScript.prototype.update = function()
@@ -109,13 +125,24 @@ Vizi.ModelControllerScript.prototype.update = function()
 	this.controls.update();
 	if (this._headlightOn)
 	{
-		this.headlight.direction.copy(this._camera.position).negate();
+//		this.headlight.direction.copy(this._camera.position).negate();
 	}	
 }
 
 Vizi.ModelControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.createControls();
+}
+
+Vizi.ModelControllerScript.prototype.useCamera = function(camera) {
+	this._camera = camera;
+	this._camera.active = true;
+	var index = this.cameras.indexOf(camera);
+	if (index) {
+		this.controls.enabled = false;
+		this.controls = this.controlsList[index];
+		this.controls.enabled = true;
+	}
 }
 
 Vizi.ModelControllerScript.prototype.setHeadlightOn = function(on)
