@@ -50961,7 +50961,7 @@ Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
 	this.showBoundingBoxes = !this.showBoundingBoxes;
 	var that = this;
 	this.sceneRoot.map(Vizi.Decoration, function(o) {
-		if (o._object._id != that.highlightedObject._id) {
+		if (!that.highlightedObject || (o._object._id != that.highlightedObject._id)) {
 			o.object.visible = that.showBoundingBoxes;
 		}
 	});
@@ -51078,7 +51078,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 				this.boundingBox.max.y - this.boundingBox.min.y,
 				this.boundingBox.max.z - this.boundingBox.min.z);
-		var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
+		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
 		var decoration = new Vizi.Decoration({geometry:geo, material:mat});
 		// decoration.position.add(center);
 //		var cube = new THREE.Mesh(geo, mat);
@@ -51101,7 +51101,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 					var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
 							bbox.max.y - bbox.min.y,
 							bbox.max.z - bbox.min.z);
-					var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent:true, wireframe:true, opacity:.2})
+					var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
 					var decoration = new Vizi.Decoration({geometry:geo, material:mat});
 					o.addComponent(decoration);
 
