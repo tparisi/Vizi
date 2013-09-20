@@ -502,8 +502,10 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 
 	var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
 		wireframe:true, opacity:1})
-	
-	this.highlightDecoration = new Vizi.Decoration({geometry:geo, material:mat});
+
+	var mesh = new THREE.Mesh(geo, mat);
+	mesh.ignorePick = true;	
+	this.highlightDecoration = new Vizi.Decoration({object:mesh});
 	object.addComponent(this.highlightDecoration);
 
 	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
@@ -576,8 +578,10 @@ Vizi.Viewer.prototype.fitToScene = function()
 		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 				this.boundingBox.max.y - this.boundingBox.min.y,
 				this.boundingBox.max.z - this.boundingBox.min.z);
-		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-		var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2});
+		var mesh = new THREE.Mesh(geo, mat)
+		mesh.ignorePick = true;
+		var decoration = new Vizi.Decoration({object:mesh});
 		// decoration.position.add(center);
 //		var cube = new THREE.Mesh(geo, mat);
 //		cube.position.add(center);
@@ -600,7 +604,9 @@ Vizi.Viewer.prototype.fitToScene = function()
 							bbox.max.y - bbox.min.y,
 							bbox.max.z - bbox.min.z);
 					var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-					var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+					var mesh = new THREE.Mesh(geo, mat)
+					mesh.ignorePick = true;
+					var decoration = new Vizi.Decoration({object:mesh});
 					o.addComponent(decoration);
 
 					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);

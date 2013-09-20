@@ -129,7 +129,7 @@
 		var sceneStats = document.getElementById("scene_stats");
 		
 		viewer = new Vizi.Viewer({ container : container, showGrid : true, headlight : true,
-			showBoundingBox : true, flipY : false });
+			showBoundingBox : true, flipY : false, oneButton: true });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
@@ -204,7 +204,8 @@
 		if (viewer.cameraNames.length > 1) {
 			selectCamera(1);
 		}
-			
+
+		addRollovers(viewer, data.scene);	
 	}
 
 	function onLoadProgress(progress)
@@ -222,6 +223,10 @@
 			imagePath: "./images/previewer_skin/",
 			title: "Scene Graph",
 			minExpandLevel: 2,
+			selectMode: 1,
+			onDblClick: function(node) {
+				openSceneNode(viewer, node);
+			},
 			onActivate: function(node) {
 				$("#echoActive").text(node.data.title);
 				selectSceneNode(viewer, node);
@@ -444,6 +449,44 @@
 		viewer.setBoundingBoxesOn(elt.checked);
 	}
 
+	function onPickerMouseOver(viewer, o, event) {
+//		console.log("Mouse over: ", o.name);
+	}
+
+	function onPickerMouseOut(viewer, o, event) {
+//		console.log("Mouse out: ", o.name);
+	}
+
+	function onPickerMouseUp(viewer, o, event) {
+//		console.log("Mouse up: ", o.name);
+		if (event.button == 0) {
+			viewer.highlightObject(o);
+			selectSceneNodeFromId(viewer, o._id);
+		}
+	}
+	
+	function addRollover(viewer, o) {
+		var picker = new Vizi.Picker;
+		picker.addEventListener("mouseover", function(event) { onPickerMouseOver(viewer, o, event); });
+		picker.addEventListener("mouseout", function(event) { onPickerMouseOut(viewer, o, event); });
+		picker.addEventListener("mouseup", function(event) { onPickerMouseUp(viewer, o, event); });
+		o.addComponent(picker);
+	}
+	
+	function addRollovers(viewer, scene) {
+		scene.map(Vizi.Object, function(o) {
+			addRollover(viewer, o);
+		});
+	}
+
+	function openSceneNode(viewer, node) {
+		setTimeout(function() {
+			var info = sceneNodeInfo(viewer, node);
+			if (info.object) {
+				alert("Object: " + info.object);
+			}
+		}, 10);
+	}
 	
 	</script>
 	

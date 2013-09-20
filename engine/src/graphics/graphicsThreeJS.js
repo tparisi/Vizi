@@ -315,7 +315,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
 	
     Vizi.Mouse.instance.onMouseMove(evt);
     
@@ -337,7 +337,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
 	
     Vizi.Mouse.instance.onMouseDown(evt);
     
@@ -359,7 +359,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
     
     Vizi.Mouse.instance.onMouseUp(evt);
     

@@ -48745,7 +48745,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
 	
     Vizi.Mouse.instance.onMouseMove(evt);
     
@@ -48767,7 +48767,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
 	
     Vizi.Mouse.instance.onMouseDown(evt);
     
@@ -48789,7 +48789,7 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty };
+	    	elementX : eltx, elementY : elty, button:event.button };
     
     Vizi.Mouse.instance.onMouseUp(evt);
     
@@ -49915,8 +49915,7 @@ Vizi.Picker.prototype.onMouseMove = function(event)
 		this.lastHitPoint.copy(event.point);
 		if (event.normal)
 			this.lastHitNormal.copy(event.normal);
-		else
-			this.lastHitNormal = null;
+
 		this.dispatchEvent("mousemove", event);
 	}
 }
@@ -49926,8 +49925,6 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 	this.lastHitPoint.copy(event.point);
 	if (event.normal)
 		this.lastHitNormal.copy(event.normal);
-	else
-		this.lastHitNormal = null;
 	
     this.dispatchEvent("mousedown", event);
 }
@@ -51004,8 +51001,10 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 
 	var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
 		wireframe:true, opacity:1})
-	
-	this.highlightDecoration = new Vizi.Decoration({geometry:geo, material:mat});
+
+	var mesh = new THREE.Mesh(geo, mat);
+	mesh.ignorePick = true;	
+	this.highlightDecoration = new Vizi.Decoration({object:mesh});
 	object.addComponent(this.highlightDecoration);
 
 	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
@@ -51078,8 +51077,10 @@ Vizi.Viewer.prototype.fitToScene = function()
 		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
 				this.boundingBox.max.y - this.boundingBox.min.y,
 				this.boundingBox.max.z - this.boundingBox.min.z);
-		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-		var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2});
+		var mesh = new THREE.Mesh(geo, mat)
+		mesh.ignorePick = true;
+		var decoration = new Vizi.Decoration({object:mesh});
 		// decoration.position.add(center);
 //		var cube = new THREE.Mesh(geo, mat);
 //		cube.position.add(center);
@@ -51102,7 +51103,9 @@ Vizi.Viewer.prototype.fitToScene = function()
 							bbox.max.y - bbox.min.y,
 							bbox.max.z - bbox.min.z);
 					var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-					var decoration = new Vizi.Decoration({geometry:geo, material:mat});
+					var mesh = new THREE.Mesh(geo, mat)
+					mesh.ignorePick = true;
+					var decoration = new Vizi.Decoration({object:mesh});
 					o.addComponent(decoration);
 
 					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);

@@ -49,8 +49,7 @@ Vizi.Picker.prototype.onMouseMove = function(event)
 		this.lastHitPoint.copy(event.point);
 		if (event.normal)
 			this.lastHitNormal.copy(event.normal);
-		else
-			this.lastHitNormal = null;
+
 		this.dispatchEvent("mousemove", event);
 	}
 }
@@ -60,8 +59,6 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 	this.lastHitPoint.copy(event.point);
 	if (event.normal)
 		this.lastHitNormal.copy(event.normal);
-	else
-		this.lastHitNormal = null;
 	
     this.dispatchEvent("mousedown", event);
 }
