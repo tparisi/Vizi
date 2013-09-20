@@ -130,7 +130,7 @@
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
 		buildFileList();
-		initSceneTree();
+		initSceneTree(viewer);
 				
 		viewer.run();
 	}
@@ -211,7 +211,7 @@
 		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
 	}
 
-	function initSceneTree() {
+	function initSceneTree(viewer) {
 		// Initialize the tree inside the <div>element.
 		// The tree structure is read from the contained <ul> tag.
 		$("#scene_tree").dynatree({
@@ -220,6 +220,7 @@
 			minExpandLevel: 2,
 			onActivate: function(node) {
 				$("#echoActive").text(node.data.title);
+				selectSceneNode(viewer, node);
 //				alert(node.getKeyPath());
 				if( node.data.url )
 					window.open(node.data.url, node.data.target);
@@ -233,21 +234,6 @@
 			onBlur: function(node) {
 				$("#echoFocused").text("-");
 			},
-			onLazyRead: function(node){
-				var fakeJsonResult = [
-					{ title: 'Lazy node 1', isLazy: true },
-					{ title: 'Simple node 2', select: true }
-				];
-//				alert ("Let's pretend we're using this AJAX response to load the branch:\n " + jsonResult);
-				function fakeAjaxResponse() {
-					return function() {
-						node.addChild(fakeJsonResult);
-						// Remove the 'loading...' status:
-						node.setLazyNodeStatus(DTNodeStatus_Ok);
-					};
-				}
-				window.setTimeout(fakeAjaxResponse(), 1500);
-			}
 		});
 	}
 	

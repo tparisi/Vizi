@@ -14,6 +14,7 @@ buildSceneTree = function(scene, tree) {
 			expand: true,
 			tooltip: "object",
 			isFolder: false,
+			vizi:object,
 		});
 		
 		var i, len = object._children.length;
@@ -23,10 +24,10 @@ buildSceneTree = function(scene, tree) {
 	}
 	
 	build(scene, tree, 0);
-
-	tree.expand(true);
 	
-	tree.childList[0].activate();
+	//return map;
+	
+	// tree.childList[0].activate();
 	/*
 	var childNode = rootNode.addChild({
 		title: "Programatically addded nodes",
@@ -37,5 +38,16 @@ buildSceneTree = function(scene, tree) {
 		title: "Document using a custom icon",
 	});
 	*/
+}
 
+selectSceneNode = function(viewer, node) {
+	
+	if (node.data.vizi) {
+//		alert("Node " + node.data.vizi.name + " selected.");
+		
+		setTimeout(function() {
+			viewer.highlightObject(node.data.vizi);
+		}, 10);
+	}
+	
 }

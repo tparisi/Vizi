@@ -50530,7 +50530,9 @@ Vizi.Viewer = function(param)
 	this.gridSize = param.gridSize || Vizi.Viewer.DEFAULT_GRID_SIZE;
 	this.gridStepSize = param.gridStepSize || Vizi.Viewer.DEFAULT_GRID_STEP_SIZE;
 	this.flipY = (param.flipY !== undefined) ? param.flipY : false;
-
+	this.highlightedObject = null;
+	this.highlightDecoration = null;
+	
 	// Set up backdrop objects for empty scene
 	this.initScene();
 
@@ -50706,6 +50708,7 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 		this.headlightOn = true;
 	}
 	
+	this.initHighlight();
 	this.fitToScene();
 	this.calcSceneStats();
 }
@@ -50958,7 +50961,9 @@ Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
 	this.showBoundingBoxes = !this.showBoundingBoxes;
 	var that = this;
 	this.sceneRoot.map(Vizi.Decoration, function(o) {
-		o.object.visible = that.showBoundingBoxes;
+		if (o._object._id != that.highlightedObject._id) {
+			o.object.visible = that.showBoundingBoxes;
+		}
 	});
 }
 
@@ -50976,6 +50981,37 @@ Vizi.Viewer.prototype.setFlipY = function(flip) {
 	else {
 		this.sceneRoot.transform.rotation.x = 0;
 	}
+}
+
+Vizi.Viewer.prototype.initHighlight = function() {
+	if (this.highlightedObject) {
+		this.highlightedObject.removeComponent(this.highlightDecoration);
+	}
+	this.highlightedObject = null;
+}
+
+Vizi.Viewer.prototype.highlightObject = function(object) {
+
+	if (this.highlightedObject) {
+		this.highlightedObject.removeComponent(this.highlightDecoration);
+	}
+	
+	var bbox = Vizi.SceneUtils.computeBoundingBox(object);
+			
+	var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+			bbox.max.y - bbox.min.y,
+			bbox.max.z - bbox.min.z);
+
+	var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
+		wireframe:true, opacity:1})
+	
+	this.highlightDecoration = new Vizi.Decoration({geometry:geo, material:mat});
+	object.addComponent(this.highlightDecoration);
+
+	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+	this.highlightDecoration.position.add(center);
+	
+	this.highlightedObject = object;
 }
 
 Vizi.Viewer.prototype.createGrid = function()
