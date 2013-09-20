@@ -50961,7 +50961,7 @@ Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
 	this.showBoundingBoxes = !this.showBoundingBoxes;
 	var that = this;
 	this.sceneRoot.map(Vizi.Decoration, function(o) {
-		if (!that.highlightedObject || (o._object._id != that.highlightedObject._id)) {
+		if (!that.highlightedObject || (o != that.highlightDecoration)) {
 			o.object.visible = that.showBoundingBoxes;
 		}
 	});
@@ -51053,7 +51053,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 
 	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
 	var scale = this.sceneRoot._children[0].transform.object.scale;
-	var mat = new THREE.Matrix4().scale(scale);
+	var mat = this.sceneRoot._children[0].transform.object.matrix; // new THREE.Matrix4().scale(scale);
 	this.boundingBox.applyMatrix4(mat);
 	
 	// For default camera setup-- small scenes (COLLADA, cm)

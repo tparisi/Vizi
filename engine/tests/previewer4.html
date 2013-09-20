@@ -24,7 +24,7 @@
 		<div id="render_stats">0 FPS</div>
 		<div id="scene_stats">0 meshes<br>0 faces<br>Bounds [ ]<br></div>
 		</div>
-		<div id="load_time_stats">Load time:</div>
+		<div id="load_time_stats">Load time</div>
 		<div id="scene_graph">Scene
 			<div id="scene_tree"></div>
 		</div>
@@ -48,7 +48,7 @@
 		</div>
 		<div id="animations">Animations
 			<div>
-				<select id="animations_list" size="7" ondblclick="selectAnimation();">
+				<select id="animations_list" size="5" ondblclick="selectAnimation();">
 				</select>
 			</div>
 			<div id="animation_controls">
@@ -72,7 +72,7 @@
 				<input type="checkbox" name="grid_cb" id="grid_cb" checked onClick="onGridChecked(this);"/><label>Grid</label>
 			</div>
 			<div id="boundingBoxes">
-				<input type="checkbox" name="bbox_cb" id="bbox_cb" unchecked onClick="onBoundingBoxesChecked(this);"/><label>Bounding Box</label>
+				<input type="checkbox" name="bbox_cb" id="bbox_cb" unchecked onClick="onBoundingBoxesChecked(this);"/><label>Boxes</label>
 			</div>
 			</div>
 	 	</div>
@@ -100,6 +100,8 @@
 	    		"./models/vc/vc.dae",
 	       		"./models/vc/vc.json",
 	    		"./models/futurgo/futurgo.dae",
+	       		"./models/futurgo/futurgo.json",
+	    		"./models/futurgo_mobile/futurgo_mobile.dae",
 	       		"./models/futurgo/futurgo.json",
 	       		"./models/futurgo_city/futurgo_city.dae",
 	       		"./models/futurgo_city/futurgo_city.json",
@@ -190,7 +192,7 @@
 
 		var loadTime = (Date.now() - loadStartTime) / 1000;
 		var loadTimeStats = document.getElementById("load_time_stats");
-		loadTimeStats.innerHTML = "Load time: " + loadTime.toFixed(2) + " seconds."
+		loadTimeStats.innerHTML = "Load time<br>" + loadTime.toFixed(2) + "s"
 		// Vizi.System.log("Loaded " + loadTime.toFixed(2) + " seconds.");
 
 		updateSceneTree(viewer);
