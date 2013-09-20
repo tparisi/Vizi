@@ -49797,7 +49797,7 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 					geometry.computeBoundingBox();
 				}
 				
-				var geometryBBox = geometry.boundingBox;
+				var geometryBBox = geometry.boundingBox.clone();
 				obj.updateMatrix();
 				geometryBBox.applyMatrix4(obj.matrix);
 				return geometryBBox;
