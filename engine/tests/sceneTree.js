@@ -67,12 +67,76 @@ selectSceneNode = function(viewer, node) {
 	
 }
 
+vec3toString = function(vec) {
+	return "[" + vec.x.toFixed(6) + "," + vec.y.toFixed(6) + "," + vec.z.toFixed(6) + "]";
+}
+
+transformToString = function(transform) {
+
+	var str = "<b>Transform</b><br>pos: " + vec3toString(transform.position) +
+		"<br>rot:" + vec3toString(transform.position) +
+		"<br>scl:" + vec3toString(transform.scale);		
+	
+	return str;
+}
+
+meshToString = function(mesh) {
+	return "(tbd)";
+
+}
+
+materialToString = function(material) {
+	return "(tbd)";
+}
+
+visualToString = function(visual) {
+
+	if (!visual)
+		return "<b>Visual</b>(null)";
+	
+	var str = "<b>Visual</b><br>mesh: " + meshToString(visual.mesh) +
+		"<br>material:" + materialToString(visual.material);
+
+	return str;
+}
+
+lightToString = function(light) {
+
+	var str = "<b>Light</b>";		
+	
+	return str;
+}
+
+cameraToString = function(camera) {
+
+	var str = "<b>Camera</b>";		
+	
+	return str;
+}
+
+
 sceneNodeInfo = function(viewer, node) {
 
 	var info = {};
 	
 	if (node.data.vizi) {
-		info.object = node.data.vizi.name;
+		var object = node.data.vizi;
+		var transform = transformToString(object.transform);
+		var visual = visualToString(object.visuals && object.visuals.length ? object.visuals[0] : null);
+		var light = lightToString(object.light);
+		var camera = cameraToString(object.camera);
+		info.object = {
+				name : object.name,
+				id : object._id,
+				components : {
+					transform : transform,
+					visual : visual,
+					light : light,
+					camera : camera,
+				}
+		};
+		
+		info.text = info.object.name + "<br>" + info.object.id + "<br>" + info.object.components.transform;
 	}
 
 	return info;

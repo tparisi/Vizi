@@ -19,6 +19,16 @@ body {
 	color:Black;
 }
 
+#infoPopup {
+	font-size:10px;
+	color:Black;
+}
+
+#tabs {
+	font-size:10px;
+	color:Black;
+}
+
 #container {
 	z-index:-1;
 	width: 83%;
