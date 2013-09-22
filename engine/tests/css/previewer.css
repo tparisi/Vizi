@@ -19,6 +19,15 @@ body {
 	color:Black;
 }
 
+.ui-dialog .ui-dialog-titlebar {
+	height:16px;
+}
+
+.ui-dialog .ui-dialog-title {
+	font-size:12px;
+	color:black;
+}
+
 #infoPopup {
 	font-size:10px;
 	color:Black;

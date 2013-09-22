@@ -93,9 +93,9 @@
 	<div id="infoPopup" title="Object Info" style="display:none;font-size:10pt;font-weight:normal;">
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Transform</a></li>
-    <li><a href="#tabs-2">Mesh</a></li>
-    <li><a href="#tabs-3">Material</a></li>
+    <li><a id="transformTabTitle" href="#tabs-1">Transform</a></li>
+    <li><a id="detailTab1Title" href="#tabs-2">Detail 1</a></li>
+    <li><a id="detailTab2Title" href="#tabs-3">Detail 2</a></li>
   </ul>
   <div id="tabs-1">
     <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
@@ -476,6 +476,8 @@
 		viewer.setBoundingBoxesOn(elt.checked);
 	}
 
+	var infoPopupVisible = false;
+	
 	function onPickerMouseOver(viewer, o, event) {
 //		console.log("Mouse over: ", o.name);
 	}
@@ -488,7 +490,10 @@
 //		console.log("Mouse up: ", o.name);
 		if (event.button == 0) {
 			viewer.highlightObject(o);
-			selectSceneNodeFromId(viewer, o._id);
+			node = selectSceneNodeFromId(viewer, o._id);
+			if (node && infoPopupVisible) {
+				openSceneNode(viewer, node);
+			}
 		}
 	}
 	
@@ -511,12 +516,30 @@
 			var info = sceneNodeInfo(viewer, node);
 			if (info.object) {
 
-//					$('#infoPopup').html(info.text);
-
-					var title = info.object.name;
-					$('#infoPopup').dialog({title:title, modal:false, height:300, width:300});
+					if (info.object.components.visual) {
+						$('#detailTab1Title').html("Mesh");
+						$('#detailTab2Title').html("Material");
+					}
+					else if (info.object.components.light) {
+						$('#detailTab1Title').html("Light");
+						$('#detailTab2Title').html("Detail 2");
+					}
+					else if (info.object.components.camera) {
+						$('#detailTab1Title').html("Camera");
+						$('#detailTab2Title').html("Detail 2");
+					}
+					else {
+						$('#detailTab1Title').html("Detail 1");
+						$('#detailTab2Title').html("Detail 2");
+					}
 					
-//				alert("Object: " + info.object);
+					var title = info.object.name;
+					infoPopupVisible = true;
+					$('#infoPopup').dialog({title:title, modal:false, height:300, width:300,
+						close: function() { infoPopupVisible = false; },
+					}
+					);
+					
 			}
 		}, 10);
 	}

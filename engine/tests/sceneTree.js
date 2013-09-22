@@ -129,14 +129,25 @@ sceneNodeInfo = function(viewer, node) {
 				name : object.name,
 				id : object._id,
 				components : {
-					transform : transform,
-					visual : visual,
-					light : light,
-					camera : camera,
+					transform : object.transform,
+					visual : object.visuals && object.visuals.length ? object.visuals[0] : null,
+					light : object.light,
+					camera : object.camera,
 				}
 		};
 		
-		info.text = info.object.name + "<br>" + info.object.id + "<br>" + info.object.components.transform;
+		info.text = {
+				name : object.name,
+				id : object._id,
+				components : {
+					transform : transform,
+					visual : visual,
+					light : light,
+					camera : camera
+				}
+		};
+		
+		//	info.object.name + "<br>" + info.object.id + "<br>" + info.object.components.transform;
 	}
 
 	return info;
@@ -157,5 +168,6 @@ selectSceneNodeFromId = function(viewer, id) {
 		node.select(true);
 		selectedSceneNode = node;
 	}
-	
+
+	return node;
 }
