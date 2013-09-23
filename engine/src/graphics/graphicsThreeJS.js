@@ -136,6 +136,13 @@ Vizi.GraphicsThreeJS.prototype.initMouse = function()
 			function(e) { that.onDocumentMouseDown(e); }, false );
 	dom.addEventListener( 'mouseup', 
 			function(e) { that.onDocumentMouseUp(e); }, false );
+
+ 
+ 	dom.addEventListener( 'click', 
+			function(e) { that.onDocumentMouseClick(e); }, false );
+
+	dom.addEventListener( 'dblclick', 
+			function(e) { that.onDocumentMouseDoubleClick(e); }, false );
 	
 	$(dom).mousewheel(
 	        function(e, delta) {
@@ -369,6 +376,50 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
     }	            
 
     Vizi.Application.handleMouseUp(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
+{
+    event.preventDefault();
+
+    var offset = $(this.renderer.domElement).offset();
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
+	
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty, button:event.button };
+    
+    Vizi.Mouse.instance.onMouseClick(evt);
+    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleMouseClick(evt);
+    }	            
+
+    Vizi.Application.handleMouseClick(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
+{
+    event.preventDefault();
+
+    var offset = $(this.renderer.domElement).offset();
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
+	
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty, button:event.button };
+    
+    Vizi.Mouse.instance.onMouseDoubleClick(evt);
+    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleMouseDoubleClick(evt);
+    }	            
+
+    Vizi.Application.handleMouseDoubleClick(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event, delta)

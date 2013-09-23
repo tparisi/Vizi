@@ -26,7 +26,8 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 		}
 		else {
 			var i, len = obj.children.length;
-			var boundingBox = new THREE.Box3(new THREE.Vector3, new THREE.Vector3);
+			
+			var boundingBox = new THREE.Box3; // (new THREE.Vector3, new THREE.Vector3);
 			
 			for (i = 0; i < len; i++) {
 				var bbox = computeBoundingBox(obj.children[i]);
@@ -67,8 +68,10 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 				}
 			}
 
-			obj.updateMatrix();
-			// boundingBox.applyMatrix4(obj.matrix);
+			if (isFinite(boundingBox.min.x)) {
+				obj.updateMatrix();
+				boundingBox.applyMatrix4(obj.matrix);
+			}
 			return boundingBox;
 		}
 	}

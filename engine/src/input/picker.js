@@ -75,7 +75,25 @@ Vizi.Picker.prototype.onMouseUp = function(event)
 
 	this.dispatchEvent("mouseup", event);
 }
+
+Vizi.Picker.prototype.onMouseClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+
+	this.dispatchEvent("click", event);
+}
 	        
+Vizi.Picker.prototype.onMouseDoubleClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+
+	this.dispatchEvent("dblclick", event);
+}
+	
 Vizi.Picker.prototype.onMouseScroll = function(event)
 {
     this.dispatchEvent("mousescroll", event);

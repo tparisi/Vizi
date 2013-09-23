@@ -123,10 +123,10 @@
 	       		"./models/vc/vc.json",
 	    		"./models/futurgo/futurgo.dae",
 	       		"./models/futurgo/futurgo.json",
-	    		"./models/futurgo_mobile/futurgo_mobile.dae",
-	       		"./models/futurgo/futurgo.json",
+	       		"./models/vizi_mobile_tc01_new/vizi_mobile_tc01.json",
+	       		"./models/vizi_mobile_tc01_newer/vizi_mobile_tc01.json",
 	       		"./models/futurgo_city/futurgo_city.dae",
-	       		"./models/futurgo_city/futurgo_city.json",
+	       		"./models/futurgo_city/futurgo_city.json",	       		
 	       		"./models/missile/missile.dae",
 	       		"./models/missile/missile-fixed.dae",
 	       		"./models/missile/missile.json",
@@ -257,6 +257,9 @@
 			onActivate: function(node) {
 				$("#echoActive").text(node.data.title);
 				selectSceneNode(viewer, node);
+				if (infoPopupVisible) {
+					openSceneNode(viewer, node);
+				}
 //				alert(node.getKeyPath());
 				if( node.data.url )
 					window.open(node.data.url, node.data.target);
@@ -496,12 +499,21 @@
 			}
 		}
 	}
-	
+
+	function onPickerMouseDoubleClick(viewer, o, event) {
+		if (event.button == 0) {
+			viewer.highlightObject(o);
+			node = selectSceneNodeFromId(viewer, o._id);
+			openSceneNode(viewer, node);
+		}
+	}
+		
 	function addRollover(viewer, o) {
 		var picker = new Vizi.Picker;
 		picker.addEventListener("mouseover", function(event) { onPickerMouseOver(viewer, o, event); });
 		picker.addEventListener("mouseout", function(event) { onPickerMouseOut(viewer, o, event); });
 		picker.addEventListener("mouseup", function(event) { onPickerMouseUp(viewer, o, event); });
+		picker.addEventListener("dblclick", function(event) { onPickerMouseDoubleClick(viewer, o, event); });
 		o.addComponent(picker);
 	}
 	

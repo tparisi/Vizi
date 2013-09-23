@@ -47144,6 +47144,20 @@ Vizi.Mouse.prototype.onMouseUp = function(event)
     this.state.buttons.left = false;	            
 }
 
+Vizi.Mouse.prototype.onMouseClick = function(event)
+{
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
+    this.state.buttons.left = false;	            
+}
+
+Vizi.Mouse.prototype.onMouseDoubleClick = function(event)
+{
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
+    this.state.buttons.left = false;	            
+}
+
 Vizi.Mouse.prototype.onMouseScroll = function(event, delta)
 {
     this.state.scroll = 0; // PUNT!
@@ -47911,6 +47925,30 @@ Vizi.PickManager.handleMouseUp = function(event)
     Vizi.PickManager.clickedObject = null;
 }
 
+Vizi.PickManager.handleMouseClick = function(event)
+{
+    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+    
+    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseClick)
+    {
+		Vizi.PickManager.clickedObject.onMouseClick(event);
+    }
+
+    Vizi.PickManager.clickedObject = null;
+}
+
+Vizi.PickManager.handleMouseDoubleClick = function(event)
+{
+    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+    
+    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDoubleClick)
+    {
+		Vizi.PickManager.clickedObject.onMouseDoubleClick(event);
+    }
+
+    Vizi.PickManager.clickedObject = null;
+}
+
 Vizi.PickManager.handleMouseScroll = function(event)
 {
     if (Vizi.PickManager.overObject && Vizi.PickManager.overObject.onMouseScroll)
@@ -48566,6 +48604,13 @@ Vizi.GraphicsThreeJS.prototype.initMouse = function()
 			function(e) { that.onDocumentMouseDown(e); }, false );
 	dom.addEventListener( 'mouseup', 
 			function(e) { that.onDocumentMouseUp(e); }, false );
+
+ 
+ 	dom.addEventListener( 'click', 
+			function(e) { that.onDocumentMouseClick(e); }, false );
+
+	dom.addEventListener( 'dblclick', 
+			function(e) { that.onDocumentMouseDoubleClick(e); }, false );
 	
 	$(dom).mousewheel(
 	        function(e, delta) {
@@ -48799,6 +48844,50 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
     }	            
 
     Vizi.Application.handleMouseUp(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
+{
+    event.preventDefault();
+
+    var offset = $(this.renderer.domElement).offset();
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
+	
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty, button:event.button };
+    
+    Vizi.Mouse.instance.onMouseClick(evt);
+    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleMouseClick(evt);
+    }	            
+
+    Vizi.Application.handleMouseClick(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
+{
+    event.preventDefault();
+
+    var offset = $(this.renderer.domElement).offset();
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
+	
+	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
+	    	elementX : eltx, elementY : elty, button:event.button };
+    
+    Vizi.Mouse.instance.onMouseDoubleClick(evt);
+    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleMouseDoubleClick(evt);
+    }	            
+
+    Vizi.Application.handleMouseDoubleClick(evt);
 }
 
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event, delta)
@@ -49175,6 +49264,22 @@ Vizi.Application.prototype.onMouseUp = function(event)
 	}
 }
 
+Vizi.Application.prototype.onMouseClick = function(event)
+{
+	if (this.mouseDelegate)
+	{
+		this.mouseDelegate.onMouseClick(event);
+	}
+}
+
+Vizi.Application.prototype.onMouseDoubleClick = function(event)
+{
+	if (this.mouseDelegate)
+	{
+		this.mouseDelegate.onMouseDoubleClick(event);
+	}
+}
+
 Vizi.Application.prototype.onMouseScroll = function(event)
 {
 	if (this.mouseDelegate)
@@ -49242,6 +49347,24 @@ Vizi.Application.handleMouseUp = function(event)
     
     if (Vizi.Application.instance.onMouseUp)
     	Vizi.Application.instance.onMouseUp(event);	            	
+}
+
+Vizi.Application.handleMouseClick = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onMouseClick)
+    	Vizi.Application.instance.onMouseClick(event);	            	
+}
+
+Vizi.Application.handleMouseDoubleClick = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onMouseDoubleClick)
+    	Vizi.Application.instance.onMouseDoubleClick(event);	            	
 }
 
 Vizi.Application.handleMouseScroll = function(event)
@@ -49808,7 +49931,8 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 		}
 		else {
 			var i, len = obj.children.length;
-			var boundingBox = new THREE.Box3(new THREE.Vector3, new THREE.Vector3);
+			
+			var boundingBox = new THREE.Box3; // (new THREE.Vector3, new THREE.Vector3);
 			
 			for (i = 0; i < len; i++) {
 				var bbox = computeBoundingBox(obj.children[i]);
@@ -49849,8 +49973,10 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 				}
 			}
 
-			obj.updateMatrix();
-			// boundingBox.applyMatrix4(obj.matrix);
+			if (isFinite(boundingBox.min.x)) {
+				obj.updateMatrix();
+				boundingBox.applyMatrix4(obj.matrix);
+			}
 			return boundingBox;
 		}
 	}
@@ -49941,7 +50067,25 @@ Vizi.Picker.prototype.onMouseUp = function(event)
 
 	this.dispatchEvent("mouseup", event);
 }
+
+Vizi.Picker.prototype.onMouseClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+
+	this.dispatchEvent("click", event);
+}
 	        
+Vizi.Picker.prototype.onMouseDoubleClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+
+	this.dispatchEvent("dblclick", event);
+}
+	
 Vizi.Picker.prototype.onMouseScroll = function(event)
 {
     this.dispatchEvent("mousescroll", event);
@@ -50974,6 +51118,7 @@ Vizi.Viewer.prototype.setFlipY = function(flip) {
 	this.flipY = flip;
 	if (this.flipY) {
 		this.sceneRoot.transform.rotation.x = -Math.PI / 2;
+		this.fitToScene();
 	}
 	else {
 		this.sceneRoot.transform.rotation.x = 0;
@@ -50990,7 +51135,7 @@ Vizi.Viewer.prototype.initHighlight = function() {
 Vizi.Viewer.prototype.highlightObject = function(object) {
 
 	if (this.highlightedObject) {
-		this.highlightedObject.removeComponent(this.highlightDecoration);
+		this.highlightedObject._parent.removeComponent(this.highlightDecoration);
 	}
 	
 	var bbox = Vizi.SceneUtils.computeBoundingBox(object);
@@ -51005,7 +51150,7 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 	var mesh = new THREE.Mesh(geo, mat);
 	mesh.ignorePick = true;	
 	this.highlightDecoration = new Vizi.Decoration({object:mesh});
-	object.addComponent(this.highlightDecoration);
+	object._parent.addComponent(this.highlightDecoration);
 
 	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
 	this.highlightDecoration.position.add(center);
@@ -51051,18 +51196,16 @@ Vizi.Viewer.prototype.fitToScene = function()
 		}
 
 	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
-	var scale = this.sceneRoot._children[0].transform.object.scale;
-	var mat = this.sceneRoot._children[0].transform.object.matrix; // new THREE.Matrix4().scale(scale);
-	this.boundingBox.applyMatrix4(mat);
 	
-	// For default camera setup-- small scenes (COLLADA, cm)
+	// For default camera setups-- small scenes (COLLADA, cm), or not clip big scenes
 	// heuristic, who knows ?
+	this.controllerScript.controls.userPanSpeed = 1;
 	if (this.boundingBox.max.z < 1) {
 		this.controllerScript.camera.near = 0.01;
 		this.controllerScript.controls.userPanSpeed = 0.01;
 	}
-	else {
-		this.controllerScript.controls.userPanSpeed = 1;
+	else if (this.boundingBox.max.z > 1000) {
+		this.controllerScript.camera.far = 20000;
 	}
 	
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
@@ -51081,37 +51224,23 @@ Vizi.Viewer.prototype.fitToScene = function()
 		var mesh = new THREE.Mesh(geo, mat)
 		mesh.ignorePick = true;
 		var decoration = new Vizi.Decoration({object:mesh});
-		// decoration.position.add(center);
-//		var cube = new THREE.Mesh(geo, mat);
-//		cube.position.add(center);
-		this.sceneRoot.addComponent(decoration);
-		decoration.position.add(center);
-		decoration.object.visible = this.showBoundingBoxes;
 		
 		this.sceneRoot.map(Vizi.Object, function(o) {
-			var visuals = o.visuals;
-				if (visuals) {
-				var i, len = visuals.length;
-				for (i = 0; i < len; i++) {
-					var visual = visuals[i];
-					if (!visual.geometry.boundingBox)
-						visual.geometry.computeBoundingBox();
-
-					var bbox = visual.geometry.boundingBox;
-					
-					var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
-							bbox.max.y - bbox.min.y,
-							bbox.max.z - bbox.min.z);
-					var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-					var mesh = new THREE.Mesh(geo, mat)
-					mesh.ignorePick = true;
-					var decoration = new Vizi.Decoration({object:mesh});
-					o.addComponent(decoration);
-
-					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
-					decoration.position.add(center);
-					decoration.object.visible = this.showBoundingBoxes;
-				}
+			if (o._parent) {
+				var bbox = Vizi.SceneUtils.computeBoundingBox(o);
+				
+				var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+						bbox.max.y - bbox.min.y,
+						bbox.max.z - bbox.min.z);
+				var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
+				var mesh = new THREE.Mesh(geo, mat)
+				mesh.ignorePick = true;
+				var decoration = new Vizi.Decoration({object:mesh});
+				o._parent.addComponent(decoration);
+		
+				var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+				decoration.position.add(center);
+				decoration.object.visible = this.showBoundingBoxes;
 			}
 		});
 	}

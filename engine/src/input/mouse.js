@@ -38,6 +38,20 @@ Vizi.Mouse.prototype.onMouseUp = function(event)
     this.state.buttons.left = false;	            
 }
 
+Vizi.Mouse.prototype.onMouseClick = function(event)
+{
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
+    this.state.buttons.left = false;	            
+}
+
+Vizi.Mouse.prototype.onMouseDoubleClick = function(event)
+{
+    this.state.x = event.elementX;
+    this.state.y = event.elementY;	            
+    this.state.buttons.left = false;	            
+}
+
 Vizi.Mouse.prototype.onMouseScroll = function(event, delta)
 {
     this.state.scroll = 0; // PUNT!

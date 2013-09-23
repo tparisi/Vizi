@@ -66,6 +66,30 @@ Vizi.PickManager.handleMouseUp = function(event)
     Vizi.PickManager.clickedObject = null;
 }
 
+Vizi.PickManager.handleMouseClick = function(event)
+{
+    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+    
+    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseClick)
+    {
+		Vizi.PickManager.clickedObject.onMouseClick(event);
+    }
+
+    Vizi.PickManager.clickedObject = null;
+}
+
+Vizi.PickManager.handleMouseDoubleClick = function(event)
+{
+    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+    
+    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDoubleClick)
+    {
+		Vizi.PickManager.clickedObject.onMouseDoubleClick(event);
+    }
+
+    Vizi.PickManager.clickedObject = null;
+}
+
 Vizi.PickManager.handleMouseScroll = function(event)
 {
     if (Vizi.PickManager.overObject && Vizi.PickManager.overObject.onMouseScroll)

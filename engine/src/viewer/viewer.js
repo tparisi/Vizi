@@ -475,6 +475,7 @@ Vizi.Viewer.prototype.setFlipY = function(flip) {
 	this.flipY = flip;
 	if (this.flipY) {
 		this.sceneRoot.transform.rotation.x = -Math.PI / 2;
+		this.fitToScene();
 	}
 	else {
 		this.sceneRoot.transform.rotation.x = 0;
@@ -491,7 +492,7 @@ Vizi.Viewer.prototype.initHighlight = function() {
 Vizi.Viewer.prototype.highlightObject = function(object) {
 
 	if (this.highlightedObject) {
-		this.highlightedObject.removeComponent(this.highlightDecoration);
+		this.highlightedObject._parent.removeComponent(this.highlightDecoration);
 	}
 	
 	var bbox = Vizi.SceneUtils.computeBoundingBox(object);
@@ -506,7 +507,7 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 	var mesh = new THREE.Mesh(geo, mat);
 	mesh.ignorePick = true;	
 	this.highlightDecoration = new Vizi.Decoration({object:mesh});
-	object.addComponent(this.highlightDecoration);
+	object._parent.addComponent(this.highlightDecoration);
 
 	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
 	this.highlightDecoration.position.add(center);
@@ -552,18 +553,16 @@ Vizi.Viewer.prototype.fitToScene = function()
 		}
 
 	this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
-	var scale = this.sceneRoot._children[0].transform.object.scale;
-	var mat = this.sceneRoot._children[0].transform.object.matrix; // new THREE.Matrix4().scale(scale);
-	this.boundingBox.applyMatrix4(mat);
 	
-	// For default camera setup-- small scenes (COLLADA, cm)
+	// For default camera setups-- small scenes (COLLADA, cm), or not clip big scenes
 	// heuristic, who knows ?
+	this.controllerScript.controls.userPanSpeed = 1;
 	if (this.boundingBox.max.z < 1) {
 		this.controllerScript.camera.near = 0.01;
 		this.controllerScript.controls.userPanSpeed = 0.01;
 	}
-	else {
-		this.controllerScript.controls.userPanSpeed = 1;
+	else if (this.boundingBox.max.z > 1000) {
+		this.controllerScript.camera.far = 20000;
 	}
 	
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
@@ -582,37 +581,23 @@ Vizi.Viewer.prototype.fitToScene = function()
 		var mesh = new THREE.Mesh(geo, mat)
 		mesh.ignorePick = true;
 		var decoration = new Vizi.Decoration({object:mesh});
-		// decoration.position.add(center);
-//		var cube = new THREE.Mesh(geo, mat);
-//		cube.position.add(center);
-		this.sceneRoot.addComponent(decoration);
-		decoration.position.add(center);
-		decoration.object.visible = this.showBoundingBoxes;
 		
 		this.sceneRoot.map(Vizi.Object, function(o) {
-			var visuals = o.visuals;
-				if (visuals) {
-				var i, len = visuals.length;
-				for (i = 0; i < len; i++) {
-					var visual = visuals[i];
-					if (!visual.geometry.boundingBox)
-						visual.geometry.computeBoundingBox();
-
-					var bbox = visual.geometry.boundingBox;
-					
-					var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
-							bbox.max.y - bbox.min.y,
-							bbox.max.z - bbox.min.z);
-					var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-					var mesh = new THREE.Mesh(geo, mat)
-					mesh.ignorePick = true;
-					var decoration = new Vizi.Decoration({object:mesh});
-					o.addComponent(decoration);
-
-					var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
-					decoration.position.add(center);
-					decoration.object.visible = this.showBoundingBoxes;
-				}
+			if (o._parent) {
+				var bbox = Vizi.SceneUtils.computeBoundingBox(o);
+				
+				var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+						bbox.max.y - bbox.min.y,
+						bbox.max.z - bbox.min.z);
+				var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
+				var mesh = new THREE.Mesh(geo, mat)
+				mesh.ignorePick = true;
+				var decoration = new Vizi.Decoration({object:mesh});
+				o._parent.addComponent(decoration);
+		
+				var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+				decoration.position.add(center);
+				decoration.object.visible = this.showBoundingBoxes;
 			}
 		});
 	}

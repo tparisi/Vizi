@@ -172,6 +172,22 @@ Vizi.Application.prototype.onMouseUp = function(event)
 	}
 }
 
+Vizi.Application.prototype.onMouseClick = function(event)
+{
+	if (this.mouseDelegate)
+	{
+		this.mouseDelegate.onMouseClick(event);
+	}
+}
+
+Vizi.Application.prototype.onMouseDoubleClick = function(event)
+{
+	if (this.mouseDelegate)
+	{
+		this.mouseDelegate.onMouseDoubleClick(event);
+	}
+}
+
 Vizi.Application.prototype.onMouseScroll = function(event)
 {
 	if (this.mouseDelegate)
@@ -239,6 +255,24 @@ Vizi.Application.handleMouseUp = function(event)
     
     if (Vizi.Application.instance.onMouseUp)
     	Vizi.Application.instance.onMouseUp(event);	            	
+}
+
+Vizi.Application.handleMouseClick = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onMouseClick)
+    	Vizi.Application.instance.onMouseClick(event);	            	
+}
+
+Vizi.Application.handleMouseDoubleClick = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onMouseDoubleClick)
+    	Vizi.Application.instance.onMouseDoubleClick(event);	            	
 }
 
 Vizi.Application.handleMouseScroll = function(event)
