@@ -6370,6 +6370,18 @@ Vizi.Viewer.prototype.calcSceneStats = function()
 	this.dispatchEvent("scenestats", this.sceneStats);	
 }
 
+Vizi.Viewer.prototype.setController = function(type) {
+	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
+	switch (type) {
+		case "model" :
+			break;
+		case "FPS" :
+			center.y = 0;
+			break;
+	}
+	this.controllerScript.center = center;
+}
+
 Vizi.Viewer.DEFAULT_GRID_SIZE = 100;
 Vizi.Viewer.DEFAULT_GRID_STEP_SIZE = 1;
 Vizi.Viewer.GRID_COLOR = 0x202020;

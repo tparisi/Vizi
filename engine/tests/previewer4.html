@@ -9,9 +9,14 @@
 </head>
 <body>
 	<div id="menubar" class="ui-widget-header ui-corner-all">
-	<label id="fileViewingLabel">Scene: </label>
-	<label id="fileViewingName"></label>
-	<button id="fileOpenButton" onclick="doFileOpen();">Open</button>
+		<label id="fileViewingLabel">Scene: </label>
+		<label id="fileViewingName"></label>
+		<button id="fileOpenButton" onclick="doFileOpen();">Open</button>
+		<div id="controllerRBGroup">
+			<label id="controllerType">Controller: </label>
+			<input type="radio" name="controllerRBGroup" value="model" checked>Model
+			<input type="radio" name="controllerRBGroup" value="FPS">FPS
+		</div>
 	</div>
 	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
@@ -158,7 +163,8 @@
 		buildFileList();
 		buildPropertySheet();
 		initSceneTree(viewer);
-				
+		initControllerMode(viewer);
+		
 		viewer.run();
 	}
 	);
@@ -274,6 +280,15 @@
 				$("#echoFocused").text("-");
 			},
 		});
+	}
+
+	function initControllerMode(viewer) {
+		$("input[name=controllerRBGroup]").click(
+				function() {
+					var type = $("input[name=controllerRBGroup]:checked").attr('value');
+					viewer.setController(type);
+				}
+			);
 	}
 	
 	function onRenderStats(stats, renderStats) {
