@@ -544,9 +544,9 @@
 
 					$('#tabs-1').html(info.text.components.transform);
 					if (info.object.components.visual) {
-						$('#detailTab1Title').html("Mesh");
+						$('#detailTab1Title').html("Geometry");
 						$('#detailTab2Title').html("Material");
-						$('#tabs-2').html(info.text.components.mesh);
+						$('#tabs-2').html(info.text.components.geometry);
 						$('#tabs-3').html(info.text.components.material);
 						$('#tabs').tabs({ disabled: [] });
 					}
@@ -571,7 +571,7 @@
 
 					$('#tabs').tabs({ active: 0 });
 										
-					var title = node.data.title;
+					var title = node.data.title + " : " + info.type;
 					infoPopupVisible = true;
 					$('#infoPopup').dialog({title:title, modal:false, height:300, width:300,
 						close: function() { infoPopupVisible = false; },
