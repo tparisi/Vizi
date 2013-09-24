@@ -63,6 +63,9 @@ selectSceneNode = function(viewer, node) {
 		}, 10);
 	}
 	
+	node.focus();
+	node.activate(true);
+	node.select(true);
 	selectedSceneNode = node;
 	
 }

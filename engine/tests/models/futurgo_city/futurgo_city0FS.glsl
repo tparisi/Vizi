@@ -1,13 +1,13 @@
 precision highp float;
 varying vec3 v_normal;
 uniform vec3 u_light0Color;
+varying vec3 v_light0Direction;
+uniform float u_shininess;
 uniform vec3 u_light1Color;
 varying vec3 v_light1Direction;
-uniform float u_shininess;
 uniform vec3 u_light2Color;
 varying vec3 v_light2Direction;
 uniform vec3 u_light3Color;
-varying vec3 v_light3Direction;
 uniform vec4 u_ambient;
 varying vec2 v_texcoord0;
 uniform sampler2D u_diffuse;
@@ -27,7 +27,12 @@ vec3 specularLight = vec3(0., 0., 0.);
 {
 float diffuseIntensity;
 float specularIntensity;
-ambientLight += u_light0Color;
+vec3 l = normalize(v_light0Direction);
+vec3 h = normalize(l+vec3(0.,0.,1.));
+diffuseIntensity = max(dot(normal,l), 0.);
+specularIntensity = pow(max(0.0,dot(normal,h)),u_shininess);
+specularLight += u_light0Color * specularIntensity;
+diffuseLight += u_light0Color * diffuseIntensity;
 }
 {
 float diffuseIntensity;
@@ -52,12 +57,7 @@ diffuseLight += u_light2Color * diffuseIntensity;
 {
 float diffuseIntensity;
 float specularIntensity;
-vec3 l = normalize(v_light3Direction);
-vec3 h = normalize(l+vec3(0.,0.,1.));
-diffuseIntensity = max(dot(normal,l), 0.);
-specularIntensity = pow(max(0.0,dot(normal,h)),u_shininess);
-specularLight += u_light3Color * specularIntensity;
-diffuseLight += u_light3Color * diffuseIntensity;
+ambientLight += u_light3Color;
 }
 ambient = u_ambient;
 diffuse = texture2D(u_diffuse, v_texcoord0);

@@ -187,6 +187,9 @@ Vizi.Object.prototype.addComponent = function(component) {
  * @param {Vizi.Component} component.
  */
 Vizi.Object.prototype.removeComponent = function(component) {
+	if (!component)
+		return;
+	
     var i = this._components.indexOf(component);
 
     if (i != -1)
@@ -199,6 +202,23 @@ Vizi.Object.prototype.removeComponent = function(component) {
         this._components.splice(i, 1);
         component.setObject(null);
     }
+    
+    var proto = Object.getPrototypeOf(component);
+    if (proto._componentProperty)
+    {
+    	this[proto._componentProperty] = null;
+    }
+
+    if (proto._componentCategory)
+    {
+    	if (this[proto._componentCategory]) {
+    		var cat = this[proto._componentCategory];
+    		i = cat.indexOf(component);
+    		if (i != -1)
+    			cat.splice(i, 1);
+    	}
+    }
+
 }
 
 /**

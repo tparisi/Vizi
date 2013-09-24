@@ -46851,6 +46851,9 @@ Vizi.Object.prototype.addComponent = function(component) {
  * @param {Vizi.Component} component.
  */
 Vizi.Object.prototype.removeComponent = function(component) {
+	if (!component)
+		return;
+	
     var i = this._components.indexOf(component);
 
     if (i != -1)
@@ -46863,6 +46866,23 @@ Vizi.Object.prototype.removeComponent = function(component) {
         this._components.splice(i, 1);
         component.setObject(null);
     }
+    
+    var proto = Object.getPrototypeOf(component);
+    if (proto._componentProperty)
+    {
+    	this[proto._componentProperty] = null;
+    }
+
+    if (proto._componentCategory)
+    {
+    	if (this[proto._componentCategory]) {
+    		var cat = this[proto._componentCategory];
+    		i = cat.indexOf(component);
+    		if (i != -1)
+    			cat.splice(i, 1);
+    	}
+    }
+
 }
 
 /**
@@ -50694,6 +50714,7 @@ Vizi.Viewer.prototype.initScene = function()
 	this.gridRoot = new Vizi.Object;
 	this.addObject(this.gridRoot);
 	this.grid = null;	
+	this.gridPicker = null;	
 	this.createGrid();
 	
 	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
@@ -51137,32 +51158,38 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 	if (this.highlightedObject) {
 		this.highlightedObject._parent.removeComponent(this.highlightDecoration);
 	}
+
+	if (object) {
+		var bbox = Vizi.SceneUtils.computeBoundingBox(object);
+				
+		var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+				bbox.max.y - bbox.min.y,
+				bbox.max.z - bbox.min.z);
 	
-	var bbox = Vizi.SceneUtils.computeBoundingBox(object);
-			
-	var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
-			bbox.max.y - bbox.min.y,
-			bbox.max.z - bbox.min.z);
-
-	var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
-		wireframe:true, opacity:1})
-
-	var mesh = new THREE.Mesh(geo, mat);
-	mesh.ignorePick = true;	
-	this.highlightDecoration = new Vizi.Decoration({object:mesh});
-	object._parent.addComponent(this.highlightDecoration);
-
-	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
-	this.highlightDecoration.position.add(center);
+		var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
+			wireframe:true, opacity:1})
+	
+		var mesh = new THREE.Mesh(geo, mat);
+		mesh.ignorePick = true;	
+		this.highlightDecoration = new Vizi.Decoration({object:mesh});
+		object._parent.addComponent(this.highlightDecoration);
+	
+		var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+		this.highlightDecoration.position.add(center);
+	}
 	
 	this.highlightedObject = object;
 }
 
 Vizi.Viewer.prototype.createGrid = function()
 {
-	if (this.gridRoot && this.grid)
+	if (this.gridRoot)
 	{
-		 this.gridRoot.removeComponent(this.grid);
+		if (this.grid)
+			this.gridRoot.removeComponent(this.grid);
+		
+		if (this.gridPicker)
+			this.gridRoot.removeComponent(this.gridPicker);
 	}
 
 	// Create a line geometry for the grid pattern
@@ -51182,11 +51209,17 @@ Vizi.Viewer.prototype.createGrid = function()
 		opacity:Vizi.Viewer.GRID_OPACITY } );
 	
 	var gridObject = new THREE.Line( geometry, line_material, THREE.LinePieces );
-	gridObject.ignorePick = true;
 	gridObject.visible = this.showGrid;
 	this.grid = new Vizi.Visual({ object : gridObject });
 
 	this.gridRoot.addComponent(this.grid);
+	
+	this.gridPicker = new Vizi.Picker;
+	var that = this;
+	this.gridPicker.addEventListener("mouseup", function(e) {
+		that.highlightObject(null);
+	});
+	this.gridRoot.addComponent(this.gridPicker);
 }
 
 Vizi.Viewer.prototype.fitToScene = function()
