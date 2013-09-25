@@ -52,7 +52,7 @@ Vizi.Object = function(param) {
     
 	if (autoCreateTransform)
 	{
-		this.addComponent(new Vizi.Transform);
+		this.addComponent(new Vizi.Transform(param));
 	}
 }
 

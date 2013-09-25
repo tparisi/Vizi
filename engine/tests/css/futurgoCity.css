@@ -17,7 +17,7 @@ body {
 	z-index:1;
 	top:13px;
 	left:13px;
-	width:98%;
+	right:10px;
 	height:99px;
 	background:url(../images/Futurgo_site_assets/top_frame.png);
 	background-size:100% 100%;
@@ -56,10 +56,10 @@ body {
 
 #container {
 	z-index:-2;
-	width: 98%;
-	height:88%;
-	top:11%;
-	left:1%;
+	top:82px;
+	left:14px;
+	right:10px;
+	bottom:5px;
 	position:absolute;
 	background-image:url(../images/skybox_breakdown/negz.jpg);
 	background-size:100% 100%;

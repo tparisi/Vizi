@@ -20,6 +20,7 @@ FuturgoCity.prototype.go = function() {
 		allowPan: false, oneButton: true });
 	this.loadURL(FuturgoCity.URL);
 	this.viewer.run();
+	
 }
 
 FuturgoCity.prototype.loadURL = function(url) {
@@ -45,6 +46,56 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	}
 	
 	this.viewer.setController("FPS");
+	
+	this.addEnvironment(data.scene);
+}
+
+FuturgoCity.prototype.addEnvironment = function(scene) {
+	
+	function addEnvMap(material) {
+		material.envMap = envMap;
+		material.reflectivity = 0.2;
+		material.refractionRatio = 0.1;
+	}
+	
+	var path = "./images/skybox_breakdown/";
+
+	var urls = [ path + "posx.jpg", path + "negx.jpg",
+				 path + "posy.jpg", path + "negy.jpg",
+				 path + "posz.jpg", path + "negz.jpg" ];
+
+	/*
+	var path = "./images/skybox/";
+
+	var urls = [ path + "px.jpg", path + "nx.jpg",
+				 path + "py.jpg", path + "ny.jpg",
+				 path + "pz.jpg", path + "nz.jpg" ];
+
+	*/
+	
+	var envMap = THREE.ImageUtils.loadTextureCube( urls );
+	
+	scene.map(/Tower.*|Office.*/, function(o) {
+		console.log(o.name);
+
+		o.map(Vizi.Visual, function(v) {
+			var material = v.material;
+			if (material) {
+				if (material instanceof THREE.MeshFaceMaterial) {
+					var materials = material.materials;
+					var i, len = materials.length;
+					for (i = 0; i < len; i++) {
+						addEnvMap(materials[i]);
+					}
+				}
+				else {
+					addEnvMap(material);
+				}
+			}
+		});
+	
+	});
+
 }
 
 FuturgoCity.prototype.onLoadProgress = function(progress)

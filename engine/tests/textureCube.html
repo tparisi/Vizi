@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container });
+
+		function addEnvMap(material) {
+			material.envMap = envMap;
+			material.reflectivity = 0.2;
+			material.refractionRatio = 0.1;
+		}
+
+		if (false) {
+			var path = "./images/skybox_breakdown/";
+	
+			var urls = [ path + "posx.jpg", path + "negx.jpg",
+						 path + "posy.jpg", path + "negy.jpg",
+						 path + "posz.jpg", path + "negz.jpg" ];
+
+		}
+		else {
+
+			var path = "./images/skybox/";
+	
+			var urls = [ path + "px.jpg", path + "nx.jpg",
+						 path + "py.jpg", path + "ny.jpg",
+						 path + "pz.jpg", path + "nz.jpg" ];
+
+		}
+		
+		var textureCube = THREE.ImageUtils.loadTextureCube( urls );
+
+		var shader = THREE.ShaderLib[ "cube" ];
+		shader.uniforms[ "tCube" ].value = textureCube;
+
+		var material = new THREE.ShaderMaterial( {
+
+			fragmentShader: shader.fragmentShader,
+			vertexShader: shader.vertexShader,
+			uniforms: shader.uniforms,
+			side: THREE.BackSide
+
+		} );
+
+		var cube = new Vizi.Object({layer:Vizi.Graphics.instance.backgroundLayer});
+//		cube.transform.rotation.x = Math.PI / 5;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry( 5000, 5000, 5000 ),
+					material: material,
+				});
+
+								
+		cube.addComponent(visual);
+		app.addObject(cube);
+
+		var rotator = new Vizi.RotateBehavior({loop:true, autoStart:true, duration:20});
+		var cam = new Vizi.PerspectiveCamera;
+		var camera = new Vizi.Object;
+		camera.addComponent(cam);
+		cam.active = true;
+
+		app.addObject(camera);
+
+		camera.addComponent(rotator);
+
+		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
+			});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+		controllerScript.camera = cam;
+		cam.position.set(0, 0, 10);
+		
+		app.addObject(controller);
+
+		var cam = new Vizi.PerspectiveCamera;
+		var camera = new Vizi.Object;
+		camera.addComponent(cam);
+		cam.active = false;
+		cam.position.set(0, 0, 0);
+		app.addObject(camera);
+				
+		var timer = new Vizi.Timer({loop:true});
+		timer.addEventListener("time", function(t) {
+			var dir = controllerScript.camera.position.clone()
+				.sub(controllerScript.center).negate().normalize();
+			Vizi.Graphics.instance.backgroundLayer.camera.position.set(0, 0, 0);
+			Vizi.Graphics.instance.backgroundLayer.camera.lookAt(dir);
+		});
+
+		//Vizi.Graphics.instance.backgroundLayer.camera = cam.object;
+		
+		timer.start();
+		cube.addComponent(timer);
+
+		var cube = new Vizi.Object;
+		//cube.transform.rotation.x = Math.PI / 5;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshBasicMaterial({
+						color:0xeeeeee, 
+						// map:THREE.ImageUtils.loadTexture("./images/board.png"),
+						envMap:textureCube})
+				});
+
+
+		cube.addComponent(visual);
+		app.addObject(cube);
+		
+		app.run();
+	}
+	);
+
+	</script>
+	
+</body>
+</html>

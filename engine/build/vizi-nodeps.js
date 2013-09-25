@@ -1806,7 +1806,7 @@ Vizi.Object = function(param) {
     
 	if (autoCreateTransform)
 	{
-		this.addComponent(new Vizi.Transform);
+		this.addComponent(new Vizi.Transform(param));
 	}
 }
 
@@ -3659,7 +3659,7 @@ Vizi.GraphicsThreeJS.prototype.initScene = function()
 //    scene.add( new THREE.AmbientLight(0xffffff) ); //  0x505050 ) ); // 
 	
     var camera = new THREE.PerspectiveCamera( 45, 
-    		this.container.offsetWidth / this.container.offsetHeight, 1, 4000 );
+    		this.container.offsetWidth / this.container.offsetHeight, 1, 10000 );
     camera.position.copy(Vizi.Camera.DEFAULT_POSITION);
 
     scene.add(camera);
@@ -3670,7 +3670,7 @@ Vizi.GraphicsThreeJS.prototype.initScene = function()
 	this.backgroundLayer = {};
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 45, 
-    		this.container.offsetWidth / this.container.offsetHeight, 1, 4000 );
+    		this.container.offsetWidth / this.container.offsetHeight, 1, 10000 );
     camera.position.set( 0, 0, 10 );	
     scene.add(camera);
     
