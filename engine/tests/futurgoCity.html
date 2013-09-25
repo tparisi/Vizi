@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Futurgo City</title>
+
+	<!-- Google font: PT Sans http://www.google.com/fonts#UsePlace:use/Collection:PT+Sans  -->
+	<link rel="stylesheet" href="../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="../libs/colorpicker/css/colorpicker.css" />
+	<link href='./css/fonts.css' rel='stylesheet' type='text/css'>
+	<link href="./css/futurgoCity.css" rel="stylesheet" type='text/css'/> 
+</head>
+<body>
+	<div id="top_frame"></div>
+	<div id="bot_frame"></div>
+	<div id="futurgo_logo"></div>
+	<div id="vizi_powered"></div>
+	<div id="container"></div>
+	<div id="loadStatus" style="display:none">
+	Loading scene...
+	</div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+    <script src="../libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
+	<script src="../libs/colorpicker/js/colorpicker.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script src="futurgoCity.js"></script>
+	<script>
+
+   	var futurgoCity = null;
+   	
+	$(document).ready(function() {
+
+		initControls();
+		loadStatus = document.getElementById("loadStatus");
+		var container = document.getElementById("container");
+		futurgoCity = new FuturgoCity({ container : container,
+				loadCallback : onLoadComplete,
+				loadProgressCallback : onLoadProgress,
+				mouseOverCallback : null,
+				mouseOutCallback : null,
+			 });	
+
+		loadStatus.style.display = 'block';
+		futurgoCity.go();
+	}
+	);
+
+	function initControls() {
+	}
+	
+	function onLoadComplete(loadTime)
+	{
+		// Hide the loader bar
+		loadStatus.style.display = 'none';		
+		console.log("Loaded " + loadTime.toFixed(2) + " seconds.");
+	}
+
+	function onLoadProgress(percentProgress)
+	{
+		loadStatus.innerHTML = "Loading scene... " + percentProgress.toFixed(0) + " %";
+	}
+
+	</script>
+	
+</body>
+</html>

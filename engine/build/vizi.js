@@ -49399,7 +49399,7 @@ Vizi.Application.handleMouseScroll = function(event)
 Vizi.Application.handleKeyDown = function(event)
 {
     if (Vizi.Application.instance.onKeyDown)
-    	Vizi.Application.instance.onKeyDown(kevent);	            	
+    	Vizi.Application.instance.onKeyDown(event);	            	
 }
 
 Vizi.Application.handleKeyUp = function(event)
