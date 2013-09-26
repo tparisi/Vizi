@@ -71,28 +71,33 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	scene.map(/Tower.*|Office.*/, function(o) {
 		console.log(o.name);
 
-		o.map(Vizi.Visual, function(v) {
-			var material = v.material;
-			if (material) {
-				if (material instanceof THREE.MeshFaceMaterial) {
-					var materials = material.materials;
-					var i, len = materials.length;
-					for (i = 0; i < len; i++) {
-						addEnvMap(materials[i]);
+		var visuals = o.visuals;
+		if (visuals) {
+			for (var vi = 0; vi < visuals.length; vi++) {
+				var v = visuals[vi];
+				var material = v.material;
+				if (material) {
+					if (material instanceof THREE.MeshFaceMaterial) {
+						var materials = material.materials;
+						var mi, len = materials.length;
+						for (mi = 0; mi < len; mi++) {
+							addEnvMap(materials[mi]);
+						}
+					}
+					else {
+						addEnvMap(material);
 					}
 				}
-				else {
-					addEnvMap(material);
-				}
 			}
-		});
-	
+		}
 	});
 
 	var skybox = Vizi.Prefabs.Skybox(); // {texture:textureCube});
 	var skyboxScript = skybox.getComponent(Vizi.SkyboxScript);
 	skyboxScript.texture = envMap;
 	this.viewer.addObject(skybox);
+	
+	this.viewer.controllerScript.camera.position.set(0, 6, 0);
 }
 
 FuturgoCity.prototype.onLoadProgress = function(progress)

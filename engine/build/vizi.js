@@ -47283,7 +47283,7 @@ Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
 	this.controls.movementSpeed = 10;
-	this.controls.lookSpeed = 0.01;
+	this.controls.lookSpeed = 0.1;
 
 }
 
