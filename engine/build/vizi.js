@@ -50035,6 +50035,10 @@ Vizi.SkyboxScript = function(param)
 {
 	Vizi.Script.call(this, param);
 
+	this.maincampos = new THREE.Vector3; 
+	this.maincamrot = new THREE.Quaternion; 
+	this.maincamscale = new THREE.Vector3; 
+	
     Object.defineProperties(this, {
     	texture: {
 			get : function() {
@@ -50053,14 +50057,22 @@ Vizi.SkyboxScript.prototype.realize = function()
 {
 	var visual = this._object.getComponent(Vizi.Visual);
 	this.uniforms = visual.material.uniforms;
+
+	this.camera = Vizi.Graphics.instance.backgroundLayer.camera;
+	this.camera.position.set(0, 0, 0);
 }
 
 Vizi.SkyboxScript.prototype.update = function()
 {
+	var maincam = Vizi.Graphics.instance.camera;
+	maincam.updateMatrixWorld();
+	maincam.matrixWorld.decompose(this.maincampos, this.maincamrot, this.maincamscale);
+	this.camera.quaternion.copy(this.maincamrot);
+	return;
+	
 	var dir = Vizi.Graphics.instance.camera.position.clone()
 		.negate().normalize(); // say that 3x fast
 	
-	Vizi.Graphics.instance.backgroundLayer.camera.position.set(0, 0, 0);
 	Vizi.Graphics.instance.backgroundLayer.camera.lookAt(dir);
 }
 
