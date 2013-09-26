@@ -30,18 +30,20 @@
 		var rotator = new Vizi.RotateBehavior({loop:true});
 		var bouncer = new Vizi.BounceBehavior({loop:true});
 		var mover = new Vizi.MoveBehavior({loop:true, duration:2, moveVector:new THREE.Vector3(0, 0, -2)});
+		var scaler = new Vizi.ScaleBehavior({loop:false, duration:2, endScale:10});
 
 		picker.addEventListener("mouseover", function() { highlight.on(); });
 		picker.addEventListener("mouseout", function() { highlight.off(); });
 		picker.addEventListener("mouseup", function() { rotator.toggle(); });
 		picker.addEventListener("mouseup", function() { bouncer.toggle(); });
-		picker.addEventListener("mouseup", function() { mover.toggle(); });
+		picker.addEventListener("mouseup", function() { scaler.toggle(); });
 						
 		cube.addComponent(visual);
 		cube.addComponent(picker);
 		cube.addComponent(rotator);
 		cube.addComponent(bouncer);
 		cube.addComponent(mover);
+		cube.addComponent(scaler);
 		cube.addComponent(highlight);
 		app.addObject(cube);
 

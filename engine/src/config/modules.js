@@ -19,6 +19,7 @@ goog.require('Vizi.FadeBehavior');
 goog.require('Vizi.HighlightBehavior');
 goog.require('Vizi.MoveBehavior');
 goog.require('Vizi.RotateBehavior');
+goog.require('Vizi.ScaleBehavior');
 goog.require('Vizi.Camera');
 goog.require('Vizi.CameraManager');
 goog.require('Vizi.PerspectiveCamera');

@@ -5922,115 +5922,7 @@ Vizi.CameraManager.handleWindowResize = function(width, height)
 
 
 Vizi.CameraManager.cameraList = [];
-Vizi.CameraManager.activeCamera = null;goog.provide('Vizi.DirectionalLight');
-goog.require('Vizi.Light');
-
-Vizi.DirectionalLight = function(param)
-{
-	param = param || {};
-	
-	Vizi.Light.call(this, param);
-
-	if (param.object) {
-		this.object = param.object; 
-		this.direction = param.object.position.clone().negate();
-	}
-	else {
-		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
-		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
-	}
-}
-
-goog.inherits(Vizi.DirectionalLight, Vizi.Light);
-
-Vizi.DirectionalLight.prototype.realize = function() 
-{
-	Vizi.Light.prototype.realize.call(this);
-}
-
-Vizi.DirectionalLight.prototype.update = function() 
-{
-	// D'oh Three.js doesn't seem to transform light directions automatically
-	// Really bizarre semantics
-	this.position.copy(this.direction).negate();
- 	this.object.target.position.copy(this.direction).multiplyScalar(Vizi.Light.DEFAULT_RANGE);
-	var worldmat = this.object.parent.matrixWorld;
-	this.position.applyMatrix4(worldmat);
-	this.object.target.position.applyMatrix4(worldmat);
-	
-	Vizi.Light.prototype.update.call(this);
-}
-
-/**
- * @fileoverview Picker component - add one to get picking support on your object
- * 
- * @author Tony Parisi
- */
-
-goog.provide('Vizi.PlaneDragger');
-goog.require('Vizi.Picker');
-
-Vizi.PlaneDragger = function(param) {
-    Vizi.Picker.call(this, param);
-}
-
-goog.inherits(Vizi.PlaneDragger, Vizi.Picker);
-
-Vizi.PlaneDragger.prototype.realize = function()
-{
-	Vizi.Picker.prototype.realize.call(this);
-
-	// Create a projector object
-    this.projector = new THREE.Projector();
-	
-    // And some helpers
-    this.dragObject = null;
-	this.dragOffset = new THREE.Vector3;
-	this.dragHitPoint = new THREE.Vector3;
-	this.dragStartPoint = new THREE.Vector3;
-	this.dragPlane = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
-	this.dragPlane.visible = false;
-	this._object.transform.object.add(this.dragPlane);
-}
-
-Vizi.PlaneDragger.prototype.update = function()
-{
-}
-
-Vizi.PlaneDragger.prototype.onMouseMove = function(event)
-{
-	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
-	
-	if (intersection)
-	{
-		this.dragHitPoint.copy(intersection.point).sub(this.dragOffset);
-		this.dragHitPoint.add(this.dragStartPoint);
-		this.dispatchEvent("drag", {
-									type : "drag", 
-									object : this.dragObject, 
-									offset : this.dragHitPoint
-									}
-		);
-	}
-}
-
-Vizi.PlaneDragger.prototype.onMouseDown = function(event)
-{
-	Vizi.Picker.prototype.onMouseDown.call(this, event);
-	
-	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
-	
-	if (intersection)
-	{
-		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
-		this.dragStartPoint.set(0, 0, 0);
-		this.dragStartPoint.applyMatrix4(event.object.object.matrixWorld);
-		this.dragObject = event.object;
-	}
-}
-
-
-/**
+Vizi.CameraManager.activeCamera = null;/**
  * @fileoverview Loader - loads level files
  * 
  * @author Tony Parisi
@@ -6277,7 +6169,173 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 
 	return convert(scene);
 }
+goog.provide('Vizi.DirectionalLight');
+goog.require('Vizi.Light');
+
+Vizi.DirectionalLight = function(param)
+{
+	param = param || {};
+	
+	Vizi.Light.call(this, param);
+
+	if (param.object) {
+		this.object = param.object; 
+		this.direction = param.object.position.clone().negate();
+	}
+	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
+		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
+	}
+}
+
+goog.inherits(Vizi.DirectionalLight, Vizi.Light);
+
+Vizi.DirectionalLight.prototype.realize = function() 
+{
+	Vizi.Light.prototype.realize.call(this);
+}
+
+Vizi.DirectionalLight.prototype.update = function() 
+{
+	// D'oh Three.js doesn't seem to transform light directions automatically
+	// Really bizarre semantics
+	this.position.copy(this.direction).negate();
+ 	this.object.target.position.copy(this.direction).multiplyScalar(Vizi.Light.DEFAULT_RANGE);
+	var worldmat = this.object.parent.matrixWorld;
+	this.position.applyMatrix4(worldmat);
+	this.object.target.position.applyMatrix4(worldmat);
+	
+	Vizi.Light.prototype.update.call(this);
+}
+
 /**
+ * @fileoverview Picker component - add one to get picking support on your object
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.PlaneDragger');
+goog.require('Vizi.Picker');
+
+Vizi.PlaneDragger = function(param) {
+    Vizi.Picker.call(this, param);
+}
+
+goog.inherits(Vizi.PlaneDragger, Vizi.Picker);
+
+Vizi.PlaneDragger.prototype.realize = function()
+{
+	Vizi.Picker.prototype.realize.call(this);
+
+	// Create a projector object
+    this.projector = new THREE.Projector();
+	
+    // And some helpers
+    this.dragObject = null;
+	this.dragOffset = new THREE.Vector3;
+	this.dragHitPoint = new THREE.Vector3;
+	this.dragStartPoint = new THREE.Vector3;
+	this.dragPlane = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+	this.dragPlane.visible = false;
+	this._object.transform.object.add(this.dragPlane);
+}
+
+Vizi.PlaneDragger.prototype.update = function()
+{
+}
+
+Vizi.PlaneDragger.prototype.onMouseMove = function(event)
+{
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
+	
+	if (intersection)
+	{
+		this.dragHitPoint.copy(intersection.point).sub(this.dragOffset);
+		this.dragHitPoint.add(this.dragStartPoint);
+		this.dispatchEvent("drag", {
+									type : "drag", 
+									object : this.dragObject, 
+									offset : this.dragHitPoint
+									}
+		);
+	}
+}
+
+Vizi.PlaneDragger.prototype.onMouseDown = function(event)
+{
+	Vizi.Picker.prototype.onMouseDown.call(this, event);
+	
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
+	
+	if (intersection)
+	{
+		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
+		this.dragStartPoint.set(0, 0, 0);
+		this.dragStartPoint.applyMatrix4(event.object.object.matrixWorld);
+		this.dragObject = event.object;
+	}
+}
+
+
+/**
+ * @fileoverview ScaleBehavior - simple scale up/down over time
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.ScaleBehavior');
+goog.require('Vizi.Behavior');
+
+Vizi.ScaleBehavior = function(param) {
+	param = param || {};
+	this.duration = (param.duration !== undefined) ? param.duration : 1;
+	this.startScale = { scale : (param.startScale !== undefined) ? param.startScale : 1 };
+	this.endScale = { scale : (param.endScale !== undefined) ? param.endScale : 2 };
+	this.tween = null;
+    Vizi.Behavior.call(this, param);
+}
+
+goog.inherits(Vizi.ScaleBehavior, Vizi.Behavior);
+
+Vizi.ScaleBehavior.prototype.start = function()
+{
+	if (this.running)
+		return;
+
+	this.scale = { scale : this.startScale.scale };
+	this.originalScale = this._object.transform.scale.clone();
+	this.tween = new TWEEN.Tween(this.scale).to(this.endScale, this.duration * 1000)
+	.easing(TWEEN.Easing.Quadratic.InOut)
+	.repeat(0)
+	.start();
+	
+	Vizi.Behavior.prototype.start.call(this);
+}
+
+Vizi.ScaleBehavior.prototype.evaluate = function(t)
+{
+	if (t >= this.duration)
+	{
+		this.stop();
+		if (this.loop) {
+			this.start();
+		}
+		else {
+			this.dispatchEvent("complete");
+		}
+	}
+	
+	this._object.transform.scale.copy(this.originalScale.clone().multiplyScalar(this.scale.scale));
+}
+
+
+Vizi.ScaleBehavior.prototype.stop = function()
+{
+	if (this.tween)
+		this.tween.stop();
+	
+	Vizi.Behavior.prototype.stop.call(this);
+}/**
  * @fileoverview Viewer class - Application Subclass for Model/Scene Viewer
  * @author Tony Parisi / http://www.tonyparisi.com
  */
@@ -7114,6 +7172,7 @@ goog.require('Vizi.FadeBehavior');
 goog.require('Vizi.HighlightBehavior');
 goog.require('Vizi.MoveBehavior');
 goog.require('Vizi.RotateBehavior');
+goog.require('Vizi.ScaleBehavior');
 goog.require('Vizi.Camera');
 goog.require('Vizi.CameraManager');
 goog.require('Vizi.PerspectiveCamera');
