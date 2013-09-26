@@ -24,7 +24,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.autoForward = false;
 	// this.invertVertical = false;
 
-	this.activeLook = true;
+	this.activeLook = false;
 
 	this.heightSpeed = false;
 	this.heightCoef = 1.0;
@@ -102,6 +102,20 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
+		if ( this.domElement === document ) {
+
+			this.mouseX = event.pageX - this.viewHalfX;
+			this.mouseY = event.pageY - this.viewHalfY;
+
+		} else {
+
+			this.mouseX = event.pageX - this.domElement.offsetLeft - this.viewHalfX;
+			this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
+
+		}
+		
+		this.dragStartX = this.mouseX;
+		this.dragStartY = this.mouseY;
 		this.mouseDragOn = true;
 
 	};
@@ -240,29 +254,38 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		this.lon += this.mouseX * actualLookSpeed;
-		if( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
-
-		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
-		this.phi = THREE.Math.degToRad( 90 - this.lat );
-
-		this.theta = THREE.Math.degToRad( this.lon );
-
-		if ( this.constrainVertical ) {
-
-			this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
-
+		var DRAG_DEAD_ZONE = 3;
+		
+		if (this.mouseDragOn) {
+			this.lon = this.mouseX - this.dragStartX; // * actualLookSpeed;
+			if (Math.abs(this.lon) < DRAG_DEAD_ZONE)
+				this.lon = 0;
+			
+			if( this.lookVertical ) this.lat = -(this.mouseY - this.dragStartY); // * actualLookSpeed * verticalLookRatio;
+			if (Math.abs(this.lat) < DRAG_DEAD_ZONE)
+				this.lat = 0;
+			
+			this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
+			this.phi = THREE.Math.degToRad( 90 - this.lat );
+	
+			this.theta = THREE.Math.degToRad( this.lon );
+	
+			if ( this.constrainVertical ) {
+	
+				this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
+	
+			}
+	
+			var targetPosition = this.target,
+				position = this.object.position;
+	
+			targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
+			targetPosition.y = position.y + 100 * Math.cos( this.phi );
+			targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+	
+			this.object.lookAt( targetPosition );
 		}
-
-		var targetPosition = this.target,
-			position = this.object.position;
-
-		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
-		targetPosition.y = position.y + 100 * Math.cos( this.phi );
-		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
-
-		this.object.lookAt( targetPosition );
-
+		
 	};
 
 

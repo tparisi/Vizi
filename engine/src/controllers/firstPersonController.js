@@ -24,6 +24,9 @@ Vizi.FirstPersonControllerScript = function(param)
 {
 	Vizi.Script.call(this, param);
 	
+	this.savedCameraPos = new THREE.Vector3;	
+	this.movementVector = new THREE.Vector3;
+	
     Object.defineProperties(this, {
     	camera: {
 			get : function() {
@@ -62,7 +65,18 @@ Vizi.FirstPersonControllerScript.prototype.createControls = function(camera)
 
 Vizi.FirstPersonControllerScript.prototype.update = function()
 {
+	this.saveCamera();
 	this.controls.update(this.clock.getDelta());
+	var collide = null;
+	if (collide = this.testCollision()) {
+		this.restoreCamera();
+		this.dispatchEvent("collide", collide);
+	}
+	
+	if (this.testTerrain()) {
+		this.restoreCamera();
+	}
+	
 	if (this._headlightOn)
 	{
 		this.headlight.direction.copy(this._camera.position).negate();
@@ -75,6 +89,24 @@ Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this.controls.movementSpeed = 10;
 	this.controls.lookSpeed = 0.1;
 
+}
+
+Vizi.FirstPersonControllerScript.prototype.saveCamera = function() {
+	this.savedCameraPos.copy(this._camera.position);
+}
+
+Vizi.FirstPersonControllerScript.prototype.restoreCamera = function() {
+	this._camera.position.copy(this.savedCameraPos);
+}
+
+Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
+	this.movementVector.copy(this.savedCameraPos).sub(this._camera.position);
+	if (this.movementVector.length())
+		console.log(this.movementVector);
+}
+
+Vizi.FirstPersonControllerScript.prototype.testTerrain = function() {
+	return false;
 }
 
 Vizi.FirstPersonControllerScript.prototype.setHeadlightOn = function(on)
