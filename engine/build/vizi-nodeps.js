@@ -3068,8 +3068,12 @@ Vizi.MoveBehavior.prototype.evaluate = function(t)
 	if (t >= this.duration)
 	{
 		this.stop();
-		if (this.loop)
+		if (this.loop) {
 			this.start();
+		}
+		else {
+			this.dispatchEvent("complete");
+		}
 	}
 	
 	this.moveDelta.copy(this.movePosition).sub(this.prevMovePosition);
