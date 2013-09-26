@@ -64,14 +64,14 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 				 path + "posy.jpg", path + "negy.jpg",
 				 path + "posz.jpg", path + "negz.jpg" ];
 
-	/*
+	
 	var path = "./images/skybox/";
 
 	var urls = [ path + "px.jpg", path + "nx.jpg",
 				 path + "py.jpg", path + "ny.jpg",
 				 path + "pz.jpg", path + "nz.jpg" ];
 
-	*/
+	
 	
 	var envMap = THREE.ImageUtils.loadTextureCube( urls );
 	
@@ -96,6 +96,10 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	
 	});
 
+	var skybox = Vizi.Prefabs.Skybox(); // {texture:textureCube});
+	var skyboxScript = skybox.getComponent(Vizi.SkyboxScript);
+	skyboxScript.texture = envMap;
+	this.viewer.addObject(skybox);
 }
 
 FuturgoCity.prototype.onLoadProgress = function(progress)

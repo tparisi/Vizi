@@ -39,6 +39,7 @@ goog.require('Vizi.DirectionalLight');
 goog.require('Vizi.PointLight');
 goog.require('Vizi.SpotLight');
 goog.require('Vizi.Loader');
+goog.require('Vizi.SkyboxScript');
 goog.require('Vizi.Prefabs');
 goog.require('Vizi.Decoration');
 goog.require('Vizi.SceneComponent');
