@@ -19,6 +19,7 @@ Vizi.Viewer = function(param)
 	// Tuck away prefs based on param
 	this.loopAnimations = (param.loopAnimations !== undefined) ? param.loopAnimations : false;
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
+	this.firstPerson = (param.firstPerson !== undefined) ? param.firstPerson : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
 	this.showBoundingBoxes = (param.showBoundingBoxes !== undefined) ? param.showBoundingBoxes : false;
@@ -54,9 +55,15 @@ Vizi.Viewer.prototype.initScene = function()
 	this.gridPicker = null;	
 	this.createGrid();
 	
-	this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
-		allowPan:this.allowPan, allowZoom:this.allowZoom, oneButton:this.oneButton});
-	this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
+	if (this.firstPerson) {
+		this.controller = Vizi.Prefabs.FirstPersonController({active:true, headlight:true});
+		this.controllerScript = this.controller.getComponent(Vizi.FirstPersonControllerScript);
+	}
+	else {
+		this.controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
+			allowPan:this.allowPan, allowZoom:this.allowZoom, oneButton:this.oneButton});
+		this.controllerScript = this.controller.getComponent(Vizi.ModelControllerScript);
+	}
 	this.addObject(this.controller);
 
 	var viewpoint = new Vizi.Object;

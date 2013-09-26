@@ -36,7 +36,7 @@ body {
 
 #futurgo_logo {
 	top:22px;
-	left:77px;
+	left:22px;
 	width:152px;
 	height:50px;
 	background:url(../images/Futurgo_site_assets/futurgo_logo.png);
@@ -56,13 +56,11 @@ body {
 
 #container {
 	z-index:-2;
-	top:82px;
+	top:14px;
 	left:14px;
 	right:10px;
 	bottom:5px;
 	position:absolute;
-	background-image:url(../images/skybox_breakdown/negz.jpg);
-	background-size:100% 100%;
 }
 
 :focus { outline: none; }

@@ -16,8 +16,7 @@ FuturgoCity = function(param) {
 }
 
 FuturgoCity.prototype.go = function() {
-	this.viewer = new Vizi.Viewer({ container : this.container, showGrid : false,
-		allowPan: false, oneButton: true });
+	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true});
 	this.loadURL(FuturgoCity.URL);
 	this.viewer.run();
 	
@@ -58,20 +57,14 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 		material.refractionRatio = 0.1;
 	}
 	
-	var path = "./images/skybox_breakdown/";
-
-	var urls = [ path + "posx.jpg", path + "negx.jpg",
-				 path + "posy.jpg", path + "negy.jpg",
-				 path + "posz.jpg", path + "negz.jpg" ];
-
+	// Skybox from http://www.3delyvisions.com/
+	// http://www.3delyvisions.com/skf1.htm
+	var path = "./images/sky35/";
 	
-	var path = "./images/skybox/";
+	var urls = [ path + "rightcity.jpg", path + "leftcity.jpg",
+				 path + "topcity.jpg", path + "botcity.jpg",
+				 path + "frontcity.jpg", path + "backcity.jpg" ];
 
-	var urls = [ path + "px.jpg", path + "nx.jpg",
-				 path + "py.jpg", path + "ny.jpg",
-				 path + "pz.jpg", path + "nz.jpg" ];
-
-	
 	
 	var envMap = THREE.ImageUtils.loadTextureCube( urls );
 	
