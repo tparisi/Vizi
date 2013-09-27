@@ -44,6 +44,14 @@ Vizi.SceneComponent = function(param)
 	            this.object.useQuaternion = v;
 	        }
     	},    	
+        visible: {
+	        get: function() {
+	            return this.object.visible;
+	        },
+	        set: function(v) {
+	            this.object.visible = v;
+	        }
+    	},    	
 
     });
     
