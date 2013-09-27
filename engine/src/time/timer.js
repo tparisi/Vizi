@@ -14,7 +14,7 @@ Vizi.Timer = function(param)
     this.currentTime = Vizi.Time.instance.currentTime;
     this.running = false;
     this.duration = param.duration ? param.duration : 0;
-    this.loop = param.loop;
+    this.loop = (param.loop !== undefined) ? param.loop : false;
     this.lastFraction = 0;
 }
 
@@ -60,6 +60,7 @@ Vizi.Timer.prototype.update = function()
 Vizi.Timer.prototype.start = function()
 {
 	this.running = true;
+	this.currentTime = Vizi.Time.instance.currentTime;
 }
 
 Vizi.Timer.prototype.stop = function()
