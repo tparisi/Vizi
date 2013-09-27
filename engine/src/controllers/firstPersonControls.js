@@ -41,7 +41,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.mouseY = 0;
 
 	this.lat = 0;
-	this.lon = 0;
+	this.lon = -90;
 	this.phi = 0;
 	this.theta = 0;
 
@@ -116,6 +116,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		this.dragStartX = this.mouseX;
 		this.dragStartY = this.mouseY;
+		this.startLon = this.lon;
+		this.startLat = this.lat;
 		this.mouseDragOn = true;
 
 	};
@@ -208,6 +210,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.update = function( delta ) {
 
+		this.startY = this.object.position.y;
+		
 		if ( this.freeze ) {
 
 			return;
@@ -229,14 +233,22 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		var actualMoveSpeed = delta * this.movementSpeed;
 
-		if ( this.moveForward || ( this.autoForward && !this.moveBackward ) ) this.object.translateZ( - ( actualMoveSpeed + this.autoSpeedFactor ) );
-		if ( this.moveBackward ) this.object.translateZ( actualMoveSpeed );
+		if ( this.moveForward || ( this.autoForward && !this.moveBackward ) ) 
+			this.object.translateZ( - ( actualMoveSpeed + this.autoSpeedFactor ) );
+		if ( this.moveBackward ) 
+			this.object.translateZ( actualMoveSpeed );
 
-		if ( this.moveLeft ) this.object.translateX( - actualMoveSpeed );
-		if ( this.moveRight ) this.object.translateX( actualMoveSpeed );
+		this.object.position.y = this.startY;
+		
+		if ( this.moveLeft ) 
+			this.object.translateX( - actualMoveSpeed );
+		if ( this.moveRight ) 
+			this.object.translateX( actualMoveSpeed );
 
-		if ( this.moveUp ) this.object.translateY( actualMoveSpeed );
-		if ( this.moveDown ) this.object.translateY( - actualMoveSpeed );
+		if ( this.moveUp ) 
+			this.object.translateY( actualMoveSpeed );
+		if ( this.moveDown ) 
+			this.object.translateY( - actualMoveSpeed );
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
@@ -254,14 +266,18 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		var DRAG_DEAD_ZONE = 3;
+		var DRAG_DEAD_ZONE = 6;
 		
 		if (this.mouseDragOn) {
-			this.lon = this.mouseX - this.dragStartX; // * actualLookSpeed;
+			var dlon = this.mouseX - this.dragStartX;
+			this.lon = this.startLon + dlon; // this.mouseX - this.dragStartX; // * actualLookSpeed;
 			if (Math.abs(this.lon) < DRAG_DEAD_ZONE)
 				this.lon = 0;
 			
-			if( this.lookVertical ) this.lat = -(this.mouseY - this.dragStartY); // * actualLookSpeed * verticalLookRatio;
+			if( this.lookVertical ) {
+				var dlat = this.mouseY - this.dragStartY;
+				this.lat = this.startLat - dlat; // * actualLookSpeed * verticalLookRatio;
+			}
 			if (Math.abs(this.lat) < DRAG_DEAD_ZONE)
 				this.lat = 0;
 			

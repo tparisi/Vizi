@@ -10,8 +10,10 @@ goog.require('Vizi.Behavior');
 Vizi.ScaleBehavior = function(param) {
 	param = param || {};
 	this.duration = (param.duration !== undefined) ? param.duration : 1;
-	this.startScale = { scale : (param.startScale !== undefined) ? param.startScale : 1 };
-	this.endScale = { scale : (param.endScale !== undefined) ? param.endScale : 2 };
+	this.startScale = (param.startScale !== undefined) ? param.startScale.clone() : 
+		new THREE.Vector3(1, 1, 1);
+	this.endScale = (param.endScale !== undefined) ? param.endScale.clone() : 
+		new THREE.Vector3(2, 2, 2);
 	this.tween = null;
     Vizi.Behavior.call(this, param);
 }
@@ -23,7 +25,7 @@ Vizi.ScaleBehavior.prototype.start = function()
 	if (this.running)
 		return;
 
-	this.scale = { scale : this.startScale.scale };
+	this.scale = this.startScale.clone();
 	this.originalScale = this._object.transform.scale.clone();
 	this.tween = new TWEEN.Tween(this.scale).to(this.endScale, this.duration * 1000)
 	.easing(TWEEN.Easing.Quadratic.InOut)
@@ -46,7 +48,11 @@ Vizi.ScaleBehavior.prototype.evaluate = function(t)
 		}
 	}
 	
-	this._object.transform.scale.copy(this.originalScale.clone().multiplyScalar(this.scale.scale));
+	var sx = this.originalScale.x * this.scale.x;
+	var sy = this.originalScale.y * this.scale.y;
+	var sz = this.originalScale.z * this.scale.z;
+	
+	this._object.transform.scale.set(sx, sy, sz);
 }
 
 

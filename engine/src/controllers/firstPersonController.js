@@ -67,8 +67,8 @@ Vizi.FirstPersonControllerScript.prototype.update = function()
 {
 	this.saveCamera();
 	this.controls.update(this.clock.getDelta());
-	var collide = null;
-	if (collide = this.testCollision()) {
+	var collide = this.testCollision();
+	if (collide && collide.object) {
 		this.restoreCamera();
 		this.dispatchEvent("collide", collide);
 	}
@@ -86,7 +86,7 @@ Vizi.FirstPersonControllerScript.prototype.update = function()
 Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
-	this.controls.movementSpeed = 10;
+	this.controls.movementSpeed = 13;
 	this.controls.lookSpeed = 0.1;
 
 }
@@ -100,9 +100,19 @@ Vizi.FirstPersonControllerScript.prototype.restoreCamera = function() {
 }
 
 Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
+	return null;
+	
 	this.movementVector.copy(this.savedCameraPos).sub(this._camera.position);
-	if (this.movementVector.length())
+	if (this.movementVector.length()) {
 		console.log(this.movementVector);
+		
+        var collide = Vizi.Graphics.instance.objectFromRay(this.savedCameraPos,
+        		this.movementVector, 0, this.movementVector.length());
+
+        return collide;
+	}
+	
+	return null;
 }
 
 Vizi.FirstPersonControllerScript.prototype.testTerrain = function() {

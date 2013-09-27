@@ -30,7 +30,7 @@
 		var rotator = new Vizi.RotateBehavior({loop:true});
 		var bouncer = new Vizi.BounceBehavior({loop:true});
 		var mover = new Vizi.MoveBehavior({loop:true, duration:2, moveVector:new THREE.Vector3(0, 0, -2)});
-		var scaler = new Vizi.ScaleBehavior({loop:false, duration:2, endScale:10});
+		var scaler = new Vizi.ScaleBehavior({loop:false, duration:2, endScale:new THREE.Vector3(10, 10, 10)});
 
 		picker.addEventListener("mouseover", function() { highlight.on(); });
 		picker.addEventListener("mouseout", function() { highlight.off(); });

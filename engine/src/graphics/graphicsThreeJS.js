@@ -217,6 +217,36 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
     }
 }
 
+Vizi.GraphicsThreeJS.prototype.objectFromRay = function(origin, direction, near, far)
+{
+    var raycaster = new THREE.Raycaster( origin, direction, near, far );
+
+	var intersects = raycaster.intersectObjects( this.scene.children, true );
+	
+    if ( intersects.length > 0 ) {
+    	var i = 0;
+    	while(i < intersects.length && (!intersects[i].object.visible || 
+    			intersects[i].object.ignoreCollision))
+    	{
+    		i++;
+    	}
+    	
+    	var intersected = intersects[i];
+    	
+    	if (i >= intersects.length)
+    	{
+        	return { object : null, point : null, normal : null };
+    	}
+    	
+    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face ? intersected.face.normal : null));        	    	                             
+    }
+    else
+    {
+    	return { object : null, point : null, normal : null };
+    }
+}
+
+
 Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, point, normal)
 {
 	if (object.data)
