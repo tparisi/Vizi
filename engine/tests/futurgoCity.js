@@ -216,6 +216,7 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 	if (this.vehicleOpen) {
 		this.playOpenAnimations();
 		
+		this.viewer.controllerScript.move = false;
 		/*
 		// This should be a move behavior but that requires a Vizi
 		// object to move to, not a camera component. Maybe we need
@@ -230,6 +231,7 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 	}
 	else {
 		this.playCloseAnimations();
+		this.viewer.controllerScript.move = true;
 	}
 	
 }

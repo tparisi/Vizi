@@ -25,9 +25,12 @@ Vizi.FirstPersonControllerScript = function(param)
 	Vizi.Script.call(this, param);
 
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this._move = (param.move !== undefined) ? param.move : true;
+	this._look = (param.look !== undefined) ? param.look : true;
 	
 	this.collisionDistance = 10;
-
+	this.moveSpeed = 13;
+	
 	this.savedCameraPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;
 	
@@ -46,6 +49,22 @@ Vizi.FirstPersonControllerScript = function(param)
     		},
     		set: function(v) {
     			this.setEnabled(v);
+    		}
+    	},
+    	move : {
+    		get: function() {
+    			return this._move;
+    		},
+    		set: function(v) {
+    			this.setMove(v);
+    		}
+    	},
+    	look : {
+    		get: function() {
+    			return this._look;
+    		},
+    		set: function(v) {
+    			this.setLook(v);
     		}
     	},
         headlightOn: {
@@ -101,10 +120,22 @@ Vizi.FirstPersonControllerScript.prototype.setEnabled = function(enabled)
 	this.controls.enabled = enabled;
 }
 
+Vizi.FirstPersonControllerScript.prototype.setMove = function(move)
+{
+	this._move = move;
+	this.controls.movementSpeed = move ? this.moveSpeed : 0;
+}
+
+Vizi.FirstPersonControllerScript.prototype.setLook = function(look)
+{
+	this._look = look;
+	this.controls.lookSpeed = look ? 1.0 : 0;
+}
+
 Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
-	this.controls.movementSpeed = 13;
+	this.controls.movementSpeed = this.moveSpeed;
 	this.controls.lookSpeed = 0.1;
 
 }
