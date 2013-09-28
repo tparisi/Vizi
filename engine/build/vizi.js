@@ -47233,7 +47233,9 @@ goog.require('Vizi.Script');
 Vizi.FirstPersonControllerScript = function(param)
 {
 	Vizi.Script.call(this, param);
-	
+
+	this.collisionDistance = 10;
+
 	this.savedCameraPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;
 	
@@ -47310,15 +47312,18 @@ Vizi.FirstPersonControllerScript.prototype.restoreCamera = function() {
 }
 
 Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
-	return null;
 	
-	this.movementVector.copy(this.savedCameraPos).sub(this._camera.position);
+	this.movementVector.copy(this._camera.position).sub(this.savedCameraPos);
 	if (this.movementVector.length()) {
-		console.log(this.movementVector);
 		
         var collide = Vizi.Graphics.instance.objectFromRay(this.savedCameraPos,
-        		this.movementVector, 0, this.movementVector.length());
+        		this.movementVector, 0.5, 2);
 
+        if (collide && collide.object) {
+        	var dist = this.savedCameraPos.distanceTo(collide.hitPointWorld);
+        	console.log("Collision: ", collide);
+        }
+        
         return collide;
 	}
 	
@@ -49207,7 +49212,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 
 Vizi.GraphicsThreeJS.prototype.objectFromRay = function(origin, direction, near, far)
 {
-    var raycaster = new THREE.Raycaster( origin, direction, near, far );
+    var raycaster = new THREE.Raycaster(origin, direction, near, far);
 
 	var intersects = raycaster.intersectObjects( this.scene.children, true );
 	

@@ -219,7 +219,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
 
 Vizi.GraphicsThreeJS.prototype.objectFromRay = function(origin, direction, near, far)
 {
-    var raycaster = new THREE.Raycaster( origin, direction, near, far );
+    var raycaster = new THREE.Raycaster(origin, direction, near, far);
 
 	var intersects = raycaster.intersectObjects( this.scene.children, true );
 	

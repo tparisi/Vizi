@@ -98,7 +98,7 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	skyboxScript.texture = envMap;
 	this.viewer.addObject(skybox);
 	
-	this.viewer.controllerScript.camera.position.set(0, 6, 0);
+	this.viewer.controllerScript.camera.position.set(0, 2, 0);
 }
 
 FuturgoCity.prototype.onLoadProgress = function(progress)
