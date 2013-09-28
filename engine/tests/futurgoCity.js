@@ -38,6 +38,7 @@ FuturgoCity.prototype.loadURL = function(url) {
 FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 {
 	var scene = data.scene;
+	this.scene = data.scene;
 	this.viewer.replaceScene(data);
 	
 	if (this.loadCallback) {
@@ -67,11 +68,12 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 				 path + "frontcity.jpg", path + "backcity.jpg" ];
 
 	/*
-	var path = "./images/skybox_breakdown/";
+	var path = "./images/skybox_buildings/";
 	
 	var urls = [ path + "futurgo_skybox_Right.jpg", path + "futurgo_skybox_Left.jpg",
 				 path + "futurgo_skybox_Top.jpg", path + "futurgo_skybox_Bottom",
 				 path + "futurgo_skybox_Front.jpg", path + "futurgo_skybox_Back.jpg" ];
+	
 	
 	*/
 	
@@ -105,8 +107,29 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	var skyboxScript = skybox.getComponent(Vizi.SkyboxScript);
 	skyboxScript.texture = envMap;
 	this.viewer.addObject(skybox);
+
+	// Maybe fog, need to figure out how to fake it in the background layer
+//	Vizi.Graphics.instance.scene.fog = new THREE.FogExp2( 0xaaaabb, .02 );
+//	Vizi.Graphics.instance.backgroundLayer.scene.fog = new THREE.FogExp2( 0xaaaabb, 100 );
+
+	/*
+	// Ground plane
+	var map = THREE.ImageUtils.loadTexture("./models/futurgo_city/images/Road_J04.bmp");
+	map.repeat.set(100, 100);
+	map.wrapS = map.wrapT = THREE.RepeatWrapping;
+	var ground = new Vizi.Object;
+	var plane = new Vizi.Visual({
+		geometry : new THREE.PlaneGeometry(1000, 1000, 100, 100),
+		material : new THREE.MeshBasicMaterial({color:0xffffff,
+			map:map}),
+	});
+	ground.addComponent(plane);
+	ground.transform.rotation.x = -Math.PI / 2;
+	ground.transform.position.y = -0.5;
+	this.viewer.addObject(ground);
+	*/
 	
-	this.viewer.controllerScript.camera.position.set(0, 2, 0);
+	this.viewer.controllerScript.camera.position.set(0, FuturgoCity.AVATAR_HEIGHT, 0);
 	this.viewer.controllerScript.camera.near = 0.01;
 	
 	this.loadFuturgo();
@@ -138,7 +161,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 	// Fade the windows
 	futurgo.map(/windows_front|windows_rear/, function(o) {
-		var fader = new Vizi.FadeBehavior({duration:2, opacity:.5});
+		var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
 		o.addComponent(fader);
 		fader.start();
 	});
@@ -147,22 +170,30 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var that = this;
 	futurgo.map("vizi_mobile", function(o) {
 		var picker = new Vizi.Picker;
+		picker.overCursor = 'pointer';
 		picker.addEventListener("mouseover", function(event) { that.onMouseOver("futurgo", event); });
 		picker.addEventListener("mouseout", function(event) { that.onMouseOut("futurgo", event); });
 		picker.addEventListener("click", function(event) { that.onMouseClick("futurgo", event); });
 		o.addComponent(picker);
 	});	
-	
-	// Turn off any lights that came with the model
+
+	// The combined lighting from the two scenes/
+	// Makes the car look too washed-out.
+	// Turn off any lights that came with the car model
 	futurgo.map(Vizi.Light, function(light) {
-		light.intensity = 0;
 	});
 
+	// Also turn off the ambient light that came with
+	// the city model
+	this.scene.map(/ambient/, function(o) {
+		o.light.color.set(0, 0, 0);
+	});
+	
 	var driveCam = new Vizi.Object;
 	var camera = new Vizi.PerspectiveCamera;
 	driveCam.addComponent(camera);
 	futurgo.addChild(driveCam);
-	driveCam.transform.position.set(0, 1.3, 0);
+	driveCam.transform.position.set(0, FuturgoCity.AVATAR_HEIGHT_SEATED, 0);
 	this.driveCamera = camera;
 	
 	this.futurgo = futurgo;
@@ -184,14 +215,17 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 	if (this.vehicleOpen) {
 		this.playOpenAnimations();
 		
+		/*
 		// This should be a move behavior but that requires a Vizi
 		// object to move to, not a camera component. Maybe we need
 		// to add the viewpoint back to the controller?
 		var carpos = this.futurgo.transform.position;
 
 		this.viewer.controllerScript.camera.position.set(0, 0, 0);
-		this.viewer.controllerScript.camera._object.transform.position.set(carpos.x, 1.3, carpos.z);
+		this.viewer.controllerScript.camera._object.transform.position.set(carpos.x, 
+				FuturgoCity.AVATAR_HEIGHT_SEATED, carpos.z);
 		this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
+		*/
 	}
 	else {
 		this.playCloseAnimations();
@@ -233,3 +267,5 @@ FuturgoCity.prototype.playCloseAnimations = function() {
 
 FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";
 FuturgoCity.FuturgoURL = "./models/futurgo_mobile/futurgo_mobile.json";
+FuturgoCity.AVATAR_HEIGHT = 2;
+FuturgoCity.AVATAR_HEIGHT_SEATED = 1.3;
