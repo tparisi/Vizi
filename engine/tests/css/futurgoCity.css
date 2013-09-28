@@ -35,11 +35,11 @@ body {
 }
 
 #left_banner_bg {
-	top:0px;
+	top:84px;
 	left:13px;
-	width:200px;
+	width:108px;
 	height:492px;
-	opacity:0.9;
+	opacity:0.5;
 	background:url(../images/Futurgo_site_assets/left_banner_fade.png);
 	background-size:100% 100%;
 	position:absolute;
@@ -47,7 +47,7 @@ body {
 
 #futurgo_logo {
 	top:18px;
-	left:24px;
+	left:72px;
 	width:180px;
 	height:60px;
 	background:url(../images/Futurgo_site_assets/futurgo_logo.png);
