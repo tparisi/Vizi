@@ -225,10 +225,14 @@ Vizi.Viewer.prototype.addToScene = function(data)
 	
 	if (!this.cameras.length)
 	{
-		this.cameras.push(this.createDefaultCamera());
-		this.camera = this.controllerScript.viewpoint.camera;
+		this.cameras = [];
+		this.cameraNames = [];
+		this.cameras.push(this.defaultCamera);
+		this.camera = this.defaultCamera;
 		this.cameraNames.push("[default]");
-		this.controllerScript.viewpoint.camera.active = true;
+
+		this.controllerScript.camera = this.defaultCamera;
+		this.controllerScript.camera.active = true;
 	}
 	
 	if (data.keyFrameAnimators)
@@ -251,8 +255,8 @@ Vizi.Viewer.prototype.addToScene = function(data)
 			camera.aspect = container.offsetWidth / container.offsetHeight;
 			
 			this.cameras.push(camera);
-			this.cameraNames.push(camera.name);
-		}
+			this.cameraNames.push(camera._object.name);
+		}		
 	}
 	
 	if (data.lights)
@@ -280,18 +284,10 @@ Vizi.Viewer.prototype.addToScene = function(data)
 			}
 			
 			this.lights.push(data.lights[i]);
-			this.lightNames.push(data.lights[i].name);
+			this.lightNames.push(data.lights[i]._object.name);
 			this.lightIntensities.push(data.lights[i].intensity);
 			this.lightColors.push(data.lights[i].color.clone());
-		}
-		
-		this.controllerScript.headlight.intensity = len ? 0 : 1;
-		this.headlightOn = len <= 0;
-	}
-	else
-	{
-		this.controllerScript.headlight.intensity = 1;
-		this.headlightOn = true;
+		}		
 	}
 	
 	this.scenes.push(data.scene);

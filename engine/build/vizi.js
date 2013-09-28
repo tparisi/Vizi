@@ -47234,6 +47234,8 @@ Vizi.FirstPersonControllerScript = function(param)
 {
 	Vizi.Script.call(this, param);
 
+	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	
 	this.collisionDistance = 10;
 
 	this.savedCameraPos = new THREE.Vector3;	
@@ -47248,6 +47250,14 @@ Vizi.FirstPersonControllerScript = function(param)
 				this.setCamera(camera);
 			}
 		},
+    	enabled : {
+    		get: function() {
+    			return this._enabled;
+    		},
+    		set: function(v) {
+    			this.setEnabled(v);
+    		}
+    	},
         headlightOn: {
 	        get: function() {
 	            return this._headlightOn;
@@ -47295,6 +47305,12 @@ Vizi.FirstPersonControllerScript.prototype.update = function()
 	}	
 }
 
+Vizi.FirstPersonControllerScript.prototype.setEnabled = function(enabled)
+{
+	this._enabled = enabled;
+	this.controls.enabled = enabled;
+}
+
 Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
@@ -47317,7 +47333,7 @@ Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
 	if (this.movementVector.length()) {
 		
         var collide = Vizi.Graphics.instance.objectFromRay(this.savedCameraPos,
-        		this.movementVector, 0.5, 2);
+        		this.movementVector, 1, 2);
 
         if (collide && collide.object) {
         	var dist = this.savedCameraPos.distanceTo(collide.hitPointWorld);
@@ -51548,10 +51564,14 @@ Vizi.Viewer.prototype.addToScene = function(data)
 	
 	if (!this.cameras.length)
 	{
-		this.cameras.push(this.createDefaultCamera());
-		this.camera = this.controllerScript.viewpoint.camera;
+		this.cameras = [];
+		this.cameraNames = [];
+		this.cameras.push(this.defaultCamera);
+		this.camera = this.defaultCamera;
 		this.cameraNames.push("[default]");
-		this.controllerScript.viewpoint.camera.active = true;
+
+		this.controllerScript.camera = this.defaultCamera;
+		this.controllerScript.camera.active = true;
 	}
 	
 	if (data.keyFrameAnimators)
@@ -51574,8 +51594,8 @@ Vizi.Viewer.prototype.addToScene = function(data)
 			camera.aspect = container.offsetWidth / container.offsetHeight;
 			
 			this.cameras.push(camera);
-			this.cameraNames.push(camera.name);
-		}
+			this.cameraNames.push(camera._object.name);
+		}		
 	}
 	
 	if (data.lights)
@@ -51603,18 +51623,10 @@ Vizi.Viewer.prototype.addToScene = function(data)
 			}
 			
 			this.lights.push(data.lights[i]);
-			this.lightNames.push(data.lights[i].name);
+			this.lightNames.push(data.lights[i]._object.name);
 			this.lightIntensities.push(data.lights[i].intensity);
 			this.lightColors.push(data.lights[i].color.clone());
-		}
-		
-		this.controllerScript.headlight.intensity = len ? 0 : 1;
-		this.headlightOn = len <= 0;
-	}
-	else
-	{
-		this.controllerScript.headlight.intensity = 1;
-		this.headlightOn = true;
+		}		
 	}
 	
 	this.scenes.push(data.scene);

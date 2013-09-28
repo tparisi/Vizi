@@ -24,6 +24,8 @@ Vizi.FirstPersonControllerScript = function(param)
 {
 	Vizi.Script.call(this, param);
 
+	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	
 	this.collisionDistance = 10;
 
 	this.savedCameraPos = new THREE.Vector3;	
@@ -38,6 +40,14 @@ Vizi.FirstPersonControllerScript = function(param)
 				this.setCamera(camera);
 			}
 		},
+    	enabled : {
+    		get: function() {
+    			return this._enabled;
+    		},
+    		set: function(v) {
+    			this.setEnabled(v);
+    		}
+    	},
         headlightOn: {
 	        get: function() {
 	            return this._headlightOn;
@@ -83,6 +93,12 @@ Vizi.FirstPersonControllerScript.prototype.update = function()
 	{
 		this.headlight.direction.copy(this._camera.position).negate();
 	}	
+}
+
+Vizi.FirstPersonControllerScript.prototype.setEnabled = function(enabled)
+{
+	this._enabled = enabled;
+	this.controls.enabled = enabled;
 }
 
 Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
