@@ -17,7 +17,7 @@ FuturgoCity = function(param) {
 
 FuturgoCity.prototype.go = function() {
 	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true,
-		showGrid:true});
+		showGrid:false});
 	this.loadURL(FuturgoCity.URL);
 	this.viewer.run();
 	
