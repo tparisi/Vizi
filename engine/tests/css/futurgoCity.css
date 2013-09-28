@@ -14,7 +14,7 @@ body {
 }
 
 #top_frame {
-	z-index:1;
+	z-index:-1;
 	top:13px;
 	left:13px;
 	right:10px;
@@ -34,13 +34,55 @@ body {
 	position:absolute;
 }
 
+#left_banner_bg {
+	top:0px;
+	left:13px;
+	width:200px;
+	height:492px;
+	opacity:0.9;
+	background:url(../images/Futurgo_site_assets/left_banner_fade.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
 #futurgo_logo {
-	top:22px;
-	left:22px;
-	width:152px;
-	height:50px;
+	top:18px;
+	left:24px;
+	width:180px;
+	height:60px;
 	background:url(../images/Futurgo_site_assets/futurgo_logo.png);
 	background-size:100% 100%;
+	position:absolute;
+}
+
+#ltd_model {
+	top:166px;
+	left:72px;
+	width:215px;
+	height:280px;
+	background:url(../images/Futurgo_site_assets/ltd_model.png);
+	background-size:100% 100%;
+	position:absolute;
+}
+
+#left_banner_title {
+	color:#C3F9FA;
+	font-size:22px;
+	font-style:normal;
+	left:33px;
+	top:470px;
+	width:300px;
+	position:absolute;
+}
+
+#left_banner_copy {
+	color:#C3F9FA;
+	font-size:14px;
+	left:33px;
+	padding:8px;
+	top:500px;
+	width:290px;
+	overflow:hidden;
 	position:absolute;
 }
 
@@ -54,9 +96,48 @@ body {
 	position:absolute;
 }
 
+#menubar {
+	font-size:18px;
+	color:Black;
+	text-align: justify;
+	width:55%;
+	padding-left:360px;
+	padding-top:30px;
+}
+
+#menubar * {
+	display: inline;
+}
+
+#menubar div {
+	display: inline-block;
+	font-style:normal;
+}
+
+#menubar span {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.menuItem {
+}
+
+.menuItem:hover {
+	cursor:pointer;
+}
+
+.menuItemHighlight {
+	color:Ivory;
+	background-color:LightBlue;
+	border-radius:1px;
+	margin:1px;
+}
+
 #container {
 	z-index:-2;
-	top:14px;
+	top:84px;
 	left:14px;
 	right:10px;
 	bottom:5px;

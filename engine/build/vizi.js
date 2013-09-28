@@ -48325,7 +48325,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
 
 	this.movementSpeed = 1.0;
-	this.lookSpeed = 0.005;
+	this.lookSpeed = 1.0;
 
 	this.lookVertical = true;
 	this.autoForward = false;
@@ -48573,17 +48573,17 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		var DRAG_DEAD_ZONE = 6;
+		var DRAG_DEAD_ZONE = 4;
 		
 		if (this.mouseDragOn) {
 			var dlon = this.mouseX - this.dragStartX;
-			this.lon = this.startLon + dlon; // this.mouseX - this.dragStartX; // * actualLookSpeed;
+			this.lon = this.startLon + dlon * this.lookSpeed;
 			if (Math.abs(this.lon) < DRAG_DEAD_ZONE)
 				this.lon = 0;
 			
 			if( this.lookVertical ) {
 				var dlat = this.mouseY - this.dragStartY;
-				this.lat = this.startLat - dlat; // * actualLookSpeed * verticalLookRatio;
+				this.lat = this.startLat - dlat * this.lookSpeed * verticalLookRatio;
 			}
 			if (Math.abs(this.lat) < DRAG_DEAD_ZONE)
 				this.lat = 0;

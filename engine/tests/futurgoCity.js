@@ -180,7 +180,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	// The combined lighting from the two scenes/
 	// Makes the car look too washed-out.
 	// Turn off any lights that came with the car model
-	futurgo.map(Vizi.Light, function(light) {
+	futurgo.map(Vizi.PointLight, function(light) {
+		light.intensity = 0;
 	});
 
 	// Also turn off the ambient light that came with

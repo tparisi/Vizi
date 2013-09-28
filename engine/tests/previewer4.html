@@ -354,7 +354,10 @@
 		setTimeout(function() {
 			rootNode.removeChild(initMessage);
 			rootNode.expand(false);
-			buildSceneTree(viewer.scenes[0], rootNode);
+			var i, len = viewer.scenes.length;
+			for (i = 0; i < len; i++) {
+				buildSceneTree(viewer.scenes[i], rootNode);
+			}
 		}, 1000);
 	}
 	

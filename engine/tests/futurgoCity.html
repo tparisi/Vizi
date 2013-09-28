@@ -11,7 +11,32 @@
 	<link href="./css/futurgoCity.css" rel="stylesheet" type='text/css'/> 
 </head>
 <body>
+	<div id="top_frame"></div>
+	<div id="menubar">
+	    <div id="menuORDER" class="menuItem" onclick="onMenuCommand(this.id);">ORDER</div>
+	    <div id="menuTEST_DRIVE" class="menuItem" onclick="onMenuCommand(this.id);">TEST DRIVE</div>
+	    <div id="menuFEATURES" class="menuItem" onclick="onMenuCommand(this.id);">FEATURES</div>
+	    <div id="menuSPECS" class="menuItem" onclick="onMenuCommand(this.id);">SPECS</div>
+	    <div id="menuCHARGING" class="menuItem" onclick="onMenuCommand(this.id);">CHARGING</div>
+	    <div id="menuGALLERY" class="menuItem" onclick="onMenuCommand(this.id);">GALLERY</div>
+	    <div id="menuVIDEO" class="menuItem" onclick="onMenuCommand(this.id);">VIDEO</div>
+	    <div id="menuFAQ" class="menuItem" onclick="onMenuCommand(this.id);">QUESTIONS?</div>
+	    <span></span>
+  	</div>
+	<div id="bot_frame"></div>
+	<div id="left_banner_bg"></div>
 	<div id="futurgo_logo"></div>
+	<!--  
+	<div id="ltd_model"></div>
+	<div id="left_banner_title">Lifestyle Transportation Device</div>
+	<div id="left_banner_copy">
+	Get where you need to go in style, in <i>Futurgo&trade;</i>'s revolutionary
+	new personal transportation system!<p></p>
+	The LTD&reg; features sleek styling, ergonomic design and a 
+	patent-pending drive train that really moves.<p></p>
+	Experience the future in personal transportation... TODAY!<p></p>
+	</div>
+	-->
 	<div id="vizi_powered"></div>
 	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
@@ -40,6 +65,9 @@
 			 });	
 
 		loadStatus.style.display = 'block';
+
+		$('#menuTEST_DRIVE').addClass('menuItemHighlight');
+	
 		futurgoCity.go();
 	}
 	);
