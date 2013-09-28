@@ -156,11 +156,11 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 	// Add the Futurgo to the scene
 	this.viewer.addToScene(data);
-	var futurgo = data.scene;
-	futurgo.transform.position.set(5.5, 0, -10);
+	var futurgoScene = data.scene;
+	futurgoScene.transform.position.set(5.5, 0, -10);
 
 	// Fade the windows
-	futurgo.map(/windows_front|windows_rear/, function(o) {
+	futurgoScene.map(/windows_front|windows_rear/, function(o) {
 		var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
 		o.addComponent(fader);
 		fader.start();
@@ -168,7 +168,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 	// Add the pickers
 	var that = this;
-	futurgo.map("vizi_mobile", function(o) {
+	futurgoScene.map("vizi_mobile", function(o) {
 		var picker = new Vizi.Picker;
 		picker.overCursor = 'pointer';
 		picker.addEventListener("mouseover", function(event) { that.onMouseOver("futurgo", event); });
@@ -180,7 +180,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	// The combined lighting from the two scenes/
 	// Makes the car look too washed-out.
 	// Turn off any lights that came with the car model
-	futurgo.map(Vizi.PointLight, function(light) {
+	futurgoScene.map(Vizi.PointLight, function(light) {
 		light.intensity = 0;
 	});
 
@@ -189,6 +189,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.scene.map(/ambient/, function(o) {
 		o.light.color.set(0, 0, 0);
 	});
+
+	var futurgo = futurgoScene.findNode("vizi_mobile");
 	
 	var driveCam = new Vizi.Object;
 	var camera = new Vizi.PerspectiveCamera;
@@ -228,10 +230,15 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 				FuturgoCity.AVATAR_HEIGHT_SEATED, carpos.z);
 		this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
 		*/
+		
+		this.viewer.controllerScript.camera = this.driveCamera;
+		this.driveCamera.active = true;
 	}
 	else {
 		this.playCloseAnimations();
+		this.viewer.controllerScript.camera = this.viewer.defaultCamera;
 		this.viewer.controllerScript.move = true;
+		this.viewer.controllerScript.camera.active = true;
 	}
 	
 }
