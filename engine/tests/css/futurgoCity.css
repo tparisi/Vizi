@@ -132,7 +132,8 @@ body {
 	color:Ivory;
 	background-color:LightBlue;
 	border-radius:1px;
-	margin:1px;
+	padding-left:3px;
+	padding-right:3px;
 }
 
 #container {
@@ -145,6 +146,47 @@ body {
 }
 
 :focus { outline: none; }
+
+#drive_controls {
+	font-size:24px;
+	bottom:40px;
+	margin-top:2px;
+	text-align:center;
+	width:100%;
+	position:absolute;
+}
+
+#help_text {
+	font-size:14px;
+	color:#C3F9FA;
+	color:white;
+	bottom:4px;
+	margin-top:2px;
+	text-align:center;
+	width:100%;
+	position:absolute;
+}
+
+@-webkit-keyframes blinker {  
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+.blinker {
+  -webkit-animation-name: blinker;  
+  -webkit-animation-iteration-count: infinite;  
+  -webkit-animation-timing-function: cubic-bezier(1, .5, 0, 1);
+  -webkit-animation-duration: 1s; 
+}
+
+.controlBarItem {
+	color:red;
+		
+}
+
+.controlBarItem:hover {
+	cursor:pointer;
+}
 
 #loadStatus {
 	color:#C3F9FA;

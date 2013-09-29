@@ -10,6 +10,9 @@ FuturgoCity = function(param) {
 	this.loadProgressCallback = param.loadProgressCallback;
 	this.mouseOverCallback = param.mouseOverCallback;
 	this.mouseOutCallback = param.mouseOutCallback;
+	this.mouseClickCallback = param.mouseClickCallback;
+	this.startTestDriveCallback = param.startTestDriveCallback;
+	this.endTestDriveCallback = param.startTestDriveCallback;
 	this.part_materials = [];
 	this.vehicleOpen = false;
 	this.wheelsMoving = false;
@@ -167,6 +170,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	});
 
 	// Add the pickers
+	this.pickers = [];
 	var that = this;
 	futurgoScene.map("vizi_mobile", function(o) {
 		var picker = new Vizi.Picker;
@@ -175,6 +179,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 		picker.addEventListener("mouseout", function(event) { that.onMouseOut("futurgo", event); });
 		picker.addEventListener("click", function(event) { that.onMouseClick("futurgo", event); });
 		o.addComponent(picker);
+		that.pickers.push(picker);
 	});	
 
 	// The combined lighting from the two scenes/
@@ -194,9 +199,14 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	
 	var driveCam = new Vizi.Object;
 	var camera = new Vizi.PerspectiveCamera;
+	camera.near = 0.01;
 	driveCam.addComponent(camera);
 	futurgo.addChild(driveCam);
-	driveCam.transform.position.set(0, FuturgoCity.AVATAR_HEIGHT_SEATED, 0);
+	var scaley = futurgo.transform.scale.y;
+	var scalez = futurgo.transform.scale.z;
+	var camy = FuturgoCity.AVATAR_HEIGHT_SEATED / scaley;
+	var camz = 0.25 / scalez;
+	driveCam.transform.position.set(0, camy, camz);
 	this.driveCamera = camera;
 	
 	this.futurgo = futurgo;
@@ -205,20 +215,39 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 FuturgoCity.prototype.onMouseOver = function(what, event) {
 	console.log("Mouse over", what);
+	if (this.mouseOverCallback)
+		this.mouseOverCallback(what, event);
 }
 
 FuturgoCity.prototype.onMouseOut = function(what, event) {
 	console.log("Mouse out", what);
+	if (this.mouseOutCallback)
+		this.mouseOutCallback(what, event);
 }
 
 FuturgoCity.prototype.onMouseClick = function(what, event) {
+
+	this.toggleStartStop();
+
+	if (this.mouseClickCallback)
+		this.mouseClickCallback(what, event);	
+}
+
+FuturgoCity.prototype.toggleStartStop = function(what, event) {
+
 	console.log("Mouse clicked", what);
 	this.vehicleOpen = !this.vehicleOpen;
 	var that = this;
 	if (this.vehicleOpen) {
+
+		// Disable the pickers while inside the car body
+		var i, len = that.pickers.length;
+		for (i = 0; i < len; i++) {
+			that.pickers[i].enabled = false;
+		}
+		
 		this.playOpenAnimations();
 		
-		this.viewer.controllerScript.move = false;
 		/*
 		// This should be a move behavior but that requires a Vizi
 		// object to move to, not a camera component. Maybe we need
@@ -231,16 +260,50 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 		this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
 		*/
 		
-		this.viewer.controllerScript.camera = this.driveCamera;
-		this.driveCamera.active = true;
+		var that = this;
+		setTimeout(function() { 
+			
+			that.viewer.controllerScript.camera = that.driveCamera;
+			that.viewer.controllerScript.move = false;
+			that.driveCamera.active = true;
+		}, 1000);
+
+		setTimeout(function() { 
+
+			that.playCloseAnimations(); 
+		}, 2000);
+
+		if (this.startTestDriveCallback)
+			this.startTestDriveCallback();
+
 	}
 	else {
-		this.playCloseAnimations();
-		this.viewer.controllerScript.camera = this.viewer.defaultCamera;
-		this.viewer.controllerScript.move = true;
-		this.viewer.controllerScript.camera.active = true;
-	}
+		// Re-enable the pickers while inside the car body
+		var i, len = that.pickers.length;
+		for (i = 0; i < len; i++) {
+			that.pickers[i].enabled = true;
+		}
+		
+		this.playOpenAnimations();
+		
+		var that = this;
+		setTimeout(function() { 
+			
+			that.viewer.controllerScript.camera = that.viewer.defaultCamera;
+			that.viewer.controllerScript.move = true;
+			that.viewer.controllerScript.camera.active = true;
+
+		}, 1000);
+
+		setTimeout(function() { 
+			
+			that.playCloseAnimations(); 
+		}, 2000);
+
+		if (this.endTestDriveCallback)
+			this.endTestDriveCallback();
 	
+	}
 }
 
 FuturgoCity.prototype.useCamera = function(name) {

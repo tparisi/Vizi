@@ -12,6 +12,7 @@ Vizi.Picker = function(param) {
 	
     Vizi.Component.call(this, param);
     this.overCursor = param.overCursor;
+    this.enabled = (param.enabled !== undefined) ? param.enabled : true;
 }
 
 goog.inherits(Vizi.Picker, Vizi.Component);

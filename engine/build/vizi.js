@@ -48212,7 +48212,7 @@ Vizi.PickManager.objectFromMouse = function(event)
 		event.point = intersected.point;
 		event.object = intersected.object;
 		
-    	if (intersected.object._object.picker)
+    	if (intersected.object._object.picker && intersected.object._object.picker.enabled)
     	{
     		return intersected.object._object.picker;
     	}
@@ -48231,7 +48231,7 @@ Vizi.PickManager.findObjectPicker = function(object)
 {
 	while (object)
 	{
-		if (object.data && object.data._object.picker)
+		if (object.data && object.data._object.picker && object.data._object.picker.enabled)
 		{
 			return object.data._object.picker;
 		}
@@ -50667,6 +50667,7 @@ Vizi.Picker = function(param) {
 	
     Vizi.Component.call(this, param);
     this.overCursor = param.overCursor;
+    this.enabled = (param.enabled !== undefined) ? param.enabled : true;
 }
 
 goog.inherits(Vizi.Picker, Vizi.Component);
