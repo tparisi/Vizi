@@ -51,10 +51,21 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	
 	this.viewer.setController("FPS");
 	
-	this.addEnvironment(data.scene);
+	this.addBackground();
+	this.addCollisionBox();
+	this.setupCamera();
+	this.loadFuturgo();
 }
 
-FuturgoCity.prototype.addEnvironment = function(scene) {
+FuturgoCity.prototype.onLoadProgress = function(progress)
+{
+	// Update the laoder bar
+	var percentProgress = progress.loaded / progress.total * 100;
+	if (this.loadProgressCallback)
+		this.loadProgressCallback(percentProgress);
+}
+
+FuturgoCity.prototype.addBackground = function() {
 	
 	function addEnvMap(material) {
 		material.envMap = envMap;
@@ -70,19 +81,9 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 				 path + "topcity.jpg", path + "botcity.jpg",
 				 path + "frontcity.jpg", path + "backcity.jpg" ];
 
-	/*
-	var path = "./images/skybox_buildings/";
-	
-	var urls = [ path + "futurgo_skybox_Right.jpg", path + "futurgo_skybox_Left.jpg",
-				 path + "futurgo_skybox_Top.jpg", path + "futurgo_skybox_Bottom",
-				 path + "futurgo_skybox_Front.jpg", path + "futurgo_skybox_Back.jpg" ];
-	
-	
-	*/
-	
 	var envMap = THREE.ImageUtils.loadTextureCube( urls );
 	
-	scene.map(/Tower.*|Office.*/, function(o) {
+	this.scene.map(/Tower.*|Office.*/, function(o) {
 		console.log(o.name);
 
 		var visuals = o.visuals;
@@ -111,42 +112,61 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	skyboxScript.texture = envMap;
 	this.viewer.addObject(skybox);
 
-	// Maybe fog, need to figure out how to fake it in the background layer
-//	Vizi.Graphics.instance.scene.fog = new THREE.FogExp2( 0xaaaabb, .02 );
-//	Vizi.Graphics.instance.backgroundLayer.scene.fog = new THREE.FogExp2( 0xaaaabb, 100 );
+}
 
-	/*
-	// Ground plane
-	var map = THREE.ImageUtils.loadTexture("./models/futurgo_city/images/Road_J04.bmp");
-	map.repeat.set(100, 100);
-	map.wrapS = map.wrapT = THREE.RepeatWrapping;
-	var ground = new Vizi.Object;
-	var plane = new Vizi.Visual({
-		geometry : new THREE.PlaneGeometry(1000, 1000, 100, 100),
-		material : new THREE.MeshBasicMaterial({color:0xffffff,
-			map:map}),
-	});
-	ground.addComponent(plane);
-	ground.transform.rotation.x = -Math.PI / 2;
-	ground.transform.position.y = -0.5;
-	this.viewer.addObject(ground);
-	*/
+FuturgoCity.prototype.addCollisionBox = function() {
+
+	var bbox = Vizi.SceneUtils.computeBoundingBox(this.scene);
+
+	var box = new Vizi.Object;
 	
+	var geometry = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
+			bbox.max.y - bbox.min.y,
+			bbox.max.z - bbox.min.z);
+	
+	var material = new THREE.MeshBasicMaterial({transparent:true, 
+		opacity:0.1, 
+		color:0x0000ff,
+		side:THREE.DoubleSide});
+	
+	var visual = new Vizi.Visual({
+		geometry : geometry,
+		material : material});
+	
+	box.addComponent(visual);
+	
+	this.viewer.addObject(box);
+}
+
+FuturgoCity.prototype.addGround = function(scene) {
+
+	return;
+	
+	var ground = new Vizi.Object;
+
+	var texture = THREE.ImageUtils.loadTexture("./models/futurgo_city/images/Road_01.bmp");
+	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set(96, 96);
+	
+	var visual = new Vizi.Visual({
+		geometry : new THREE.PlaneGeometry(3 * 192, 3 * 192, 192, 192),
+		material : new THREE.MeshBasicMaterial({color:0xaaaaaa,
+			map:null})
+	});
+	
+	ground.addComponent(visual);
+	ground.transform.rotation.x = -Math.PI / 2;
+	// drop plane a little below roads to avoid z-fighting
+	ground.transform.position.y = -0.01;
+	
+	this.viewer.addObject(ground);
+}
+
+FuturgoCity.prototype.setupCamera = function() {
 	this.viewer.controllerScript.camera.position.set(0, FuturgoCity.AVATAR_HEIGHT, 0);
 	this.viewer.controllerScript.camera.near = 0.01;
-
-//	this.viewer.controllerScript.camera.rotation.set(0, Math.PI / 2, 0);
-
-	this.loadFuturgo();
 }
 
-FuturgoCity.prototype.onLoadProgress = function(progress)
-{
-	// Update the laoder bar
-	var percentProgress = progress.loaded / progress.total * 100;
-	if (this.loadProgressCallback)
-		this.loadProgressCallback(percentProgress);
-}
 
 FuturgoCity.prototype.loadFuturgo = function() {
 	var that = this;

@@ -48460,7 +48460,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		rotation.setFromQuaternion(quaternion);
 		
 		this.lon = THREE.Math.radToDeg(rotation.y);
-		this.lat = THREE.Math.radToDeg(rotation.x);
+		// hack for bad math
+		//this.lat = THREE.Math.radToDeg(rotation.x);
 		
 		this.dragStartX = this.mouseX;
 		this.dragStartY = this.mouseY;
