@@ -118,7 +118,9 @@
 	}
 
 	function onMouseClick(what, event) {
-		toggleStartStop();
+		if (what == "futurgo") {
+			toggleStartStop();
+		}
 	}
 
 	function onStartStopClicked() {
@@ -132,7 +134,7 @@
 
 		if (help_drive.style.display == 'block') {
 			$('#start_stop').html('START TEST DRIVE');
-			$('#start_stop').addClass('blinker');
+//			$('#start_stop').addClass('blinker');
 			help_drive.style.display = 'none';
 			help_walk.style.display = 'block';
 		}

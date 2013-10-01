@@ -149,10 +149,11 @@ body {
 
 #drive_controls {
 	font-size:24px;
-	bottom:40px;
+	bottom:20px;
 	margin-top:2px;
 	text-align:center;
-	width:100%;
+	left:43%;
+	width:14%;
 	position:absolute;
 }
 

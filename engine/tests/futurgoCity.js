@@ -14,7 +14,7 @@ FuturgoCity = function(param) {
 	this.startTestDriveCallback = param.startTestDriveCallback;
 	this.endTestDriveCallback = param.startTestDriveCallback;
 	this.part_materials = [];
-	this.vehicleOpen = false;
+	this.testDriveRunning = false;
 	this.wheelsMoving = false;
 }
 
@@ -85,7 +85,7 @@ FuturgoCity.prototype.addBackground = function() {
 	var envMap = THREE.ImageUtils.loadTextureCube( urls );
 	
 	this.scene.map(/Tower.*|Office.*/, function(o) {
-		console.log(o.name);
+//		console.log(o.name);
 
 		var visuals = o.visuals;
 		if (visuals) {
@@ -112,6 +112,8 @@ FuturgoCity.prototype.addBackground = function() {
 	var skyboxScript = skybox.getComponent(Vizi.SkyboxScript);
 	skyboxScript.texture = envMap;
 	this.viewer.addObject(skybox);
+	
+	this.envMap = envMap;
 
 }
 
@@ -125,10 +127,11 @@ FuturgoCity.prototype.addCollisionBox = function() {
 			bbox.max.y - bbox.min.y,
 			bbox.max.z - bbox.min.z);
 	
-	var material = new THREE.MeshBasicMaterial({transparent:true, 
-		opacity:0.1, 
-		color:0x0000ff,
-		side:THREE.DoubleSide});
+	var material = new THREE.MeshBasicMaterial({
+		transparent:true, 
+		opacity:0, 
+		side:THREE.DoubleSide
+		});
 	
 	var visual = new Vizi.Visual({
 		geometry : geometry,
@@ -140,10 +143,8 @@ FuturgoCity.prototype.addCollisionBox = function() {
 }
 
 FuturgoCity.prototype.fixTrees = function(scene) {
-	console.log("Trees:");
 	
 	this.scene.map(/^Tree.*/, function(o) {
-		console.log(o.name);
 		
 		o.map(Vizi.Visual, function(v){
 			var material = v.material;
@@ -161,30 +162,6 @@ FuturgoCity.prototype.fixTrees = function(scene) {
 				
 		});
 	});
-}
-
-FuturgoCity.prototype.addGround = function(scene) {
-
-	return;
-	
-	var ground = new Vizi.Object;
-
-	var texture = THREE.ImageUtils.loadTexture("./models/futurgo_city/images/Road_01.bmp");
-	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set(96, 96);
-	
-	var visual = new Vizi.Visual({
-		geometry : new THREE.PlaneGeometry(3 * 192, 3 * 192, 192, 192),
-		material : new THREE.MeshBasicMaterial({color:0xaaaaaa,
-			map:null})
-	});
-	
-	ground.addComponent(visual);
-	ground.transform.rotation.x = -Math.PI / 2;
-	// drop plane a little below roads to avoid z-fighting
-	ground.transform.position.y = -0.01;
-	
-	this.viewer.addObject(ground);
 }
 
 FuturgoCity.prototype.setupCamera = function() {
@@ -209,16 +186,44 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var futurgoScene = data.scene;
 	futurgoScene.transform.position.set(5.5, 0, -10);
 
-	// Fade the windows
+	// Add some interaction and behaviors
+	var that = this;
+
+	// Add environment map and faders to the windows; fade the windows on start
+	this.faders = [];
 	futurgoScene.map(/windows_front|windows_rear/, function(o) {
-		var fader = new Vizi.FadeBehavior({duration:2, opacity:.8});
+		
+		var fader = new Vizi.FadeBehavior({duration:2, 
+			opacity:FuturgoCity.OPACITY_SEMI_OPAQUE});
 		o.addComponent(fader);
 		fader.start();
+		that.faders.push(fader);
+
+		var visuals = o.visuals;
+		var i, len = visuals.length;
+		for (i = 0; i < len; i++) {
+			visuals[i].material.envMap = that.envMap;
+			visuals[i].material.reflectivity = 0.1;
+			visuals[i].material.refractionRatio = 0.1;
+		}
+		
 	});
 
-	// Add the pickers
+	// Add environment map to the body
+	futurgoScene.map(/body2/, function(o) {
+		var visuals = o.visuals;
+		var i, len = visuals.length;
+		for (i = 0; i < len; i++) {
+			console.log(visuals[i].material)
+			visuals[i].material.envMap = that.envMap;
+			visuals[i].material.reflectivity = 0.1;
+			visuals[i].material.refractionRatio = 0.1;
+		}
+		
+	});
+	
+	// Add pickers to the vehicle
 	this.pickers = [];
-	var that = this;
 	futurgoScene.map("vizi_mobile", function(o) {
 		var picker = new Vizi.Picker;
 		picker.overCursor = 'pointer';
@@ -229,8 +234,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 		that.pickers.push(picker);
 	});	
 
-	// The combined lighting from the two scenes/
-	// Makes the car look too washed-out.
+	// The combined lighting from the two scenes
+	// makes the car look too washed-out;
 	// Turn off any lights that came with the car model
 	futurgoScene.map(Vizi.PointLight, function(light) {
 		light.intensity = 0;
@@ -248,7 +253,9 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var camera = new Vizi.PerspectiveCamera;
 	camera.near = 0.01;
 	driveCam.addComponent(camera);
-	futurgo.addChild(driveCam);
+	futurgo.addChild(driveCam);	
+	// account for scale in model so that
+	// we can position the camera properly
 	var scaley = futurgo.transform.scale.y;
 	var scalez = futurgo.transform.scale.z;
 	var camy = FuturgoCity.AVATAR_HEIGHT_SEATED / scaley;
@@ -257,24 +264,25 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.driveCamera = camera;
 	
 	this.futurgo = futurgo;
-	this.vehicleOpen = false;
+	this.futurgoScene = futurgoScene;
+	this.testDriveRunning = false;
 }
 
 FuturgoCity.prototype.onMouseOver = function(what, event) {
-	console.log("Mouse over", what);
+//	console.log("Mouse over", what);
 	if (this.mouseOverCallback)
 		this.mouseOverCallback(what, event);
 }
 
 FuturgoCity.prototype.onMouseOut = function(what, event) {
-	console.log("Mouse out", what);
+//	console.log("Mouse out", what);
 	if (this.mouseOutCallback)
 		this.mouseOutCallback(what, event);
 }
 
 FuturgoCity.prototype.onMouseClick = function(what, event) {
 
-	this.toggleStartStop();
+	this.toggleStartStop(what);
 
 	if (this.mouseClickCallback)
 		this.mouseClickCallback(what, event);	
@@ -282,10 +290,10 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 
 FuturgoCity.prototype.toggleStartStop = function(what, event) {
 
-	console.log("Mouse clicked", what);
-	this.vehicleOpen = !this.vehicleOpen;
+//	console.log("Mouse clicked", what);
+	this.testDriveRunning = !this.testDriveRunning;
 	var that = this;
-	if (this.vehicleOpen) {
+	if (this.testDriveRunning) {
 
 		// Disable the pickers while inside the car body
 		var i, len = that.pickers.length;
@@ -312,8 +320,17 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			
 			that.viewer.controllerScript.camera = that.driveCamera;
 			that.viewer.controllerScript.move = false;
-			that.driveCamera.active = true;
 			that.driveCamera.rotation.set(0, 0, 0);
+			that.driveCamera.active = true;
+			
+			// Fade the windows
+			var i, len = that.faders.length;
+			for (i = 0; i < len; i++) {
+				var fader = that.faders[i];
+				fader.opacity = FuturgoCity.OPACITY_MOSTLY_TRANSPARENT;
+				fader.start();
+			}
+			
 		}, 1000);
 
 		setTimeout(function() { 
@@ -341,6 +358,13 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			that.viewer.controllerScript.move = true;
 			that.viewer.controllerScript.camera.active = true;
 			that.viewer.controllerScript.update();
+			// Fade the windows
+			var i, len = that.faders.length;
+			for (i = 0; i < len; i++) {
+				var fader = that.faders[i];
+				fader.opacity = FuturgoCity.OPACITY_SEMI_OPAQUE;
+				fader.start();
+			}
 //			that.viewer.controllerScript.camera.position.copy(that.futurgo.position);
 //			that.viewer.controllerScript.camera.position.x -= 3;
 //			that.viewer.controllerScript.camera.position.z += 10;
@@ -396,3 +420,5 @@ FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";
 FuturgoCity.FuturgoURL = "./models/futurgo_mobile/futurgo_mobile.json";
 FuturgoCity.AVATAR_HEIGHT = 2;
 FuturgoCity.AVATAR_HEIGHT_SEATED = 1.3;
+FuturgoCity.OPACITY_SEMI_OPAQUE = 0.8;
+FuturgoCity.OPACITY_MOSTLY_TRANSPARENT = 0.2;

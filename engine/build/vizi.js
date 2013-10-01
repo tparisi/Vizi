@@ -47795,7 +47795,7 @@ goog.require('Vizi.Behavior');
 Vizi.FadeBehavior = function(param) {
 	param = param || {};
 	this.duration = (param.duration !== undefined) ? param.duration : 1;
-	this.targetOpacity = (param.opacity !== undefined) ? param.opacity : 0.5;
+	this.opacity = (param.opacity !== undefined) ? param.opacity : 0.5;
 	this.savedOpacities = [];
 	this.savedTransparencies = [];
 	this.tween = null;
@@ -47815,13 +47815,13 @@ Vizi.FadeBehavior.prototype.start = function()
 		for (i = 0; i < len; i++) {
 			this.savedOpacities.push(visuals[i].material.opacity);
 			this.savedTransparencies.push(visuals[i].material.transparent);
-			visuals[i].material.transparent = this.targetOpacity < 1 ? true : false;
+			visuals[i].material.transparent = this.opacity < 1 ? true : false;
 		}	
 	}
 	
-	this.opacity = { opacity : this.savedOpacities[0] };
-	this.opacityTarget = { opacity : this.targetOpacity };
-	this.tween = new TWEEN.Tween(this.opacity).to(this.opacityTarget, this.duration * 1000)
+	this.value = { opacity : this.savedOpacities[0] };
+	this.targetValue = { opacity : this.opacity };
+	this.tween = new TWEEN.Tween(this.value).to(this.targetValue, this.duration * 1000)
 	.easing(TWEEN.Easing.Quadratic.InOut)
 	.repeat(0)
 	.start();
@@ -47843,7 +47843,7 @@ Vizi.FadeBehavior.prototype.evaluate = function(t)
 		var visuals = this._object.visuals;
 		var i, len = visuals.length;
 		for (i = 0; i < len; i++) {
-			visuals[i].material.opacity = this.opacity.opacity;
+			visuals[i].material.opacity = this.value.opacity;
 		}	
 	}
 
