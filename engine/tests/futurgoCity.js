@@ -264,7 +264,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var scaley = futurgo.transform.scale.y;
 	var scalez = futurgo.transform.scale.z;
 	var camy = FuturgoCity.AVATAR_HEIGHT_SEATED / scaley;
-	var camz = 0.25 / scalez;
+	var camz = 0 / scalez;
 	driveCam.transform.position.set(0, camy, camz);
 	this.driveCamera = camera;
 

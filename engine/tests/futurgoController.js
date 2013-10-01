@@ -33,6 +33,8 @@ FuturgoControllerScript.prototype.realize = function()
 {
 	this.lastUpdateTime = Date.now();
 	this.startY = this._object.transform.position.y;
+	
+	this.steeringWheel = this._object.findNode("polySurface93");
 }
 
 FuturgoControllerScript.prototype.update = function()
@@ -68,11 +70,18 @@ FuturgoControllerScript.prototype.updatePosition = function() {
 	this._object.transform.position.y = this.startY;
 
 	// Turn
-	if ( this.turnLeft ) 
+	if ( this.turnLeft ) {
 		this._object.transform.object.rotateY( actualTurnSpeed );
-	if ( this.turnRight ) 
+		//this.steeringWheel.transform.rotation.z = Math.PI / 96;
+	}
+	else if ( this.turnRight ) {
 		this._object.transform.object.rotateY( -actualTurnSpeed );
-
+		//this.steeringWheel.transform.rotation.z = -Math.PI / 96;
+	}
+	else {
+		//this.steeringWheel.transform.rotation.z = 0;
+	}
+	
 	this.lastUpdateTime = now;
 	
 	
