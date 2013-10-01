@@ -3510,15 +3510,16 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.onMouseDown = function ( event ) {
 
-		if ( this.domElement !== document ) {
+/*		if ( this.domElement !== document ) {
 
 			this.domElement.focus();
 
 		}
 
-		event.preventDefault();
-		event.stopPropagation();
-
+//		event.preventDefault();
+//		event.stopPropagation();
+*/
+		
 		if ( this.activeLook ) {
 
 			switch ( event.button ) {
@@ -3563,8 +3564,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.onMouseUp = function ( event ) {
 
-		event.preventDefault();
-		event.stopPropagation();
+//		event.preventDefault();
+//		event.stopPropagation();
 
 		if ( this.activeLook ) {
 
@@ -3758,14 +3759,15 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	};
 
 
-	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+//	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 
-	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), false );
+	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), true );
 	this.domElement.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 	this.domElement.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
 	this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
 	this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
 
+	
 	function bind( scope, fn ) {
 
 		return function () {
@@ -4959,7 +4961,7 @@ Vizi.Application.prototype.realizeObjects = function()
 	
 Vizi.Application.prototype.onMouseMove = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate  && this.mouseDelegate.onMouseMove)
 	{
 		this.mouseDelegate.onMouseMove(event);
 	}
@@ -4967,7 +4969,7 @@ Vizi.Application.prototype.onMouseMove = function(event)
 
 Vizi.Application.prototype.onMouseDown = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate && this.mouseDelegate.onMouseDown)
 	{
 		this.mouseDelegate.onMouseDown(event);
 	}
@@ -4975,7 +4977,7 @@ Vizi.Application.prototype.onMouseDown = function(event)
 
 Vizi.Application.prototype.onMouseUp = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate && this.mouseDelegate.onMouseUp)
 	{
 		this.mouseDelegate.onMouseUp(event);
 	}
@@ -4983,7 +4985,7 @@ Vizi.Application.prototype.onMouseUp = function(event)
 
 Vizi.Application.prototype.onMouseClick = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate && this.mouseDelegate.onMouseClick)
 	{
 		this.mouseDelegate.onMouseClick(event);
 	}
@@ -4991,7 +4993,7 @@ Vizi.Application.prototype.onMouseClick = function(event)
 
 Vizi.Application.prototype.onMouseDoubleClick = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate && this.mouseDelegate.onMouseDoubleClick)
 	{
 		this.mouseDelegate.onMouseDoubleClick(event);
 	}
@@ -4999,7 +5001,7 @@ Vizi.Application.prototype.onMouseDoubleClick = function(event)
 
 Vizi.Application.prototype.onMouseScroll = function(event)
 {
-	if (this.mouseDelegate)
+	if (this.mouseDelegate  && this.mouseDelegate.onMouseScroll)
 	{
 		this.mouseDelegate.onMouseScroll(event);
 	}
@@ -5007,7 +5009,7 @@ Vizi.Application.prototype.onMouseScroll = function(event)
 
 Vizi.Application.prototype.onKeyDown = function(event)
 {
-	if (this.keyboardDelegate)
+	if (this.keyboardDelegate && this.keyboardDelegate.onKeyDown)
 	{
 		this.keyboardDelegate.onKeyDown(event);
 	}
@@ -5015,7 +5017,7 @@ Vizi.Application.prototype.onKeyDown = function(event)
 
 Vizi.Application.prototype.onKeyUp = function(event)
 {
-	if (this.keyboardDelegate)
+	if (this.keyboardDelegate && this.keyboardDelegate.onKeyUp)
 	{
 		this.keyboardDelegate.onKeyUp(event);
 	}
@@ -5023,7 +5025,7 @@ Vizi.Application.prototype.onKeyUp = function(event)
 
 Vizi.Application.prototype.onKeyPress = function(event)
 {
-	if (this.keyboardDelegate)
+	if (this.keyboardDelegate  && this.keyboardDelegate.onKeyPress)
 	{
 		this.keyboardDelegate.onKeyPress(event);
 	}

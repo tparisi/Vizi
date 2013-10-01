@@ -22,6 +22,9 @@ FuturgoCity.prototype.go = function() {
 	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true,
 		showGrid:false});
 	this.loadURL(FuturgoCity.URL);
+	this.viewer.mouseDelegate = this;
+	this.viewer.keyboardDelegate = this;
+	this.viewer.focus();
 	this.viewer.run();
 	
 }
@@ -122,6 +125,7 @@ FuturgoCity.prototype.addCollisionBox = function() {
 	var bbox = Vizi.SceneUtils.computeBoundingBox(this.scene);
 
 	var box = new Vizi.Object;
+	box.name = "_futurgoCollisionBox";
 	
 	var geometry = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
 			bbox.max.y - bbox.min.y,
@@ -227,9 +231,9 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	futurgoScene.map("vizi_mobile", function(o) {
 		var picker = new Vizi.Picker;
 		picker.overCursor = 'pointer';
-		picker.addEventListener("mouseover", function(event) { that.onMouseOver("futurgo", event); });
-		picker.addEventListener("mouseout", function(event) { that.onMouseOut("futurgo", event); });
-		picker.addEventListener("click", function(event) { that.onMouseClick("futurgo", event); });
+		picker.addEventListener("mouseover", function(event) { that.onPickerMouseOver("futurgo", event); });
+		picker.addEventListener("mouseout", function(event) { that.onPickerMouseOut("futurgo", event); });
+		picker.addEventListener("click", function(event) { that.onPickerMouseClick("futurgo", event); });
 		o.addComponent(picker);
 		that.pickers.push(picker);
 	});	
@@ -248,7 +252,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	});
 
 	var futurgo = futurgoScene.findNode("vizi_mobile");
-	
+
+	// Drop a camera inside the vehicle
 	var driveCam = new Vizi.Object;
 	var camera = new Vizi.PerspectiveCamera;
 	camera.near = 0.01;
@@ -262,25 +267,29 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var camz = 0.25 / scalez;
 	driveCam.transform.position.set(0, camy, camz);
 	this.driveCamera = camera;
+
+	// Add the keyboard controller
+	this.carController = new FuturgoControllerScript({enabled:false});
+	futurgo.addComponent(this.carController);
 	
 	this.futurgo = futurgo;
 	this.futurgoScene = futurgoScene;
 	this.testDriveRunning = false;
 }
 
-FuturgoCity.prototype.onMouseOver = function(what, event) {
+FuturgoCity.prototype.onPickerMouseOver = function(what, event) {
 //	console.log("Mouse over", what);
 	if (this.mouseOverCallback)
 		this.mouseOverCallback(what, event);
 }
 
-FuturgoCity.prototype.onMouseOut = function(what, event) {
+FuturgoCity.prototype.onPickerMouseOut = function(what, event) {
 //	console.log("Mouse out", what);
 	if (this.mouseOutCallback)
 		this.mouseOutCallback(what, event);
 }
 
-FuturgoCity.prototype.onMouseClick = function(what, event) {
+FuturgoCity.prototype.onPickerMouseClick = function(what, event) {
 
 	this.toggleStartStop(what);
 
@@ -290,6 +299,8 @@ FuturgoCity.prototype.onMouseClick = function(what, event) {
 
 FuturgoCity.prototype.toggleStartStop = function(what, event) {
 
+	this.viewer.focus(); // in case page element had it
+	
 //	console.log("Mouse clicked", what);
 	this.testDriveRunning = !this.testDriveRunning;
 	var that = this;
@@ -300,6 +311,8 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 		for (i = 0; i < len; i++) {
 			that.pickers[i].enabled = false;
 		}
+		
+		this.carController.enabled = true;
 		
 		this.playOpenAnimations();
 		
@@ -348,6 +361,9 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 		for (i = 0; i < len; i++) {
 			that.pickers[i].enabled = true;
 		}
+
+		// Disable the car controller
+		this.carController.enabled = false;
 		
 		this.playOpenAnimations();
 		
@@ -414,6 +430,23 @@ FuturgoCity.prototype.playOpenAnimations = function() {
 FuturgoCity.prototype.playCloseAnimations = function() {	
 	this.playAnimation("animation_window_rear_open", false, true);
 	this.playAnimation("animation_window_front_open", false, true);
+}
+
+// Event handling
+FuturgoCity.prototype.onMouseDown = function ( event ) {
+	this.viewer.focus();
+}
+
+FuturgoCity.prototype.onKeyDown = function ( event ) {
+	this.carController.onKeyDown(event);
+}
+
+FuturgoCity.prototype.onKeyUp = function ( event ) {
+	this.carController.onKeyUp(event);
+}
+
+FuturgoCity.prototype.onKeyPress = function ( event ) {
+	this.carController.onKeyPress(event);
 }
 
 FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";

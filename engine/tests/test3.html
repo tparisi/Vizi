@@ -15,7 +15,8 @@
 		var container = document.getElementById("container");
 		
 		var app = new Vizi.Application({ container : container });
-
+		app.focus();
+		
 		var cube = new Vizi.Object;
 		cube.transform.rotation.x = Math.PI / 5;
 
