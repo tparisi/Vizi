@@ -134,7 +134,9 @@ FuturgoCity.prototype.addEnvironment = function(scene) {
 	
 	this.viewer.controllerScript.camera.position.set(0, FuturgoCity.AVATAR_HEIGHT, 0);
 	this.viewer.controllerScript.camera.near = 0.01;
-	
+
+//	this.viewer.controllerScript.camera.rotation.set(0, Math.PI / 2, 0);
+
 	this.loadFuturgo();
 }
 
@@ -266,6 +268,7 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			that.viewer.controllerScript.camera = that.driveCamera;
 			that.viewer.controllerScript.move = false;
 			that.driveCamera.active = true;
+			that.driveCamera.rotation.set(0, 0, 0);
 		}, 1000);
 
 		setTimeout(function() { 
@@ -278,7 +281,7 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 
 	}
 	else {
-		// Re-enable the pickers while inside the car body
+		// Re-enable the pickers
 		var i, len = that.pickers.length;
 		for (i = 0; i < len; i++) {
 			that.pickers[i].enabled = true;
@@ -292,6 +295,12 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			that.viewer.controllerScript.camera = that.viewer.defaultCamera;
 			that.viewer.controllerScript.move = true;
 			that.viewer.controllerScript.camera.active = true;
+			that.viewer.controllerScript.update();
+//			that.viewer.controllerScript.camera.position.copy(that.futurgo.position);
+//			that.viewer.controllerScript.camera.position.x -= 3;
+//			that.viewer.controllerScript.camera.position.z += 10;
+			
+			
 
 		}, 1000);
 
