@@ -53,6 +53,7 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	
 	this.addBackground();
 	this.addCollisionBox();
+	this.fixTrees();
 	this.setupCamera();
 	this.loadFuturgo();
 }
@@ -136,6 +137,30 @@ FuturgoCity.prototype.addCollisionBox = function() {
 	box.addComponent(visual);
 	
 	this.viewer.addObject(box);
+}
+
+FuturgoCity.prototype.fixTrees = function(scene) {
+	console.log("Trees:");
+	
+	this.scene.map(/^Tree.*/, function(o) {
+		console.log(o.name);
+		
+		o.map(Vizi.Visual, function(v){
+			var material = v.material;
+			if (material instanceof THREE.MeshFaceMaterial) {
+				var materials = material.materials;
+				var i, len = materials.length;
+				for (i = 0; i < len; i++) {
+					material = materials[i];
+					material.transparent = true;
+				}
+			}
+			else {
+				material.transparent = true;
+			}
+				
+		});
+	});
 }
 
 FuturgoCity.prototype.addGround = function(scene) {

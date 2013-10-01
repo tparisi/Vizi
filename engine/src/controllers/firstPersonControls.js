@@ -286,7 +286,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			this.lon = this.startLon - dlon * this.lookSpeed;
 			
 			if (dlon != 0) {
-				console.log("Longitude - delta: ", dlon, "value: ", this.lon)
+//				console.log("Longitude - delta: ", dlon, "value: ", this.lon)
 			}
 			
 			if( this.lookVertical ) {
@@ -297,7 +297,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 				this.lat = this.startLat + dlat * this.lookSpeed * verticalLookRatio;
 
 				if (dlat != 0) {
-					console.log("Latitue - delta: ", dlat, "value: ", this.lat)
+//					console.log("Latitue - delta: ", dlat, "value: ", this.lat)
 				}
 
 			}
@@ -306,7 +306,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			this.phi = THREE.Math.degToRad( this.lat );
 
 			if (this.phi != 0) {
-				console.log("Phi: ", this.phi)
+//				console.log("Phi: ", this.phi)
 			}
 	
 			this.theta = THREE.Math.degToRad( this.lon );

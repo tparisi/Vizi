@@ -13,10 +13,10 @@
 			exportTexTangents=0;exportTangents=0;exportReferencedMaterials=0;exportMaterialsOnly=0;
 			exportXRefs=1;dereferenceXRefs=1;exportCameraAsLookat=0;cameraXFov=0;cameraYFov=1;doublePrecision=0
 		</comments>
-      <source_data>file:///C:/Users/TC/TC_DESIGNS/Vizi/Futurgo_Environment/futurgo_city_block/futurgo_city_v02.mb</source_data>
+      <source_data>file:///C:/Users/TC/TC_DESIGNS/Vizi/Futurgo_Environment/futurgo_city_block/futurgo_city_v03.mb</source_data>
     </contributor>
-    <created>2013-09-23T13:31:34</created>
-    <modified>2013-09-23T13:31:34</modified>
+    <created>2013-09-27T23:05:39</created>
+    <modified>2013-09-27T23:05:39</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -101,6 +101,30 @@
           <horizontal_aperture>3.599993</horizontal_aperture>
           <lens_squeeze>1</lens_squeeze>
           <originalMayaNodeId>perspShape3</originalMayaNodeId>
+          <vertical_aperture>2.399995</vertical_aperture>
+        </technique>
+      </extra>
+    </camera>
+    <camera id="setupShape" name="setupShape">
+      <optics>
+        <technique_common>
+          <perspective>
+            <yfov>37.84928</yfov>
+            <aspect_ratio>1.5</aspect_ratio>
+            <znear>0.1</znear>
+            <zfar>10000</zfar>
+          </perspective>
+        </technique_common>
+      </optics>
+      <extra>
+        <technique profile="OpenCOLLADAMaya">
+          <film_fit>1</film_fit>
+          <film_fit_offset>0</film_fit_offset>
+          <film_offsetX>0</film_offsetX>
+          <film_offsetY>0</film_offsetY>
+          <horizontal_aperture>3.599993</horizontal_aperture>
+          <lens_squeeze>1</lens_squeeze>
+          <originalMayaNodeId>setupShape</originalMayaNodeId>
           <vertical_aperture>2.399995</vertical_aperture>
         </technique>
       </extra>
@@ -1420,16 +1444,6 @@
             <source>Pine_A_bmp-surface</source>
           </sampler2D>
         </newparam>
-        <newparam sid="Pine_Aa_bmp-surface">
-          <surface type="2D">
-            <init_from>Pine_Aa_bmp</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="Pine_Aa_bmp-sampler">
-          <sampler2D>
-            <source>Pine_Aa_bmp-surface</source>
-          </sampler2D>
-        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -1477,32 +1491,8 @@
             <reflectivity>
               <float>0.015625</float>
             </reflectivity>
-            <transparent opaque="A_ONE">
-              <texture texture="Pine_Aa_bmp-sampler" texcoord="TEX1">
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <blend_mode>NONE</blend_mode>
-                    <coverageU>1</coverageU>
-                    <coverageV>1</coverageV>
-                    <fast>0</fast>
-                    <mirrorU>0</mirrorU>
-                    <mirrorV>0</mirrorV>
-                    <noiseU>0</noiseU>
-                    <noiseV>0</noiseV>
-                    <offsetU>0</offsetU>
-                    <offsetV>0</offsetV>
-                    <repeatU>1</repeatU>
-                    <repeatV>1</repeatV>
-                    <rotateFrame>0</rotateFrame>
-                    <rotateUV>0</rotateUV>
-                    <stagger>0</stagger>
-                    <translateFrameU>0</translateFrameU>
-                    <translateFrameV>0</translateFrameV>
-                    <wrapU>1</wrapU>
-                    <wrapV>1</wrapV>
-                  </technique>
-                </extra>
-              </texture>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
             </transparent>
             <transparency>
               <float>1</float>
@@ -2645,16 +2635,6 @@
             <source>TREE_B_bmp-surface</source>
           </sampler2D>
         </newparam>
-        <newparam sid="Tree_Ba_bmp-surface">
-          <surface type="2D">
-            <init_from>Tree_Ba_bmp</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="Tree_Ba_bmp-sampler">
-          <sampler2D>
-            <source>Tree_Ba_bmp-surface</source>
-          </sampler2D>
-        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -2702,32 +2682,8 @@
             <reflectivity>
               <float>0.015625</float>
             </reflectivity>
-            <transparent opaque="A_ONE">
-              <texture texture="Tree_Ba_bmp-sampler" texcoord="TEX1">
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <blend_mode>NONE</blend_mode>
-                    <coverageU>1</coverageU>
-                    <coverageV>1</coverageV>
-                    <fast>0</fast>
-                    <mirrorU>0</mirrorU>
-                    <mirrorV>0</mirrorV>
-                    <noiseU>0</noiseU>
-                    <noiseV>0</noiseV>
-                    <offsetU>0</offsetU>
-                    <offsetV>0</offsetV>
-                    <repeatU>1</repeatU>
-                    <repeatV>1</repeatV>
-                    <rotateFrame>0</rotateFrame>
-                    <rotateUV>0</rotateUV>
-                    <stagger>0</stagger>
-                    <translateFrameU>0</translateFrameU>
-                    <translateFrameV>0</translateFrameV>
-                    <wrapU>1</wrapU>
-                    <wrapV>1</wrapV>
-                  </technique>
-                </extra>
-              </texture>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
             </transparent>
             <transparency>
               <float>1</float>
@@ -2746,16 +2702,6 @@
         <newparam sid="TREE_C_bmp-sampler">
           <sampler2D>
             <source>TREE_C_bmp-surface</source>
-          </sampler2D>
-        </newparam>
-        <newparam sid="Tree_Ca_bmp-surface">
-          <surface type="2D">
-            <init_from>Tree_Ca_bmp</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="Tree_Ca_bmp-sampler">
-          <sampler2D>
-            <source>Tree_Ca_bmp-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -2805,32 +2751,8 @@
             <reflectivity>
               <float>0.015625</float>
             </reflectivity>
-            <transparent opaque="A_ONE">
-              <texture texture="Tree_Ca_bmp-sampler" texcoord="TEX1">
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <blend_mode>NONE</blend_mode>
-                    <coverageU>1</coverageU>
-                    <coverageV>1</coverageV>
-                    <fast>0</fast>
-                    <mirrorU>0</mirrorU>
-                    <mirrorV>0</mirrorV>
-                    <noiseU>0</noiseU>
-                    <noiseV>0</noiseV>
-                    <offsetU>0</offsetU>
-                    <offsetV>0</offsetV>
-                    <repeatU>1</repeatU>
-                    <repeatV>1</repeatV>
-                    <rotateFrame>0</rotateFrame>
-                    <rotateUV>0</rotateUV>
-                    <stagger>0</stagger>
-                    <translateFrameU>0</translateFrameU>
-                    <translateFrameV>0</translateFrameV>
-                    <wrapU>1</wrapU>
-                    <wrapV>1</wrapV>
-                  </technique>
-                </extra>
-              </texture>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
             </transparent>
             <transparency>
               <float>1</float>
@@ -2849,16 +2771,6 @@
         <newparam sid="TREE_G_bmp-sampler">
           <sampler2D>
             <source>TREE_G_bmp-surface</source>
-          </sampler2D>
-        </newparam>
-        <newparam sid="Tree_Ca_bmp-surface">
-          <surface type="2D">
-            <init_from>Tree_Ca_bmp</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="Tree_Ca_bmp-sampler">
-          <sampler2D>
-            <source>Tree_Ca_bmp-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -2908,32 +2820,8 @@
             <reflectivity>
               <float>0.015625</float>
             </reflectivity>
-            <transparent opaque="A_ONE">
-              <texture texture="Tree_Ca_bmp-sampler" texcoord="TEX1">
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <blend_mode>NONE</blend_mode>
-                    <coverageU>1</coverageU>
-                    <coverageV>1</coverageV>
-                    <fast>0</fast>
-                    <mirrorU>0</mirrorU>
-                    <mirrorV>0</mirrorV>
-                    <noiseU>0</noiseU>
-                    <noiseV>0</noiseV>
-                    <offsetU>0</offsetU>
-                    <offsetV>0</offsetV>
-                    <repeatU>1</repeatU>
-                    <repeatV>1</repeatV>
-                    <rotateFrame>0</rotateFrame>
-                    <rotateUV>0</rotateUV>
-                    <stagger>0</stagger>
-                    <translateFrameU>0</translateFrameU>
-                    <translateFrameV>0</translateFrameV>
-                    <wrapU>1</wrapU>
-                    <wrapV>1</wrapV>
-                  </technique>
-                </extra>
-              </texture>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
             </transparent>
             <transparency>
               <float>1</float>
@@ -3896,22 +3784,12 @@
       </extra>
     </image>
     <image id="Pine_A_bmp" name="Pine_A_bmp">
-      <init_from>./images/Pine_A.bmp</init_from>
+      <init_from>./images/Pine_A_png.png</init_from>
       <extra>
         <technique profile="OpenCOLLADAMaya">
           <dgnode_type>kFile</dgnode_type>
           <image_sequence>0</image_sequence>
           <originalMayaNodeId>Pine_A_bmp</originalMayaNodeId>
-        </technique>
-      </extra>
-    </image>
-    <image id="Pine_Aa_bmp" name="Pine_Aa_bmp">
-      <init_from>./images/Pine_Aa.bmp</init_from>
-      <extra>
-        <technique profile="OpenCOLLADAMaya">
-          <dgnode_type>kFile</dgnode_type>
-          <image_sequence>0</image_sequence>
-          <originalMayaNodeId>Pine_Aa_bmp</originalMayaNodeId>
         </technique>
       </extra>
     </image>
@@ -4106,7 +3984,7 @@
       </extra>
     </image>
     <image id="TREE_B_bmp" name="TREE_B_bmp">
-      <init_from>./images/TREE_B.bmp</init_from>
+      <init_from>./images/TREE_B_png.png</init_from>
       <extra>
         <technique profile="OpenCOLLADAMaya">
           <dgnode_type>kFile</dgnode_type>
@@ -4116,7 +3994,7 @@
       </extra>
     </image>
     <image id="TREE_C_bmp" name="TREE_C_bmp">
-      <init_from>./images/TREE_C.bmp</init_from>
+      <init_from>./images/TREE_C_png.png</init_from>
       <extra>
         <technique profile="OpenCOLLADAMaya">
           <dgnode_type>kFile</dgnode_type>
@@ -4126,32 +4004,12 @@
       </extra>
     </image>
     <image id="TREE_G_bmp" name="TREE_G_bmp">
-      <init_from>./images/TREE_G.bmp</init_from>
+      <init_from>./images/TREE_G_png.png</init_from>
       <extra>
         <technique profile="OpenCOLLADAMaya">
           <dgnode_type>kFile</dgnode_type>
           <image_sequence>0</image_sequence>
           <originalMayaNodeId>TREE_G_bmp</originalMayaNodeId>
-        </technique>
-      </extra>
-    </image>
-    <image id="Tree_Ba_bmp" name="Tree_Ba_bmp">
-      <init_from>./images/Tree_Ba.bmp</init_from>
-      <extra>
-        <technique profile="OpenCOLLADAMaya">
-          <dgnode_type>kFile</dgnode_type>
-          <image_sequence>0</image_sequence>
-          <originalMayaNodeId>Tree_Ba_bmp</originalMayaNodeId>
-        </technique>
-      </extra>
-    </image>
-    <image id="Tree_Ca_bmp" name="Tree_Ca_bmp">
-      <init_from>./images/Tree_Ca.bmp</init_from>
-      <extra>
-        <technique profile="OpenCOLLADAMaya">
-          <dgnode_type>kFile</dgnode_type>
-          <image_sequence>0</image_sequence>
-          <originalMayaNodeId>Tree_Ca_bmp</originalMayaNodeId>
         </technique>
       </extra>
     </image>
@@ -11641,7 +11499,7 @@
     </geometry>
   </library_geometries>
   <library_visual_scenes>
-    <visual_scene id="VisualSceneNode" name="futurgo_city_v02">
+    <visual_scene id="VisualSceneNode" name="futurgo_city_v03">
       <node id="FOUR_light_setup_meters_FOUR_light_setup_meters_FOUR_light_setup_meters_pointLight2" name="pointLight2" type="NODE">
         <matrix sid="transform">15.2769 0 0 -73.27162 0 15.2769 0 86.77419 0 0 15.2769 -71.00338 0 0 0 1</matrix>
         <instance_light url="#FOUR_light_setup_meters_FOUR_light_setup_meters_FOUR_light_setup_meters_pointLightShape2"/>
@@ -12581,7 +12439,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12599,7 +12456,6 @@
                 <technique_common>
                   <instance_material symbol="Pine_A_Mat_SG" target="#Pine_A_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12617,7 +12473,6 @@
                 <technique_common>
                   <instance_material symbol="TREE_C_Mat_SG" target="#TREE_C_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12635,7 +12490,6 @@
                 <technique_common>
                   <instance_material symbol="TREE_G_Mat_SG" target="#TREE_G_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12656,7 +12510,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12674,7 +12527,6 @@
                 <technique_common>
                   <instance_material symbol="Pine_A_Mat_SG" target="#Pine_A_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12692,7 +12544,6 @@
                 <technique_common>
                   <instance_material symbol="TREE_C_Mat_SG" target="#TREE_C_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12710,7 +12561,6 @@
                 <technique_common>
                   <instance_material symbol="TREE_G_Mat_SG" target="#TREE_G_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12731,7 +12581,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12752,7 +12601,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12773,7 +12621,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12791,7 +12638,6 @@
                 <technique_common>
                   <instance_material symbol="TREE_G_Mat_SG" target="#TREE_G_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12812,7 +12658,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -12833,7 +12678,6 @@
                   </instance_material>
                   <instance_material symbol="TREE_B_Mat_SG" target="#TREE_B_Mat">
                     <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
-                    <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
                   </instance_material>
                 </technique_common>
               </bind_material>
@@ -14603,11 +14447,20 @@
         </extra>
       </node>
       <node id="persp2" name="persp2" type="NODE">
-        <matrix sid="transform">-0.6971651 -0.3685749 0.6149093 109.9297 0 0.857721 0.5141155 95.31683 -0.7169106 0.3584234 -0.5979731 -91.26364 0 0 0 1</matrix>
+        <matrix sid="transform">-0.6967404 -0.3515877 0.6252511 91.63608 0.02433071 0.8595599 0.5104555 49.97782 -0.7169106 0.3708678 -0.5903357 -89.07064 0 0 0 1</matrix>
         <instance_camera url="#perspShape3"/>
         <extra>
           <technique profile="OpenCOLLADAMaya">
             <originalMayaNodeId>persp2</originalMayaNodeId>
+          </technique>
+        </extra>
+      </node>
+      <node id="setup" name="setup" type="NODE">
+        <matrix sid="transform">0.877983 0.2795966 -0.3885507 -50.45018 0 0.8116927 0.5840847 84.46656 0.4786919 -0.5128164 0.7126524 132.4211 0 0 0 1</matrix>
+        <instance_camera url="#setupShape"/>
+        <extra>
+          <technique profile="OpenCOLLADAMaya">
+            <originalMayaNodeId>setup</originalMayaNodeId>
           </technique>
         </extra>
       </node>
