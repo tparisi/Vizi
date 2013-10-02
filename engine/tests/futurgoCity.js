@@ -250,7 +250,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 	// Drop the Futurgo at a good initial position
 	var futurgo = futurgoScene.findNode("vizi_mobile");
-	futurgo.transform.position.set(5.5, 0, -10);
+	futurgo.transform.position.set(2.33, 0, -6);
 
 	// Drop a camera inside the vehicle
 	var driveCam = new Vizi.Object;
