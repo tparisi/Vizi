@@ -60,12 +60,20 @@ FuturgoControllerScript.prototype.updatePosition = function() {
 	var actualTurnSpeed = deltat / 1000 * this.turnSpeed;
 	
 	// Translate in Z
-	if ( this.moveForward ) 
+	if ( this.moveForward ) {
+		this.moveSpeed *= 1.01;
+		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
+		this.dashboardScript.speed = actualMoveSpeed;
 		this._object.transform.object.translateZ( -actualMoveSpeed );
+	}
 
-	if ( this.moveBackward ) 
+	if ( this.moveBackward ) {
+		this.moveSpeed /= 1.01;
+		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
+		this.dashboardScript.speed = actualMoveSpeed;
 		this._object.transform.object.translateZ( actualMoveSpeed );
-
+	}
+	
 	// but keep the vehicle on the ground
 	this._object.transform.position.y = this.startY;
 

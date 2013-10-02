@@ -13,9 +13,30 @@ FuturgoDashboardScript = function(param)
 	
 	this.backgroundColor = param.backgroundColor || '#ff0000';
 	this.textColor = param.textColor || '#aa0000';
-	this.theta = 0;
-	this.speed = 0;
-	this.rpms = 0;
+	this._speed = 0;
+	this._rpm = 0;
+	this.needsUpdate = false;
+	
+    Object.defineProperties(this, {
+    	speed: {
+			get : function() {
+				return this._speed;
+			},
+			set: function(v) {
+				this._speed = v;
+				this.needsUpdate = true;
+			}
+		},
+    	rpm: {
+			get : function() {
+				return this._rpm;
+			},
+			set: function(v) {
+				this._rpm = v;
+				this.needsUpdate = true;
+			}
+		},
+    });
 }
 
 goog.inherits(FuturgoDashboardScript, Vizi.Script);
@@ -46,15 +67,18 @@ FuturgoDashboardScript.prototype.realize = function()
 	var image1 = new Image();  
     image1.onload = function () {  
     	that.dashboardImage = image1;
+        that.needsUpdate = true;
     }  
     image1.src = FuturgoDashboardScript.dashboardURL;
 
 	var image2 = new Image();  
     image2.onload = function () {  
     	that.dialImage = image2;
+        that.needsUpdate = true;
     }  
     image2.src = FuturgoDashboardScript.dialURL;
 
+    this.needsUpdate = true;
 }
 
 FuturgoDashboardScript.prototype.update = function()
@@ -62,18 +86,14 @@ FuturgoDashboardScript.prototype.update = function()
 	if (!this.enabled)
 		return;
 
-	this.speed += 0.05;
-	if (this.speed > 1.5)
-		this.speed = 0;
-
-	this.rpms += 0.01;
-	if (this.rpms > 1)
-		this.rpms = 0;
+	if (this.needsUpdate) {
+		this.draw();
 	
-	this.draw();
-	
-	// this.texture.offset.x += 0.01;
-	this.texture.needsUpdate = true;	
+		// this.texture.offset.x += 0.01;
+		this.texture.needsUpdate = true;
+		
+		this.needsUpdate = false;
+	}
 }
 
 FuturgoDashboardScript.prototype.draw = function()
