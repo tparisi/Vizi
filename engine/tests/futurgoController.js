@@ -63,14 +63,14 @@ FuturgoControllerScript.prototype.updatePosition = function() {
 	if ( this.moveForward ) {
 		this.moveSpeed *= 1.01;
 		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this.dashboardScript.speed = actualMoveSpeed;
+		this.dispatchEvent("speed", actualMoveSpeed);
 		this._object.transform.object.translateZ( -actualMoveSpeed );
 	}
 
 	if ( this.moveBackward ) {
 		this.moveSpeed /= 1.01;
 		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this.dashboardScript.speed = actualMoveSpeed;
+		this.dispatchEvent("speed", actualMoveSpeed);
 		this._object.transform.object.translateZ( actualMoveSpeed );
 	}
 	

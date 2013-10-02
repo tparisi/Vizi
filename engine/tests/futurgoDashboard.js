@@ -15,6 +15,7 @@ FuturgoDashboardScript = function(param)
 	this.textColor = param.textColor || '#aa0000';
 	this._speed = 0;
 	this._rpm = 0;
+	this._carController = null;
 	this.needsUpdate = false;
 	
     Object.defineProperties(this, {
@@ -23,8 +24,7 @@ FuturgoDashboardScript = function(param)
 				return this._speed;
 			},
 			set: function(v) {
-				this._speed = v;
-				this.needsUpdate = true;
+				this.setSpeed(v);
 			}
 		},
     	rpm: {
@@ -35,6 +35,14 @@ FuturgoDashboardScript = function(param)
 				this._rpm = v;
 				this.needsUpdate = true;
 			}
+		},
+		carController: {
+			get : function() {
+				return this._carController;
+			},
+			set: function(controller) {
+				this.setCarController(controller);
+			}			
 		},
     });
 }
@@ -86,12 +94,17 @@ FuturgoDashboardScript.prototype.update = function()
 	if (!this.enabled)
 		return;
 
+	this.demoMode = true;
+	if (this.demoMode) {
+		this.demo();
+	}
+	
 	if (this.needsUpdate) {
+
 		this.draw();
 	
 		// this.texture.offset.x += 0.01;
 		this.texture.needsUpdate = true;
-		
 		this.needsUpdate = false;
 	}
 }
@@ -111,8 +124,8 @@ FuturgoDashboardScript.prototype.draw = function()
 		context.drawImage(this.dashboardImage, 0, 0);  
 	}
 	
-	this.theta = -Math.PI * 3 / 4 + this.speed * Math.PI;
-	this.rpmtheta = -Math.PI / 2 + this.rpms * Math.PI;
+	this.theta = -Math.PI * 3 / 4 + this._speed * Math.PI;
+	this.rpmtheta = -Math.PI / 2 + this._rpm * Math.PI;
 	
 	if (this.dialImage) {
 		context.save();
@@ -125,16 +138,46 @@ FuturgoDashboardScript.prototype.draw = function()
 
 		context.save();
 		
-		context.translate(403, 358);
+		context.translate(403, 360);
 		context.rotate(this.rpmtheta);
 		context.translate(-12, -90);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
 		context.restore();
 
-	}
-	
+	}	
 }
 
+FuturgoDashboardScript.prototype.demo = function() {
+	
+	this._speed += 0.01;
+	if (this._speed > 1)
+		this._speed = 0;
+	this._rpm += 0.025;
+	if (this._rpm > 2)
+		this._rpm = 0;
+	
+	this.needsUpdate = true;
+}
+
+FuturgoDashboardScript.prototype.setSpeed = function(speed) {
+	this._speed = speed;
+	this.needsUpdate = true;
+}
+
+FuturgoDashboardScript.prototype.setRPM = function(rpm) {
+	this._rpm = rpm;
+	this.needsUpdate = true;
+}
+
+FuturgoDashboardScript.prototype.setCarController = function(controller) {
+
+	this._carController = controller;
+	
+	var that = this;
+	controller.addEventListener("speed", function(speed) { that.setSpeed(speed); });
+	controller.addEventListener("rpm", function(speed) { that.setRPM(rpm); });
+}
+	
 FuturgoDashboardScript.imagePath = './models/futurgo_mobile/images/';
 FuturgoDashboardScript.dashboardURL = FuturgoDashboardScript.imagePath + 'gauges.png';
 FuturgoDashboardScript.dialURL = FuturgoDashboardScript.imagePath + 'dial2.png';

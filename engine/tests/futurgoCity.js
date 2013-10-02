@@ -275,7 +275,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.dashboardScript = new FuturgoDashboardScript({enabled:false});
 	futurgo.addComponent(this.dashboardScript);
 	
-	this.carController.dashboardScript = this.dashboardScript;
+	this.dashboardScript.carController = this.carController;
 	
 	this.futurgo = futurgo;
 	this.futurgoScene = futurgoScene;
