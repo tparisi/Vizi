@@ -88,7 +88,6 @@ FuturgoCity.prototype.addBackground = function() {
 	var envMap = THREE.ImageUtils.loadTextureCube( urls );
 	
 	this.scene.map(/Tower.*|Office.*/, function(o) {
-//		console.log(o.name);
 
 		var visuals = o.visuals;
 		if (visuals) {
@@ -188,7 +187,6 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	// Add the Futurgo to the scene
 	this.viewer.addToScene(data);
 	var futurgoScene = data.scene;
-	futurgoScene.transform.position.set(5.5, 0, -10);
 
 	// Add some interaction and behaviors
 	var that = this;
@@ -218,7 +216,6 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 		var visuals = o.visuals;
 		var i, len = visuals.length;
 		for (i = 0; i < len; i++) {
-			console.log(visuals[i].material)
 			visuals[i].material.envMap = that.envMap;
 			visuals[i].material.reflectivity = 0.1;
 			visuals[i].material.refractionRatio = 0.1;
@@ -251,7 +248,9 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 		o.light.color.set(0, 0, 0);
 	});
 
+	// Drop the Futurgo at a good initial position
 	var futurgo = futurgoScene.findNode("vizi_mobile");
+	futurgo.transform.position.set(5.5, 0, -10);
 
 	// Drop a camera inside the vehicle
 	var driveCam = new Vizi.Object;
@@ -278,13 +277,13 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 }
 
 FuturgoCity.prototype.onPickerMouseOver = function(what, event) {
-//	console.log("Mouse over", what);
+
 	if (this.mouseOverCallback)
 		this.mouseOverCallback(what, event);
 }
 
 FuturgoCity.prototype.onPickerMouseOut = function(what, event) {
-//	console.log("Mouse out", what);
+
 	if (this.mouseOutCallback)
 		this.mouseOutCallback(what, event);
 }
@@ -301,7 +300,6 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 
 	this.viewer.focus(); // in case page element had it
 	
-//	console.log("Mouse clicked", what);
 	this.testDriveRunning = !this.testDriveRunning;
 	var that = this;
 	if (this.testDriveRunning) {
@@ -438,15 +436,18 @@ FuturgoCity.prototype.onMouseDown = function ( event ) {
 }
 
 FuturgoCity.prototype.onKeyDown = function ( event ) {
-	this.carController.onKeyDown(event);
+	if (this.carController)
+		this.carController.onKeyDown(event);
 }
 
 FuturgoCity.prototype.onKeyUp = function ( event ) {
-	this.carController.onKeyUp(event);
+	if (this.carController)
+		this.carController.onKeyUp(event);
 }
 
 FuturgoCity.prototype.onKeyPress = function ( event ) {
-	this.carController.onKeyPress(event);
+	if (this.carController)
+		this.carController.onKeyPress(event);
 }
 
 FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";

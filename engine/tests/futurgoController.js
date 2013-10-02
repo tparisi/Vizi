@@ -102,13 +102,12 @@ FuturgoControllerScript.prototype.testCollision = function() {
 	this.yAdjustedPosition.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
 	
 	if (this.movementVector.length()) {
-		
+
         var collide = Vizi.Graphics.instance.objectFromRay(this.yAdjustedPosition,
         		this.movementVector, 1, 2);
 
         if (collide && collide.object) {
         	var dist = this.yAdjustedPosition.distanceTo(collide.hitPointWorld);
-        	console.log("Collision: ", collide);
         }
         
         return collide;

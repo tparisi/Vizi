@@ -2458,7 +2458,6 @@ Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
 
         if (collide && collide.object) {
         	var dist = this.savedCameraPos.distanceTo(collide.hitPointWorld);
-        	console.log("Collision: ", collide);
         }
         
         return collide;
