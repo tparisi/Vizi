@@ -270,6 +270,10 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	// Add the keyboard controller
 	this.carController = new FuturgoControllerScript({enabled:false});
 	futurgo.addComponent(this.carController);
+
+	// Add the dashboard animation script
+	this.dashboardScript = new FuturgoDashboardScript({enabled:false});
+	futurgo.addComponent(this.dashboardScript);
 	
 	this.futurgo = futurgo;
 	this.futurgoScene = futurgoScene;
@@ -310,7 +314,9 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			that.pickers[i].enabled = false;
 		}
 		
+		// Enable the car scripts
 		this.carController.enabled = true;
+		this.dashboardScript.enabled = true;
 		
 		this.playOpenAnimations();
 		
@@ -360,8 +366,9 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 			that.pickers[i].enabled = true;
 		}
 
-		// Disable the car controller
+		// Disable the car scripts
 		this.carController.enabled = false;
+		this.dashboardScript.enabled = true;
 		
 		this.playOpenAnimations();
 		
