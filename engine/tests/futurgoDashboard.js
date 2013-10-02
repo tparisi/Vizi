@@ -130,20 +130,23 @@ FuturgoDashboardScript.prototype.draw = function()
 	if (this.dialImage) {
 		context.save();
 		
-		context.translate(256, 175);
+		context.translate(FuturgoDashboardScript.speedDialLeftOffset, 
+				FuturgoDashboardScript.speedDialTopOffset);
 		context.rotate(this.theta);
-		context.translate(-12, -90);
+		context.translate(-FuturgoDashboardScript.dialCenterLeftOffset, 
+				-FuturgoDashboardScript.dialCenterTopOffset);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
 		context.restore();
 
 		context.save();
 		
-		context.translate(403, 360);
+		context.translate(FuturgoDashboardScript.rpmDialLeftOffset, 
+				FuturgoDashboardScript.rpmDialTopOffset);
 		context.rotate(this.rpmtheta);
-		context.translate(-12, -90);
+		context.translate(-FuturgoDashboardScript.dialCenterLeftOffset, 
+				-FuturgoDashboardScript.dialCenterTopOffset);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
 		context.restore();
-
 	}	
 }
 
@@ -177,9 +180,17 @@ FuturgoDashboardScript.prototype.setCarController = function(controller) {
 	controller.addEventListener("speed", function(speed) { that.setSpeed(speed); });
 	controller.addEventListener("rpm", function(speed) { that.setRPM(rpm); });
 }
-	
+
+// Constants
 FuturgoDashboardScript.imagePath = './models/futurgo_mobile/images/';
 FuturgoDashboardScript.dashboardURL = FuturgoDashboardScript.imagePath + 'gauges.png';
 FuturgoDashboardScript.dialURL = FuturgoDashboardScript.imagePath + 'dial2.png';
+FuturgoDashboardScript.speedDialLeftOffset = 256;
+FuturgoDashboardScript.speedDialTopOffset = 175;
+FuturgoDashboardScript.rpmDialLeftOffset = 403;
+FuturgoDashboardScript.rpmDialTopOffset = 360;
+FuturgoDashboardScript.dialCenterLeftOffset = 12;
+FuturgoDashboardScript.dialCenterTopOffset = 90;
+
 
 

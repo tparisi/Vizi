@@ -11,7 +11,6 @@ FuturgoControllerScript = function(param)
 
 	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
 	
-	this.collisionDistance = 10;
 	this.moveSpeed = 13;
 	this.turnSpeed = Math.PI / 2; // 90 degs/sec
 
@@ -20,11 +19,16 @@ FuturgoControllerScript = function(param)
 	this.turnLeft = false;
 	this.turnRight = false;
 	
+	this.acceleration = 0;
+	this.braking = 0;
+	this.speed = 0;
+	
 	this.yAdjustedPosition = new THREE.Vector3;
 	
 	this.savedPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;	
-	
+
+	this.lastUpdateTime = Date.now();
 }
 
 goog.inherits(FuturgoControllerScript, Vizi.Script);
@@ -42,26 +46,28 @@ FuturgoControllerScript.prototype.update = function()
 	if (!this.enabled)
 		return;
 	
+	var now = Date.now();
+	var deltat = now - this.lastUpdateTime;
+
 	this.savePosition();
-	this.updatePosition();	
-	var collide = this.testCollision();
-	if (collide && collide.object) {
-		this.restorePosition();
-		this.dispatchEvent("collide", collide);
-	}
+	this.updateSpeed(deltat);
+	this.updatePosition(deltat);	
+	this.testCollision();
+	
+	this.lastUpdateTime = now;
 }
 
-FuturgoControllerScript.prototype.updatePosition = function() {
-
-	var now = Date.now();
-	var deltat = now - this.lastUpdateTime;	
+FuturgoControllerScript.prototype.updateSpeed = function() {
 	
+}
+
+FuturgoControllerScript.prototype.updatePosition = function(deltat) {
+
 	var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
 	var actualTurnSpeed = deltat / 1000 * this.turnSpeed;
 	
-	// Translate in Z
+	// Translate in Z...
 	if ( this.moveForward ) {
-		this.moveSpeed *= 1.01;
 		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
 		this.dispatchEvent("speed", actualMoveSpeed);
 		this._object.transform.object.translateZ( -actualMoveSpeed );
@@ -74,24 +80,17 @@ FuturgoControllerScript.prototype.updatePosition = function() {
 		this._object.transform.object.translateZ( actualMoveSpeed );
 	}
 	
-	// but keep the vehicle on the ground
+	// ...but keep the vehicle on the ground
 	this._object.transform.position.y = this.startY;
 
 	// Turn
 	if ( this.turnLeft ) {
 		this._object.transform.object.rotateY( actualTurnSpeed );
-		//this.steeringWheel.transform.rotation.z = Math.PI / 96;
 	}
-	else if ( this.turnRight ) {
+	
+	if ( this.turnRight ) {
 		this._object.transform.object.rotateY( -actualTurnSpeed );
-		//this.steeringWheel.transform.rotation.z = -Math.PI / 96;
 	}
-	else {
-		//this.steeringWheel.transform.rotation.z = 0;
-	}
-	
-	this.lastUpdateTime = now;
-	
 	
 }
 
@@ -109,19 +108,24 @@ FuturgoControllerScript.prototype.testCollision = function() {
 	this.yAdjustedPosition.copy(this.savedPos);
 	this.yAdjustedPosition.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
 	
+	var collide = null;
 	if (this.movementVector.length()) {
 
-        var collide = Vizi.Graphics.instance.objectFromRay(this.yAdjustedPosition,
-        		this.movementVector, 1, 2);
+        collide = Vizi.Graphics.instance.objectFromRay(this.yAdjustedPosition,
+        		this.movementVector, 
+        		FuturgoControllerScript.COLLISION_MIN, 
+        		FuturgoControllerScript.COLLISION_MAX);
 
         if (collide && collide.object) {
         	var dist = this.yAdjustedPosition.distanceTo(collide.hitPointWorld);
         }
-        
-        return collide;
 	}
 	
-	return null;
+	if (collide && collide.object) {
+		this.restorePosition();
+		this.dispatchEvent("collide", collide);
+	}
+	
 }
 
 // Keyboard handlers
@@ -132,21 +136,28 @@ FuturgoControllerScript.prototype.onKeyDown = function ( event ) {
 	switch ( event.keyCode ) {
 
 		case 38: /*up*/
-		case 87: /*W*/ this.moveForward = true; break;
+		case 87: /*W*/
+			this.moveForward = true; 
+			this.accelerate = true; 
+			this.accelerateTime = Date.now();
+			break;
 
 		case 37: /*left*/
-		case 65: /*A*/ this.turnLeft = true; break;
+		case 65: /*A*/ 
+			this.turnLeft = true; 
+			break;
 
 		case 40: /*down*/
-		case 83: /*S*/ this.moveBackward = true; break;
+		case 83: /*S*/
+			this.moveBackward = true;
+			this.brake = true; 
+			this.brakeTime = Date.now();
+			break;
 
 		case 39: /*right*/
-		case 68: /*D*/ this.turnRight = true; break;
-
-		case 82: /*R*/ this.moveUp = true; break;
-		case 70: /*F*/ this.moveDown = true; break;
-
-		case 81: /*Q*/ this.freeze = !this.freeze; break;
+		case 68: /*D*/
+			this.turnRight = true; 
+			break;
 
 	}
 
@@ -157,19 +168,26 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 	switch( event.keyCode ) {
 
 		case 38: /*up*/
-		case 87: /*W*/ this.moveForward = false; break;
+		case 87: /*W*/
+			this.moveForward = false; 
+			this.accelerate = false; 
+			break;
 
 		case 37: /*left*/
-		case 65: /*A*/ this.turnLeft = false; break;
+		case 65: /*A*/
+			this.turnLeft = false; 
+			break;
 
 		case 40: /*down*/
-		case 83: /*S*/ this.moveBackward = false; break;
+		case 83: /*S*/
+			this.moveBackward = false; 
+			this.brake = false; 
+			break;
 
 		case 39: /*right*/
-		case 68: /*D*/ this.turnRight = false; break;
-
-		case 82: /*R*/ this.moveUp = false; break;
-		case 70: /*F*/ this.moveDown = false; break;
+		case 68: /*D*/ 
+			this.turnRight = false; 
+			break;
 
 	}
 
@@ -178,4 +196,8 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
 }
 
+FuturgoControllerScript.ACCELERATION = 1; // m/s
+FuturgoControllerScript.BRAKING = 1; // m/s
+FuturgoControllerScript.COLLISION_MIN = 1; // m
+FuturgoControllerScript.COLLISION_MAX = 2; // m
 
