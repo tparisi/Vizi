@@ -296,8 +296,10 @@ FuturgoCity.prototype.onPickerMouseOut = function(what, event) {
 
 FuturgoCity.prototype.onPickerMouseClick = function(what, event) {
 
-	this.toggleStartStop(what);
-
+	if (what == "futurgo") {
+		this.toggleStartStop(what);
+	}
+	
 	if (this.mouseClickCallback)
 		this.mouseClickCallback(what, event);	
 }
@@ -306,42 +308,57 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 
 	this.viewer.focus(); // in case page element had it
 	
-	this.testDriveRunning = !this.testDriveRunning;
+	if (!this.testDriveRunning) {
+		this.startTestDrive(event);
+	}
+	else {
+		this.endTestDrive(event);
+	}
+}
+
+FuturgoCity.prototype.startTestDrive = function(event) {
+
+	if (this.testDriveRunning)
+		return;
+	
+	this.testDriveRunning = true;
+	
 	var that = this;
-	if (this.testDriveRunning) {
 
-		// Disable the pickers while inside the car body
-		var i, len = that.pickers.length;
-		for (i = 0; i < len; i++) {
-			that.pickers[i].enabled = false;
-		}
-		
-		// Enable the car scripts
-		this.carController.enabled = true;
-		this.dashboardScript.enabled = true;
-		
-		this.playOpenAnimations();
-		
-		/*
-		// This should be a move behavior but that requires a Vizi
-		// object to move to, not a camera component. Maybe we need
-		// to add the viewpoint back to the controller?
-		var carpos = this.futurgo.transform.position;
+	// Disable the pickers while inside the car body
+	var i, len = that.pickers.length;
+	for (i = 0; i < len; i++) {
+		that.pickers[i].enabled = false;
+	}
+	
+	// Enable the car scripts
+	this.carController.enabled = true;
+	this.dashboardScript.enabled = true;
+	
+	this.playOpenAnimations();
+	
+	/*
+	// This should be a move behavior but that requires a Vizi
+	// object to move to, not a camera component. Maybe we need
+	// to add the viewpoint back to the controller?
+	var carpos = this.futurgo.transform.position;
 
-		this.viewer.controllerScript.camera.position.set(0, 0, 0);
-		this.viewer.controllerScript.camera._object.transform.position.set(carpos.x, 
-				FuturgoCity.AVATAR_HEIGHT_SEATED, carpos.z);
-		this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
-		*/
+	this.viewer.controllerScript.camera.position.set(0, 0, 0);
+	this.viewer.controllerScript.camera._object.transform.position.set(carpos.x, 
+			FuturgoCity.AVATAR_HEIGHT_SEATED, carpos.z);
+	this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
+	*/
+	setTimeout(function() { 
 		
-		var that = this;
+		that.viewer.controllerScript.camera = that.driveCamera;
+		that.viewer.controllerScript.move = false;
+		that.driveCamera.rotation.set(0, 0, 0);
+		that.driveCamera.active = true;
+		
 		setTimeout(function() { 
-			
-			that.viewer.controllerScript.camera = that.driveCamera;
-			that.viewer.controllerScript.move = false;
-			that.driveCamera.rotation.set(0, 0, 0);
-			that.driveCamera.active = true;
-			
+
+			that.playCloseAnimations(); 
+
 			// Fade the windows
 			var i, len = that.faders.length;
 			for (i = 0; i < len; i++) {
@@ -349,62 +366,65 @@ FuturgoCity.prototype.toggleStartStop = function(what, event) {
 				fader.opacity = FuturgoCity.OPACITY_MOSTLY_TRANSPARENT;
 				fader.start();
 			}
-			
+
 		}, 1000);
 
-		setTimeout(function() { 
+		
+	}, 1000);
 
-			that.playCloseAnimations(); 
-		}, 2000);
+	if (this.startTestDriveCallback)
+		this.startTestDriveCallback();
+}
 
-		if (this.startTestDriveCallback)
-			this.startTestDriveCallback();
+FuturgoCity.prototype.endTestDrive = function(event) {
 
-	}
-	else {
+	if (!this.testDriveRunning)
+		return;
+	
+	this.testDriveRunning = false;
+
+	// Disable the car scripts
+	this.carController.enabled = false;
+	this.dashboardScript.enabled = true;
+	
+	this.playOpenAnimations();
+	
+	var that = this;
+	setTimeout(function() { 
+		
 		// Re-enable the pickers
 		var i, len = that.pickers.length;
 		for (i = 0; i < len; i++) {
 			that.pickers[i].enabled = true;
 		}
 
-		// Disable the car scripts
-		this.carController.enabled = false;
-		this.dashboardScript.enabled = true;
-		
-		this.playOpenAnimations();
-		
-		var that = this;
-		setTimeout(function() { 
-			
-			that.viewer.controllerScript.camera = that.viewer.defaultCamera;
-			that.viewer.controllerScript.move = true;
-			that.viewer.controllerScript.camera.active = true;
-			that.viewer.controllerScript.update();
-			// Fade the windows
-			var i, len = that.faders.length;
-			for (i = 0; i < len; i++) {
-				var fader = that.faders[i];
-				fader.opacity = FuturgoCity.OPACITY_SEMI_OPAQUE;
-				fader.start();
-			}
-//			that.viewer.controllerScript.camera.position.copy(that.futurgo.position);
-//			that.viewer.controllerScript.camera.position.x -= 3;
-//			that.viewer.controllerScript.camera.position.z += 10;
-			
-			
+		that.viewer.controllerScript.camera = that.viewer.defaultCamera;
+		that.viewer.controllerScript.move = true;
+		that.viewer.controllerScript.camera.active = true;
+		that.viewer.controllerScript.update();
 
-		}, 1000);
+		// Fade the windows back to semi-opaque
+		var i, len = that.faders.length;
+		for (i = 0; i < len; i++) {
+			var fader = that.faders[i];
+			fader.opacity = FuturgoCity.OPACITY_SEMI_OPAQUE;
+			fader.start();
+		}
 
 		setTimeout(function() { 
 			
 			that.playCloseAnimations(); 
-		}, 2000);
+		}, 1000);
 
-		if (this.endTestDriveCallback)
-			this.endTestDriveCallback();
-	
-	}
+		
+	}, 1000);
+
+	if (this.endTestDriveCallback)
+		this.endTestDriveCallback();
+
+}
+
+FuturgoCity.prototype.tour = function() {
 }
 
 FuturgoCity.prototype.useCamera = function(name) {

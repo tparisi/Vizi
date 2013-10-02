@@ -27,10 +27,6 @@
 	<div id="left_banner_bg"></div>
 	<div id="futurgo_logo"></div>
 
-	<div id="drive_controls">
-	<label id="start_stop" class="controlBarItem" style="display:none;"
-		onclick="onStartStopClicked();">START TEST DRIVE</label>
-	</div>
 	<div id="help_text">
 	<div id="help_walk">
 	Use arrow or WASD keys to walk; drag mouse to look up/down.
@@ -62,7 +58,6 @@
    	var futurgoCity = null;
    	var help_walk = document.getElementById("help_walk");
    	var help_drive = document.getElementById("help_drive");
-   	var start_stop = document.getElementById("start_stop");
    	
 	$(document).ready(function() {
 
@@ -80,9 +75,6 @@
 
 		loadStatus.style.display = 'block';
 
-		$('#menuTEST_DRIVE').addClass('menuItemHighlight');
-		$('#start_stop').addClass('blinker');
-	
 		futurgoCity.go();
 	}
 	);
@@ -95,7 +87,6 @@
 		// Hide the loader bar
 		loadStatus.style.display = 'none';		
 		console.log("Loaded " + loadTime.toFixed(2) + " seconds.");
-		start_stop.style.display='block';
 	}
 
 	function onLoadProgress(percentProgress)
@@ -119,29 +110,28 @@
 		}
 	}
 
-	function onStartStopClicked() {
-		futurgoCity.toggleStartStop();
-		toggleStartStop();
+	function startTestDrive() {
+		futurgoCity.startTestDrive();
+		help_drive.style.display = 'block';
+		help_walk.style.display = 'none';
+		futurgoCity.viewer.focus();
+	}
+
+	function endTestDrive() {
+		futurgoCity.endTestDrive();
+		help_drive.style.display = 'none';
+		help_walk.style.display = 'block';
+		futurgoCity.viewer.focus();
+	}
+
+	function tour() {
+		futurgoCity.tour();
+		futurgoCity.viewer.focus();
+	}
+
+	function toggleStartStop() {
 	}
 	
-	function toggleStartStop() {
-		//console.log("Mouse out", what, event);
-		//hideOverlay();
-
-		if (help_drive.style.display == 'block') {
-			$('#start_stop').html('START TEST DRIVE');
-//			$('#start_stop').addClass('blinker');
-			help_drive.style.display = 'none';
-			help_walk.style.display = 'block';
-		}
-		else {
-			$('#start_stop').html('END TEST DRIVE');
-			$('#start_stop').removeClass('blinker');
-			help_drive.style.display = 'block';
-			help_walk.style.display = 'none';
-		}
-	}
-
 	</script>
 	
 </body>
