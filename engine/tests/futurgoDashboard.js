@@ -94,11 +94,6 @@ FuturgoDashboardScript.prototype.update = function()
 	if (!this.enabled)
 		return;
 
-	this.demoMode = false;
-	if (this.demoMode) {
-		this.demo();
-	}
-	
 	if (this.needsUpdate) {
 
 		this.draw();
@@ -124,7 +119,7 @@ FuturgoDashboardScript.prototype.draw = function()
 		context.drawImage(this.dashboardImage, 0, 0);  
 	}
 	
-	this.theta = -Math.PI * 3 / 4 + this._speed * Math.PI;
+	this.speedtheta = -Math.PI * 3 / 4 + this._speed * Math.PI;
 	this.rpmtheta = -Math.PI / 2 + this._rpm  * Math.PI;
 	
 	if (this.dialImage) {
@@ -132,7 +127,7 @@ FuturgoDashboardScript.prototype.draw = function()
 		
 		context.translate(FuturgoDashboardScript.speedDialLeftOffset, 
 				FuturgoDashboardScript.speedDialTopOffset);
-		context.rotate(this.theta);
+		context.rotate(this.speedtheta);
 		context.translate(-FuturgoDashboardScript.dialCenterLeftOffset, 
 				-FuturgoDashboardScript.dialCenterTopOffset);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
@@ -148,18 +143,6 @@ FuturgoDashboardScript.prototype.draw = function()
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
 		context.restore();
 	}	
-}
-
-FuturgoDashboardScript.prototype.demo = function() {
-	
-	this._speed += 0.01;
-	if (this._speed > 1)
-		this._speed = 0;
-	this._rpm += 0.025;
-	if (this._rpm > 2)
-		this._rpm = 0;
-	
-	this.needsUpdate = true;
 }
 
 FuturgoDashboardScript.prototype.setSpeed = function(speed) {

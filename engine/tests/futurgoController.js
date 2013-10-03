@@ -65,7 +65,7 @@ FuturgoControllerScript.prototype.update = function()
 
 FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 	
-	var speed = 0, rpm = 0;
+	var speed = this.speed, rpm = this.rpm;
 	
 	// Accelerate if the pedal is down
 	if (this.accelerate) {
@@ -110,20 +110,13 @@ FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 
 FuturgoControllerScript.prototype.updatePosition = function(now, deltat) {
 
+	this.moveSpeed = this.speed;
+	
 	var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
 	var actualTurnSpeed = deltat / 1000 * this.turnSpeed;
-	
-	// Translate in Z...
-	if ( this.moveForward ) {
-		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this._object.transform.object.translateZ( -actualMoveSpeed );
-	}
 
-	if ( this.moveBackward ) {
-		this.moveSpeed /= 1.01;
-		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this._object.transform.object.translateZ( actualMoveSpeed );
-	}
+	// Translate in Z...
+	this._object.transform.object.translateZ( -actualMoveSpeed );
 	
 	// ...but keep the vehicle on the ground
 	this._object.transform.position.y = this.startY;
@@ -251,10 +244,10 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
 }
 
-FuturgoControllerScript.ACCELERATION = 1; // m/s
-FuturgoControllerScript.BRAKING = 1; // m/s
-FuturgoControllerScript.INERTIA = 0.1; // m/s
+FuturgoControllerScript.ACCELERATION = 10; // m/s
+FuturgoControllerScript.BRAKING = 5; // m/s
+FuturgoControllerScript.INERTIA = 20; // m/s
 FuturgoControllerScript.COLLISION_MIN = 1; // m
 FuturgoControllerScript.COLLISION_MAX = 2; // m
-FuturgoControllerScript.MAX_SPEED = 10; // m/s
-FuturgoControllerScript.MAX_ACCELERATION = 1; // m/s
+FuturgoControllerScript.MAX_SPEED = 20; // m/s
+FuturgoControllerScript.MAX_ACCELERATION = 10; // m/s
