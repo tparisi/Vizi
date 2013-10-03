@@ -119,15 +119,17 @@ FuturgoDashboardScript.prototype.draw = function()
 		context.drawImage(this.dashboardImage, 0, 0);  
 	}
 	
-	this.speedtheta = -Math.PI * 3 / 4 + this._speed * Math.PI;
-	this.rpmtheta = -Math.PI / 2 + this._rpm  * Math.PI;
+	var speeddeg = this._speed * 10 - 120;
+	var speedtheta = THREE.Math.degToRad(speeddeg);
+	var rpmdeg = this._rpm * 20 - 90;
+	var rpmtheta = THREE.Math.degToRad(rpmdeg);
 	
 	if (this.dialImage) {
 		context.save();
 		
 		context.translate(FuturgoDashboardScript.speedDialLeftOffset, 
 				FuturgoDashboardScript.speedDialTopOffset);
-		context.rotate(this.speedtheta);
+		context.rotate(speedtheta);
 		context.translate(-FuturgoDashboardScript.dialCenterLeftOffset, 
 				-FuturgoDashboardScript.dialCenterTopOffset);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  
@@ -137,7 +139,7 @@ FuturgoDashboardScript.prototype.draw = function()
 		
 		context.translate(FuturgoDashboardScript.rpmDialLeftOffset, 
 				FuturgoDashboardScript.rpmDialTopOffset);
-		context.rotate(this.rpmtheta);
+		context.rotate(rpmtheta);
 		context.translate(-FuturgoDashboardScript.dialCenterLeftOffset, 
 				-FuturgoDashboardScript.dialCenterTopOffset);
 		context.drawImage(this.dialImage, 0, 0); // 198, 25, 115);  

@@ -89,10 +89,11 @@ FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 
 		speed -= braking;
 	}
-
-	// Apply inertia
-	var inertia = deltat / 1000 * FuturgoControllerScript.INERTIA;
-	speed -= inertia;
+	else {
+		// Apply inertia
+		var inertia = deltat / 1000 * FuturgoControllerScript.INERTIA;
+		speed -= inertia;
+	}
 	
 	speed = Math.max( 0, Math.min( FuturgoControllerScript.MAX_SPEED, speed ) );
 	rpm = Math.max( 0, Math.min( FuturgoControllerScript.MAX_ACCELERATION, this.acceleration ) );
@@ -244,10 +245,10 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
 }
 
-FuturgoControllerScript.ACCELERATION = 10; // m/s
-FuturgoControllerScript.BRAKING = 5; // m/s
-FuturgoControllerScript.INERTIA = 20; // m/s
+FuturgoControllerScript.ACCELERATION = 2; // m/s
+FuturgoControllerScript.BRAKING = 1.5; // m/s
+FuturgoControllerScript.INERTIA = 12; // m/s
 FuturgoControllerScript.COLLISION_MIN = 1; // m
 FuturgoControllerScript.COLLISION_MAX = 2; // m
-FuturgoControllerScript.MAX_SPEED = 20; // m/s
-FuturgoControllerScript.MAX_ACCELERATION = 10; // m/s
+FuturgoControllerScript.MAX_SPEED = 24; // m/s
+FuturgoControllerScript.MAX_ACCELERATION = 24; // m/s
