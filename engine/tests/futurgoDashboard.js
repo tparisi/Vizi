@@ -94,7 +94,7 @@ FuturgoDashboardScript.prototype.update = function()
 	if (!this.enabled)
 		return;
 
-	this.demoMode = true;
+	this.demoMode = false;
 	if (this.demoMode) {
 		this.demo();
 	}
@@ -125,7 +125,7 @@ FuturgoDashboardScript.prototype.draw = function()
 	}
 	
 	this.theta = -Math.PI * 3 / 4 + this._speed * Math.PI;
-	this.rpmtheta = -Math.PI / 2 + this._rpm * Math.PI;
+	this.rpmtheta = -Math.PI / 2 + this._rpm  * Math.PI;
 	
 	if (this.dialImage) {
 		context.save();
@@ -163,11 +163,13 @@ FuturgoDashboardScript.prototype.demo = function() {
 }
 
 FuturgoDashboardScript.prototype.setSpeed = function(speed) {
+	
 	this._speed = speed;
 	this.needsUpdate = true;
 }
 
 FuturgoDashboardScript.prototype.setRPM = function(rpm) {
+	
 	this._rpm = rpm;
 	this.needsUpdate = true;
 }
@@ -178,7 +180,7 @@ FuturgoDashboardScript.prototype.setCarController = function(controller) {
 	
 	var that = this;
 	controller.addEventListener("speed", function(speed) { that.setSpeed(speed); });
-	controller.addEventListener("rpm", function(speed) { that.setRPM(rpm); });
+	controller.addEventListener("rpm", function(rpm) { that.setRPM(rpm); });
 }
 
 // Constants

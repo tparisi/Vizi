@@ -19,9 +19,12 @@ FuturgoControllerScript = function(param)
 	this.turnLeft = false;
 	this.turnRight = false;
 	
+	this.accelerate = false;
+	this.brake = false;
 	this.acceleration = 0;
 	this.braking = 0;
 	this.speed = 0;
+	this.rpm = 0;
 	
 	this.yAdjustedPosition = new THREE.Vector3;
 	
@@ -29,6 +32,9 @@ FuturgoControllerScript = function(param)
 	this.movementVector = new THREE.Vector3;	
 
 	this.lastUpdateTime = Date.now();
+	this.accelerateStartTime = this.brakeStartTime = 
+		this.accelerateEndTime = this.brakeEndTime = 
+		this.lastUpdateTime;
 }
 
 goog.inherits(FuturgoControllerScript, Vizi.Script);
@@ -50,18 +56,59 @@ FuturgoControllerScript.prototype.update = function()
 	var deltat = now - this.lastUpdateTime;
 
 	this.savePosition();
-	this.updateSpeed(deltat);
-	this.updatePosition(deltat);	
+	this.updateSpeed(now, deltat);
+	this.updatePosition(now, deltat);	
 	this.testCollision();
 	
 	this.lastUpdateTime = now;
 }
 
-FuturgoControllerScript.prototype.updateSpeed = function() {
+FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 	
+	var speed = 0, rpm = 0;
+	
+	// Accelerate if the pedal is down
+	if (this.accelerate) {
+		var deltaA = now - this.accelerateStartTime;
+		this.acceleration = deltaA / 1000 * FuturgoControllerScript.ACCELERATION;		
+	}
+	else {
+		// Apply momentum
+		var deltaA = now - this.accelerateEndTime;
+		this.acceleration -= deltaA / 1000 * FuturgoControllerScript.INERTIA;		
+		this.acceleration = Math.max( 0, Math.min( FuturgoControllerScript.MAX_ACCELERATION, 
+			this.acceleration) );
+	}
+
+	speed += this.acceleration;
+	
+	// Slow down if the brake is down
+	if (this.brake) {
+		var deltaB = now - this.brakeStartTime;
+		var braking = deltaB / 1000 * FuturgoControllerScript.BRAKING;
+
+		speed -= braking;
+	}
+
+	// Apply inertia
+	var inertia = deltat / 1000 * FuturgoControllerScript.INERTIA;
+	speed -= inertia;
+	
+	speed = Math.max( 0, Math.min( FuturgoControllerScript.MAX_SPEED, speed ) );
+	rpm = Math.max( 0, Math.min( FuturgoControllerScript.MAX_ACCELERATION, this.acceleration ) );
+
+	if (this.speed != speed) {
+		this.speed = speed;
+		this.dispatchEvent("speed", speed);
+	}
+	
+	if (this.rpm != rpm) {
+		this.rpm = rpm;
+		this.dispatchEvent("rpm", rpm);
+	}
 }
 
-FuturgoControllerScript.prototype.updatePosition = function(deltat) {
+FuturgoControllerScript.prototype.updatePosition = function(now, deltat) {
 
 	var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
 	var actualTurnSpeed = deltat / 1000 * this.turnSpeed;
@@ -69,14 +116,12 @@ FuturgoControllerScript.prototype.updatePosition = function(deltat) {
 	// Translate in Z...
 	if ( this.moveForward ) {
 		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this.dispatchEvent("speed", actualMoveSpeed);
 		this._object.transform.object.translateZ( -actualMoveSpeed );
 	}
 
 	if ( this.moveBackward ) {
 		this.moveSpeed /= 1.01;
 		var actualMoveSpeed = deltat / 1000 * this.moveSpeed;
-		this.dispatchEvent("speed", actualMoveSpeed);
 		this._object.transform.object.translateZ( actualMoveSpeed );
 	}
 	
@@ -138,8 +183,10 @@ FuturgoControllerScript.prototype.onKeyDown = function ( event ) {
 		case 38: /*up*/
 		case 87: /*W*/
 			this.moveForward = true; 
-			this.accelerate = true; 
-			this.accelerateTime = Date.now();
+			if (!this.accelerate) {
+				this.accelerateStartTime = Date.now();
+				this.accelerate = true; 
+			}
 			break;
 
 		case 37: /*left*/
@@ -150,8 +197,10 @@ FuturgoControllerScript.prototype.onKeyDown = function ( event ) {
 		case 40: /*down*/
 		case 83: /*S*/
 			this.moveBackward = true;
-			this.brake = true; 
-			this.brakeTime = Date.now();
+			if (!this.brake) {
+				this.brakeStartTime = Date.now();
+				this.brake = true; 
+			}
 			break;
 
 		case 39: /*right*/
@@ -169,8 +218,11 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 
 		case 38: /*up*/
 		case 87: /*W*/
-			this.moveForward = false; 
-			this.accelerate = false; 
+			this.moveForward = false;
+			if (this.accelerate) {
+				this.accelerate = false; 
+				this.accelerateEndTime = Date.now(); 
+			}
 			break;
 
 		case 37: /*left*/
@@ -181,7 +233,10 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 		case 40: /*down*/
 		case 83: /*S*/
 			this.moveBackward = false; 
-			this.brake = false; 
+			if (this.brake) {
+				this.brake = false; 
+				this.brakeEndTime = Date.now(); 
+			}
 			break;
 
 		case 39: /*right*/
@@ -198,6 +253,8 @@ FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
 
 FuturgoControllerScript.ACCELERATION = 1; // m/s
 FuturgoControllerScript.BRAKING = 1; // m/s
+FuturgoControllerScript.INERTIA = 0.1; // m/s
 FuturgoControllerScript.COLLISION_MIN = 1; // m
 FuturgoControllerScript.COLLISION_MAX = 2; // m
-
+FuturgoControllerScript.MAX_SPEED = 10; // m/s
+FuturgoControllerScript.MAX_ACCELERATION = 1; // m/s
