@@ -323,40 +323,36 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 	
 	this.testDriveRunning = true;
 	
-	var that = this;
-
 	// Disable the pickers while inside the car body
-	var i, len = that.pickers.length;
+	var i, len = this.pickers.length;
 	for (i = 0; i < len; i++) {
-		that.pickers[i].enabled = false;
+		this.pickers[i].enabled = false;
 	}
 	
-	// Enable the car scripts
-	this.carController.enabled = true;
-	this.dashboardScript.enabled = true;
-	
+	// Open the car windows
 	this.playOpenAnimations();
-	
-	/*
-	// This should be a move behavior but that requires a Vizi
-	// object to move to, not a camera component. Maybe we need
-	// to add the viewpoint back to the controller?
-	var carpos = this.futurgo.transform.position;
 
-	this.viewer.controllerScript.camera.position.set(0, 0, 0);
-	this.viewer.controllerScript.camera._object.transform.position.set(carpos.x, 
-			FuturgoCity.AVATAR_HEIGHT_SEATED, carpos.z);
-	this.viewer.controllerScript.camera.rotation.set(0, 0, 0);
-	*/
+	// After opening the car, move to the inside camera
+	// and activate the controller for test drive - on a
+	// delay
+	var that = this;
 	setTimeout(function() { 
 		
+		// Switch to the car interior camera
 		that.viewer.controllerScript.camera = that.driveCamera;
 		that.viewer.controllerScript.move = false;
 		that.driveCamera.rotation.set(0, 0, 0);
 		that.driveCamera.active = true;
-		
+
+		// Enable the car scripts - controller and dashboard animations
+		that.carController.enabled = true;
+		that.dashboardScript.enabled = true;
+
+		// Now that we're inside, shut the windows and fade them
+		// to nearly transparent so we can see the city
 		setTimeout(function() { 
 
+			// Close the car windows
 			that.playCloseAnimations(); 
 
 			// Fade the windows
@@ -387,8 +383,11 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 	this.carController.enabled = false;
 	this.dashboardScript.enabled = true;
 	
+	// Open up the windows
 	this.playOpenAnimations();
 	
+	// After the open animation, re-activate walk mode,
+	// jump back to the exterior camera
 	var that = this;
 	setTimeout(function() { 
 		
@@ -411,6 +410,7 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 			fader.start();
 		}
 
+		// Now that we're back outside, close the windows
 		setTimeout(function() { 
 			
 			that.playCloseAnimations(); 
