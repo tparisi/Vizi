@@ -240,7 +240,7 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 
 	}
 
-};
+}
 
 FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
 }
