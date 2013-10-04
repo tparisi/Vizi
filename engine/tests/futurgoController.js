@@ -42,7 +42,15 @@ goog.inherits(FuturgoController, Vizi.Script);
 FuturgoController.prototype.realize = function()
 {
 	this.lastUpdateTime = Date.now();
+
+	// Save ground position
 	this.startY = this._object.transform.position.y;
+	
+	// Add a bounce behavior to run on collide
+	this.bouncer = new Vizi.BounceBehavior(
+			{ duration : FuturgoController.BOUNCE_DURATION }
+			);
+	this._object.addComponent(this.bouncer);	
 }
 
 FuturgoController.prototype.update = function()
@@ -159,18 +167,37 @@ FuturgoController.prototype.testCollision = function() {
 	}
 	
 	if (collide && collide.object) {
-		this.restorePosition();
-		this.dispatchEvent("collide", collide);
+		this.handleCollision(collide);
 	}
 	
 }
 
+FuturgoController.prototype.handleCollision = function(collide) {
+
+	// Tell any listeners
+	this.dispatchEvent("collide", collide);
+	
+	// Move back to previously saved position
+	this.restorePosition();
+	
+	// Run the bounce response
+	this.bouncer.bounceVector
+		.copy(this.movementVector)
+		.negate()
+		.multiplyScalar(.333);
+	this.bouncer.start();
+
+	// Kill the motor
+	this.speed = 0;
+	this.rpm = 0;
+}
+
 // Keyboard handlers
-FuturgoController.prototype.onKeyDown = function ( event ) {
+FuturgoController.prototype.onKeyDown = function(event) {
 
 	//event.preventDefault();
 
-	switch ( event.keyCode ) {
+	switch (event.keyCode) {
 
 		case 38: /*up*/
 		case 87: /*W*/
@@ -204,9 +231,9 @@ FuturgoController.prototype.onKeyDown = function ( event ) {
 
 }
 
-FuturgoController.prototype.onKeyUp = function ( event ) {
+FuturgoController.prototype.onKeyUp = function(event) {
 
-	switch( event.keyCode ) {
+	switch(event.keyCode) {
 
 		case 38: /*up*/
 		case 87: /*W*/
@@ -240,7 +267,7 @@ FuturgoController.prototype.onKeyUp = function ( event ) {
 
 }
 
-FuturgoController.prototype.onKeyPress = function ( event ) {
+FuturgoController.prototype.onKeyPress = function(event) {
 }
 
 FuturgoController.ACCELERATION = 2; // m/s
@@ -250,3 +277,4 @@ FuturgoController.COLLISION_MIN = 1; // m
 FuturgoController.COLLISION_MAX = 2; // m
 FuturgoController.MAX_SPEED = 24; // m/s
 FuturgoController.MAX_ACCELERATION = 24; // m/s
+FuturgoController.BOUNCE_DURATION = 0.5; // sec
