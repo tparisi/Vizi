@@ -3,7 +3,7 @@
  * extends Vizi.Script
  */
 
-FuturgoControllerScript = function(param)
+FuturgoController = function(param)
 {
 	param = param || {};
 	
@@ -37,9 +37,9 @@ FuturgoControllerScript = function(param)
 		this.lastUpdateTime;
 }
 
-goog.inherits(FuturgoControllerScript, Vizi.Script);
+goog.inherits(FuturgoController, Vizi.Script);
 
-FuturgoControllerScript.prototype.realize = function()
+FuturgoController.prototype.realize = function()
 {
 	this.lastUpdateTime = Date.now();
 	this.startY = this._object.transform.position.y;
@@ -47,7 +47,7 @@ FuturgoControllerScript.prototype.realize = function()
 	this.steeringWheel = this._object.findNode("polySurface93");
 }
 
-FuturgoControllerScript.prototype.update = function()
+FuturgoController.prototype.update = function()
 {
 	if (!this.enabled)
 		return;
@@ -63,20 +63,20 @@ FuturgoControllerScript.prototype.update = function()
 	this.lastUpdateTime = now;
 }
 
-FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
+FuturgoController.prototype.updateSpeed = function(now, deltat) {
 	
 	var speed = this.speed, rpm = this.rpm;
 	
 	// Accelerate if the pedal is down
 	if (this.accelerate) {
 		var deltaA = now - this.accelerateStartTime;
-		this.acceleration = deltaA / 1000 * FuturgoControllerScript.ACCELERATION;		
+		this.acceleration = deltaA / 1000 * FuturgoController.ACCELERATION;		
 	}
 	else {
 		// Apply momentum
 		var deltaA = now - this.accelerateEndTime;
-		this.acceleration -= deltaA / 1000 * FuturgoControllerScript.INERTIA;		
-		this.acceleration = Math.max( 0, Math.min( FuturgoControllerScript.MAX_ACCELERATION, 
+		this.acceleration -= deltaA / 1000 * FuturgoController.INERTIA;		
+		this.acceleration = Math.max( 0, Math.min( FuturgoController.MAX_ACCELERATION, 
 			this.acceleration) );
 	}
 
@@ -85,18 +85,18 @@ FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 	// Slow down if the brake is down
 	if (this.brake) {
 		var deltaB = now - this.brakeStartTime;
-		var braking = deltaB / 1000 * FuturgoControllerScript.BRAKING;
+		var braking = deltaB / 1000 * FuturgoController.BRAKING;
 
 		speed -= braking;
 	}
 	else {
 		// Apply inertia
-		var inertia = deltat / 1000 * FuturgoControllerScript.INERTIA;
+		var inertia = deltat / 1000 * FuturgoController.INERTIA;
 		speed -= inertia;
 	}
 	
-	speed = Math.max( 0, Math.min( FuturgoControllerScript.MAX_SPEED, speed ) );
-	rpm = Math.max( 0, Math.min( FuturgoControllerScript.MAX_ACCELERATION, this.acceleration ) );
+	speed = Math.max( 0, Math.min( FuturgoController.MAX_SPEED, speed ) );
+	rpm = Math.max( 0, Math.min( FuturgoController.MAX_ACCELERATION, this.acceleration ) );
 
 	if (this.speed != speed) {
 		this.speed = speed;
@@ -109,7 +109,7 @@ FuturgoControllerScript.prototype.updateSpeed = function(now, deltat) {
 	}
 }
 
-FuturgoControllerScript.prototype.updatePosition = function(now, deltat) {
+FuturgoController.prototype.updatePosition = function(now, deltat) {
 
 	this.moveSpeed = this.speed;
 	
@@ -133,15 +133,15 @@ FuturgoControllerScript.prototype.updatePosition = function(now, deltat) {
 	
 }
 
-FuturgoControllerScript.prototype.savePosition = function() {
+FuturgoController.prototype.savePosition = function() {
 	this.savedPos.copy(this._object.transform.position);
 }
 
-FuturgoControllerScript.prototype.restorePosition = function() {
+FuturgoController.prototype.restorePosition = function() {
 	this._object.transform.position.copy(this.savedPos);
 }
 
-FuturgoControllerScript.prototype.testCollision = function() {
+FuturgoController.prototype.testCollision = function() {
 	
 	this.movementVector.copy(this._object.transform.position).sub(this.savedPos);
 	this.yAdjustedPosition.copy(this.savedPos);
@@ -152,8 +152,8 @@ FuturgoControllerScript.prototype.testCollision = function() {
 
         collide = Vizi.Graphics.instance.objectFromRay(this.yAdjustedPosition,
         		this.movementVector, 
-        		FuturgoControllerScript.COLLISION_MIN, 
-        		FuturgoControllerScript.COLLISION_MAX);
+        		FuturgoController.COLLISION_MIN, 
+        		FuturgoController.COLLISION_MAX);
 
         if (collide && collide.object) {
         	var dist = this.yAdjustedPosition.distanceTo(collide.hitPointWorld);
@@ -168,7 +168,7 @@ FuturgoControllerScript.prototype.testCollision = function() {
 }
 
 // Keyboard handlers
-FuturgoControllerScript.prototype.onKeyDown = function ( event ) {
+FuturgoController.prototype.onKeyDown = function ( event ) {
 
 	//event.preventDefault();
 
@@ -206,7 +206,7 @@ FuturgoControllerScript.prototype.onKeyDown = function ( event ) {
 
 }
 
-FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
+FuturgoController.prototype.onKeyUp = function ( event ) {
 
 	switch( event.keyCode ) {
 
@@ -242,13 +242,13 @@ FuturgoControllerScript.prototype.onKeyUp = function ( event ) {
 
 }
 
-FuturgoControllerScript.prototype.onKeyPress = function ( event ) {
+FuturgoController.prototype.onKeyPress = function ( event ) {
 }
 
-FuturgoControllerScript.ACCELERATION = 2; // m/s
-FuturgoControllerScript.BRAKING = 1.5; // m/s
-FuturgoControllerScript.INERTIA = 12; // m/s
-FuturgoControllerScript.COLLISION_MIN = 1; // m
-FuturgoControllerScript.COLLISION_MAX = 2; // m
-FuturgoControllerScript.MAX_SPEED = 24; // m/s
-FuturgoControllerScript.MAX_ACCELERATION = 24; // m/s
+FuturgoController.ACCELERATION = 2; // m/s
+FuturgoController.BRAKING = 1.5; // m/s
+FuturgoController.INERTIA = 12; // m/s
+FuturgoController.COLLISION_MIN = 1; // m
+FuturgoController.COLLISION_MAX = 2; // m
+FuturgoController.MAX_SPEED = 24; // m/s
+FuturgoController.MAX_ACCELERATION = 24; // m/s

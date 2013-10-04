@@ -268,9 +268,13 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.driveCamera = camera;
 
 	// Add the keyboard controller
-	this.carController = new FuturgoControllerScript({enabled:false});
+	this.carController = new FuturgoController({enabled:false});
 	futurgo.addComponent(this.carController);
-
+	
+	// Add the bounce behavior for collisions
+	this.bounceBehavior = new Vizi.BounceBehavior({bounceVector:new THREE.Vector3(0, 0, 1)});
+	futurgo.addComponent(this.bounceBehavior);
+	
 	// Add the dashboard animation script
 	this.dashboardScript = new FuturgoDashboardScript({enabled:false});
 	futurgo.addComponent(this.dashboardScript);
