@@ -91,9 +91,6 @@ FuturgoDashboardScript.prototype.realize = function()
 
 FuturgoDashboardScript.prototype.update = function()
 {
-	if (!this.enabled)
-		return;
-
 	if (this.needsUpdate) {
 
 		this.draw();

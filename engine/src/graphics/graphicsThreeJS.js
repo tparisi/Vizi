@@ -217,11 +217,19 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
     }
 }
 
-Vizi.GraphicsThreeJS.prototype.objectFromRay = function(origin, direction, near, far)
+Vizi.GraphicsThreeJS.prototype.objectFromRay = function(hierarchy, origin, direction, near, far)
 {
     var raycaster = new THREE.Raycaster(origin, direction, near, far);
 
-	var intersects = raycaster.intersectObjects( this.scene.children, true );
+    var objects = null;
+    if (hierarchy) {
+    	objects = hierarchy.transform.object.children; 
+    }
+    else {
+    	objects = this.scene.children;
+    }
+    
+	var intersects = raycaster.intersectObjects( objects, true );
 	
     if ( intersects.length > 0 ) {
     	var i = 0;

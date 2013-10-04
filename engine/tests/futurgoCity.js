@@ -282,7 +282,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.driveCamera = camera;
 
 	// Add the car controller
-	this.carController = new FuturgoController({enabled:false});
+	this.carController = new FuturgoController({enabled:false,
+		scene: this.scene});
 	futurgo.addComponent(this.carController);
 	
 	this.carController.addEventListener("collide", function(collide) {

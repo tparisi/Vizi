@@ -10,6 +10,7 @@ FuturgoController = function(param)
 	Vizi.Script.call(this, param);
 
 	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this.scene = param.scene || null;
 	
 	this.moveSpeed = 13;
 	this.turnSpeed = Math.PI / 2; // 90 degs/sec
@@ -27,7 +28,10 @@ FuturgoController = function(param)
 	this.rpm = 0;
 	
 	this.eyePosition = new THREE.Vector3;
-	
+	this.downVector = new THREE.Vector3(0, -1, 0);
+	this.groundY = 0;
+	this.avatarHeight = FuturgoCity.AVATAR_HEIGHT_SEATED;
+		
 	this.savedPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;	
 
@@ -65,6 +69,7 @@ FuturgoController.prototype.update = function()
 	this.updateSpeed(now, deltat);
 	this.updatePosition(now, deltat);	
 	this.testCollision();
+	this.testTerrain();
 	
 	this.lastUpdateTime = now;
 }
@@ -151,12 +156,12 @@ FuturgoController.prototype.testCollision = function() {
 	
 	this.movementVector.copy(this._object.transform.position).sub(this.savedPos);
 	this.eyePosition.copy(this.savedPos);
-	this.eyePosition.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
+	this.eyePosition.y = this.groundY + this.avatarHeight;
 	
 	var collide = null;
 	if (this.movementVector.length()) {
 
-        collide = Vizi.Graphics.instance.objectFromRay(this.eyePosition,
+        collide = Vizi.Graphics.instance.objectFromRay(this.scene, this.eyePosition,
         		this.movementVector, 
         		FuturgoController.COLLISION_MIN, 
         		FuturgoController.COLLISION_MAX);
@@ -191,6 +196,29 @@ FuturgoController.prototype.handleCollision = function(collide) {
 	this.speed = 0;
 	this.rpm = 0;
 }
+
+FuturgoController.prototype.testTerrain = function() {
+	
+	var EPSILON = 0.00001;
+	
+	var terrainHit = Vizi.Graphics.instance.objectFromRay(this.scene, 
+				this.eyePosition,
+        		this.downVector);
+
+    if (terrainHit && terrainHit.object) {
+    	var dist = this.eyePosition.distanceTo(terrainHit.hitPointWorld);
+		var diff = this.avatarHeight - dist;		
+		if (Math.abs(diff) > EPSILON) {
+    		console.log("distance", dist);
+    		
+    		
+    		this.eyePosition.y += diff;
+    		this._object.transform.position.y += diff;
+    		this.groundY = this._object.transform.position.y;
+    	}
+    }
+}
+
 
 // Keyboard handlers
 FuturgoController.prototype.onKeyDown = function(event) {

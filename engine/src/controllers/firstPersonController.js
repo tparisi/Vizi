@@ -153,7 +153,8 @@ Vizi.FirstPersonControllerScript.prototype.testCollision = function() {
 	this.movementVector.copy(this._camera.position).sub(this.savedCameraPos);
 	if (this.movementVector.length()) {
 		
-        var collide = Vizi.Graphics.instance.objectFromRay(this.savedCameraPos,
+        var collide = Vizi.Graphics.instance.objectFromRay(null, 
+        		this.savedCameraPos,
         		this.movementVector, 1, 2);
 
         if (collide && collide.object) {
