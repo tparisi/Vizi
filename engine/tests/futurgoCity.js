@@ -363,33 +363,35 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 		that.driveCamera.rotation.set(0, 0, 0);
 		that.driveCamera.active = true;
 
+	}, 1000);
+
+	// Now that we're inside, enable the car controller
+	// Also shut the windows and fade them
+	// to nearly transparent so we can see the city
+	setTimeout(function() { 
+
+		// Close the car windows
+		that.playCloseAnimations(); 
+
+		// Dampen city background sounds
+		that.sound.interior();
+		
+		// Fade the windows
+		var i, len = that.faders.length;
+		for (i = 0; i < len; i++) {
+			var fader = that.faders[i];
+			fader.opacity = FuturgoCity.OPACITY_MOSTLY_TRANSPARENT;
+			fader.start();
+		}
+
 		// Enable the car scripts - controller and dashboard animations
 		that.carController.enabled = true;
 		that.dashboardScript.enabled = true;
 
-		// Now that we're inside, shut the windows and fade them
-		// to nearly transparent so we can see the city
-		setTimeout(function() { 
 
-			// Close the car windows
-			that.playCloseAnimations(); 
-
-			// Dampen city background sounds
-			that.sound.interior();
-			
-			// Fade the windows
-			var i, len = that.faders.length;
-			for (i = 0; i < len; i++) {
-				var fader = that.faders[i];
-				fader.opacity = FuturgoCity.OPACITY_MOSTLY_TRANSPARENT;
-				fader.start();
-			}
-
-		}, 1000);
-
-		
-	}, 1000);
-
+	}, 2000);
+	
+	
 	if (this.startTestDriveCallback)
 		this.startTestDriveCallback();
 }
@@ -435,15 +437,15 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 			fader.start();
 		}
 
-		// Now that we're back outside, close the windows
-		setTimeout(function() { 
-			
-			that.playCloseAnimations(); 
-		}, 1000);
-
-		
 	}, 1000);
 
+	// Now that we're back outside, close the windows
+	setTimeout(function() { 
+		
+		that.playCloseAnimations(); 
+	}, 2000);
+	
+	
 	if (this.endTestDriveCallback)
 		this.endTestDriveCallback();
 
