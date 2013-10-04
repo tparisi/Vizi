@@ -19,14 +19,28 @@ FuturgoCity = function(param) {
 }
 
 FuturgoCity.prototype.go = function() {
+
+	// Create the viewer
 	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true,
 		showGrid:false});
-	this.loadURL(FuturgoCity.URL);
+	
+	// We'll take the mouse clicks and keyboard
 	this.viewer.mouseDelegate = this;
 	this.viewer.keyboardDelegate = this;
-	this.viewer.focus();
-	this.viewer.run();
 	
+	// Load the city model
+	this.loadURL(FuturgoCity.URL);
+
+	// Make sure we have keyboard focus
+	this.viewer.focus();
+	
+	// Run the run loop
+	this.viewer.run();
+
+	// Create the sound manager and start the
+	// ambient sound
+	this.sound = new FuturgoSound;
+	this.sound.start();
 }
 
 FuturgoCity.prototype.loadURL = function(url) {
@@ -258,8 +272,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	camera.near = 0.01;
 	driveCam.addComponent(camera);
 	futurgo.addChild(driveCam);	
-	// account for scale in model so that
-	// we can position the camera properly
+	// Account for scale in model so that
+	//   we can position the camera properly
 	var scaley = futurgo.transform.scale.y;
 	var scalez = futurgo.transform.scale.z;
 	var camy = FuturgoCity.AVATAR_HEIGHT_SEATED / scaley;
@@ -267,13 +281,13 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	driveCam.transform.position.set(0, camy, camz);
 	this.driveCamera = camera;
 
-	// Add the keyboard controller
+	// Add the car controller
 	this.carController = new FuturgoController({enabled:false});
 	futurgo.addComponent(this.carController);
 	
-	// Add the bounce behavior for collisions
-	this.bounceBehavior = new Vizi.BounceBehavior({bounceVector:new THREE.Vector3(0, 0, 1)});
-	futurgo.addComponent(this.bounceBehavior);
+	this.carController.addEventListener("collide", function(collide) {
+		that.sound.bump();
+	});
 	
 	// Add the dashboard animation script
 	this.dashboardScript = new FuturgoDashboardScript({enabled:false});
@@ -281,6 +295,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	
 	this.dashboardScript.carController = this.carController;
 	
+	// The car is now ready to roll
 	this.futurgo = futurgo;
 	this.futurgoScene = futurgoScene;
 	this.testDriveRunning = false;
@@ -359,6 +374,9 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 			// Close the car windows
 			that.playCloseAnimations(); 
 
+			// Dampen city background sounds
+			that.sound.interior();
+			
 			// Fade the windows
 			var i, len = that.faders.length;
 			for (i = 0; i < len; i++) {
@@ -406,6 +424,9 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 		that.viewer.controllerScript.camera.active = true;
 		that.viewer.controllerScript.update();
 
+		// Restore city background sound volume
+		that.sound.exterior();
+		
 		// Fade the windows back to semi-opaque
 		var i, len = that.faders.length;
 		for (i = 0; i < len; i++) {

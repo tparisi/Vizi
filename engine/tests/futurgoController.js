@@ -26,7 +26,7 @@ FuturgoController = function(param)
 	this.speed = 0;
 	this.rpm = 0;
 	
-	this.yAdjustedPosition = new THREE.Vector3;
+	this.eyePosition = new THREE.Vector3;
 	
 	this.savedPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;	
@@ -44,7 +44,7 @@ FuturgoController.prototype.realize = function()
 	this.lastUpdateTime = Date.now();
 
 	// Save ground position
-	this.startY = this._object.transform.position.y;
+	this.groundY = this._object.transform.position.y;
 	
 	// Add a bounce behavior to run on collide
 	this.bouncer = new Vizi.BounceBehavior(
@@ -126,7 +126,7 @@ FuturgoController.prototype.updatePosition = function(now, deltat) {
 	this._object.transform.object.translateZ( -actualMoveSpeed );
 	
 	// ...but keep the vehicle on the ground
-	this._object.transform.position.y = this.startY;
+	this._object.transform.position.y = this.groundY;
 
 	// Turn
 	if ( this.turnLeft ) {
@@ -150,19 +150,19 @@ FuturgoController.prototype.restorePosition = function() {
 FuturgoController.prototype.testCollision = function() {
 	
 	this.movementVector.copy(this._object.transform.position).sub(this.savedPos);
-	this.yAdjustedPosition.copy(this.savedPos);
-	this.yAdjustedPosition.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
+	this.eyePosition.copy(this.savedPos);
+	this.eyePosition.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
 	
 	var collide = null;
 	if (this.movementVector.length()) {
 
-        collide = Vizi.Graphics.instance.objectFromRay(this.yAdjustedPosition,
+        collide = Vizi.Graphics.instance.objectFromRay(this.eyePosition,
         		this.movementVector, 
         		FuturgoController.COLLISION_MIN, 
         		FuturgoController.COLLISION_MAX);
 
         if (collide && collide.object) {
-        	var dist = this.yAdjustedPosition.distanceTo(collide.hitPointWorld);
+        	var dist = this.eyePosition.distanceTo(collide.hitPointWorld);
         }
 	}
 	
