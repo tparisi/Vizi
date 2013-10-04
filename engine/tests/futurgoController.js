@@ -43,8 +43,6 @@ FuturgoController.prototype.realize = function()
 {
 	this.lastUpdateTime = Date.now();
 	this.startY = this._object.transform.position.y;
-	
-	this.steeringWheel = this._object.findNode("polySurface93");
 }
 
 FuturgoController.prototype.update = function()
