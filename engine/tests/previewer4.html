@@ -291,23 +291,18 @@
 				openSceneNode(viewer, node);
 			},
 			onActivate: function(node) {
-//				$("#echoActive").text(node.data.title);
 				selectSceneNode(viewer, node);
 				if (infoPopupVisible) {
 					openSceneNode(viewer, node);
 				}
-//				alert(node.getKeyPath());
 				if( node.data.url )
 					window.open(node.data.url, node.data.target);
 			},
 			onDeactivate: function(node) {
-//				$("#echoSelected").text("-");
 			},
 			onFocus: function(node) {
-//				$("#echoFocused").text(node.data.title);
 			},
 			onBlur: function(node) {
-//				$("#echoFocused").text("-");
 			},
 		});
 	}
