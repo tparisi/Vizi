@@ -27,6 +27,7 @@ Vizi.FirstPersonControllerScript = function(param)
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this._move = (param.move !== undefined) ? param.move : true;
 	this._look = (param.look !== undefined) ? param.look : true;
+	this._mouseLook = (param.mouseLook !== undefined) ? param.mouseLook : false;
 	
 	this.collisionDistance = 10;
 	this.moveSpeed = 13;
@@ -67,6 +68,14 @@ Vizi.FirstPersonControllerScript = function(param)
     			this.setLook(v);
     		}
     	},
+    	mouseLook : {
+    		get: function() {
+    			return this._mouseLook;
+    		},
+    		set: function(v) {
+    			this.setMouseLook(v);
+    		}
+    	},
         headlightOn: {
 	        get: function() {
 	            return this._headlightOn;
@@ -90,6 +99,10 @@ Vizi.FirstPersonControllerScript.prototype.realize = function()
 Vizi.FirstPersonControllerScript.prototype.createControls = function(camera)
 {
 	var controls = new Vizi.FirstPersonControls(camera.object, Vizi.Graphics.instance.container);
+	controls.mouseLook = this._mouseLook;
+	controls.movementSpeed = this._move ? this.moveSpeed : 0;
+	controls.lookSpeed = this._look ? 1.0 : 0;
+
 	this.clock = new THREE.Clock();
 	return controls;
 }
@@ -130,6 +143,12 @@ Vizi.FirstPersonControllerScript.prototype.setLook = function(look)
 {
 	this._look = look;
 	this.controls.lookSpeed = look ? 1.0 : 0;
+}
+
+Vizi.FirstPersonControllerScript.prototype.setMouseLook = function(mouseLook)
+{
+	this._mouseLook = mouseLook;
+	this.controls.mouseLook = mouseLook;
 }
 
 Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {

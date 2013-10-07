@@ -50,7 +50,7 @@ FuturgoSound.prototype.bump = function() {
 
 }
 
-FuturgoSound.CITY_VOLUME = 0.5;
-FuturgoSound.CITY_VOLUME_INTERIOR = 0.25;
-FuturgoSound.BUMP_VOLUME = 0.5;
+FuturgoSound.CITY_VOLUME = 0.3;
+FuturgoSound.CITY_VOLUME_INTERIOR = 0.15;
+FuturgoSound.BUMP_VOLUME = 0.3;
 FuturgoSound.FADE_TIME = 1000;

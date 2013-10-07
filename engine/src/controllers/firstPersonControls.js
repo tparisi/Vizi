@@ -4,7 +4,7 @@
  * @author paulirish / http://paulirish.com/
  */
 
-/* Hacked-up version of Three.js FirstPerson controls for Vizi
+/* Heavily adapted version of Three.js FirstPerson controls for Vizi
  * 
  */
 
@@ -20,28 +20,13 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.movementSpeed = 1.0;
 	this.lookSpeed = 1.0;
 
-	this.lookVertical = true;
-	this.autoForward = false;
-	// this.invertVertical = false;
-
-	this.activeLook = false;
-
-	this.heightSpeed = false;
-	this.heightCoef = 1.0;
-	this.heightMin = 0.0;
-	this.heightMax = 1.0;
-
-	this.constrainVertical = false;
-	this.verticalMin = 0;
-	this.verticalMax = Math.PI;
-
-	this.autoSpeedFactor = 0.0;
-
 	this.mouseX = 0;
 	this.mouseY = 0;
+	this.lastMouseX = 0;
+	this.lastMouseY = 0;
 
 	this.lat = 0;
-	this.lon = -90;
+	this.lon = 0;
 	this.phi = 0;
 	this.theta = 0;
 
@@ -49,9 +34,9 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.moveBackward = false;
 	this.moveLeft = false;
 	this.moveRight = false;
-	this.freeze = false;
 
 	this.mouseDragOn = false;
+	this.mouseLook = false;
 
 	this.viewHalfX = 0;
 	this.viewHalfY = 0;
@@ -61,8 +46,6 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		this.domElement.setAttribute( 'tabindex', -1 );
 
 	}
-
-	//
 
 	this.handleResize = function () {
 
@@ -82,27 +65,6 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.onMouseDown = function ( event ) {
 
-/*		if ( this.domElement !== document ) {
-
-			this.domElement.focus();
-
-		}
-
-//		event.preventDefault();
-//		event.stopPropagation();
-*/
-		
-		if ( this.activeLook ) {
-
-			switch ( event.button ) {
-
-				case 0: this.moveForward = true; break;
-				case 2: this.moveBackward = true; break;
-
-			}
-
-		}
-
 		if ( this.domElement === document ) {
 
 			this.mouseX = event.pageX - this.viewHalfX;
@@ -114,41 +76,14 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
 
 		}
-		
-		var position = new THREE.Vector3, 
-		quaternion = new THREE.Quaternion, 
-		scale = new THREE.Vector3;
-		this.object.matrix.decompose(position, quaternion, scale);
-		var rotation = new THREE.Euler;
-		rotation.setFromQuaternion(quaternion);
-		
-		this.lon = THREE.Math.radToDeg(rotation.y);
-		// hack for bad math
-		//this.lat = THREE.Math.radToDeg(rotation.x);
-		
-		this.dragStartX = this.mouseX;
-		this.dragStartY = this.mouseY;
-		this.startLon = this.lon;
-		this.startLat = this.lat;
+				
+		this.lastMouseX = this.mouseX;
+		this.lastMouseY = this.mouseY;
 		this.mouseDragOn = true;
 
 	};
 
 	this.onMouseUp = function ( event ) {
-
-//		event.preventDefault();
-//		event.stopPropagation();
-
-		if ( this.activeLook ) {
-
-			switch ( event.button ) {
-
-				case 0: this.moveForward = false; break;
-				case 2: this.moveBackward = false; break;
-
-			}
-
-		}
 
 		this.mouseDragOn = false;
 
@@ -191,8 +126,6 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			case 82: /*R*/ this.moveUp = true; break;
 			case 70: /*F*/ this.moveDown = true; break;
 
-			case 81: /*Q*/ this.freeze = !this.freeze; break;
-
 		}
 
 	};
@@ -224,29 +157,10 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		this.startY = this.object.position.y;
 		
-		if ( this.freeze ) {
-
-			return;
-
-		}
-
-		if ( this.heightSpeed ) {
-
-			var y = THREE.Math.clamp( this.object.position.y, this.heightMin, this.heightMax );
-			var heightDelta = y - this.heightMin;
-
-			this.autoSpeedFactor = delta * ( heightDelta * this.heightCoef );
-
-		} else {
-
-			this.autoSpeedFactor = 0.0;
-
-		}
-
 		var actualMoveSpeed = delta * this.movementSpeed;
 
 		if ( this.moveForward || ( this.autoForward && !this.moveBackward ) ) 
-			this.object.translateZ( - ( actualMoveSpeed + this.autoSpeedFactor ) );
+			this.object.translateZ( - actualMoveSpeed );
 		if ( this.moveBackward ) 
 			this.object.translateZ( actualMoveSpeed );
 
@@ -264,81 +178,51 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
-		if ( !this.activeLook ) {
-
-			actualLookSpeed = 0;
-
-		}
-
-		var verticalLookRatio = 1;
-
-		if ( this.constrainVertical ) {
-
-			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
-
-		}
-
-		var DRAG_DEAD_ZONE = 4;
+		var DRAG_DEAD_ZONE = 1;
 		
-		if (this.mouseDragOn) {
-			var dlon = this.mouseX - this.dragStartX;
-			if (Math.abs(dlon) < DRAG_DEAD_ZONE)
+		if (this.mouseDragOn || this.mouseLook) {
+			
+			var deltax = this.lastMouseX - this.mouseX;
+			if (Math.abs(deltax) < DRAG_DEAD_ZONE)
 				dlon = 0;
-			this.lon = this.startLon - dlon * this.lookSpeed;
-			
-			if (dlon != 0) {
-//				console.log("Longitude - delta: ", dlon, "value: ", this.lon)
-			}
-			
-			if( this.lookVertical ) {
-				var dlat = -(this.mouseY - this.dragStartY);
-				if (Math.abs(dlat) < DRAG_DEAD_ZONE)
-					dlat = 0;
+			var dlon = deltax / this.viewHalfX * 900;
+			this.lon += dlon * this.lookSpeed;
 
-				this.lat = this.startLat + dlat * this.lookSpeed * verticalLookRatio;
-
-				if (dlat != 0) {
-//					console.log("Latitue - delta: ", dlat, "value: ", this.lat)
-				}
-
-			}
+			var deltay = this.lastMouseY - this.mouseY;
+			if (Math.abs(deltay) < DRAG_DEAD_ZONE)
+				dlat = 0;
+			var dlat = deltay / this.viewHalfY * 900;
+			this.lat += dlat * this.lookSpeed;
 			
+			this.theta = THREE.Math.degToRad( this.lon );
+
 			this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
 			this.phi = THREE.Math.degToRad( this.lat );
 
-			if (this.phi != 0) {
-//				console.log("Phi: ", this.phi)
-			}
-	
-			this.theta = THREE.Math.degToRad( this.lon );
-	
-			if ( this.constrainVertical ) {
-	
-				this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
-	
-			}
-	
 			var targetPosition = this.target,
 				position = this.object.position;
 	
-			targetPosition.x = position.x -Math.sin( this.theta );
+			targetPosition.x = position.x - Math.sin( this.theta );
 			targetPosition.y = position.y + Math.sin( this.phi );
-			targetPosition.z = position.z -Math.cos( this.theta );
+			targetPosition.z = position.z - Math.cos( this.theta );
 	
 			this.object.lookAt( targetPosition );
+			
+			this.lastMouseX = this.mouseX;
+			this.lastMouseY = this.mouseY;
 		}
 		
 	};
 
 
-//	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 
 	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), true );
 	this.domElement.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 	this.domElement.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
 	this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
 	this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
-
+	this.domElement.addEventListener( 'resize', bind( this, this.handleResize ), false );
 	
 	function bind( scope, fn ) {
 
