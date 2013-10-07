@@ -67,6 +67,8 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	}
 	
 	this.viewer.setController("FPS");
+	this.cameraController = this.viewer.controllerScript;
+	this.walkCamera = this.viewer.defaultCamera;
 	
 	this.addBackground();
 	this.addCollisionBox();
@@ -182,8 +184,8 @@ FuturgoCity.prototype.fixTrees = function(scene) {
 }
 
 FuturgoCity.prototype.setupCamera = function() {
-	this.viewer.controllerScript.camera.position.set(0, FuturgoCity.AVATAR_HEIGHT, 0);
-	this.viewer.controllerScript.camera.near = 0.01;
+	this.cameraController.camera.position.set(0, FuturgoCity.AVATAR_HEIGHT, 0);
+	this.cameraController.camera.near = 0.01;
 }
 
 
@@ -359,8 +361,10 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 	setTimeout(function() { 
 		
 		// Switch to the car interior camera
-		that.viewer.controllerScript.camera = that.driveCamera;
-		that.viewer.controllerScript.move = false;
+		that.cameraController.camera = that.driveCamera;
+		// Don't allow camera move, we want to
+		// stay in the car
+		that.cameraController.move = false;
 		that.driveCamera.rotation.set(0, 0, 0);
 		that.driveCamera.active = true;
 
@@ -422,10 +426,11 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 			that.pickers[i].enabled = true;
 		}
 
-		that.viewer.controllerScript.camera = that.viewer.defaultCamera;
-		that.viewer.controllerScript.move = true;
-		that.viewer.controllerScript.camera.active = true;
-		that.viewer.controllerScript.update();
+		// Switch back to walk camera
+		that.cameraController.camera = that.walkCamera;
+		that.cameraController.camera.active = true;
+		// Enable camera camera controller more
+		that.cameraController.move = true;
 
 		// Restore city background sound volume
 		that.sound.exterior();
