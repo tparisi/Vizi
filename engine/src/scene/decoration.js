@@ -20,3 +20,8 @@ goog.inherits(Vizi.Decoration, Vizi.Visual);
 
 Vizi.Decoration.prototype._componentCategory = "decorations";
 
+Vizi.Decoration.prototype.realize = function()
+{
+	Vizi.Visual.prototype.realize.call(this);
+	this.object.ignorePick = true;
+}

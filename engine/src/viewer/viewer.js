@@ -510,7 +510,6 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 			wireframe:true, opacity:1})
 	
 		var mesh = new THREE.Mesh(geo, mat);
-		mesh.ignorePick = true;	
 		this.highlightDecoration = new Vizi.Decoration({object:mesh});
 		object._parent.addComponent(this.highlightDecoration);
 	
@@ -590,13 +589,6 @@ Vizi.Viewer.prototype.fitToScene = function()
 
 	// Bounding box display
 	if (true) {
-		var geo = new THREE.CubeGeometry(this.boundingBox.max.x - this.boundingBox.min.x,
-				this.boundingBox.max.y - this.boundingBox.min.y,
-				this.boundingBox.max.z - this.boundingBox.min.z);
-		var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2});
-		var mesh = new THREE.Mesh(geo, mat)
-		mesh.ignorePick = true;
-		var decoration = new Vizi.Decoration({object:mesh});
 		
 		this.sceneRoot.map(Vizi.Object, function(o) {
 			if (o._parent) {
@@ -607,7 +599,6 @@ Vizi.Viewer.prototype.fitToScene = function()
 						bbox.max.z - bbox.min.z);
 				var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
 				var mesh = new THREE.Mesh(geo, mat)
-				mesh.ignorePick = true;
 				var decoration = new Vizi.Decoration({object:mesh});
 				o._parent.addComponent(decoration);
 		
