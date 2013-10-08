@@ -454,7 +454,7 @@ Vizi.Viewer.prototype.setGridOn = function(on)
 {
 	if (this.grid)
 	{
-		this.grid.object.visible = on;
+		this.grid.visible = on;
 	}
 }
 
@@ -464,7 +464,7 @@ Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
 	var that = this;
 	this.sceneRoot.map(Vizi.Decoration, function(o) {
 		if (!that.highlightedObject || (o != that.highlightDecoration)) {
-			o.object.visible = that.showBoundingBoxes;
+			o.visible = that.showBoundingBoxes;
 		}
 	});
 }
@@ -604,7 +604,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 		
 				var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
 				decoration.position.add(center);
-				decoration.object.visible = this.showBoundingBoxes;
+				decoration.visible = this.showBoundingBoxes;
 			}
 		});
 	}
