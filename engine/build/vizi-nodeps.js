@@ -3529,6 +3529,9 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.lastMouseX = 0;
 	this.lastMouseY = 0;
 
+	this.touchScreenX = 0;
+	this.touchScreenY = 0;
+	
 	this.lat = 0;
 	this.lon = 0;
 	this.phi = 0;
@@ -3628,6 +3631,13 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			};
 		
 		this.onMouseDown(mouseEvent);
+						
+		if (event.touches.length > 1) {
+			// second touch does move
+			this.touchScreenX = event.touches[1].screenX; 
+			this.touchScreenY = event.touches[1].screenY; 
+		}
+		
 	}
 
 	
@@ -3650,6 +3660,35 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			};
 		
 		this.onMouseMove(mouseEvent);
+
+
+		if (event.touches.length > 1) {
+			// second touch does move
+			var deltaX = event.touches[1].screenX - this.touchScreenX;
+			var deltaY = event.touches[1].screenX - this.touchScreenY;
+			
+			this.touchScreenX = event.touches[1].screenX; 
+			this.touchScreenY = event.touches[1].screenY; 
+			
+			if (deltaX > 0) {
+				this.moveRight = true;
+			}
+			
+			if (deltaX < 0) {
+				this.moveLeft = true;
+			}
+
+			if (deltaY > 0) {
+				this.moveBackward = true;
+			}
+			
+			if (deltaY < 0) {
+				this.moveForward = true;
+			}
+
+			
+		}
+	
 	}
 
 	
@@ -3672,6 +3711,18 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		};
 		
 		this.onMouseUp(mouseEvent);
+
+		if (event.changedTouches.length > 1) {
+			// second touch does move
+			this.touchScreenX = event.changedTouches[1].screenX; 
+			this.touchScreenY = event.changedTouches[1].screenY; 
+			
+			this.moveRight = false;		
+			this.moveLeft = false;
+			this.moveBackward = false;
+			this.moveForward = false;
+		}
+		
 	}
 	
 	
