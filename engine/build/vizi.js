@@ -50114,7 +50114,32 @@ Vizi.Application.handleKeyPress = function(event)
 {
     if (Vizi.Application.instance.onKeyPress)
     	Vizi.Application.instance.onKeyPress(event);	            	
-}	        
+}
+
+Vizi.Application.prototype.onTouchMove = function(event)
+{
+	if (this.touchDelegate  && this.touchDelegate.onTouchMove)
+	{
+		this.touchDelegate.onTouchMove(event);
+	}
+}
+
+Vizi.Application.prototype.onTouchStart = function(event)
+{
+	if (this.touchDelegate && this.touchDelegate.onTouchStart)
+	{
+		this.touchDelegate.onTouchStart(event);
+	}
+}
+
+Vizi.Application.prototype.onTouchEnd = function(event)
+{
+	if (this.touchDelegate && this.touchDelegate.onTouchEnd)
+	{
+		this.touchDelegate.onTouchEnd(event);
+	}
+}
+
 /**
  *
  */
