@@ -507,9 +507,19 @@ FuturgoCity.prototype.onKeyUp = function ( event ) {
 		this.carController.onKeyUp(event);
 }
 
-FuturgoCity.prototype.onKeyPress = function ( event ) {
+FuturgoCity.prototype.onTouchStart = function ( event ) {
 	if (this.carController)
-		this.carController.onKeyPress(event);
+		this.carController.onTouchStart(event);
+}
+
+FuturgoCity.prototype.onTouchMove = function(event) {
+	if (this.carController)
+		this.carController.onTouchMove(event);
+}
+
+FuturgoCity.prototype.onTouchEnd = function(event) {
+	if (this.carController)
+		this.carController.onTouchEnd(event);
 }
 
 FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";

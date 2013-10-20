@@ -295,6 +295,19 @@ FuturgoController.prototype.onKeyUp = function(event) {
 FuturgoController.prototype.onKeyPress = function(event) {
 }
 
+FuturgoController.prototype.onTouchStart = function(event) {
+
+}
+
+FuturgoController.prototype.onTouchMove = function(event) {
+
+}
+
+FuturgoController.prototype.onTouchEnd = function(event) {
+
+}
+
+
 FuturgoController.ACCELERATION = 2; // m/s
 FuturgoController.BRAKING = 1.5; // m/s
 FuturgoController.INERTIA = 12; // m/s

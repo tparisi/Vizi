@@ -48457,18 +48457,10 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		    'pageX': event.touches[0].pageX,
 		    'pageY': event.touches[0].pageY,
 		    'button': 0,
-		    'preventDefault' : function() {}
+		    'preventDefault' : event.preventDefault
 			};
 		
 		this.onMouseDown(mouseEvent);
-		
-		return;
-		
-		if (event.touches.length > 1) {
-			// second touch does move
-			this.touchScreenX = event.touches[1].screenX; 
-			this.touchScreenY = event.touches[1].screenY; 
-		}
 	}
 
 	
@@ -48487,53 +48479,10 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		    'pageX': event.touches[0].pageX,
 		    'pageY': event.touches[0].pageY,
 		    'button': 0,
-		    'preventDefault' : function() {}
+		    'preventDefault' : event.preventDefault
 			};
 		
 		this.onMouseMove(mouseEvent);
-
-		return;
-		
-		if (event.touches.length > 1) {
-			// second touch does move
-			var deltaX = event.touches[1].screenX - this.touchScreenX;
-			var deltaY = event.touches[1].screenY - this.touchScreenY;
-			this.lastKeyX = deltaX < 0 ? 37 : 39;
-			this.lastKeyY = deltaY > 0 ? 38 : 40;
-			
-			this.touchScreenX = event.touches[1].screenX; 
-			this.touchScreenY = event.touches[1].screenY; 
-			
-			if (deltaX) {
-				// synthesize a keyboard event
-				var keyEvent = {
-					'type': 'keydown',
-					'keyCode' : this.lastKeyX,
-				    'view': event.view,
-				    'bubbles': event.bubbles,
-				    'cancelable': event.cancelable,
-				    'detail': event.detail,
-				    'preventDefault' : function() {}
-					};
-			
-				this.onKeyDown(keyEvent);
-			}
-
-			if (deltaY) {
-				// synthesize a keyboard event
-				var keyEvent = {
-					'type': 'keydown',
-					'keyCode' : this.lastKeyY,
-				    'view': event.view,
-				    'bubbles': event.bubbles,
-				    'cancelable': event.cancelable,
-				    'detail': event.detail,
-				    'preventDefault' : function() {}
-					};
-			
-				this.onKeyDown(keyEvent);
-			}
-		}
 	}
 
 	
@@ -48552,54 +48501,10 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		    'pageX': event.changedTouches[0].pageX,
 		    'pageY': event.changedTouches[0].pageY,
 		    'button': 0,
-		    'preventDefault' : function() {}
+		    'preventDefault' : event.preventDefault
 		};
 		
 		this.onMouseUp(mouseEvent);
-
-		return;
-		
-		if (event.changedTouches.length > 1) {
-			// second touch does move
-			var deltaX = event.changedTouches[1].screenX - this.touchScreenX;
-			var deltaY = event.changedTouches[1].screenY - this.touchScreenY;
-			this.lastKeyX = deltaX < 0 ? 37 : 39;
-			this.lastKeyY = deltaY > 0 ? 38 : 40;
-			
-			this.touchScreenX = event.changedTouches[1].screenX; 
-			this.touchScreenY = event.changedTouches[1].screenY; 
-			
-			if (deltaX) {
-				// synthesize a keyboard event
-				var keyEvent = {
-					'type': 'keyup',
-					'keyCode' : this.lastKeyX,
-				    'view': event.view,
-				    'bubbles': event.bubbles,
-				    'cancelable': event.cancelable,
-				    'detail': event.detail,
-				    'preventDefault' : function() {}
-					};
-			
-				this.onKeyUp(keyEvent);
-			}
-
-			if (deltaY) {
-				// synthesize a keyboard event
-				var keyEvent = {
-					'type': 'keyup',
-					'keyCode' : this.lastKeyY,
-				    'view': event.view,
-				    'bubbles': event.bubbles,
-				    'cancelable': event.cancelable,
-				    'detail': event.detail,
-				    'preventDefault' : function() {}
-					};
-			
-				this.onKeyUp(keyEvent);
-			}
-		}
-	
 	}
 	
 	
