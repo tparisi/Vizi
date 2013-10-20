@@ -232,6 +232,7 @@ Futurgo.prototype.onTouchStart = function(what, event) {
 
 Futurgo.prototype.onTouchEnd = function(what, event) {
 	console.log("touch end", what, event);
+	this.onMouseOver(what, event);
 }
 
 Futurgo.URL = "./models/futurgo/futurgo.json";

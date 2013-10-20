@@ -3315,6 +3315,12 @@ Vizi.PickManager.handleMouseScroll = function(event)
 Vizi.PickManager.handleTouchStart = function(event)
 {
 	if (event.touches.length > 0) {
+		event.screenX = event.touches[0].screenX;
+		event.screenY = event.touches[0].screenY;
+		event.clientX = event.touches[0].clientX;
+		event.clientY = event.touches[0].clientY;
+		event.pageX = event.touches[0].pageX;
+		event.pageY = event.touches[0].pageY;
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
@@ -3328,6 +3334,12 @@ Vizi.PickManager.handleTouchStart = function(event)
 Vizi.PickManager.handleTouchMove = function(event)
 {
 	if (event.touches.length > 0) {
+		event.screenX = event.touches[0].screenX;
+		event.screenY = event.touches[0].screenY;
+		event.clientX = event.touches[0].clientX;
+		event.clientY = event.touches[0].clientY;
+		event.pageX = event.touches[0].pageX;
+		event.pageY = event.touches[0].pageY;
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 
@@ -3340,6 +3352,12 @@ Vizi.PickManager.handleTouchMove = function(event)
 Vizi.PickManager.handleTouchEnd = function(event)
 {
 	if (event.changedTouches.length > 0) {
+		event.screenX = event.changedTouches[0].screenX;
+		event.screenY = event.changedTouches[0].screenY;
+		event.clientX = event.changedTouches[0].clientX;
+		event.clientY = event.changedTouches[0].clientY;
+		event.pageX = event.changedTouches[0].pageX;
+		event.pageY = event.changedTouches[0].pageY;
 		event.elementX = event.changedTouches[0].elementX;
 		event.elementY = event.changedTouches[0].elementY;
 	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
@@ -3591,6 +3609,72 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	};
 
+	this.onTouchStart = function ( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousedown',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		this.onMouseDown(mouseEvent);
+	}
+
+	
+	this.onTouchMove = function ( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousemove',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		this.onMouseMove(mouseEvent);
+	}
+
+	
+	this.onTouchEnd = function ( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mouseup',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.changedTouches[0].screenX,
+		    'screenY': event.changedTouches[0].screenY,
+		    'clientX': event.changedTouches[0].clientX,
+		    'clientY': event.changedTouches[0].clientY,
+		    'pageX': event.changedTouches[0].pageX,
+		    'pageY': event.changedTouches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+		};
+		
+		this.onMouseUp(mouseEvent);
+	}
+	
+	
 	this.onKeyDown = function ( event ) {
 
 		//event.preventDefault();
@@ -3701,6 +3785,9 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), true );
 	this.domElement.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 	this.domElement.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
+	this.domElement.addEventListener( 'touchstart', bind( this, this.onTouchStart), false );
+	this.domElement.addEventListener( 'touchmove', bind( this, this.onTouchMove), false );
+	this.domElement.addEventListener( 'touchend', bind( this, this.onTouchEnd), false );
 	this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
 	this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
 	this.domElement.addEventListener( 'resize', bind( this, this.handleResize ), false );

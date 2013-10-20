@@ -103,6 +103,12 @@ Vizi.PickManager.handleMouseScroll = function(event)
 Vizi.PickManager.handleTouchStart = function(event)
 {
 	if (event.touches.length > 0) {
+		event.screenX = event.touches[0].screenX;
+		event.screenY = event.touches[0].screenY;
+		event.clientX = event.touches[0].clientX;
+		event.clientY = event.touches[0].clientY;
+		event.pageX = event.touches[0].pageX;
+		event.pageY = event.touches[0].pageY;
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
@@ -116,6 +122,12 @@ Vizi.PickManager.handleTouchStart = function(event)
 Vizi.PickManager.handleTouchMove = function(event)
 {
 	if (event.touches.length > 0) {
+		event.screenX = event.touches[0].screenX;
+		event.screenY = event.touches[0].screenY;
+		event.clientX = event.touches[0].clientX;
+		event.clientY = event.touches[0].clientY;
+		event.pageX = event.touches[0].pageX;
+		event.pageY = event.touches[0].pageY;
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 
@@ -128,6 +140,12 @@ Vizi.PickManager.handleTouchMove = function(event)
 Vizi.PickManager.handleTouchEnd = function(event)
 {
 	if (event.changedTouches.length > 0) {
+		event.screenX = event.changedTouches[0].screenX;
+		event.screenY = event.changedTouches[0].screenY;
+		event.clientX = event.changedTouches[0].clientX;
+		event.clientY = event.changedTouches[0].clientY;
+		event.pageX = event.changedTouches[0].pageX;
+		event.pageY = event.changedTouches[0].pageY;
 		event.elementX = event.changedTouches[0].elementX;
 		event.elementY = event.changedTouches[0].elementY;
 	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
