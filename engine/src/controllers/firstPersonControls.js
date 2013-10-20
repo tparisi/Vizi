@@ -116,33 +116,35 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		if (event.touches.length > 0) {
 
-			this.lookTouchId = event.touches[0].identifier;
-		
-			// synthesize a left mouse button event
-			var mouseEvent = {
-				'type': 'mousedown',
-			    'view': event.view,
-			    'bubbles': event.bubbles,
-			    'cancelable': event.cancelable,
-			    'detail': event.detail,
-			    'screenX': event.touches[0].screenX,
-			    'screenY': event.touches[0].screenY,
-			    'clientX': event.touches[0].clientX,
-			    'clientY': event.touches[0].clientY,
-			    'pageX': event.touches[0].pageX,
-			    'pageY': event.touches[0].pageY,
-			    'button': 0,
-			    'preventDefault' : event.preventDefault
-				};
+			if (this.lookTouchId == -1) {
+				this.lookTouchId = event.touches[0].identifier;
 			
-			this.onMouseDown(mouseEvent);
-		}
-		
-		if (event.touches.length > 1) {
-			// second touch does move
-			this.touchScreenX = event.touches[1].screenX; 
-			this.touchScreenY = event.touches[1].screenY;
-			this.moveTouchId = event.touches[1].identifier;
+				// synthesize a left mouse button event
+				var mouseEvent = {
+					'type': 'mousedown',
+				    'view': event.view,
+				    'bubbles': event.bubbles,
+				    'cancelable': event.cancelable,
+				    'detail': event.detail,
+				    'screenX': event.touches[0].screenX,
+				    'screenY': event.touches[0].screenY,
+				    'clientX': event.touches[0].clientX,
+				    'clientY': event.touches[0].clientY,
+				    'pageX': event.touches[0].pageX,
+				    'pageY': event.touches[0].pageY,
+				    'button': 0,
+				    'preventDefault' : event.preventDefault
+					};
+				
+				this.onMouseDown(mouseEvent);
+			}
+			else {
+				// second touch does move
+				this.touchScreenX = event.touches[1].screenX; 
+				this.touchScreenY = event.touches[1].screenY;
+				this.moveTouchId = event.touches[1].identifier;
+			}
+			
 		}
 		
 	}
@@ -233,26 +235,30 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 				moveTouch = event.changedTouches[i];
 				
 		}
-		
-		// synthesize a left mouse button event
-		var mouseEvent = {
-			'type': 'mouseup',
-		    'view': event.view,
-		    'bubbles': event.bubbles,
-		    'cancelable': event.cancelable,
-		    'detail': event.detail,
-		    'screenX': lookTouch.screenX,
-		    'screenY': lookTouch.screenY,
-		    'clientX': lookTouch.clientX,
-		    'clientY': lookTouch.clientY,
-		    'pageX': lookTouch.pageX,
-		    'pageY': lookTouch.pageY,
-		    'button': 0,
-		    'preventDefault' : event.preventDefault
-		};
-		
-		this.onMouseUp(mouseEvent);
 
+		if (lookTouch) {
+			// synthesize a left mouse button event
+			var mouseEvent = {
+				'type': 'mouseup',
+			    'view': event.view,
+			    'bubbles': event.bubbles,
+			    'cancelable': event.cancelable,
+			    'detail': event.detail,
+			    'screenX': lookTouch.screenX,
+			    'screenY': lookTouch.screenY,
+			    'clientX': lookTouch.clientX,
+			    'clientY': lookTouch.clientY,
+			    'pageX': lookTouch.pageX,
+			    'pageY': lookTouch.pageY,
+			    'button': 0,
+			    'preventDefault' : event.preventDefault
+			};
+			
+			this.onMouseUp(mouseEvent);
+			
+			this.lookTouchId = -1;
+		}
+		
 		if (moveTouch) {
 			// second touch does move
 			this.touchScreenX = moveTouch.screenX; 
@@ -262,6 +268,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			this.moveLeft = false;
 			this.moveBackward = false;
 			this.moveForward = false;
+			
+			this.moveTouchId = -1;
 		}
 		
 	}
