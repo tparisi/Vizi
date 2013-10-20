@@ -22,8 +22,9 @@ FuturgoCity.prototype.go = function() {
 	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true,
 		showGrid:false});
 	
-	// We'll take the mouse clicks and keyboard
+	// We'll take the mouse clicks, touch and keyboard
 	this.viewer.mouseDelegate = this;
+	this.viewer.touchDelegate = this;
 	this.viewer.keyboardDelegate = this;
 	
 	// Load the city model
