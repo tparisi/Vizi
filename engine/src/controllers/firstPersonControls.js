@@ -112,6 +112,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.onTouchStart = function ( event ) {
 
+		event.preventDefault();
+		
 		if (event.touches.length > 0) {
 
 			this.lookTouchId = event.touches[0].identifier;
@@ -148,6 +150,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	
 	this.onTouchMove = function ( event ) {
 
+		event.preventDefault();
+		
 		var lookTouch = null, moveTouch = null, 
 			len = event.changedTouches.length;
 		
@@ -214,6 +218,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	
 	this.onTouchEnd = function ( event ) {
+		
+		event.preventDefault();
 		
 		var lookTouch = null, moveTouch = null, 
 		len = event.changedTouches.length;
