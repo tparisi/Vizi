@@ -3660,7 +3660,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		if (event.touches.length > 1) {
 			// second touch does move
 			var deltaX = event.touches[1].screenX - this.touchScreenX;
-			var deltaY = event.touches[1].screenX - this.touchScreenY;
+			var deltaY = event.touches[1].screenY - this.touchScreenY;
 			this.lastKeyX = deltaX < 0 ? 37 : 39;
 			this.lastKeyY = deltaY > 0 ? 38 : 40;
 			
@@ -3723,7 +3723,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		if (event.changedTouches.length > 1) {
 			// second touch does move
 			var deltaX = event.changedTouches[1].screenX - this.touchScreenX;
-			var deltaY = event.changedTouches[1].screenX - this.touchScreenY;
+			var deltaY = event.changedTouches[1].screenY - this.touchScreenY;
 			this.lastKeyX = deltaX < 0 ? 37 : 39;
 			this.lastKeyY = deltaY > 0 ? 38 : 40;
 			
