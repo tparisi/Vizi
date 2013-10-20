@@ -48462,6 +48462,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		this.onMouseDown(mouseEvent);
 		
+		return;
+		
 		if (event.touches.length > 1) {
 			// second touch does move
 			this.touchScreenX = event.touches[1].screenX; 
@@ -48490,6 +48492,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		this.onMouseMove(mouseEvent);
 
+		return;
+		
 		if (event.touches.length > 1) {
 			// second touch does move
 			var deltaX = event.touches[1].screenX - this.touchScreenX;
@@ -48553,6 +48557,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		this.onMouseUp(mouseEvent);
 
+		return;
+		
 		if (event.changedTouches.length > 1) {
 			// second touch does move
 			var deltaX = event.changedTouches[1].screenX - this.touchScreenX;
