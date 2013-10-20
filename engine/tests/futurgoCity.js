@@ -245,6 +245,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 		picker.addEventListener("mouseover", function(event) { that.onPickerMouseOver("futurgo", event); });
 		picker.addEventListener("mouseout", function(event) { that.onPickerMouseOut("futurgo", event); });
 		picker.addEventListener("click", function(event) { that.onPickerMouseClick("futurgo", event); });
+		picker.addEventListener("touchend", function(event) { that.onPickerTouchEnd("futurgo", event); });
 		o.addComponent(picker);
 		that.pickers.push(picker);
 	});	
@@ -322,6 +323,13 @@ FuturgoCity.prototype.onPickerMouseClick = function(what, event) {
 	
 	if (this.mouseClickCallback)
 		this.mouseClickCallback(what, event);	
+}
+
+FuturgoCity.prototype.onPickerTouchEnd = function(what, event) {
+
+	if (what == "futurgo") {
+		this.toggleStartStop(what);
+	}
 }
 
 FuturgoCity.prototype.toggleStartStop = function(what, event) {
