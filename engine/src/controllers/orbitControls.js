@@ -249,11 +249,34 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		}
 
-		document.addEventListener( 'mousemove', onMouseMove, false );
-		document.addEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.addEventListener( 'mousemove', onMouseMove, false );
+		scope.domElement.addEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
+		scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
 
 	}
 
+	function onTouchStart( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousedown',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		onMouseDown(mouseEvent);
+	}
+		
 	function onMouseMove( event ) {
 
 		if ( scope.enabled === false ) return;
@@ -298,6 +321,27 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	}
 
+	function onTouchMove( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousemove',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		onMouseMove(mouseEvent);
+	}
+		
 	function onMouseUp( event ) {
 
 		if ( scope.enabled === false ) return;
@@ -305,11 +349,35 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		document.removeEventListener( 'mousemove', onMouseMove, false );
 		document.removeEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.removeEventListener( 'touchmove', onTouchMove, false );
+		scope.domElement.removeEventListener( 'touchend', onTouchEnd, false );
 
 		state = STATE.NONE;
 
 	}
 
+	
+	function onTouchEnd( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mouseup',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.changedTouches[0].screenX,
+		    'screenY': event.changedTouches[0].screenY,
+		    'clientX': event.changedTouches[0].clientX,
+		    'clientY': event.changedTouches[0].clientY,
+		    'pageX': event.changedTouches[0].pageX,
+		    'pageY': event.changedTouches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+		};
+		
+		onMouseUp(mouseEvent);
+	}
+		
 	function onMouseWheel( event ) {
 
 		event.preventDefault();
@@ -365,6 +433,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	this.domElement.addEventListener( 'mousedown', onMouseDown, false );
+	this.domElement.addEventListener( 'touchstart', onTouchStart, false );
 	this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
 	this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
 	this.domElement.addEventListener( 'keydown', onKeyDown, false );

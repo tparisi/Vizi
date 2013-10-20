@@ -3312,6 +3312,45 @@ Vizi.PickManager.handleMouseScroll = function(event)
     Vizi.PickManager.clickedObject = null;
 }
 
+Vizi.PickManager.handleTouchStart = function(event)
+{
+	if (event.touches.length > 0) {
+		event.elementX = event.touches[0].elementX;
+		event.elementY = event.touches[0].elementY;
+	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchStart)
+	    {
+	        Vizi.PickManager.clickedObject.onTouchStart(event);
+	    }
+	}
+}
+
+Vizi.PickManager.handleTouchMove = function(event)
+{
+	if (event.touches.length > 0) {
+		event.elementX = event.touches[0].elementX;
+		event.elementY = event.touches[0].elementY;
+
+		if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchMove) {
+			Vizi.PickManager.clickedObject.onTouchMove(event);
+	    }
+	}
+}
+
+Vizi.PickManager.handleTouchEnd = function(event)
+{
+	if (event.changedTouches.length > 0) {
+		event.elementX = event.changedTouches[0].elementX;
+		event.elementY = event.changedTouches[0].elementY;
+	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
+	    {
+			Vizi.PickManager.clickedObject.onTouchEnd(event);
+	    }
+	    
+	    Vizi.PickManager.clickedObject = null;
+	}	
+}
+
 Vizi.PickManager.objectFromMouse = function(event)
 {
 	var intersected = Vizi.Graphics.instance.objectFromMouse(event);
@@ -3930,11 +3969,34 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		}
 
-		document.addEventListener( 'mousemove', onMouseMove, false );
-		document.addEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.addEventListener( 'mousemove', onMouseMove, false );
+		scope.domElement.addEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
+		scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
 
 	}
 
+	function onTouchStart( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousedown',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		onMouseDown(mouseEvent);
+	}
+		
 	function onMouseMove( event ) {
 
 		if ( scope.enabled === false ) return;
@@ -3979,6 +4041,27 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	}
 
+	function onTouchMove( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mousemove',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.touches[0].screenX,
+		    'screenY': event.touches[0].screenY,
+		    'clientX': event.touches[0].clientX,
+		    'clientY': event.touches[0].clientY,
+		    'pageX': event.touches[0].pageX,
+		    'pageY': event.touches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+			};
+		
+		onMouseMove(mouseEvent);
+	}
+		
 	function onMouseUp( event ) {
 
 		if ( scope.enabled === false ) return;
@@ -3986,11 +4069,35 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		document.removeEventListener( 'mousemove', onMouseMove, false );
 		document.removeEventListener( 'mouseup', onMouseUp, false );
+		scope.domElement.removeEventListener( 'touchmove', onTouchMove, false );
+		scope.domElement.removeEventListener( 'touchend', onTouchEnd, false );
 
 		state = STATE.NONE;
 
 	}
 
+	
+	function onTouchEnd( event ) {
+		// synthesize a left mouse button event
+		var mouseEvent = {
+			'type': 'mouseup',
+		    'view': event.view,
+		    'bubbles': event.bubbles,
+		    'cancelable': event.cancelable,
+		    'detail': event.detail,
+		    'screenX': event.changedTouches[0].screenX,
+		    'screenY': event.changedTouches[0].screenY,
+		    'clientX': event.changedTouches[0].clientX,
+		    'clientY': event.changedTouches[0].clientY,
+		    'pageX': event.changedTouches[0].pageX,
+		    'pageY': event.changedTouches[0].pageY,
+		    'button': 0,
+		    'preventDefault' : function() {}
+		};
+		
+		onMouseUp(mouseEvent);
+	}
+		
 	function onMouseWheel( event ) {
 
 		event.preventDefault();
@@ -4046,6 +4153,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	this.domElement.addEventListener( 'mousedown', onMouseDown, false );
+	this.domElement.addEventListener( 'touchstart', onTouchStart, false );
 	this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
 	this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
 	this.domElement.addEventListener( 'keydown', onKeyDown, false );
@@ -4190,21 +4298,23 @@ Vizi.GraphicsThreeJS.prototype.initMouse = function()
 	dom.addEventListener( 'mousedown', 
 			function(e) { that.onDocumentMouseDown(e); }, false );
 	dom.addEventListener( 'mouseup', 
-			function(e) { that.onDocumentMouseUp(e); }, false );
-
- 
+			function(e) { that.onDocumentMouseUp(e); }, false ); 
  	dom.addEventListener( 'click', 
 			function(e) { that.onDocumentMouseClick(e); }, false );
-
 	dom.addEventListener( 'dblclick', 
 			function(e) { that.onDocumentMouseDoubleClick(e); }, false );
+
+	dom.addEventListener( 'mousewheel', 
+			function(e) { that.onDocumentMouseScroll(e); }, false );
+	dom.addEventListener( 'DOMMouseScroll', 
+			function(e) { that.onDocumentMouseScroll(e); }, false );
 	
-	$(dom).mousewheel(
-	        function(e, delta) {
-	            that.onDocumentMouseScroll(e, delta);
-	        }
-	    );
-	
+	dom.addEventListener( 'touchstart', 
+			function(e) { that.onDocumentTouchStart(e); }, false );
+	dom.addEventListener( 'touchmove', 
+			function(e) { that.onDocumentTouchMove(e); }, false );
+	dom.addEventListener( 'touchend', 
+			function(e) { that.onDocumentTouchEnd(e); }, false );
 }
 
 Vizi.GraphicsThreeJS.prototype.initKeyboard = function()
@@ -4409,7 +4519,10 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 {
     event.preventDefault();
     
-	var offset = $(this.renderer.domElement).offset();
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -4431,7 +4544,10 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 {
     event.preventDefault();
     
-	var offset = $(this.renderer.domElement).offset();
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -4453,7 +4569,10 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 {
     event.preventDefault();
 
-    var offset = $(this.renderer.domElement).offset();
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -4475,7 +4594,13 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
 {
     event.preventDefault();
 
-    var offset = $(this.renderer.domElement).offset();
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -4497,7 +4622,13 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
 {
     event.preventDefault();
 
-    var offset = $(this.renderer.domElement).offset();
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
+	
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -4515,11 +4646,23 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
     Vizi.Application.handleMouseDoubleClick(evt);
 }
 
-Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event, delta)
+Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event)
 {
     event.preventDefault();
 
-    var evt = { type : "mousescroll", delta : delta };
+	var delta = 0;
+
+	if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
+
+		delta = event.wheelDelta;
+
+	} else if ( event.detail ) { // Firefox
+
+		delta = - event.detail;
+
+	}
+
+	var evt = { type : "mousescroll", delta : delta };
     
     Vizi.Mouse.instance.onMouseScroll(evt);
 
@@ -4530,6 +4673,100 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseScroll = function(event, delta)
     
     Vizi.Application.handleMouseScroll(evt);
 }
+
+// Touch events
+Vizi.GraphicsThreeJS.prototype.translateTouch = function(touch, offset) {
+
+	var eltx = touch.pageX - offset.left;
+	var elty = touch.pageY - offset.top;
+
+	return {
+	    'screenX': touch.screenX,
+	    'screenY': touch.screenY,
+	    'clientX': touch.clientX,
+	    'clientY': touch.clientY,
+	    'pageX': touch.pageX,
+	    'pageY': touch.pageY,
+	    'elementX': eltx,
+	    'elementY': elty,
+	}
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentTouchStart = function(event)
+{
+    event.preventDefault();
+    
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
+
+	var touches = [];
+	var i, len = event.touches.length;
+	for (i = 0; i < len; i++) {
+		touches.push(this.translateTouch(event.touches[i], offset));
+	}
+
+	var evt = { type : event.type, touches : touches };
+	
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleTouchStart(evt);
+    }
+    
+    Vizi.Application.handleTouchStart(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentTouchMove = function(event)
+{
+    event.preventDefault();
+    
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
+	
+	var touches = [];
+	var i, len = event.touches.length;
+	for (i = 0; i < len; i++) {
+		touches.push(this.translateTouch(event.touches[i], offset));
+	}
+
+	var evt = { type : event.type, touches : touches };
+		    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleTouchMove(evt);
+    }
+    
+    Vizi.Application.handleTouchMove(evt);
+}
+
+Vizi.GraphicsThreeJS.prototype.onDocumentTouchEnd = function(event)
+{
+    event.preventDefault();
+
+	var offset = {
+			left : this.renderer.domElement.offsetLeft, 
+			top : this.renderer.domElement.offsetTop,
+	};
+	
+	var changedTouches = [];
+	var i, len = event.changedTouches.length;
+	for (i = 0; i < len; i++) {
+		changedTouches.push(this.translateTouch(event.changedTouches[i], offset));
+	}
+
+	var evt = { type : event.type, changedTouches : changedTouches };    
+    
+    if (Vizi.PickManager)
+    {
+    	Vizi.PickManager.handleTouchEnd(evt);
+    }	            
+
+    Vizi.Application.handleTouchEnd(evt);
+}
+
 
 Vizi.GraphicsThreeJS.prototype.onKeyDown = function(event)
 {
@@ -4999,6 +5236,33 @@ Vizi.Application.handleMouseScroll = function(event)
     
     if (Vizi.Application.instance.onMouseScroll)
     	Vizi.Application.instance.onMouseScroll(event);	            	
+}
+
+Vizi.Application.handleTouchStart = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchStart)
+    	Vizi.Application.instance.onTouchStart(event);	            	
+}
+
+Vizi.Application.handleTouchMove = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchMove)
+    	Vizi.Application.instance.onTouchMove(event);	            	
+}
+
+Vizi.Application.handleTouchEnd = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchEnd)
+    	Vizi.Application.instance.onTouchEnd(event);	            	
 }
 
 Vizi.Application.handleKeyDown = function(event)
@@ -5777,6 +6041,22 @@ Vizi.Picker.prototype.onMouseScroll = function(event)
 {
     this.dispatchEvent("mousescroll", event);
 }
+
+Vizi.Picker.prototype.onTouchMove = function(event)
+{
+	this.dispatchEvent("touchmove", event);
+}
+
+Vizi.Picker.prototype.onTouchStart = function(event)
+{	
+    this.dispatchEvent("touchstart", event);
+}
+
+Vizi.Picker.prototype.onTouchEnd = function(event)
+{
+	this.dispatchEvent("touchend", event);
+}
+
 
 goog.provide("Vizi.System");
 

@@ -53,6 +53,8 @@ Futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 		var picker = new Vizi.Picker;
 		picker.addEventListener("mouseover", function(event) { that.onMouseOver("glass", event); });
 		picker.addEventListener("mouseout", function(event) { that.onMouseOut("glass", event); });
+		picker.addEventListener("touchstart", function(event) { that.onTouchStart("glass", event); });
+		picker.addEventListener("touchend", function(event) { that.onTouchEnd("glass", event); });
 		o.addComponent(picker);
 	});
 
@@ -74,6 +76,8 @@ Futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 		var picker = new Vizi.Picker;
 		picker.addEventListener("mouseover", function(event) { that.onMouseOver("body", event); });
 		picker.addEventListener("mouseout", function(event) { that.onMouseOut("body", event); });
+		picker.addEventListener("touchstart", function(event) { that.onTouchStart("body", event); });
+		picker.addEventListener("touchend", function(event) { that.onTouchEnd("body", event); });
 		o.addComponent(picker);
 	});
 
@@ -82,6 +86,8 @@ Futurgo.prototype.onLoadComplete = function(data, loadStartTime)
 		var picker = new Vizi.Picker;
 		picker.addEventListener("mouseover", function(event) { that.onMouseOver("wheels", event); });
 		picker.addEventListener("mouseout", function(event) { that.onMouseOut("wheels", event); });
+		picker.addEventListener("touchstart", function(event) { that.onTouchStart("wheels", event); });
+		picker.addEventListener("touchend", function(event) { that.onTouchEnd("wheels", event); });
 		o.addComponent(picker);
 	});
 	
@@ -218,6 +224,14 @@ Futurgo.prototype.onMouseOver = function(what, event) {
 Futurgo.prototype.onMouseOut = function(what, event) {
 	if (this.mouseOutCallback)
 		this.mouseOutCallback(what, event);
+}
+
+Futurgo.prototype.onTouchStart = function(what, event) {
+	console.log("touch start", what, event);
+}
+
+Futurgo.prototype.onTouchEnd = function(what, event) {
+	console.log("touch end", what, event);
 }
 
 Futurgo.URL = "./models/futurgo/futurgo.json";

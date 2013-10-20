@@ -100,6 +100,45 @@ Vizi.PickManager.handleMouseScroll = function(event)
     Vizi.PickManager.clickedObject = null;
 }
 
+Vizi.PickManager.handleTouchStart = function(event)
+{
+	if (event.touches.length > 0) {
+		event.elementX = event.touches[0].elementX;
+		event.elementY = event.touches[0].elementY;
+	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
+	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchStart)
+	    {
+	        Vizi.PickManager.clickedObject.onTouchStart(event);
+	    }
+	}
+}
+
+Vizi.PickManager.handleTouchMove = function(event)
+{
+	if (event.touches.length > 0) {
+		event.elementX = event.touches[0].elementX;
+		event.elementY = event.touches[0].elementY;
+
+		if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchMove) {
+			Vizi.PickManager.clickedObject.onTouchMove(event);
+	    }
+	}
+}
+
+Vizi.PickManager.handleTouchEnd = function(event)
+{
+	if (event.changedTouches.length > 0) {
+		event.elementX = event.changedTouches[0].elementX;
+		event.elementY = event.changedTouches[0].elementY;
+	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
+	    {
+			Vizi.PickManager.clickedObject.onTouchEnd(event);
+	    }
+	    
+	    Vizi.PickManager.clickedObject = null;
+	}	
+}
+
 Vizi.PickManager.objectFromMouse = function(event)
 {
 	var intersected = Vizi.Graphics.instance.objectFromMouse(event);

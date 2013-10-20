@@ -284,6 +284,33 @@ Vizi.Application.handleMouseScroll = function(event)
     	Vizi.Application.instance.onMouseScroll(event);	            	
 }
 
+Vizi.Application.handleTouchStart = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchStart)
+    	Vizi.Application.instance.onTouchStart(event);	            	
+}
+
+Vizi.Application.handleTouchMove = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchMove)
+    	Vizi.Application.instance.onTouchMove(event);	            	
+}
+
+Vizi.Application.handleTouchEnd = function(event)
+{
+    if (Vizi.PickManager && Vizi.PickManager.clickedObject)
+    	return;
+    
+    if (Vizi.Application.instance.onTouchEnd)
+    	Vizi.Application.instance.onTouchEnd(event);	            	
+}
+
 Vizi.Application.handleKeyDown = function(event)
 {
     if (Vizi.Application.instance.onKeyDown)

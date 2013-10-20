@@ -100,3 +100,19 @@ Vizi.Picker.prototype.onMouseScroll = function(event)
     this.dispatchEvent("mousescroll", event);
 }
 
+Vizi.Picker.prototype.onTouchMove = function(event)
+{
+	this.dispatchEvent("touchmove", event);
+}
+
+Vizi.Picker.prototype.onTouchStart = function(event)
+{	
+    this.dispatchEvent("touchstart", event);
+}
+
+Vizi.Picker.prototype.onTouchEnd = function(event)
+{
+	this.dispatchEvent("touchend", event);
+}
+
+
