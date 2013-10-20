@@ -216,15 +216,15 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 		this.onMouseUp(mouseEvent);
 
-		if (event.changeTouches.length > 1) {
+		if (event.changedTouches.length > 1) {
 			// second touch does move
-			var deltaX = event.changeTouches[1].screenX - this.touchScreenX;
-			var deltaY = event.changeTouches[1].screenX - this.touchScreenY;
+			var deltaX = event.changedTouches[1].screenX - this.touchScreenX;
+			var deltaY = event.changedTouches[1].screenX - this.touchScreenY;
 			this.lastKeyX = deltaX < 0 ? 37 : 39;
 			this.lastKeyY = deltaY > 0 ? 38 : 40;
 			
-			this.touchScreenX = event.changeTouches[1].screenX; 
-			this.touchScreenY = event.changeTouches[1].screenY; 
+			this.touchScreenX = event.changedTouches[1].screenX; 
+			this.touchScreenY = event.changedTouches[1].screenY; 
 			
 			if (deltaX) {
 				// synthesize a keyboard event
