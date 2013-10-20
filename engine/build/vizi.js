@@ -48364,6 +48364,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.touchScreenX = 0;
 	this.touchScreenY = 0;
+	this.lookTouchId = -1;
+	this.moveTouchId = -1;
 	
 	this.lat = 0;
 	this.lon = 0;
@@ -48446,62 +48448,85 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	};
 
 	this.onTouchStart = function ( event ) {
-		// synthesize a left mouse button event
-		var mouseEvent = {
-			'type': 'mousedown',
-		    'view': event.view,
-		    'bubbles': event.bubbles,
-		    'cancelable': event.cancelable,
-		    'detail': event.detail,
-		    'screenX': event.touches[0].screenX,
-		    'screenY': event.touches[0].screenY,
-		    'clientX': event.touches[0].clientX,
-		    'clientY': event.touches[0].clientY,
-		    'pageX': event.touches[0].pageX,
-		    'pageY': event.touches[0].pageY,
-		    'button': 0,
-		    'preventDefault' : event.preventDefault
-			};
+
+		if (event.touches.length > 0) {
+
+			this.lookTouchId = event.touches[0].identifier;
 		
-		this.onMouseDown(mouseEvent);
-						
+			// synthesize a left mouse button event
+			var mouseEvent = {
+				'type': 'mousedown',
+			    'view': event.view,
+			    'bubbles': event.bubbles,
+			    'cancelable': event.cancelable,
+			    'detail': event.detail,
+			    'screenX': event.touches[0].screenX,
+			    'screenY': event.touches[0].screenY,
+			    'clientX': event.touches[0].clientX,
+			    'clientY': event.touches[0].clientY,
+			    'pageX': event.touches[0].pageX,
+			    'pageY': event.touches[0].pageY,
+			    'button': 0,
+			    'preventDefault' : event.preventDefault
+				};
+			
+			this.onMouseDown(mouseEvent);
+		}
+		
 		if (event.touches.length > 1) {
 			// second touch does move
 			this.touchScreenX = event.touches[1].screenX; 
-			this.touchScreenY = event.touches[1].screenY; 
+			this.touchScreenY = event.touches[1].screenY;
+			this.moveTouchId = event.touches[1].identifier;
 		}
 		
 	}
 
 	
 	this.onTouchMove = function ( event ) {
-		// synthesize a left mouse button event
-		var mouseEvent = {
-			'type': 'mousemove',
-		    'view': event.view,
-		    'bubbles': event.bubbles,
-		    'cancelable': event.cancelable,
-		    'detail': event.detail,
-		    'screenX': event.touches[0].screenX,
-		    'screenY': event.touches[0].screenY,
-		    'clientX': event.touches[0].clientX,
-		    'clientY': event.touches[0].clientY,
-		    'pageX': event.touches[0].pageX,
-		    'pageY': event.touches[0].pageY,
-		    'button': 0,
-		    'preventDefault' : event.preventDefault
-			};
+
+		var lookTouch = null, moveTouch = null, 
+			len = event.changedTouches.length;
 		
-		this.onMouseMove(mouseEvent);
-
-
-		if (event.touches.length > 1) {
-			// second touch does move
-			var deltaX = event.touches[1].screenX - this.touchScreenX;
-			var deltaY = event.touches[1].screenX - this.touchScreenY;
+		for (var i = 0; i < len; i++) {
 			
-			this.touchScreenX = event.touches[1].screenX; 
-			this.touchScreenY = event.touches[1].screenY; 
+			if (event.changedTouches[i].identifier == this.lookTouchId)
+				lookTouch = event.changedTouches[i];
+			
+			if (event.changedTouches[i].identifier == this.moveTouchId)
+				moveTouch = event.changedTouches[i];
+				
+		}
+		
+		if (lookTouch) {
+			// synthesize a left mouse button event
+			var mouseEvent = {
+				'type': 'mousemove',
+			    'view': event.view,
+			    'bubbles': event.bubbles,
+			    'cancelable': event.cancelable,
+			    'detail': event.detail,
+			    'screenX': lookTouch.screenX,
+			    'screenY': lookTouch.screenY,
+			    'clientX': lookTouch.clientX,
+			    'clientY': lookTouch.clientY,
+			    'pageX': lookTouch.pageX,
+			    'pageY': lookTouch.pageY,
+			    'button': 0,
+			    'preventDefault' : event.preventDefault
+				};
+			
+			this.onMouseMove(mouseEvent);
+		}
+
+
+		if (moveTouch) {
+			// second touch does move
+			var deltaX = moveTouch.screenX - this.touchScreenX;
+			var deltaY = moveTouch.screenX - this.touchScreenY;
+			
+			this.touchScreenX = moveTouch.screenX; 
+			this.touchScreenY = moveTouch.screenY; 
 			
 			if (deltaX > 0) {
 				this.moveRight = true;
@@ -48526,6 +48551,20 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	
 	this.onTouchEnd = function ( event ) {
+		
+		var lookTouch = null, moveTouch = null, 
+		len = event.changedTouches.length;
+	
+		for (var i = 0; i < len; i++) {
+			
+			if (event.changedTouches[i].identifier == this.lookTouchId)
+				lookTouch = event.changedTouches[i];
+			
+			if (event.changedTouches[i].identifier == this.moveTouchId)
+				moveTouch = event.changedTouches[i];
+				
+		}
+		
 		// synthesize a left mouse button event
 		var mouseEvent = {
 			'type': 'mouseup',
@@ -48533,12 +48572,12 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		    'bubbles': event.bubbles,
 		    'cancelable': event.cancelable,
 		    'detail': event.detail,
-		    'screenX': event.changedTouches[0].screenX,
-		    'screenY': event.changedTouches[0].screenY,
-		    'clientX': event.changedTouches[0].clientX,
-		    'clientY': event.changedTouches[0].clientY,
-		    'pageX': event.changedTouches[0].pageX,
-		    'pageY': event.changedTouches[0].pageY,
+		    'screenX': lookTouch.screenX,
+		    'screenY': lookTouch.screenY,
+		    'clientX': lookTouch.clientX,
+		    'clientY': lookTouch.clientY,
+		    'pageX': lookTouch.pageX,
+		    'pageY': lookTouch.pageY,
 		    'button': 0,
 		    'preventDefault' : event.preventDefault
 		};
@@ -48547,8 +48586,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		if (event.changedTouches.length > 1) {
 			// second touch does move
-			this.touchScreenX = event.changedTouches[1].screenX; 
-			this.touchScreenY = event.changedTouches[1].screenY; 
+			this.touchScreenX = moveTouch.screenX; 
+			this.touchScreenY = moveTouch.screenY; 
 			
 			this.moveRight = false;		
 			this.moveLeft = false;
