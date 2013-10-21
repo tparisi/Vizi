@@ -4923,7 +4923,13 @@ Vizi.GraphicsThreeJS.prototype.onDocumentTouchMove = function(event)
 		touches.push(this.translateTouch(event.touches[i], offset));
 	}
 
-	var evt = { type : event.type, touches : touches };
+	var changedTouches = [];
+	var i, len = event.changedTouches.length;
+	for (i = 0; i < len; i++) {
+		changedTouches.push(this.translateTouch(event.changedTouches[i], offset));
+	}
+
+	var evt = { type : event.type, touches : touches, changedTouches : changedTouches };
 		    
     if (Vizi.PickManager)
     {
@@ -4942,13 +4948,19 @@ Vizi.GraphicsThreeJS.prototype.onDocumentTouchEnd = function(event)
 			top : this.renderer.domElement.offsetTop,
 	};
 	
+	var touches = [];
+	var i, len = event.touches.length;
+	for (i = 0; i < len; i++) {
+		touches.push(this.translateTouch(event.touches[i], offset));
+	}
+
 	var changedTouches = [];
 	var i, len = event.changedTouches.length;
 	for (i = 0; i < len; i++) {
 		changedTouches.push(this.translateTouch(event.changedTouches[i], offset));
 	}
 
-	var evt = { type : event.type, changedTouches : changedTouches };    
+	var evt = { type : event.type, touches : touches, changedTouches : changedTouches };
     
     if (Vizi.PickManager)
     {
