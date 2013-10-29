@@ -220,7 +220,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	function getZoomScale() {
 
-		return Math.pow( 0.95, scope.userZoomSpeed );
+		return Math.pow( 1 / 0.95, scope.userZoomSpeed );
 
 	}
 
@@ -342,10 +342,10 @@ Vizi.OrbitControls = function ( object, domElement ) {
 			if (touch0 && touch1) {
 				 var touchDistance = calcDistance(event.touches[0], event.touches[1]);
 				 var deltaDistance = touchDistance - scope.touchDistance;
-				 if (deltaDistance < 0) {
+				 if (deltaDistance > 0) {
 					 scope.zoomIn();
 				 }
-				 else if (deltaDistance > 0) {
+				 else if (deltaDistance < 0) {
 					 scope.zoomOut();
 				 }
 				 scope.touchDistance = touchDistance;
@@ -440,11 +440,11 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 		if ( delta > 0 ) {
 
-			scope.zoomOut();
+			scope.zoomIn();
 
 		} else {
 
-			scope.zoomIn();
+			scope.zoomOut();
 
 		}
 
