@@ -49581,17 +49581,28 @@ Vizi.GraphicsThreeJS.prototype.getObjectIntersection = function(x, y, object)
 		
 }
 
+Vizi.GraphicsThreeJS.prototype.calcElementOffset = function(offset) {
+
+	offset.left = this.renderer.domElement.offsetLeft;
+	offset.top = this.renderer.domElement.offsetTop;
+	
+	var parent = this.renderer.domElement.offsetParent;
+	while(parent) {
+		offset.left += parent.offsetLeft;
+		offset.top += parent.offsetTop;
+		parent = parent.offsetParent;
+	}
+}
+
 Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 {
     event.preventDefault();
     
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
-	var eltx = event.pageX - offset.left;
-	var elty = event.pageY - offset.top;
+	var eltx = event.clientX - offset.left;
+	var elty = event.clientY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
@@ -49610,14 +49621,12 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 {
     event.preventDefault();
     
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
-	var eltx = event.pageX - offset.left;
-	var elty = event.pageY - offset.top;
-	
+	var eltx = event.clientX - offset.left;
+	var elty = event.clientY - offset.top;
+		
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
 	
@@ -49635,13 +49644,11 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 {
     event.preventDefault();
 
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
-	var eltx = event.pageX - offset.left;
-	var elty = event.pageY - offset.top;
+	var eltx = event.clientX - offset.left;
+	var elty = event.clientY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
@@ -49660,16 +49667,11 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
 {
     event.preventDefault();
 
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
-	var eltx = event.pageX - offset.left;
-	var elty = event.pageY - offset.top;
-	
-	var eltx = event.pageX - offset.left;
-	var elty = event.pageY - offset.top;
+	var eltx = event.clientX - offset.left;
+	var elty = event.clientY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
