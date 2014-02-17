@@ -4768,8 +4768,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var offset = {};
 	this.calcElementOffset(offset);
 	
-	var eltx = event.clientX - offset.left;
-	var elty = event.clientY - offset.top;
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
@@ -4791,8 +4791,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var offset = {};
 	this.calcElementOffset(offset);
 	
-	var eltx = event.clientX - offset.left;
-	var elty = event.clientY - offset.top;
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 		
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
@@ -4814,8 +4814,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var offset = {};
 	this.calcElementOffset(offset);
 	
-	var eltx = event.clientX - offset.left;
-	var elty = event.clientY - offset.top;
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
@@ -4837,8 +4837,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
 	var offset = {};
 	this.calcElementOffset(offset);
 	
-	var eltx = event.clientX - offset.left;
-	var elty = event.clientY - offset.top;
+	var eltx = event.pageX - offset.left;
+	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
 	    	elementX : eltx, elementY : elty, button:event.button };
