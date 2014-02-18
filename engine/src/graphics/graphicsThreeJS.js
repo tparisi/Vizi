@@ -461,10 +461,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
 {
     event.preventDefault();
 
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
 	var eltx = event.pageX - offset.left;
 	var elty = event.pageY - offset.top;
@@ -535,10 +533,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentTouchStart = function(event)
 {
     event.preventDefault();
     
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 
 	var touches = [];
 	var i, len = event.touches.length;
@@ -560,10 +556,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentTouchMove = function(event)
 {
     event.preventDefault();
     
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
 	var touches = [];
 	var i, len = event.touches.length;
@@ -591,10 +585,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentTouchEnd = function(event)
 {
     event.preventDefault();
 
-	var offset = {
-			left : this.renderer.domElement.offsetLeft, 
-			top : this.renderer.domElement.offsetTop,
-	};
+	var offset = {};
+	this.calcElementOffset(offset);
 	
 	var touches = [];
 	var i, len = event.touches.length;
