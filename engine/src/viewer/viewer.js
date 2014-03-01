@@ -289,8 +289,15 @@ Vizi.Viewer.prototype.addToScene = function(data)
 			this.lightColors.push(data.lights[i].color.clone());
 		}		
 	}
+	else if (!this.lights.length)
+	{
+		this.controllerScript.headlight.intensity = 1;
+		this.headlightOn = true;
+	}
 	
 	this.scenes.push(data.scene);
+	this.initHighlight();
+	this.fitToScene();
 	this.calcSceneStats();
 }
 
@@ -582,11 +589,13 @@ Vizi.Viewer.prototype.fitToScene = function()
 	
 	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
 	this.controllerScript.center = center;
-	var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
-	this.controllerScript.camera.position.copy(campos);
-	this.controllerScript.camera.position.z *= 2;
-	this.cameras[0].position.copy(this.controllerScript.camera.position);
-
+	if (this.scenes.length == 1) {
+		var campos = new THREE.Vector3(0, this.boundingBox.max.y, this.boundingBox.max.z * 2);
+		this.controllerScript.camera.position.copy(campos);
+		this.controllerScript.camera.position.z *= 2;
+		this.cameras[0].position.copy(this.controllerScript.camera.position);
+	}
+	
 	// Bounding box display
 	if (true) {
 		
