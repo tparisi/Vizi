@@ -87,7 +87,6 @@ Vizi.Viewer.prototype.initScene = function()
 	this.lightNames = [];
 	this.lightIntensities = [];
 	this.lightColors = [];
-	this.mouseCallbacks = {};	
 }
 
 Vizi.Viewer.prototype.runloop = function()

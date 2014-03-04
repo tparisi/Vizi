@@ -51868,7 +51868,6 @@ Vizi.Viewer.prototype.initScene = function()
 	this.lightNames = [];
 	this.lightIntensities = [];
 	this.lightColors = [];
-	this.mouseCallbacks = {};	
 }
 
 Vizi.Viewer.prototype.runloop = function()
@@ -52570,7 +52569,7 @@ Vizi.SpotLight.DEFAULT_EXPONENT = 10;
 Vizi.SpotLight.DEFAULT_CAST_SHADOWS = false;
 Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS = 0.3;
 /**
- * @fileoverview Base class for visual elements.
+ * @fileoverview Base class for visual decoration - like Vizi.Visual but not pickable.
  * @author Tony Parisi
  */
 goog.provide('Vizi.Decoration');

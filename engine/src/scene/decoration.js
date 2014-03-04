@@ -1,5 +1,5 @@
 /**
- * @fileoverview Base class for visual elements.
+ * @fileoverview Base class for visual decoration - like Vizi.Visual but not pickable.
  * @author Tony Parisi
  */
 goog.provide('Vizi.Decoration');
