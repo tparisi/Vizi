@@ -30,6 +30,7 @@ goog.require('Vizi.ModelControllerScript');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');
 goog.require('Vizi.Graphics');
+goog.require('Vizi.Helpers');
 goog.require('Vizi.Input');
 goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');

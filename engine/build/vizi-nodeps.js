@@ -6121,6 +6121,39 @@ Vizi.PerspectiveCamera.prototype.update = function()  {
 	}
 }
 /**
+ * @fileoverview Contains prefab assemblies for core Vizi package
+ * @author Tony Parisi
+ */
+goog.provide('Vizi.Helpers');
+
+Vizi.Helpers.BoundingBoxDecoration = function(param)
+{
+	param = param || {};
+	if (!param.object) {
+		return null;
+	}
+	
+	var object = param.object;
+	var color = param.color !== undefined ? param.color : 0x888888;
+	
+	var bbox = Vizi.SceneUtils.computeBoundingBox(object);
+	
+	var width = bbox.max.x - bbox.min.x,
+		height = bbox.max.y - bbox.min.y,
+		depth = bbox.max.z - bbox.min.z;
+	
+	var mesh = new THREE.BoxHelper();
+	mesh.material.color.setHex(color);
+	mesh.scale.set(width / 2, height / 2, depth / 2);
+	
+	var decoration = new Vizi.Decoration({object:mesh});
+	
+	var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
+	decoration.position.add(center);
+	
+	return decoration;
+}
+/**
  * @fileoverview Vizi scene utilities
  * @author Tony Parisi
  */
@@ -7455,21 +7488,12 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 	}
 
 	if (object) {
-		var bbox = Vizi.SceneUtils.computeBoundingBox(object);
-				
-		var width = bbox.max.x - bbox.min.x,
-			height = bbox.max.y - bbox.min.y,
-			depth = bbox.max.z - bbox.min.z;
+		this.highlightDecoration = Vizi.Helpers.BoundingBoxDecoration({
+			object : object,
+			color : 0xaaaa00
+		});
 		
-		var mesh = new THREE.BoxHelper();
-		mesh.material.color.setHex(0xaaaa00);
-		mesh.scale.set(width / 2, height / 2, depth / 2);
-		
-		this.highlightDecoration = new Vizi.Decoration({object:mesh});
 		object._parent.addComponent(this.highlightDecoration);
-	
-		var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
-		this.highlightDecoration.position.add(center);
 	}
 	
 	this.highlightedObject = object;
@@ -7549,20 +7573,13 @@ Vizi.Viewer.prototype.fitToScene = function()
 		
 		this.sceneRoot.map(Vizi.Object, function(o) {
 			if (o._parent) {
-				var bbox = Vizi.SceneUtils.computeBoundingBox(o);
 				
-				var width = bbox.max.x - bbox.min.x,
-				height = bbox.max.y - bbox.min.y,
-				depth = bbox.max.z - bbox.min.z;
-			
-				var mesh = new THREE.BoxHelper();
-				mesh.material.color.setHex(0x00ff00);
-				mesh.scale.set(width / 2, height / 2, depth / 2);
-				var decoration = new Vizi.Decoration({object:mesh});
-				o._parent.addComponent(decoration);
-							
-				var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
-				decoration.position.add(center);
+				var decoration = Vizi.Helpers.BoundingBoxDecoration({
+					object : o,
+					color : 0x00ff00
+				});
+				
+				o._parent.addComponent(decoration);							
 				decoration.visible = this.showBoundingBoxes;
 			}
 		});
@@ -7796,6 +7813,7 @@ goog.require('Vizi.ModelControllerScript');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');
 goog.require('Vizi.Graphics');
+goog.require('Vizi.Helpers');
 goog.require('Vizi.Input');
 goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');
