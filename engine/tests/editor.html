@@ -546,10 +546,16 @@
 //		console.log("Mouse out: ", o.name);
 	}
 
-	function onPickerMouseUp(editor, o, event) {
+	function onPickerMouseDown(editor, o, event) {
 //		console.log("Mouse up: ", o.name);
 		if (event.button == 0) {
 			editor.selectObject(o, event);
+		}
+	}
+	
+	function onPickerMouseUp(editor, o, event) {
+//		console.log("Mouse up: ", o.name);
+		if (event.button == 0) {
 			node = selectSceneNodeFromId(editor, o._id);
 			if (node && infoPopupVisible) {
 				openSceneNode(editor, node);
@@ -557,6 +563,11 @@
 		}
 	}
 
+	function onPickerMouseMove(editor, o, event) {
+//		console.log("Mouse up: ", o.name);
+		editor.onMouseMove(o, event);
+	}
+		
 	function onPickerMouseDoubleClick(editor, o, event) {
 		if (event.button == 0) {
 			editor.selectObject(o);
@@ -569,7 +580,9 @@
 		var picker = new Vizi.Picker;
 		picker.addEventListener("mouseover", function(event) { onPickerMouseOver(editor, o, event); });
 		picker.addEventListener("mouseout", function(event) { onPickerMouseOut(editor, o, event); });
+		picker.addEventListener("mousedown", function(event) { onPickerMouseDown(editor, o, event); });
 		picker.addEventListener("mouseup", function(event) { onPickerMouseUp(editor, o, event); });
+		picker.addEventListener("mousemove", function(event) { onPickerMouseMove(editor, o, event); });
 		picker.addEventListener("dblclick", function(event) { onPickerMouseDoubleClick(editor, o, event); });
 		o.addComponent(picker);
 	}

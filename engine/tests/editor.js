@@ -13,7 +13,7 @@ Vizi.Editor = function(param) {
 	this.normalDecoration = null;
 	this.planeDecoration = null;
 	this.planeDecoration2 = null;
-	
+	this.selectedObject = null;
 }
 
 goog.inherits(Vizi.Editor, Vizi.Viewer);
@@ -28,6 +28,15 @@ Vizi.Editor.prototype.selectObject = function(object, event) {
 	}
 	
 	if (this.showNormals) {
+		this.showNormal(object, event);
+	}
+	
+	this.selectedObject = object;
+}
+
+Vizi.Editor.prototype.onMouseMove = function(object, event) {
+
+	if (this.selectedObject) {
 		this.showNormal(object, event);
 	}
 }
@@ -67,27 +76,6 @@ Vizi.Editor.prototype.showNormal = function(object, event) {
 					
 			// The plane
 			var planeSize = Math.max(width, Math.max(height, depth));
-			var planegeom = new THREE.Geometry();
-			var face = event.face;
-			var objgeom = object.visuals[0].geometry;
-			var v1 = objgeom.vertices[face.a].clone();//.multiplyScalar(planeSize);
-			var v2 = objgeom.vertices[face.b].clone();//.multiplyScalar(planeSize);
-			var v3 = objgeom.vertices[face.c].clone();//.multiplyScalar(planeSize);
-			planegeom.vertices.push(v1, v2, v3); 
-			var planeface = new THREE.Face3( 0, 1, 2 );
-			planeface.normal.copy( event.normal );
-			planeface.vertexNormals.push( event.normal.clone(), event.normal.clone(), event.normal.clone() );
-			planegeom.faces.push(planeface);
-			planegeom.computeFaceNormals();
-			planegeom.computeCentroids();
-			//			planegeom = new THREE.PlaneGeometry(planeSize, planeSize);
-			
-			var mat = new THREE.MeshBasicMaterial({color:0x00aaff, transparent: true, side:THREE.DoubleSide, opacity:0.5 });
-
-			var mesh = new THREE.Mesh(planegeom, mat);
-			
-			this.planeDecoration = new Vizi.Decoration({object:mesh});
-			this.highlightedObject._parent.addComponent(this.planeDecoration);
 
 			var u = new THREE.Vector3(0, event.normal.z, -event.normal.y).normalize().multiplyScalar(Vizi.Editor.DRAG_PLANE_SIZE);
 			var v = u.clone().cross(event.normal).multiplyScalar(4);
