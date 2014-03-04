@@ -90,7 +90,11 @@ Vizi.Editor.prototype.showNormal = function(object, event) {
 			
 			var planegeom = new THREE.Geometry();
 			planegeom.vertices.push(p1, p2, p3, p4); 
-			var planeface = new THREE.Face4( 0, 1, 2, 3 );
+			var planeface = new THREE.Face3( 0, 1, 2 );
+			planeface.normal.copy( event.normal );
+			planeface.vertexNormals.push( event.normal.clone(), event.normal.clone(), event.normal.clone(), event.normal.clone() );
+			planegeom.faces.push(planeface);
+			var planeface = new THREE.Face3( 0, 2, 3 );
 			planeface.normal.copy( event.normal );
 			planeface.vertexNormals.push( event.normal.clone(), event.normal.clone(), event.normal.clone(), event.normal.clone() );
 			planegeom.faces.push(planeface);

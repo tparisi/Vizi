@@ -508,14 +508,14 @@ Vizi.Viewer.prototype.highlightObject = function(object) {
 	if (object) {
 		var bbox = Vizi.SceneUtils.computeBoundingBox(object);
 				
-		var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
-				bbox.max.y - bbox.min.y,
-				bbox.max.z - bbox.min.z);
-	
-		var mat = new THREE.MeshBasicMaterial({color:0xaaaa00, transparent:false, 
-			wireframe:true, opacity:1})
-	
-		var mesh = new THREE.Mesh(geo, mat);
+		var width = bbox.max.x - bbox.min.x,
+			height = bbox.max.y - bbox.min.y,
+			depth = bbox.max.z - bbox.min.z;
+		
+		var mesh = new THREE.BoxHelper();
+		mesh.material.color.setHex(0xaaaa00);
+		mesh.scale.set(width / 2, height / 2, depth / 2);
+		
 		this.highlightDecoration = new Vizi.Decoration({object:mesh});
 		object._parent.addComponent(this.highlightDecoration);
 	
@@ -602,14 +602,16 @@ Vizi.Viewer.prototype.fitToScene = function()
 			if (o._parent) {
 				var bbox = Vizi.SceneUtils.computeBoundingBox(o);
 				
-				var geo = new THREE.CubeGeometry(bbox.max.x - bbox.min.x,
-						bbox.max.y - bbox.min.y,
-						bbox.max.z - bbox.min.z);
-				var mat = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, wireframe:true, opacity:.2})
-				var mesh = new THREE.Mesh(geo, mat)
+				var width = bbox.max.x - bbox.min.x,
+				height = bbox.max.y - bbox.min.y,
+				depth = bbox.max.z - bbox.min.z;
+			
+				var mesh = new THREE.BoxHelper();
+				mesh.material.color.setHex(0x00ff00);
+				mesh.scale.set(width / 2, height / 2, depth / 2);
 				var decoration = new Vizi.Decoration({object:mesh});
 				o._parent.addComponent(decoration);
-		
+							
 				var center = bbox.max.clone().add(bbox.min).multiplyScalar(0.5);
 				decoration.position.add(center);
 				decoration.visible = this.showBoundingBoxes;

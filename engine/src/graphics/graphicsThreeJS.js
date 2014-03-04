@@ -103,7 +103,7 @@ Vizi.GraphicsThreeJS.prototype.initScene = function()
 Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 {
     var renderer = // Vizi.Config.USE_WEBGL ?
-    	new THREE.WebGLRenderer( { antialias: true } ); // :
+    	new THREE.WebGLRenderer( { antialias: true, alpha: true } ); // :
     	// new THREE.CanvasRenderer;
     	
     renderer.sortObjects = false;
@@ -262,9 +262,10 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 	if (object.data)
 	{
 		var modelMat = new THREE.Matrix4;
-		modelMat.getInverse(object.matrixWorld);
+		//modelMat.getInverse(object.matrixWorld);
 		var hitPointWorld = point.clone();
-		point.applyMatrix4(modelMat);
+		hitPointWorld.applyMatrix4(object.matrixWorld);
+		//point.applyMatrix4(modelMat);
 		var normal = face ? face.normal : null
 		return { object: object.data, point: point, hitPointWorld : hitPointWorld, face: face, normal: normal };
 	}
