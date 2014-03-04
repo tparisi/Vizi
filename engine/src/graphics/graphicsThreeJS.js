@@ -211,7 +211,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
         	return { object : null, point : null, normal : null };
     	}
     	
-    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face ? intersected.face.normal : null));        	    	                             
+    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face));        	    	                             
     }
     else
     {
@@ -248,7 +248,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromRay = function(hierarchy, origin, direc
         	return { object : null, point : null, normal : null };
     	}
     	
-    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face ? intersected.face.normal : null));        	    	                             
+    	return (this.findObjectFromIntersected(intersected.object, intersected.point, intersected.face));        	    	                             
     }
     else
     {
@@ -257,7 +257,7 @@ Vizi.GraphicsThreeJS.prototype.objectFromRay = function(hierarchy, origin, direc
 }
 
 
-Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, point, normal)
+Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, point, face)
 {
 	if (object.data)
 	{
@@ -265,15 +265,16 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 		modelMat.getInverse(object.matrixWorld);
 		var hitPointWorld = point.clone();
 		point.applyMatrix4(modelMat);
-		return { object: object.data, point: point, hitPointWorld : hitPointWorld, normal: normal };
+		var normal = face ? face.normal : null
+		return { object: object.data, point: point, hitPointWorld : hitPointWorld, face: face, normal: normal };
 	}
 	else if (object.parent)
 	{
-		return this.findObjectFromIntersected(object.parent, point, normal);
+		return this.findObjectFromIntersected(object.parent, point, face);
 	}
 	else
 	{
-		return { object : null, point : null, normal : null };
+		return { object : null, point : null, face : null, normal : null };
 	}
 }
 

@@ -26,6 +26,7 @@ Vizi.Picker.prototype.realize = function()
 	
     this.lastHitPoint = new THREE.Vector3;
     this.lastHitNormal = new THREE.Vector3;
+    this.lastHitFace = new THREE.Face3;
 }
 
 Vizi.Picker.prototype.update = function()
@@ -60,6 +61,8 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 	this.lastHitPoint.copy(event.point);
 	if (event.normal)
 		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
 	
     this.dispatchEvent("mousedown", event);
 }
@@ -71,6 +74,7 @@ Vizi.Picker.prototype.onMouseUp = function(event)
 	{
 		event.point = this.lastHitPoint;
 		event.normal = this.lastHitNormal;
+		event.face = this.lastHitNormal;
 		this.dispatchEvent("mouseout", event);
 	}
 
@@ -82,6 +86,8 @@ Vizi.Picker.prototype.onMouseClick = function(event)
 	this.lastHitPoint.copy(event.point);
 	if (event.normal)
 		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
 
 	this.dispatchEvent("click", event);
 }
@@ -91,6 +97,8 @@ Vizi.Picker.prototype.onMouseDoubleClick = function(event)
 	this.lastHitPoint.copy(event.point);
 	if (event.normal)
 		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
 
 	this.dispatchEvent("dblclick", event);
 }

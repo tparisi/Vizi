@@ -162,6 +162,7 @@ Vizi.PickManager.objectFromMouse = function(event)
 	var intersected = Vizi.Graphics.instance.objectFromMouse(event);
 	if (intersected.object)
 	{
+		event.face = intersected.face;
 		event.normal = intersected.normal;
 		event.point = intersected.point;
 		event.object = intersected.object;

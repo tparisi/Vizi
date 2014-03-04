@@ -549,7 +549,7 @@
 	function onPickerMouseUp(editor, o, event) {
 //		console.log("Mouse up: ", o.name);
 		if (event.button == 0) {
-			editor.selectObject(o);
+			editor.selectObject(o, event);
 			node = selectSceneNodeFromId(editor, o._id);
 			if (node && infoPopupVisible) {
 				openSceneNode(editor, node);
