@@ -97,7 +97,7 @@ Vizi.Editor.prototype.showNormal = function(object, event) {
 			planegeom.computeFaceNormals();
 			planegeom.computeCentroids();
 
-			var mat = new THREE.MeshBasicMaterial({color:0xaa0000, transparent: true, side:THREE.DoubleSide, opacity:0.1 });
+			var mat = new THREE.MeshBasicMaterial({color:0x888888, transparent: true, side:THREE.DoubleSide, opacity:0.1 });
 
 			var mesh = new THREE.Mesh(planegeom, mat);
 			
@@ -128,9 +128,8 @@ Vizi.Editor.prototype.setSelectionBoxesOn = function(on)
 Vizi.Editor.prototype.setNormalsOn = function(on)
 {
 	this.showNormals = !this.showNormals;
-	var that = this;
-	this.sceneRoot.map(Vizi.Decoration, function(o) {
-	});
+	this.showNormal(null, null);
+	
 }
 
 Vizi.Editor.DRAG_PLANE_SIZE = 10;
