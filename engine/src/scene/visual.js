@@ -38,6 +38,7 @@ Vizi.Visual.prototype.realize = function()
 	
 	if (!this.object && this.geometry && this.material) {
 		this.object = new THREE.Mesh(this.geometry, this.material);
+		this.object.ignorePick = false;
 	    this.addToScene();
 	}	
 }

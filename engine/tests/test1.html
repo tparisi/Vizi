@@ -5,7 +5,7 @@
 <title>Vizi</title>
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -30,11 +30,12 @@
 		var camobj2 = new Vizi.Object;
 		camera2 = new Vizi.PerspectiveCamera({active:false});
 		camobj2.addComponent(camera2);
+		camera2.position.z = 30;
 		app.addObject(camobj2);
 		
 		var root = new Vizi.Object;
 		
-		var dragger = new Vizi.PlaneDragger;
+		var dragger = new Vizi.PlaneDragger({ normal: new THREE.Vector3(0, 1, 1) });
 		dragger.overCursor = 'pointer';
 		dragger.addEventListener("mouseover", onDraggerMouseOver);
 		dragger.addEventListener("mouseout", onDraggerMouseOut);
@@ -70,8 +71,8 @@
 		
 		app.addObject(root);
 
-		var backdrop = createBackdrop();
-		app.addObject(backdrop);
+		//var backdrop = createBackdrop();
+		//app.addObject(backdrop);
 
 		app.run();
 	}

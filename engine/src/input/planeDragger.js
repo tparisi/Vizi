@@ -8,7 +8,14 @@ goog.provide('Vizi.PlaneDragger');
 goog.require('Vizi.Picker');
 
 Vizi.PlaneDragger = function(param) {
+	
+	param = param || {};
+	
     Vizi.Picker.call(this, param);
+    
+    this.normal = param.normal || new THREE.Vector3(0, 0, 1);
+    this.position = param.position || new THREE.Vector3;
+    this.color = 0x888888;
 }
 
 goog.inherits(Vizi.PlaneDragger, Vizi.Picker);
@@ -17,17 +24,48 @@ Vizi.PlaneDragger.prototype.realize = function()
 {
 	Vizi.Picker.prototype.realize.call(this);
 
-	// Create a projector object
-    this.projector = new THREE.Projector();
-	
     // And some helpers
     this.dragObject = null;
 	this.dragOffset = new THREE.Vector3;
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
-	this.dragPlane = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+	this.dragPlane = this.createDragPlane();
 	this.dragPlane.visible = false;
-	this._object.transform.object.add(this.dragPlane);
+	this._object._parent.transform.object.add(this.dragPlane);
+}
+
+Vizi.PlaneDragger.prototype.createDragPlane = function() {
+
+	var size = 2000;
+	var normal = this.normal;
+	var position = this.position;
+	
+	var u = new THREE.Vector3(0, normal.z, -normal.y).normalize().multiplyScalar(size);
+	var v = u.clone().cross(normal).normalize().multiplyScalar(size);
+	
+	var p1 = position.clone().sub(u).sub(v);
+	var p2 = position.clone().add(u).sub(v);
+	var p3 = position.clone().add(u).add(v);
+	var p4 = position.clone().sub(u).add(v);
+	
+	var planegeom = new THREE.Geometry();
+	planegeom.vertices.push(p1, p2, p3, p4); 
+	var planeface = new THREE.Face3( 0, 1, 2 );
+	planeface.normal.copy( normal );
+	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
+	planegeom.faces.push(planeface);
+	var planeface = new THREE.Face3( 0, 2, 3 );
+	planeface.normal.copy( normal );
+	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
+	planegeom.faces.push(planeface);
+	planegeom.computeFaceNormals();
+	planegeom.computeCentroids();
+
+	var mat = new THREE.MeshBasicMaterial({color:this.color, transparent: true, side:THREE.DoubleSide, opacity:0.1 });
+
+	var mesh = new THREE.Mesh(planegeom, mat);
+	
+	return mesh;
 }
 
 Vizi.PlaneDragger.prototype.update = function()
