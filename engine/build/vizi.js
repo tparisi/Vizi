@@ -47501,6 +47501,207 @@ Vizi.FirstPersonControllerScript.prototype.setHeadlightOn = function(on)
 }
 
 /**
+ * @fileoverview Picker component - add one to get picking support on your object
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.Picker');
+goog.require('Vizi.Component');
+
+Vizi.Picker = function(param) {
+	param = param || {};
+	
+    Vizi.Component.call(this, param);
+    this.overCursor = param.overCursor;
+    this.enabled = (param.enabled !== undefined) ? param.enabled : true;
+}
+
+goog.inherits(Vizi.Picker, Vizi.Component);
+
+Vizi.Picker.prototype._componentProperty = "picker";
+Vizi.Picker.prototype._componentPropertyType = "Picker";
+
+Vizi.Picker.prototype.realize = function()
+{
+	Vizi.Component.prototype.realize.call(this);
+	
+    this.lastHitPoint = new THREE.Vector3;
+    this.lastHitNormal = new THREE.Vector3;
+    this.lastHitFace = new THREE.Face3;
+}
+
+Vizi.Picker.prototype.update = function()
+{
+}
+
+Vizi.Picker.prototype.onMouseOver = function(event)
+{
+    this.dispatchEvent("mouseover", event);
+}
+
+Vizi.Picker.prototype.onMouseOut = function(event)
+{
+    this.dispatchEvent("mouseout", event);
+}
+	        	        
+Vizi.Picker.prototype.onMouseMove = function(event)
+{
+	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
+	if (this == Vizi.PickManager.clickedObject || this == mouseOverObject)
+	{
+		this.lastHitPoint.copy(event.point);
+		if (event.normal)
+			this.lastHitNormal.copy(event.normal);
+
+		this.dispatchEvent("mousemove", event);
+	}
+}
+
+Vizi.Picker.prototype.onMouseDown = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
+	
+    this.dispatchEvent("mousedown", event);
+}
+
+Vizi.Picker.prototype.onMouseUp = function(event)
+{
+	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
+	if (mouseOverObject != this)
+	{
+		event.point = this.lastHitPoint;
+		event.normal = this.lastHitNormal;
+		event.face = this.lastHitNormal;
+		this.dispatchEvent("mouseout", event);
+	}
+
+	this.dispatchEvent("mouseup", event);
+}
+
+Vizi.Picker.prototype.onMouseClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
+
+	this.dispatchEvent("click", event);
+}
+	        
+Vizi.Picker.prototype.onMouseDoubleClick = function(event)
+{
+	this.lastHitPoint.copy(event.point);
+	if (event.normal)
+		this.lastHitNormal.copy(event.normal);
+	if (event.face)
+		this.lastHitFace = event.face;
+
+	this.dispatchEvent("dblclick", event);
+}
+	
+Vizi.Picker.prototype.onMouseScroll = function(event)
+{
+    this.dispatchEvent("mousescroll", event);
+}
+
+Vizi.Picker.prototype.onTouchMove = function(event)
+{
+	this.dispatchEvent("touchmove", event);
+}
+
+Vizi.Picker.prototype.onTouchStart = function(event)
+{	
+    this.dispatchEvent("touchstart", event);
+}
+
+Vizi.Picker.prototype.onTouchEnd = function(event)
+{
+	this.dispatchEvent("touchend", event);
+}
+
+
+/**
+ * @fileoverview Picker component - get drag for an object along the surface of a reference object
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.SurfaceDragger');
+goog.require('Vizi.Picker');
+
+Vizi.SurfaceDragger = function(param) {
+	
+	param = param || {};
+	
+    Vizi.Picker.call(this, param);
+    
+    this.reference = param.reference;
+	this.dragPlane = new THREE.Plane();
+}
+
+goog.inherits(Vizi.SurfaceDragger, Vizi.Picker);
+
+Vizi.SurfaceDragger.prototype.realize = function()
+{
+	Vizi.Picker.prototype.realize.call(this);
+
+}
+
+Vizi.SurfaceDragger.prototype.update = function()
+{
+}
+
+Vizi.SurfaceDragger.prototype.onMouseDown = function(event)
+{
+	Vizi.Picker.prototype.onMouseDown.call(this, event);
+	
+	var visual = this.reference.visuals[0];
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, visual.object);
+	if (intersection) {
+
+		var hitpoint = intersection.point.clone();
+		this.dragOffset = hitpoint.clone().sub(this._object.transform.position);
+	}
+
+}
+
+Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
+{
+	Vizi.Picker.prototype.onMouseMove.call(this, event);
+	
+	var visual = this.reference.visuals[0];
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, visual.object);
+	
+	if (intersection) {
+		var hitpoint = intersection.point.clone();
+		var hitnormal = intersection.face.normal.clone();
+		var verts = visual.geometry.vertices;
+		var v1 = verts[intersection.face.a];
+		var v2 = verts[intersection.face.b];
+		var v3 = verts[intersection.face.c];
+		hitpoint.sub(this.dragOffset);
+		var vec = hitpoint.clone().add(hitnormal);
+
+		this.dragPlane = new THREE.Plane().setFromCoplanarPoints(v1, v2, v3);
+
+		var projectedPoint = this.dragPlane.projectPoint(hitpoint);
+		this._object.transform.position.copy(projectedPoint);
+		var up = new THREE.Vector3(hitnormal.y, hitnormal.z, 0).normalize();
+		this._object.transform.object.up.copy(up);
+		this._object.transform.object.lookAt(vec);
+		
+	}
+}
+
+
+
+/**
  *
  */
 goog.provide('Vizi.Mouse');
@@ -51312,132 +51513,6 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 }
 
 
-/**
- * @fileoverview Picker component - add one to get picking support on your object
- * 
- * @author Tony Parisi
- */
-
-goog.provide('Vizi.Picker');
-goog.require('Vizi.Component');
-
-Vizi.Picker = function(param) {
-	param = param || {};
-	
-    Vizi.Component.call(this, param);
-    this.overCursor = param.overCursor;
-    this.enabled = (param.enabled !== undefined) ? param.enabled : true;
-}
-
-goog.inherits(Vizi.Picker, Vizi.Component);
-
-Vizi.Picker.prototype._componentProperty = "picker";
-Vizi.Picker.prototype._componentPropertyType = "Picker";
-
-Vizi.Picker.prototype.realize = function()
-{
-	Vizi.Component.prototype.realize.call(this);
-	
-    this.lastHitPoint = new THREE.Vector3;
-    this.lastHitNormal = new THREE.Vector3;
-    this.lastHitFace = new THREE.Face3;
-}
-
-Vizi.Picker.prototype.update = function()
-{
-}
-
-Vizi.Picker.prototype.onMouseOver = function(event)
-{
-    this.dispatchEvent("mouseover", event);
-}
-
-Vizi.Picker.prototype.onMouseOut = function(event)
-{
-    this.dispatchEvent("mouseout", event);
-}
-	        	        
-Vizi.Picker.prototype.onMouseMove = function(event)
-{
-	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (this == Vizi.PickManager.clickedObject || this == mouseOverObject)
-	{
-		this.lastHitPoint.copy(event.point);
-		if (event.normal)
-			this.lastHitNormal.copy(event.normal);
-
-		this.dispatchEvent("mousemove", event);
-	}
-}
-
-Vizi.Picker.prototype.onMouseDown = function(event)
-{
-	this.lastHitPoint.copy(event.point);
-	if (event.normal)
-		this.lastHitNormal.copy(event.normal);
-	if (event.face)
-		this.lastHitFace = event.face;
-	
-    this.dispatchEvent("mousedown", event);
-}
-
-Vizi.Picker.prototype.onMouseUp = function(event)
-{
-	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (mouseOverObject != this)
-	{
-		event.point = this.lastHitPoint;
-		event.normal = this.lastHitNormal;
-		event.face = this.lastHitNormal;
-		this.dispatchEvent("mouseout", event);
-	}
-
-	this.dispatchEvent("mouseup", event);
-}
-
-Vizi.Picker.prototype.onMouseClick = function(event)
-{
-	this.lastHitPoint.copy(event.point);
-	if (event.normal)
-		this.lastHitNormal.copy(event.normal);
-	if (event.face)
-		this.lastHitFace = event.face;
-
-	this.dispatchEvent("click", event);
-}
-	        
-Vizi.Picker.prototype.onMouseDoubleClick = function(event)
-{
-	this.lastHitPoint.copy(event.point);
-	if (event.normal)
-		this.lastHitNormal.copy(event.normal);
-	if (event.face)
-		this.lastHitFace = event.face;
-
-	this.dispatchEvent("dblclick", event);
-}
-	
-Vizi.Picker.prototype.onMouseScroll = function(event)
-{
-    this.dispatchEvent("mousescroll", event);
-}
-
-Vizi.Picker.prototype.onTouchMove = function(event)
-{
-	this.dispatchEvent("touchmove", event);
-}
-
-Vizi.Picker.prototype.onTouchStart = function(event)
-{	
-    this.dispatchEvent("touchstart", event);
-}
-
-Vizi.Picker.prototype.onTouchEnd = function(event)
-{
-	this.dispatchEvent("touchend", event);
-}
-
-
 goog.provide("Vizi.System");
 
 Vizi.System = {
@@ -52930,6 +53005,7 @@ goog.require('Vizi.Mouse');
 goog.require('Vizi.Picker');
 goog.require('Vizi.PickManager');
 goog.require('Vizi.PlaneDragger');
+goog.require('Vizi.SurfaceDragger');
 goog.require('Vizi.Light');
 goog.require('Vizi.AmbientLight');
 goog.require('Vizi.DirectionalLight');
