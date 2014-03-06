@@ -51360,7 +51360,7 @@ Vizi.Picker.prototype.onMouseOut = function(event)
 Vizi.Picker.prototype.onMouseMove = function(event)
 {
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (mouseOverObject == this)
+	if (this == Vizi.PickManager.clickedObject || this == mouseOverObject)
 	{
 		this.lastHitPoint.copy(event.point);
 		if (event.normal)
