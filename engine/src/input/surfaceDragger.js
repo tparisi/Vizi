@@ -63,10 +63,16 @@ Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
 		this.dragPlane = new THREE.Plane().setFromCoplanarPoints(v1, v2, v3);
 
 		var projectedPoint = this.dragPlane.projectPoint(hitpoint);
-		this._object.transform.position.copy(projectedPoint);
 		var up = new THREE.Vector3(hitnormal.y, hitnormal.z, 0).normalize();
-		this._object.transform.object.up.copy(up);
-		this._object.transform.object.lookAt(vec);
+
+		this.dispatchEvent("drag", {
+				type : "drag", 
+				offset : projectedPoint,
+				normal : hitnormal,
+				up : up,
+				lookAt : vec
+			}
+		);
 		
 	}
 }

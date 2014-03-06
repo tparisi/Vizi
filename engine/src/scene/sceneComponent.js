@@ -36,6 +36,14 @@ Vizi.SceneComponent = function(param)
 	            return this.object.quaternion;
 	        }
     	},    	
+        up: {
+	        get: function() {
+	            return this.object.up;
+	        },
+	        set: function(v) {
+	            this.object.up = v;
+	        }
+    	},    	
         useQuaternion: {
 	        get: function() {
 	            return this.object.useQuaternion;
@@ -52,7 +60,11 @@ Vizi.SceneComponent = function(param)
 	            this.object.visible = v;
 	        }
     	},    	
-
+    	lookAt : {
+    		value : function(v) {
+    			this.object.lookAt(v);
+    		}
+    	}
     });
     
     this.layer = param.layer;

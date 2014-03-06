@@ -47691,10 +47691,19 @@ Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
 		this.dragPlane = new THREE.Plane().setFromCoplanarPoints(v1, v2, v3);
 
 		var projectedPoint = this.dragPlane.projectPoint(hitpoint);
-		this._object.transform.position.copy(projectedPoint);
+//		this._object.transform.position.copy(projectedPoint);
 		var up = new THREE.Vector3(hitnormal.y, hitnormal.z, 0).normalize();
-		this._object.transform.object.up.copy(up);
-		this._object.transform.object.lookAt(vec);
+//		this._object.transform.object.up.copy(up);
+//		this._object.transform.object.lookAt(vec);
+
+		this.dispatchEvent("drag", {
+				type : "drag", 
+				offset : projectedPoint,
+				normal : hitnormal,
+				up : up,
+				lookAt : vec
+			}
+		);
 		
 	}
 }
@@ -47876,6 +47885,14 @@ Vizi.SceneComponent = function(param)
 	            return this.object.quaternion;
 	        }
     	},    	
+        up: {
+	        get: function() {
+	            return this.object.up;
+	        },
+	        set: function(v) {
+	            this.object.up = v;
+	        }
+    	},    	
         useQuaternion: {
 	        get: function() {
 	            return this.object.useQuaternion;
@@ -47892,7 +47909,11 @@ Vizi.SceneComponent = function(param)
 	            this.object.visible = v;
 	        }
     	},    	
-
+    	lookAt : {
+    		value : function(v) {
+    			this.object.lookAt(v);
+    		}
+    	}
     });
     
     this.layer = param.layer;
