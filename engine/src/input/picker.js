@@ -48,11 +48,16 @@ Vizi.Picker.prototype.onMouseMove = function(event)
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
 	if (this == Vizi.PickManager.clickedObject || this == mouseOverObject)
 	{
-		this.lastHitPoint.copy(event.point);
+		if (event.point)
+			this.lastHitPoint.copy(event.point);
 		if (event.normal)
 			this.lastHitNormal.copy(event.normal);
+		if (event.face)
+			this.lastHitFace = event.face;
 
-		this.dispatchEvent("mousemove", event);
+		if (event.point) {
+			this.dispatchEvent("mousemove", event);
+		}
 	}
 }
 
