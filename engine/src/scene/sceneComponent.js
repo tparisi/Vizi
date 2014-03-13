@@ -133,4 +133,6 @@ Vizi.SceneComponent.prototype.removeFromScene = function() {
 	{
 		// N.B.: throw something?
 	}
+	
+	this._realized = false;
 }

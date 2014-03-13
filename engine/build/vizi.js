@@ -47984,6 +47984,8 @@ Vizi.SceneComponent.prototype.removeFromScene = function() {
 	{
 		// N.B.: throw something?
 	}
+	
+	this._realized = false;
 }
 /**
  *
@@ -51530,6 +51532,9 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 	if (obj instanceof Vizi.Object) {
 		return computeBoundingBox(obj.transform.object);
 	}
+	else if (obj instanceof Vizi.Visual) {
+		return computeBoundingBox(obj.object);
+	}
 	else {
 		return new THREE.Box3(new THREE.Vector3, new THREE.Vector3);
 	}
@@ -51928,7 +51933,9 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 			// the general case longer-term for glTF loader
 			n.matrixAutoUpdate = true;
 			n.geometry.dynamic = true;
-			return new Vizi.Visual({object:n});
+			var v = new Vizi.Visual({object:n});
+			v.name = n.name;
+			return v;
 		}
 		else if (n instanceof THREE.Camera) {
 			if (n instanceof THREE.PerspectiveCamera) {
@@ -52692,19 +52699,32 @@ Vizi.Viewer.prototype.initHighlight = function() {
 Vizi.Viewer.prototype.highlightObject = function(object) {
 
 	if (this.highlightedObject) {
-		this.highlightedObject._parent.removeComponent(this.highlightDecoration);
+		this.highlightParent.removeComponent(this.highlightDecoration);
 	}
 
 	if (object) {
+		
 		this.highlightDecoration = Vizi.Helpers.BoundingBoxDecoration({
 			object : object,
 			color : 0xaaaa00
 		});
 		
-		object._parent.addComponent(this.highlightDecoration);
+		if (object instanceof Vizi.Object) {
+			object._parent.addComponent(this.highlightDecoration);
+			this.highlightedObject = object;
+			this.highlightParent = object._parent;
+		}
+		else if (object instanceof Vizi.Visual) {
+			object._object.addComponent(this.highlightDecoration);
+			this.highlightedObject = object._object;
+			this.highlightParent = object._object;
+		}
+	}
+	else {
+		this.highlightedObject = null;
+		this.highlightParent = null;
 	}
 	
-	this.highlightedObject = object;
 }
 
 Vizi.Viewer.prototype.createGrid = function()

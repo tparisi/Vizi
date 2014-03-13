@@ -19,7 +19,6 @@ vec4 diffuse = vec4(0., 0., 0., 1.);
 vec3 diffuseLight = vec3(0., 0., 0.);
 vec4 emission;
 vec4 ambient;
-vec3 ambientLight = vec3(0., 0., 0.);
 vec4 specular;
 vec3 specularLight = vec3(0., 0., 0.);
 {
@@ -56,8 +55,6 @@ ambient = u_ambient;
 diffuse = u_diffuse;
 emission = u_emission;
 specular = u_specular;
-ambient.xyz *= ambientLight;
-color.xyz += ambient.xyz;
 specular.xyz *= specularLight;
 color.xyz += specular.xyz;
 diffuse.xyz *= diffuseLight;

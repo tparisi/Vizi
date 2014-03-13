@@ -10,6 +10,8 @@ buildSceneTree = function(scene, tree) {
 	function build(object, node, level) {
 		
 		var noname = level ? "[object]" : "Scene";
+		if (object instanceof Vizi.Visual)
+			noname = "[visual]";
 		
 		var childNode = node.addChild({
 			title: object.name ? object.name : noname,
@@ -19,10 +21,19 @@ buildSceneTree = function(scene, tree) {
 		});
 
 		sceneTreeMap[object._id] = childNode;
-		
-		var i, len = object._children.length;
-		for (i = 0; i < len; i++) {	
-			build(object._children[i], childNode, level+1);
+
+		if (object._children) {
+			var i, len = object._children.length;
+			for (i = 0; i < len; i++) {	
+				build(object._children[i], childNode, level+1);
+			}
+		}
+
+		if (object.visuals) {
+			len = object.visuals.length;
+			for (i = 0; i < len; i++) {
+				build(object.visuals[i], childNode, level+1);
+			}
 		}
 	}
 	
@@ -67,8 +78,12 @@ transformToString = function(transform) {
 	return str;
 }
 
-geometryToString = function(geometry) {
-	var str = "<b>Geometry</b><br>";
+visualToString = function(visual) {
+	
+	var name = visual.name ? visual.name : "";
+	var geometry = visual.geometry;
+	
+	var str = "<b>Visual: </b>" + name + "<br>";
 
 	var nFaces = geometry.faces ? geometry.faces.length : geometry.attributes.index.array.length / 3;
 	var nVertices = geometry.vertices ? geometry.vertices.length :
@@ -89,6 +104,21 @@ geometryToString = function(geometry) {
 
 	str += ("Bounds " + boundingBoxSize);
 	return str;
+}
+
+visualsToStrings = function(visuals) {
+
+	var str = "";
+	
+	var i, len = visuals.length;
+	for (i = 0; i < len; i++) {
+		var visual = visuals[i];
+		str += visualToString(visual);
+		str += "<br>";
+	}
+	
+	return str;
+	
 }
 
 textureUrl = function(map) {
@@ -261,15 +291,15 @@ sceneNodeInfo = function(viewer, node) {
 				id : object._id,
 				components : {
 					transform : object.transform,
-					visual : object.visuals && object.visuals.length ? object.visuals[0] : null,
+					visuals : object.visuals,
 					light : object.light,
 					camera : object.camera,
 				}
 		};
 
 		info.type = "unknown";
-		if (info.object.components.visual) {
-			info.type = "Visual";
+		if (info.object.components.visuals) {
+			info.type = "Visuals";
 		}
 		else if (info.object.components.light) {
 			info.type = nodeTypeToString(info.object.components.light)
@@ -281,24 +311,39 @@ sceneNodeInfo = function(viewer, node) {
 			info.type = "Group";
 		}
 		
-		var transform = transformToString(object.transform);
-		var geometry = object.visuals && object.visuals.length ? geometryToString(object.visuals[0].geometry) : "";
-		var material = object.visuals && object.visuals.length ? materialToString(object.visuals[0].material) : "";
-		var light = object.light? lightToString(object.light) : "";
-		var camera = object.camera ? cameraToString(object.camera) : "";
-		var group = groupToString(object);
-		info.text = {
-				name : object.name,
-				id : object._id,
-				components : {
-					transform : transform,
-					geometry : geometry,
-					material : material,
-					light : light,
-					camera : camera,
-					group : group
-				}
-		};
+		if (object instanceof Vizi.Object) {
+			var transform = transformToString(object.transform);
+			var visuals = object.visuals && object.visuals.length ? visualsToStrings(object.visuals) : "";
+			var material = object.visuals && object.visuals.length ? materialToString(object.visuals[0].material) : "";
+			var light = object.light? lightToString(object.light) : "";
+			var camera = object.camera ? cameraToString(object.camera) : "";
+			var group = groupToString(object);
+			info.text = {
+					name : object.name,
+					id : object._id,
+					components : {
+						transform : transform,
+						visuals : visuals,
+						material : material,
+						light : light,
+						camera : camera,
+						group : group
+					}
+			};
+		}
+		else if (object instanceof Vizi.Visual) {
+			info.type = "Visual";
+			info.object.components = {
+					visual : object
+			}
+			info.text = {
+					name : object.name,
+					id : object._id,
+					components : {
+						visual : visualToString(object),
+					}
+			};
+		}
 	}
 
 	return info;

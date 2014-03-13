@@ -17,7 +17,6 @@ vec4 diffuse = vec4(0., 0., 0., 1.);
 vec3 diffuseLight = vec3(0., 0., 0.);
 vec4 emission;
 vec4 ambient;
-vec3 ambientLight = vec3(0., 0., 0.);
 {
 float diffuseIntensity;
 float specularIntensity;
@@ -39,8 +38,6 @@ diffuseLight += u_light2Color * diffuseIntensity;
 ambient = u_ambient;
 diffuse = u_diffuse;
 emission = u_emission;
-ambient.xyz *= ambientLight;
-color.xyz += ambient.xyz;
 diffuse.xyz *= diffuseLight;
 color.xyz += diffuse.xyz;
 color.xyz += emission.xyz;

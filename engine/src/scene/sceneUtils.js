@@ -79,6 +79,9 @@ Vizi.SceneUtils.computeBoundingBox = function(obj) {
 	if (obj instanceof Vizi.Object) {
 		return computeBoundingBox(obj.transform.object);
 	}
+	else if (obj instanceof Vizi.Visual) {
+		return computeBoundingBox(obj.object);
+	}
 	else {
 		return new THREE.Box3(new THREE.Vector3, new THREE.Vector3);
 	}

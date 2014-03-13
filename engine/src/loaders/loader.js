@@ -195,7 +195,9 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 			// the general case longer-term for glTF loader
 			n.matrixAutoUpdate = true;
 			n.geometry.dynamic = true;
-			return new Vizi.Visual({object:n});
+			var v = new Vizi.Visual({object:n});
+			v.name = n.name;
+			return v;
 		}
 		else if (n instanceof THREE.Camera) {
 			if (n instanceof THREE.PerspectiveCamera) {

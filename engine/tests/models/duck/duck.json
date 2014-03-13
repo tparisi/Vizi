@@ -1,9 +1,5 @@
 {
-    "animations": {},
-    "asset": {
-        "generator": "collada2gltf@8ffb01efe30653c6a629c9403833575252cb5bec"
-    },
-    "attributes": {
+    "accessors": {
         "attribute_23": {
             "bufferView": "bufferView_29",
             "byteOffset": 0,
@@ -19,7 +15,7 @@
                 9.92937,
                 -61.3282
             ],
-            "type": "FLOAT_VEC3"
+            "type": 35665
         },
         "attribute_25": {
             "bufferView": "bufferView_29",
@@ -36,7 +32,7 @@
                 -1,
                 -0.999832
             ],
-            "type": "FLOAT_VEC3"
+            "type": 35665
         },
         "attribute_27": {
             "bufferView": "bufferView_29",
@@ -51,49 +47,59 @@
                 0.026409,
                 0.019963
             ],
-            "type": "FLOAT_VEC2"
+            "type": 35664
+        },
+        "indices_21": {
+            "bufferView": "bufferView_30",
+            "byteOffset": 0,
+            "count": 12636,
+            "type": 5123
         }
+    },
+    "animations": {},
+    "asset": {
+        "generator": "collada2gltf@fb6d6e65e66c3b0013c75a8d1e63650f4309bf77"
     },
     "bufferViews": {
         "bufferView_29": {
-            "buffer": "duck.bin",
+            "buffer": "duck",
             "byteLength": 76768,
             "byteOffset": 0,
-            "target": "ARRAY_BUFFER"
+            "target": 34962
         },
         "bufferView_30": {
-            "buffer": "duck.bin",
+            "buffer": "duck",
             "byteLength": 25272,
             "byteOffset": 76768,
-            "target": "ELEMENT_ARRAY_BUFFER"
+            "target": 34963
+        },
+        "bufferView_31": {
+            "buffer": "duck",
+            "byteLength": 0,
+            "byteOffset": 102040
         }
     },
     "buffers": {
-        "duck.bin": {
+        "duck": {
             "byteLength": 102040,
-            "path": "duck.bin"
+            "path": "duck.bin",
+            "type": "arraybuffer"
         }
     },
     "cameras": {
         "camera_0": {
-            "aspect_ratio": 1.5,
-            "projection": "perspective",
-            "yfov": 37.8492,
-            "zfar": 10000,
-            "znear": 1
+            "perspective": {
+                "aspect_ratio": 1.5,
+                "yfov": 37.8492,
+                "zfar": 10000,
+                "znear": 1
+            },
+            "type": "perspective"
         }
     },
     "images": {
         "image_0": {
             "path": "images/duckCM.png"
-        }
-    },
-    "indices": {
-        "indices_21": {
-            "bufferView": "bufferView_30",
-            "byteOffset": 0,
-            "count": 12636,
-            "type": "UNSIGNED_SHORT"
         }
     },
     "lights": {
@@ -105,7 +111,6 @@
                     1
                 ]
             },
-            "id": "directionalLightShape1-lib",
             "type": "directional"
         }
     },
@@ -113,43 +118,28 @@
         "blinn3-fx": {
             "instanceTechnique": {
                 "technique": "technique1",
-                "values": [
-                    {
-                        "parameter": "ambient",
-                        "value": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ]
-                    },
-                    {
-                        "parameter": "diffuse",
-                        "value": "texture_image_0"
-                    },
-                    {
-                        "parameter": "emission",
-                        "value": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ]
-                    },
-                    {
-                        "parameter": "shininess",
-                        "value": 38.4
-                    },
-                    {
-                        "parameter": "specular",
-                        "value": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ]
-                    }
-                ]
+                "values": {
+                    "ambient": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ],
+                    "diffuse": "texture_image_0",
+                    "emission": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ],
+                    "shininess": 38.4,
+                    "specular": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
+                }
             },
             "name": "blinn3"
         }
@@ -159,14 +149,14 @@
             "name": "LOD3spShape",
             "primitives": [
                 {
-                    "indices": "indices_21",
-                    "material": "blinn3-fx",
-                    "primitive": "TRIANGLES",
-                    "semantics": {
+                    "attributes": {
                         "NORMAL": "attribute_25",
                         "POSITION": "attribute_23",
                         "TEXCOORD_0": "attribute_27"
-                    }
+                    },
+                    "indices": "indices_21",
+                    "material": "blinn3-fx",
+                    "primitive": 4
                 }
             ]
         }
@@ -222,9 +212,7 @@
         },
         "directionalLight1": {
             "children": [],
-            "lights": [
-                "directionalLightShape1-lib"
-            ],
+            "light": "directionalLightShape1-lib",
             "matrix": [
                 -0.954692,
                 0.218143,
@@ -246,19 +234,24 @@
             "name": "directionalLight1"
         }
     },
-    "profile": "WebGL 1.0",
+    "profile": "WebGL 1.0.2",
     "programs": {
         "program_0": {
+            "attributes": [
+                "a_normal",
+                "a_position",
+                "a_texcoord0"
+            ],
             "fragmentShader": "duck0FS",
             "vertexShader": "duck0VS"
         }
     },
     "samplers": {
         "sampler_0": {
-            "magFilter": "LINEAR",
-            "minFilter": "LINEAR_MIPMAP_LINEAR",
-            "wrapS": "REPEAT",
-            "wrapT": "REPEAT"
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapS": 10497,
+            "wrapT": 10497
         }
     },
     "scene": "defaultScene",
@@ -284,16 +277,16 @@
         "technique1": {
             "parameters": {
                 "ambient": {
-                    "type": "FLOAT_VEC4"
+                    "type": 35666
                 },
                 "diffuse": {
-                    "type": "SAMPLER_2D"
+                    "type": 35678
                 },
                 "emission": {
-                    "type": "FLOAT_VEC4"
+                    "type": 35666
                 },
                 "light0Color": {
-                    "type": "FLOAT_VEC3",
+                    "type": 35665,
                     "value": [
                         1,
                         1,
@@ -302,37 +295,37 @@
                 },
                 "light0Transform": {
                     "source": "directionalLight1",
-                    "type": "FLOAT_MAT4"
+                    "type": 35676
+                },
+                "modelViewMatrix": {
+                    "semantic": "MODELVIEW",
+                    "type": 35676
                 },
                 "normal": {
                     "semantic": "NORMAL",
-                    "type": "FLOAT_VEC3"
+                    "type": 35665
                 },
                 "normalMatrix": {
-                    "semantic": "WORLDVIEWINVERSETRANSPOSE",
-                    "type": "FLOAT_MAT3"
+                    "semantic": "MODELVIEWINVERSETRANSPOSE",
+                    "type": 35675
                 },
                 "position": {
                     "semantic": "POSITION",
-                    "type": "FLOAT_VEC3"
+                    "type": 35665
                 },
                 "projectionMatrix": {
                     "semantic": "PROJECTION",
-                    "type": "FLOAT_MAT4"
+                    "type": 35676
                 },
                 "shininess": {
-                    "type": "FLOAT"
+                    "type": 5126
                 },
                 "specular": {
-                    "type": "FLOAT_VEC4"
+                    "type": 35666
                 },
                 "texcoord0": {
                     "semantic": "TEXCOORD_0",
-                    "type": "FLOAT_VEC2"
-                },
-                "worldViewMatrix": {
-                    "semantic": "WORLDVIEW",
-                    "type": "FLOAT_MAT4"
+                    "type": 35664
                 }
             },
             "pass": "defaultPass",
@@ -350,11 +343,11 @@
                                 "emission",
                                 "light0Color",
                                 "light0Transform",
+                                "modelViewMatrix",
                                 "normalMatrix",
                                 "projectionMatrix",
                                 "shininess",
-                                "specular",
-                                "worldViewMatrix"
+                                "specular"
                             ],
                             "texcoordBindings": {
                                 "diffuse": "TEXCOORD_0"
@@ -375,18 +368,18 @@
                             "u_emission": "emission",
                             "u_light0Color": "light0Color",
                             "u_light0Transform": "light0Transform",
+                            "u_modelViewMatrix": "modelViewMatrix",
                             "u_normalMatrix": "normalMatrix",
                             "u_projectionMatrix": "projectionMatrix",
                             "u_shininess": "shininess",
-                            "u_specular": "specular",
-                            "u_worldViewMatrix": "worldViewMatrix"
+                            "u_specular": "specular"
                         }
                     },
                     "states": {
-                        "blendEnable": false,
-                        "cullFaceEnable": true,
-                        "depthMask": true,
-                        "depthTestEnable": true
+                        "blendEnable": 0,
+                        "cullFaceEnable": 1,
+                        "depthMask": 1,
+                        "depthTestEnable": 1
                     }
                 }
             }
@@ -394,11 +387,11 @@
     },
     "textures": {
         "texture_image_0": {
-            "format": "RGBA",
-            "internalFormat": "RGBA",
+            "format": 6408,
+            "internalFormat": 6408,
             "sampler": "sampler_0",
             "source": "image_0",
-            "target": "TEXTURE_2D"
+            "target": 3553
         }
     }
 }
