@@ -595,13 +595,13 @@
 							$('#tabs').tabs({ active: 1 });
 					}
 					else if (info.object.components.visual) {
-						$('#transformTabTitle').html("Visual");
-						$('#detailTab1Title').html("");
+						$('#transformTabTitle').html("Geometry");
+						$('#detailTab1Title').html("Material");
 						$('#detailTab2Title').html("");
 						$('#tabs-1').html(info.text.components.visual);
-						$('#tabs-2').html("");
+						$('#tabs-2').html(info.text.components.material);
 						$('#tabs-3').html("");
-						$('#tabs').tabs({ disabled: [1, 2] });
+						$('#tabs').tabs({ disabled: [2] });
 						if (active > 0)
 							$('#tabs').tabs({ active: 0 });
 					}

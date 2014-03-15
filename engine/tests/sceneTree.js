@@ -334,13 +334,15 @@ sceneNodeInfo = function(viewer, node) {
 		else if (object instanceof Vizi.Visual) {
 			info.type = "Visual";
 			info.object.components = {
-					visual : object
+					visual : object,
+					material : object.material,
 			}
 			info.text = {
 					name : object.name,
 					id : object._id,
 					components : {
 						visual : visualToString(object),
+						material : materialToString(object.material)
 					}
 			};
 		}
