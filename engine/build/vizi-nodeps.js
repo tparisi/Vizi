@@ -7785,6 +7785,9 @@ Vizi.Viewer.prototype.fitToScene = function()
 		this.controllerScript.camera.near = 0.01;
 		this.controllerScript.controls.userPanSpeed = 0.01;
 	}
+	else if (this.boundingBox.max.z > 10000) {
+		this.controllerScript.camera.far = this.boundingBox.max.z * Math.sqrt(2) * 2;
+	}
 	else if (this.boundingBox.max.z > 1000) {
 		this.controllerScript.camera.far = 20000;
 	}
