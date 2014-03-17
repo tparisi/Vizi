@@ -581,7 +581,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 this.animations = [];
                 this.joints = {};
                 this.skeltons = {};
-                THREE.GLTFLoaderUtils.init();
+                this.loaderUtils = THREE.GLTFLoaderUtils();
                 glTFParser.load.call(this, userInfo, options);
             }
         },
@@ -637,8 +637,8 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 
                 var shaderContext = new ShaderContext(entryID, description.path);
 
-                theLoader.shadersRequested++;
-        		THREE.GLTFLoaderUtils.getFile(shaderRequest, shaderDelegate, shaderContext);
+//                theLoader.shadersRequested++;
+//        		this.loaderUtils.getFile(shaderRequest, shaderDelegate, shaderContext);
         		
                 return true;
             }
@@ -930,7 +930,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                         };
                         
                         var indicesContext = new IndicesContext(indicesObject, geometry);
-                        var alreadyProcessedIndices = THREE.GLTFLoaderUtils.getBuffer(indicesObject, indicesDelegate, indicesContext);
+                        var alreadyProcessedIndices = this.loaderUtils.getBuffer(indicesObject, indicesDelegate, indicesContext);
                         /*if(alreadyProcessedIndices) {
                             indicesDelegate.resourceAvailable(alreadyProcessedIndices, indicesContext);
                         }*/
@@ -971,7 +971,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                             
                             var attribContext = new VertexAttributeContext(attributeObject, semantic, geometry);
 
-                            var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(attributeObject, vertexAttributeDelegate, attribContext);
+                            var alreadyProcessedAttribute = this.loaderUtils.getBuffer(attributeObject, vertexAttributeDelegate, attribContext);
                             /*if(alreadyProcessedAttribute) {
                                 vertexAttributeDelegate.resourceAvailable(alreadyProcessedAttribute, attribContext);
                             }*/
@@ -1480,7 +1480,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                     
                     var paramContext = new AnimationParameterContext(paramObject, animation);
 
-                    var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(paramObject, animationParameterDelegate, paramContext);
+                    var alreadyProcessedAttribute = this.loaderUtils.getBuffer(paramObject, animationParameterDelegate, paramContext);
                     /*if(alreadyProcessedAttribute) {
                         vertexAttributeDelegate.resourceAvailable(alreadyProcessedAttribute, attribContext);
                     }*/
@@ -1531,7 +1531,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 
 	            var context = new InverseBindMatricesContext(paramObject, skin);
 
-                var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(paramObject, inverseBindMatricesDelegate, context);
+                var alreadyProcessedAttribute = this.loaderUtils.getBuffer(paramObject, inverseBindMatricesDelegate, context);
 
 	            var bufferView = this.resources.getEntry(skin.inverseBindMatricesDescription.bufferView);
 	            skin.inverseBindMatricesDescription.bufferView = 
@@ -1594,15 +1594,16 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
     var self = this;
     
     var loader = Object.create(ThreeGLTFLoader);
+    this.loader = loader;
+    this.callback = callback;
+    this.rootObj = rootObj;
+
     loader.initWithPath(url);
     loader.load(new Context(rootObj, 
     					function(obj) {
     					}), 
     			null);
 
-    this.loader = loader;
-    this.callback = callback;
-    this.rootObj = rootObj;
     return rootObj;
 }
 
@@ -1617,6 +1618,7 @@ THREE.glTFLoader.prototype.callLoadedCallback = function() {
 }
 
 THREE.glTFLoader.prototype.checkComplete = function() {
+
 	if (this.meshesLoaded == this.meshesRequested 
 			&& this.shadersLoaded == this.shadersRequested
 			&& this.animationsLoaded == this.animationsRequested)

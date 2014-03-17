@@ -43437,7 +43437,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 this.animations = [];
                 this.joints = {};
                 this.skeltons = {};
-                THREE.GLTFLoaderUtils.init();
+                this.loaderUtils = THREE.GLTFLoaderUtils();
                 glTFParser.load.call(this, userInfo, options);
             }
         },
@@ -43493,8 +43493,8 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 
                 var shaderContext = new ShaderContext(entryID, description.path);
 
-                theLoader.shadersRequested++;
-        		THREE.GLTFLoaderUtils.getFile(shaderRequest, shaderDelegate, shaderContext);
+//                theLoader.shadersRequested++;
+//        		this.loaderUtils.getFile(shaderRequest, shaderDelegate, shaderContext);
         		
                 return true;
             }
@@ -43786,7 +43786,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                         };
                         
                         var indicesContext = new IndicesContext(indicesObject, geometry);
-                        var alreadyProcessedIndices = THREE.GLTFLoaderUtils.getBuffer(indicesObject, indicesDelegate, indicesContext);
+                        var alreadyProcessedIndices = this.loaderUtils.getBuffer(indicesObject, indicesDelegate, indicesContext);
                         /*if(alreadyProcessedIndices) {
                             indicesDelegate.resourceAvailable(alreadyProcessedIndices, indicesContext);
                         }*/
@@ -43827,7 +43827,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                             
                             var attribContext = new VertexAttributeContext(attributeObject, semantic, geometry);
 
-                            var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(attributeObject, vertexAttributeDelegate, attribContext);
+                            var alreadyProcessedAttribute = this.loaderUtils.getBuffer(attributeObject, vertexAttributeDelegate, attribContext);
                             /*if(alreadyProcessedAttribute) {
                                 vertexAttributeDelegate.resourceAvailable(alreadyProcessedAttribute, attribContext);
                             }*/
@@ -44336,7 +44336,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                     
                     var paramContext = new AnimationParameterContext(paramObject, animation);
 
-                    var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(paramObject, animationParameterDelegate, paramContext);
+                    var alreadyProcessedAttribute = this.loaderUtils.getBuffer(paramObject, animationParameterDelegate, paramContext);
                     /*if(alreadyProcessedAttribute) {
                         vertexAttributeDelegate.resourceAvailable(alreadyProcessedAttribute, attribContext);
                     }*/
@@ -44387,7 +44387,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
                 
 	            var context = new InverseBindMatricesContext(paramObject, skin);
 
-                var alreadyProcessedAttribute = THREE.GLTFLoaderUtils.getBuffer(paramObject, inverseBindMatricesDelegate, context);
+                var alreadyProcessedAttribute = this.loaderUtils.getBuffer(paramObject, inverseBindMatricesDelegate, context);
 
 	            var bufferView = this.resources.getEntry(skin.inverseBindMatricesDescription.bufferView);
 	            skin.inverseBindMatricesDescription.bufferView = 
@@ -44450,15 +44450,16 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
     var self = this;
     
     var loader = Object.create(ThreeGLTFLoader);
+    this.loader = loader;
+    this.callback = callback;
+    this.rootObj = rootObj;
+
     loader.initWithPath(url);
     loader.load(new Context(rootObj, 
     					function(obj) {
     					}), 
     			null);
 
-    this.loader = loader;
-    this.callback = callback;
-    this.rootObj = rootObj;
     return rootObj;
 }
 
@@ -44473,6 +44474,7 @@ THREE.glTFLoader.prototype.callLoadedCallback = function() {
 }
 
 THREE.glTFLoader.prototype.checkComplete = function() {
+
 	if (this.meshesLoaded == this.meshesRequested 
 			&& this.shadersLoaded == this.shadersRequested
 			&& this.animationsLoaded == this.animationsRequested)
@@ -44501,7 +44503,8 @@ THREE.glTFLoader.prototype.checkComplete = function() {
  * @author Tony Parisi / http://www.tonyparisi.com/
  */
 
-THREE.GLTFLoaderUtils = Object.create(Object, {
+THREE.GLTFLoaderUtils = function() {
+  var utils = Object.create(Object, {
 
     // errors
     MISSING_DESCRIPTION: { value: "MISSING_DESCRIPTION" },
@@ -44621,6 +44624,7 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             processResourceDelegate.streamAvailable = function(path, res_) {
             	var streamStatus = self._streamsStatus[path];
             	var requests = streamStatus.requests;
+//            	console.log("Stream available: ", path, requests.length);
                 requests.forEach( function(req_) {
                     var subArray = res_.slice(req_.range[0], req_.range[1]);
                     var convertedResource = req_.delegate.convert(subArray, req_.ctx);
@@ -44716,7 +44720,11 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             return null;
 	    }
 	},    
-});
+  });
+  
+  utils.init();
+  return utils;
+}
 /**
  * @author Tony Parisi / http://www.tonyparisi.com/
  */
@@ -51815,7 +51823,7 @@ Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
 	this.dispatchEvent("loaded", result);
 }
 
-Vizi.Loader.prototype.loadScene = function(url)
+Vizi.Loader.prototype.loadScene = function(url, userData)
 {
 	var spliturl = url.split('.');
 	var len = spliturl.length;
@@ -51857,7 +51865,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 		
 		loader.load(url, 
 				function (data) {
-					that.handleSceneLoaded(url, data);
+					that.handleSceneLoaded(url, data, userData);
 				},
 				function (data) {
 					that.handleSceneProgress(url, data);
@@ -51887,17 +51895,21 @@ Vizi.Loader.prototype.traverseCallback = function(n, result)
 	}
 }
 
-Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
+Vizi.Loader.prototype.handleSceneLoaded = function(url, data, userData)
 {
 	var result = {};
 	var success = false;
 	
 	if (data.scene)
 	{
+		console.log("In loaded callback for ", url);
+		
 		var convertedScene = this.convertScene(data.scene);
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
 		result.cameras = convertedScene.findNodes(Vizi.Camera);
 		result.lights = convertedScene.findNodes(Vizi.Light);
+		result.url = url;
+		result.userData = userData;
 		success = true;
 	}
 	
@@ -52975,8 +52987,8 @@ Vizi.SpotLight.prototype.updateShadows = function()
 		this.object.shadowBias = 0.0001;
 		this.object.shadowDarkness = this.shadowDarkness;
 
-		this.object.shadowMapWidth = 2048;
-		this.object.shadowMapHeight = 2048;
+		this.object.shadowMapWidth = 1024;
+		this.object.shadowMapHeight = 1024;
 		
 		Vizi.Graphics.instance.enableShadows(true);
 	}	

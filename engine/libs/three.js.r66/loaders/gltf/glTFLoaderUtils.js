@@ -2,7 +2,8 @@
  * @author Tony Parisi / http://www.tonyparisi.com/
  */
 
-THREE.GLTFLoaderUtils = Object.create(Object, {
+THREE.GLTFLoaderUtils = function() {
+  var utils = Object.create(Object, {
 
     // errors
     MISSING_DESCRIPTION: { value: "MISSING_DESCRIPTION" },
@@ -122,6 +123,7 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             processResourceDelegate.streamAvailable = function(path, res_) {
             	var streamStatus = self._streamsStatus[path];
             	var requests = streamStatus.requests;
+//            	console.log("Stream available: ", path, requests.length);
                 requests.forEach( function(req_) {
                     var subArray = res_.slice(req_.range[0], req_.range[1]);
                     var convertedResource = req_.delegate.convert(subArray, req_.ctx);
@@ -217,4 +219,8 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             return null;
 	    }
 	},    
-});
+  });
+  
+  utils.init();
+  return utils;
+}

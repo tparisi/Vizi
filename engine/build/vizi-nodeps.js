@@ -6809,7 +6809,7 @@ Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
 	this.dispatchEvent("loaded", result);
 }
 
-Vizi.Loader.prototype.loadScene = function(url)
+Vizi.Loader.prototype.loadScene = function(url, userData)
 {
 	var spliturl = url.split('.');
 	var len = spliturl.length;
@@ -6851,7 +6851,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 		
 		loader.load(url, 
 				function (data) {
-					that.handleSceneLoaded(url, data);
+					that.handleSceneLoaded(url, data, userData);
 				},
 				function (data) {
 					that.handleSceneProgress(url, data);
@@ -6881,17 +6881,21 @@ Vizi.Loader.prototype.traverseCallback = function(n, result)
 	}
 }
 
-Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
+Vizi.Loader.prototype.handleSceneLoaded = function(url, data, userData)
 {
 	var result = {};
 	var success = false;
 	
 	if (data.scene)
 	{
+		console.log("In loaded callback for ", url);
+		
 		var convertedScene = this.convertScene(data.scene);
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
 		result.cameras = convertedScene.findNodes(Vizi.Camera);
 		result.lights = convertedScene.findNodes(Vizi.Light);
+		result.url = url;
+		result.userData = userData;
 		success = true;
 	}
 	
@@ -7969,8 +7973,8 @@ Vizi.SpotLight.prototype.updateShadows = function()
 		this.object.shadowBias = 0.0001;
 		this.object.shadowDarkness = this.shadowDarkness;
 
-		this.object.shadowMapWidth = 2048;
-		this.object.shadowMapHeight = 2048;
+		this.object.shadowMapWidth = 1024;
+		this.object.shadowMapHeight = 1024;
 		
 		Vizi.Graphics.instance.enableShadows(true);
 	}	

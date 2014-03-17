@@ -105,8 +105,8 @@ Vizi.SpotLight.prototype.updateShadows = function()
 		this.object.shadowBias = 0.0001;
 		this.object.shadowDarkness = this.shadowDarkness;
 
-		this.object.shadowMapWidth = 2048;
-		this.object.shadowMapHeight = 2048;
+		this.object.shadowMapWidth = 1024;
+		this.object.shadowMapHeight = 1024;
 		
 		Vizi.Graphics.instance.enableShadows(true);
 	}	

@@ -73,7 +73,7 @@ Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
 	this.dispatchEvent("loaded", result);
 }
 
-Vizi.Loader.prototype.loadScene = function(url)
+Vizi.Loader.prototype.loadScene = function(url, userData)
 {
 	var spliturl = url.split('.');
 	var len = spliturl.length;
@@ -115,7 +115,7 @@ Vizi.Loader.prototype.loadScene = function(url)
 		
 		loader.load(url, 
 				function (data) {
-					that.handleSceneLoaded(url, data);
+					that.handleSceneLoaded(url, data, userData);
 				},
 				function (data) {
 					that.handleSceneProgress(url, data);
@@ -145,17 +145,21 @@ Vizi.Loader.prototype.traverseCallback = function(n, result)
 	}
 }
 
-Vizi.Loader.prototype.handleSceneLoaded = function(url, data)
+Vizi.Loader.prototype.handleSceneLoaded = function(url, data, userData)
 {
 	var result = {};
 	var success = false;
 	
 	if (data.scene)
 	{
+		console.log("In loaded callback for ", url);
+		
 		var convertedScene = this.convertScene(data.scene);
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
 		result.cameras = convertedScene.findNodes(Vizi.Camera);
 		result.lights = convertedScene.findNodes(Vizi.Light);
+		result.url = url;
+		result.userData = userData;
 		success = true;
 	}
 	
