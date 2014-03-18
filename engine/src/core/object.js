@@ -37,7 +37,13 @@ Vizi.Object = function(param) {
      * @private
      */
     this._components = [];
-    
+
+    /**
+     * @type {String}
+     * @public
+     */
+    this.name = "";
+ 
     
     /**
      * @type {Boolean}

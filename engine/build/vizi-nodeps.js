@@ -1791,7 +1791,13 @@ Vizi.Object = function(param) {
      * @private
      */
     this._components = [];
-    
+
+    /**
+     * @type {String}
+     * @public
+     */
+    this.name = "";
+ 
     
     /**
      * @type {Boolean}
@@ -6754,7 +6760,7 @@ Vizi.Loader = function()
 
 goog.inherits(Vizi.Loader, Vizi.EventDispatcher);
         
-Vizi.Loader.prototype.loadModel = function(url)
+Vizi.Loader.prototype.loadModel = function(url, userData)
 {
 	var spliturl = url.split('.');
 	var len = spliturl.length;
@@ -6789,12 +6795,12 @@ Vizi.Loader.prototype.loadModel = function(url)
 		var that = this;
 		
 		loader.load(url, function (geometry, materials) {
-			that.handleModelLoaded(url, geometry, materials);
+			that.handleModelLoaded(url, userData, geometry, materials);
 		});		
 	}
 }
 
-Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
+Vizi.Loader.prototype.handleModelLoaded = function(url, userData, geometry, materials)
 {
 	// Create a new mesh with per-face materials
 	var material = new THREE.MeshFaceMaterial(materials);
@@ -6804,7 +6810,7 @@ Vizi.Loader.prototype.handleModelLoaded = function(url, geometry, materials)
 	var visual = new Vizi.Visual({object:mesh});
 	obj.addComponent(visual);
 
-	var result = { scene : obj, cameras: [], lights: [], keyFrameAnimators:[] };
+	var result = { scene : obj, cameras: [], lights: [], keyFrameAnimators:[] , userData: userData };
 	
 	this.dispatchEvent("loaded", result);
 }
@@ -6835,7 +6841,7 @@ Vizi.Loader.prototype.loadScene = function(url, userData)
 			loaderClass = THREE.ColladaLoader;
 			break;
 		case 'JS' :
-			return this.loadModel(url);
+			return this.loadModel(url, userData);
 			break;
 		case 'JSON' :
 			loaderClass = THREE.glTFLoader;
