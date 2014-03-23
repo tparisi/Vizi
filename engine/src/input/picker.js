@@ -17,8 +17,7 @@ Vizi.Picker = function(param) {
 
 goog.inherits(Vizi.Picker, Vizi.Component);
 
-Vizi.Picker.prototype._componentProperty = "picker";
-Vizi.Picker.prototype._componentPropertyType = "Picker";
+Vizi.Picker.prototype._componentCategory = "pickers";
 
 Vizi.Picker.prototype.realize = function()
 {

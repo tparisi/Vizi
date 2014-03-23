@@ -8,9 +8,15 @@ goog.provide('Vizi.PickManager');
 
 Vizi.PickManager.handleMouseMove = function(event)
 {
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseMove)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseMove(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseMove) {
+    			pickers[i].onMouseMove(event);
+    		}
+    	}
     }
     else
     {
@@ -22,26 +28,33 @@ Vizi.PickManager.handleMouseMove = function(event)
     		if (oldObj)
     		{
     			Vizi.Graphics.instance.setCursor(null);
-    			
-    			if (oldObj.onMouseOut)
-                {
-    				event.type = "mouseout";
-                    oldObj.onMouseOut(event);
-                }
+
+    			event.type = "mouseout";
+    	    	var pickers = oldObj.pickers;
+    	    	var i, len = pickers.length;
+    	    	for (i = 0; i < len; i++) {
+    	    		if (pickers[i].enabled && pickers[i].onMouseOut) {
+    	    			pickers[i].onMouseOut(event);
+    	    		}
+    	    	}
     		}
 
             if (Vizi.PickManager.overObject)
             {            	
-	        	if (Vizi.PickManager.overObject.overCursor)
-	        	{
-	        		Vizi.Graphics.instance.setCursor(Vizi.PickManager.overObject.overCursor);
-	        	}
-	        	
-	        	if (Vizi.PickManager.overObject.onMouseOver)
-	        	{
-	        		event.type = "mouseover";
-	        		Vizi.PickManager.overObject.onMouseOver(event);
-	        	}
+        		event.type = "mouseover";
+    	    	var pickers = Vizi.PickManager.overObject.pickers;
+    	    	var i, len = pickers.length;
+    	    	for (i = 0; i < len; i++) {
+    	    		
+    	    		if (pickers[i].enabled && pickers[i].overCursor) {
+    	        		Vizi.Graphics.instance.setCursor(pickers[i].overCursor);
+    	    		}
+    	    		
+    	        	if (pickers[i].enabled && pickers[i].onMouseOver) {
+    	        		pickers[i].onMouseOver(event);
+    	        	}
+    	    	}
+
             }
         }
     }
@@ -50,17 +63,29 @@ Vizi.PickManager.handleMouseMove = function(event)
 Vizi.PickManager.handleMouseDown = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDown)
+    if (Vizi.PickManager.clickedObject)
     {
-        Vizi.PickManager.clickedObject.onMouseDown(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseDown) {
+    			pickers[i].onMouseDown(event);
+    		}
+    	}
     }
 }
 
 Vizi.PickManager.handleMouseUp = function(event)
 {
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseUp)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseUp(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseUp) {
+    			pickers[i].onMouseUp(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -70,9 +95,15 @@ Vizi.PickManager.handleMouseClick = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseClick)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseClick(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseClick) {
+    			pickers[i].onMouseClick(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -82,9 +113,15 @@ Vizi.PickManager.handleMouseDoubleClick = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDoubleClick)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseDoubleClick(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseDoubleClick) {
+    			pickers[i].onMouseDoubleClick(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -92,9 +129,15 @@ Vizi.PickManager.handleMouseDoubleClick = function(event)
 
 Vizi.PickManager.handleMouseScroll = function(event)
 {
-    if (Vizi.PickManager.overObject && Vizi.PickManager.overObject.onMouseScroll)
+    if (Vizi.PickManager.overObject)
     {
-        Vizi.PickManager.overObject.onMouseScroll(event);
+    	var pickers = Vizi.PickManager.overObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseScroll) {
+    			pickers[i].onMouseScroll(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -112,9 +155,15 @@ Vizi.PickManager.handleTouchStart = function(event)
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
-	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchStart)
+	    if (Vizi.PickManager.clickedObject)
 	    {
-	        Vizi.PickManager.clickedObject.onTouchStart(event);
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchStart) {
+	    			pickers[i].onTouchStart(event);
+	    		}
+	    	}
 	    }
 	}
 }
@@ -131,8 +180,14 @@ Vizi.PickManager.handleTouchMove = function(event)
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 
-		if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchMove) {
-			Vizi.PickManager.clickedObject.onTouchMove(event);
+		if (Vizi.PickManager.clickedObject) {
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchMove) {
+	    			pickers[i].onTouchMove(event);
+	    		}
+	    	}
 	    }
 	}
 }
@@ -148,9 +203,15 @@ Vizi.PickManager.handleTouchEnd = function(event)
 		event.pageY = event.changedTouches[0].pageY;
 		event.elementX = event.changedTouches[0].elementX;
 		event.elementY = event.changedTouches[0].elementY;
-	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
+	    if (Vizi.PickManager.clickedObject)
 	    {
-			Vizi.PickManager.clickedObject.onTouchEnd(event);
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchEnd) {
+	    			pickers[i].onTouchEnd(event);
+	    		}
+	    	}
 	    }
 	    
 	    Vizi.PickManager.clickedObject = null;
@@ -167,14 +228,18 @@ Vizi.PickManager.objectFromMouse = function(event)
 		event.point = intersected.point;
 		event.object = intersected.object;
 		
-    	if (intersected.object._object.picker && intersected.object._object.picker.enabled)
+    	if (intersected.object._object.pickers)
     	{
-    		return intersected.object._object.picker;
+    		var pickers = intersected.object._object.pickers;
+    		var i, len = pickers.length;
+    		for (i = 0; i < len; i++) {
+    			if (pickers[i].enabled) { // just need one :-)
+    				return intersected.object._object;
+    			}
+    		}
     	}
-    	else
-    	{
-    		return Vizi.PickManager.findObjectPicker(intersected.object.object);
-    	}
+
+		return Vizi.PickManager.findObjectPicker(intersected.object.object);
 	}
 	else
 	{
@@ -182,18 +247,20 @@ Vizi.PickManager.objectFromMouse = function(event)
 	}
 }
 
-Vizi.PickManager.findObjectPicker = function(object)
-{
-	while (object)
-	{
-		if (object.data && object.data._object.picker && object.data._object.picker.enabled)
-		{
-			return object.data._object.picker;
+Vizi.PickManager.findObjectPicker = function(object) {
+	while (object) {
+		
+		if (object.data && object.data._object.pickers) {
+    		var pickers = object.data._object.pickers;
+    		var i, len = pickers.length;
+    		for (i = 0; i < len; i++) {
+    			if (pickers[i].enabled) { // just need one :-)
+    				return object.data._object;
+    			}
+    		}
 		}
-		else
-		{
-			object = object.parent;
-		}
+
+		object = object.parent;
 	}
 	
 	return null;

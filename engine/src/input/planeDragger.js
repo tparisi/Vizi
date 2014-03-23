@@ -101,7 +101,7 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	if (intersection)
 	{
 		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
-		this.dragStartPoint.copy(event.object.transform.position);
+		this.dragStartPoint.copy(event.object.position);
 		this.dragObject = event.object;
 	}
 }

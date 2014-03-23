@@ -47537,8 +47537,7 @@ Vizi.Picker = function(param) {
 
 goog.inherits(Vizi.Picker, Vizi.Component);
 
-Vizi.Picker.prototype._componentProperty = "picker";
-Vizi.Picker.prototype._componentPropertyType = "Picker";
+Vizi.Picker.prototype._componentCategory = "pickers";
 
 Vizi.Picker.prototype.realize = function()
 {
@@ -48394,7 +48393,7 @@ Vizi.CylinderDragger = function(param) {
     
     this.normal = param.normal || new THREE.Vector3(0, 1, 0);
     this.position = param.position || new THREE.Vector3;
-    this.color = 0x888888;
+    this.color = 0x0000aa;
 }
 
 goog.inherits(Vizi.CylinderDragger, Vizi.Picker);
@@ -48409,9 +48408,23 @@ Vizi.CylinderDragger.prototype.realize = function()
 	this.dragPlane = new THREE.Plane(this.normal);
 }
 
-
 Vizi.CylinderDragger.prototype.update = function()
 {
+}
+
+Vizi.CylinderDragger.prototype.createDragCylinder = function() {
+
+	var height = 2000;
+	var radialSegments = 32;
+	var normal = this.normal;
+	
+	var radius = this.dragStartPoint.length();
+	var geom = new THREE.CylinderGeometry(radius, radius, height, radialSegments);
+	var mat = new THREE.MeshBasicMaterial({color:this.color, transparent: true, side:THREE.DoubleSide, opacity:0.2 });
+
+	var mesh = new THREE.Mesh(geom, mat);
+	
+	return mesh;
 }
 
 Vizi.CylinderDragger.prototype.onMouseDown = function(event)
@@ -48420,33 +48433,50 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event)
 	
 	var hitpoint = event.point.clone();
 	this.lastHitPoint = event.point.clone();
-	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
+	this.dragCylinder = this.createDragCylinder();
+	this.dragStartPoint.normalize();
+	this.dragCylinder.position.copy(this._object.transform.position);
+	this._object._parent.transform.object.add(this.dragCylinder);
+	this.dragCylinder.ignorePick = true;
+	this.dragCylinder.visible = false;
 }
 
 Vizi.CylinderDragger.prototype.onMouseMove = function(event)
 {
 	Vizi.Picker.prototype.onMouseMove.call(this, event);
+
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
-	if (event.point)
-		this.lastHitPoint = event.point.clone();
-	var hitpoint = event.point ? event.point.clone() : this.lastHitPoint.clone();
-	
-	var projectedPoint = this.dragPlane.projectPoint(hitpoint).normalize();
-	var theta = Math.acos(this.dragStartPoint.dot(projectedPoint));
-	var cross = this.dragStartPoint.clone().cross(projectedPoint);
-	if (this.normal.dot(cross) > 0)
-		theta = -theta;
-	
-	this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
+	if (intersection) {
+		if (intersection.point)
+			this.lastHitPoint = intersection.point.clone();
+		var hitpoint = intersection.point ? intersection.point.clone() : this.lastHitPoint.clone();
 		
-	this.dispatchEvent("drag", {
-			type : "drag", 
-			offset : this.dragOffset,
-		}
-	);
+		var projectedPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+		var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
+		var cross = projectedPoint.clone().cross(this.dragStartPoint);
+		if (this.normal.dot(cross) > 0)
+			theta = -theta;
+		
+		console.log("theta: ", theta);
+		
+		this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
+			
+		this.dispatchEvent("drag", {
+				type : "drag", 
+				offset : this.dragOffset,
+			}
+		);
+	}
 }
 
-
+Vizi.CylinderDragger.prototype.onMouseUp = function(event)
+{
+	Vizi.Picker.prototype.onMouseUp.call(this, event);
+	
+	this._object._parent.transform.object.remove(this.dragCylinder);
+}
 
 /**
  * @fileoverview Main interface to the graphics and rendering subsystem
@@ -48538,9 +48568,15 @@ goog.provide('Vizi.PickManager');
 
 Vizi.PickManager.handleMouseMove = function(event)
 {
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseMove)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseMove(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseMove) {
+    			pickers[i].onMouseMove(event);
+    		}
+    	}
     }
     else
     {
@@ -48552,26 +48588,33 @@ Vizi.PickManager.handleMouseMove = function(event)
     		if (oldObj)
     		{
     			Vizi.Graphics.instance.setCursor(null);
-    			
-    			if (oldObj.onMouseOut)
-                {
-    				event.type = "mouseout";
-                    oldObj.onMouseOut(event);
-                }
+
+    			event.type = "mouseout";
+    	    	var pickers = oldObj.pickers;
+    	    	var i, len = pickers.length;
+    	    	for (i = 0; i < len; i++) {
+    	    		if (pickers[i].enabled && pickers[i].onMouseOut) {
+    	    			pickers[i].onMouseOut(event);
+    	    		}
+    	    	}
     		}
 
             if (Vizi.PickManager.overObject)
             {            	
-	        	if (Vizi.PickManager.overObject.overCursor)
-	        	{
-	        		Vizi.Graphics.instance.setCursor(Vizi.PickManager.overObject.overCursor);
-	        	}
-	        	
-	        	if (Vizi.PickManager.overObject.onMouseOver)
-	        	{
-	        		event.type = "mouseover";
-	        		Vizi.PickManager.overObject.onMouseOver(event);
-	        	}
+        		event.type = "mouseover";
+    	    	var pickers = Vizi.PickManager.overObject.pickers;
+    	    	var i, len = pickers.length;
+    	    	for (i = 0; i < len; i++) {
+    	    		
+    	    		if (pickers[i].enabled && pickers[i].overCursor) {
+    	        		Vizi.Graphics.instance.setCursor(pickers[i].overCursor);
+    	    		}
+    	    		
+    	        	if (pickers[i].enabled && pickers[i].onMouseOver) {
+    	        		pickers[i].onMouseOver(event);
+    	        	}
+    	    	}
+
             }
         }
     }
@@ -48580,17 +48623,29 @@ Vizi.PickManager.handleMouseMove = function(event)
 Vizi.PickManager.handleMouseDown = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDown)
+    if (Vizi.PickManager.clickedObject)
     {
-        Vizi.PickManager.clickedObject.onMouseDown(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseDown) {
+    			pickers[i].onMouseDown(event);
+    		}
+    	}
     }
 }
 
 Vizi.PickManager.handleMouseUp = function(event)
 {
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseUp)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseUp(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseUp) {
+    			pickers[i].onMouseUp(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -48600,9 +48655,15 @@ Vizi.PickManager.handleMouseClick = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseClick)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseClick(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseClick) {
+    			pickers[i].onMouseClick(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -48612,9 +48673,15 @@ Vizi.PickManager.handleMouseDoubleClick = function(event)
 {
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
-    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onMouseDoubleClick)
+    if (Vizi.PickManager.clickedObject)
     {
-		Vizi.PickManager.clickedObject.onMouseDoubleClick(event);
+    	var pickers = Vizi.PickManager.clickedObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseDoubleClick) {
+    			pickers[i].onMouseDoubleClick(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -48622,9 +48689,15 @@ Vizi.PickManager.handleMouseDoubleClick = function(event)
 
 Vizi.PickManager.handleMouseScroll = function(event)
 {
-    if (Vizi.PickManager.overObject && Vizi.PickManager.overObject.onMouseScroll)
+    if (Vizi.PickManager.overObject)
     {
-        Vizi.PickManager.overObject.onMouseScroll(event);
+    	var pickers = Vizi.PickManager.overObject.pickers;
+    	var i, len = pickers.length;
+    	for (i = 0; i < len; i++) {
+    		if (pickers[i].enabled && pickers[i].onMouseScroll) {
+    			pickers[i].onMouseScroll(event);
+    		}
+    	}
     }
 
     Vizi.PickManager.clickedObject = null;
@@ -48642,9 +48715,15 @@ Vizi.PickManager.handleTouchStart = function(event)
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 	    Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
-	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchStart)
+	    if (Vizi.PickManager.clickedObject)
 	    {
-	        Vizi.PickManager.clickedObject.onTouchStart(event);
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchStart) {
+	    			pickers[i].onTouchStart(event);
+	    		}
+	    	}
 	    }
 	}
 }
@@ -48661,8 +48740,14 @@ Vizi.PickManager.handleTouchMove = function(event)
 		event.elementX = event.touches[0].elementX;
 		event.elementY = event.touches[0].elementY;
 
-		if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchMove) {
-			Vizi.PickManager.clickedObject.onTouchMove(event);
+		if (Vizi.PickManager.clickedObject) {
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchMove) {
+	    			pickers[i].onTouchMove(event);
+	    		}
+	    	}
 	    }
 	}
 }
@@ -48678,9 +48763,15 @@ Vizi.PickManager.handleTouchEnd = function(event)
 		event.pageY = event.changedTouches[0].pageY;
 		event.elementX = event.changedTouches[0].elementX;
 		event.elementY = event.changedTouches[0].elementY;
-	    if (Vizi.PickManager.clickedObject && Vizi.PickManager.clickedObject.onTouchEnd)
+	    if (Vizi.PickManager.clickedObject)
 	    {
-			Vizi.PickManager.clickedObject.onTouchEnd(event);
+	    	var pickers = Vizi.PickManager.clickedObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		if (pickers[i].enabled && pickers[i].onTouchEnd) {
+	    			pickers[i].onTouchEnd(event);
+	    		}
+	    	}
 	    }
 	    
 	    Vizi.PickManager.clickedObject = null;
@@ -48697,14 +48788,18 @@ Vizi.PickManager.objectFromMouse = function(event)
 		event.point = intersected.point;
 		event.object = intersected.object;
 		
-    	if (intersected.object._object.picker && intersected.object._object.picker.enabled)
+    	if (intersected.object._object.pickers)
     	{
-    		return intersected.object._object.picker;
+    		var pickers = intersected.object._object.pickers;
+    		var i, len = pickers.length;
+    		for (i = 0; i < len; i++) {
+    			if (pickers[i].enabled) { // just need one :-)
+    				return intersected.object._object;
+    			}
+    		}
     	}
-    	else
-    	{
-    		return Vizi.PickManager.findObjectPicker(intersected.object.object);
-    	}
+
+		return Vizi.PickManager.findObjectPicker(intersected.object.object);
 	}
 	else
 	{
@@ -48712,18 +48807,20 @@ Vizi.PickManager.objectFromMouse = function(event)
 	}
 }
 
-Vizi.PickManager.findObjectPicker = function(object)
-{
-	while (object)
-	{
-		if (object.data && object.data._object.picker && object.data._object.picker.enabled)
-		{
-			return object.data._object.picker;
+Vizi.PickManager.findObjectPicker = function(object) {
+	while (object) {
+		
+		if (object.data && object.data._object.pickers) {
+    		var pickers = object.data._object.pickers;
+    		var i, len = pickers.length;
+    		for (i = 0; i < len; i++) {
+    			if (pickers[i].enabled) { // just need one :-)
+    				return object.data._object;
+    			}
+    		}
 		}
-		else
-		{
-			object = object.parent;
-		}
+
+		object = object.parent;
 	}
 	
 	return null;
@@ -52261,7 +52358,7 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	if (intersection)
 	{
 		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
-		this.dragStartPoint.copy(event.object.transform.position);
+		this.dragStartPoint.copy(event.object.position);
 		this.dragObject = event.object;
 	}
 }
