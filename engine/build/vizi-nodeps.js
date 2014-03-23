@@ -7111,6 +7111,9 @@ Vizi.PlaneDragger.prototype.createDragPlane = function() {
 	var position = this.position;
 	
 	var u = new THREE.Vector3(0, normal.z, -normal.y).normalize().multiplyScalar(size);
+	if (!u.lengthSq())
+		u = new THREE.Vector3(-normal.z, normal.x, 0).normalize().multiplyScalar(size);
+
 	var v = u.clone().cross(normal).normalize().multiplyScalar(size);
 	
 	var p1 = position.clone().sub(u).sub(v);
