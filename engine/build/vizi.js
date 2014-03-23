@@ -48420,19 +48420,23 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event)
 	
 	var hitpoint = event.point.clone();
 	this.lastHitPoint = event.point.clone();
-	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
+	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
 }
 
 Vizi.CylinderDragger.prototype.onMouseMove = function(event)
 {
 	Vizi.Picker.prototype.onMouseMove.call(this, event);
 	
-	var hitpoint = event.point ? event.point.clone() : this.lastHitPoint;
 	if (event.point)
 		this.lastHitPoint = event.point.clone();
+	var hitpoint = event.point ? event.point.clone() : this.lastHitPoint.clone();
 	
-	var projectedPoint = this.dragPlane.projectPoint(hitpoint);
-	var theta = Math.acos(hitpoint.dot(projectedPoint));
+	var projectedPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+	var theta = Math.acos(this.dragStartPoint.dot(projectedPoint));
+	var cross = this.dragStartPoint.clone().cross(projectedPoint);
+	if (this.normal.dot(cross) > 0)
+		theta = -theta;
+	
 	this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
 		
 	this.dispatchEvent("drag", {
