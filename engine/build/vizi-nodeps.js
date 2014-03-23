@@ -3364,6 +3364,73 @@ Vizi.SceneVisual.prototype.realize = function()
     this.addToScene();
 }
 /**
+ * @fileoverview Picker component - add one to get picking support on your object
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.CylinderDragger');
+goog.require('Vizi.Picker');
+
+Vizi.CylinderDragger = function(param) {
+	
+	param = param || {};
+	
+    Vizi.Picker.call(this, param);
+    
+    this.normal = param.normal || new THREE.Vector3(0, 1, 0);
+    this.position = param.position || new THREE.Vector3;
+    this.color = 0x888888;
+}
+
+goog.inherits(Vizi.CylinderDragger, Vizi.Picker);
+
+Vizi.CylinderDragger.prototype.realize = function()
+{
+	Vizi.Picker.prototype.realize.call(this);
+
+    // And some helpers
+	this.dragOffset = new THREE.Euler;
+	this.dragStartPoint = new THREE.Vector3;
+	this.dragPlane = new THREE.Plane(this.normal);
+}
+
+
+Vizi.CylinderDragger.prototype.update = function()
+{
+}
+
+Vizi.CylinderDragger.prototype.onMouseDown = function(event)
+{
+	Vizi.Picker.prototype.onMouseDown.call(this, event);
+	
+	var hitpoint = event.point.clone();
+	this.lastHitPoint = event.point.clone();
+	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
+}
+
+Vizi.CylinderDragger.prototype.onMouseMove = function(event)
+{
+	Vizi.Picker.prototype.onMouseMove.call(this, event);
+	
+	var hitpoint = event.point ? event.point.clone() : this.lastHitPoint;
+	if (event.point)
+		this.lastHitPoint = event.point.clone();
+	
+	var projectedPoint = this.dragPlane.projectPoint(hitpoint);
+	var theta = Math.acos(hitpoint.dot(projectedPoint));
+	this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
+		
+	this.dispatchEvent("drag", {
+			type : "drag", 
+			offset : this.dragOffset,
+		}
+	);
+}
+
+
+
+/**
  * @fileoverview Main interface to the graphics and rendering subsystem
  * 
  * @author Tony Parisi
@@ -5008,7 +5075,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey };
 	
     Vizi.Mouse.instance.onMouseMove(evt);
     
@@ -5031,7 +5099,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var elty = event.pageY - offset.top;
 		
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
 	
     Vizi.Mouse.instance.onMouseDown(evt);
     
@@ -5054,7 +5123,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseUp(evt);
     
@@ -5077,7 +5147,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseClick(evt);
     
@@ -5103,7 +5174,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseDoubleClick(evt);
     
@@ -8096,6 +8168,7 @@ goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');
 goog.require('Vizi.Picker');
 goog.require('Vizi.PickManager');
+goog.require('Vizi.CylinderDragger');
 goog.require('Vizi.PlaneDragger');
 goog.require('Vizi.SurfaceDragger');
 goog.require('Vizi.Light');

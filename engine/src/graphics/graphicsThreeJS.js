@@ -378,7 +378,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseMove = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey };
 	
     Vizi.Mouse.instance.onMouseMove(evt);
     
@@ -401,7 +402,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDown = function(event)
 	var elty = event.pageY - offset.top;
 		
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
 	
     Vizi.Mouse.instance.onMouseDown(evt);
     
@@ -424,7 +426,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseUp = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseUp(evt);
     
@@ -447,7 +450,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseClick = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseClick(evt);
     
@@ -473,7 +477,8 @@ Vizi.GraphicsThreeJS.prototype.onDocumentMouseDoubleClick = function(event)
 	var elty = event.pageY - offset.top;
 	
 	var evt = { type : event.type, pageX : event.pageX, pageY : event.pageY, 
-	    	elementX : eltx, elementY : elty, button:event.button };
+	    	elementX : eltx, elementY : elty, button:event.button, altKey:event.altKey,
+	    	ctrlKey:event.ctrlKey, shiftKey:event.shiftKey  };
     
     Vizi.Mouse.instance.onMouseDoubleClick(evt);
     
