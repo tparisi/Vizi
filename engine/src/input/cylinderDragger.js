@@ -57,15 +57,25 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event) {
 Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	
 	var hitpoint = event.point.clone();
-	this.lastHitPoint = event.point.clone();
+	var modelMat = new THREE.Matrix4;
+	modelMat.getInverse(this._object.transform.object.matrixWorld);
+	hitpoint.applyMatrix4(modelMat);
+	this.lastHitPoint = hitpoint.clone();
+	
+	//console.log("event.point: ", event.point);
+	
 	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
+	
+	//console.log("dragStartPoint: ", this.dragStartPoint);
+	
 	this.dragCylinder = this.createDragCylinder();
 	this.dragStartPoint.normalize();
 	this._object._parent.transform.object.add(this.dragCylinder);
 	this.dragCylinder.position.copy(this._object.transform.position);
+	this.dragCylinder.scale.copy(this._object.transform.scale);
 	this.dragCylinder.updateMatrixWorld();
 	this.dragCylinder.ignorePick = true;
-	this.dragCylinder.visible = false;
+	//this.dragCylinder.visible = false;
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
