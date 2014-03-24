@@ -75,7 +75,7 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	this.dragCylinder.scale.copy(this._object.transform.scale);
 	this.dragCylinder.updateMatrixWorld();
 	this.dragCylinder.ignorePick = true;
-	//this.dragCylinder.visible = false;
+	this.dragCylinder.visible = false;
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
