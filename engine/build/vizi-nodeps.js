@@ -3419,15 +3419,26 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event) {
 }
 
 Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
+	
 	var hitpoint = event.point.clone();
 	this.lastHitPoint = event.point.clone();
 	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
 	this.dragCylinder = this.createDragCylinder();
 	this.dragStartPoint.normalize();
-	this.dragCylinder.position.copy(this._object.transform.position);
 	this._object._parent.transform.object.add(this.dragCylinder);
+	this.dragCylinder.position.copy(this._object.transform.position);
+	this.dragCylinder.updateMatrixWorld();
 	this.dragCylinder.ignorePick = true;
 	this.dragCylinder.visible = false;
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
+	
+	if (intersection) {
+		if (intersection.point)
+			this.lastHitPoint = intersection.point.clone();
+		var hitpoint = intersection.point ? intersection.point.clone() : this.lastHitPoint.clone();
+		
+		this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+	}
 }
 
 Vizi.CylinderDragger.prototype.onMouseMove = function(event) {
@@ -3439,6 +3450,7 @@ Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
+
 		if (intersection.point)
 			this.lastHitPoint = intersection.point.clone();
 		var hitpoint = intersection.point ? intersection.point.clone() : this.lastHitPoint.clone();
@@ -3448,9 +3460,7 @@ Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
 		var cross = projectedPoint.clone().cross(this.dragStartPoint);
 		if (this.normal.dot(cross) > 0)
 			theta = -theta;
-		
-		console.log("theta: ", theta);
-		
+				
 		this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
 			
 		this.dispatchEvent("drag", {
