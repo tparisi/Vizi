@@ -71,12 +71,15 @@ Vizi.PlaneDragger.prototype.createDragPlane = function() {
 	return mesh;
 }
 
-Vizi.PlaneDragger.prototype.update = function()
-{
+Vizi.PlaneDragger.prototype.update = function() {
 }
 
-Vizi.PlaneDragger.prototype.onMouseMove = function(event)
-{
+Vizi.PlaneDragger.prototype.onMouseMove = function(event) {
+	Vizi.Picker.prototype.onMouseMove.call(this, event);
+	this.handleMouseMove(event);
+}
+
+Vizi.PlaneDragger.prototype.handleMouseMove = function(event) {
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
 	
 	if (intersection)
@@ -92,10 +95,12 @@ Vizi.PlaneDragger.prototype.onMouseMove = function(event)
 	}
 }
 
-Vizi.PlaneDragger.prototype.onMouseDown = function(event)
-{
+Vizi.PlaneDragger.prototype.onMouseDown = function(event) {
 	Vizi.Picker.prototype.onMouseDown.call(this, event);
-	
+	this.handleMouseDown(event);
+}
+
+Vizi.PlaneDragger.prototype.handleMouseDown = function(event) {
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
 	
 	if (intersection)
@@ -106,4 +111,30 @@ Vizi.PlaneDragger.prototype.onMouseDown = function(event)
 	}
 }
 
+Vizi.PlaneDragger.prototype.onMouseUp = function(event) {
+	Vizi.Picker.prototype.onMouseUp.call(this, event);
+	this.handleMouseUp(event);
+}
+
+Vizi.PlaneDragger.prototype.handleMouseUp = function(event) {
+}
+
+
+Vizi.PlaneDragger.prototype.onTouchStart = function(event) {
+	Vizi.Picker.prototype.onTouchStart.call(this, event);
+
+	this.handleMouseDown(event);
+}
+
+Vizi.PlaneDragger.prototype.onTouchMove = function(event) {
+	Vizi.Picker.prototype.onTouchMove.call(this, event);
+
+	this.handleMouseMove(event);
+}
+
+Vizi.PlaneDragger.prototype.onTouchEnd = function(event) {
+	Vizi.Picker.prototype.onTouchEnd.call(this, event);
+
+	this.handleMouseUp(event);
+}
 
