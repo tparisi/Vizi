@@ -52522,6 +52522,7 @@ Vizi.Viewer = function(param)
 	this.sceneStats = { meshCount : 0, faceCount : 0, boundingBox:new THREE.Box3 };
 	
 	// Tuck away prefs based on param
+	this.renderStatsUpdateInterval = (param.renderStatsUpdateInterval !== undefined) ? param.renderStatsUpdateInterval : 1000;
 	this.loopAnimations = (param.loopAnimations !== undefined) ? param.loopAnimations : false;
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.firstPerson = (param.firstPerson !== undefined) ? param.firstPerson : false;
@@ -52596,7 +52597,7 @@ Vizi.Viewer.prototype.initScene = function()
 
 Vizi.Viewer.prototype.runloop = function()
 {
-	var updateInterval = 1000;
+	var updateInterval = this.renderStatsUpdateInterval;
 	
 	Vizi.Application.prototype.runloop.call(this);
 	if (Vizi.Graphics.instance.frameRate)
@@ -52616,10 +52617,16 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 {
 	// hack for now - do this for real after computing scene bounds
 	
-	var i, len = this.scenes.length;
+	var i, len = this.sceneRoot._children.length;
+	var childrenToRemove = [];
 	for (i = 0; i < len; i++)
 	{
-		this.sceneRoot.removeChild(this.scenes[i]);
+		var child = this.sceneRoot._children[i];
+		childrenToRemove.push(child);
+	}
+	
+	for (i = 0; i < len; i++) {
+		this.sceneRoot.removeChild(childrenToRemove[i]);
 	}
 	
 	this.sceneRoot.removeComponent(this.sceneRoot.findNode(Vizi.Decoration));
