@@ -310,7 +310,7 @@
 	}
 	
 	function onRenderStats(stats, renderStats) {
-		renderStats.innerHTML = stats.fps + " FPS";
+		renderStats.innerHTML = stats.fps.toFixed(0) + " FPS";
 	}
 
 	function onSceneStats(stats, sceneStats) {

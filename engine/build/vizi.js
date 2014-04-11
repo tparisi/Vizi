@@ -52606,7 +52606,7 @@ Vizi.Viewer.prototype.runloop = function()
 		var deltat = now - this.lastFPSUpdateTime;
 		if (deltat > updateInterval)
 		{
-			this.renderStats.fps = Vizi.Graphics.instance.frameRate.toFixed(0);
+			this.renderStats.fps = Vizi.Graphics.instance.frameRate;
 			this.dispatchEvent("renderstats", this.renderStats);
 			this.lastFPSUpdateTime = now;
 		}
