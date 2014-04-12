@@ -50789,7 +50789,7 @@ Vizi.Application.prototype.addObject = function(o)
 	}
 }
 
-Vizi.Application.prototype.removeObject = function(oe) {
+Vizi.Application.prototype.removeObject = function(o) {
     var i = this._objects.indexOf(o);
     if (i != -1) {
     	// N.B.: I suppose we could be paranoid and check to see if I actually own this component
