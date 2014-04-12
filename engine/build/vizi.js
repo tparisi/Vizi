@@ -49289,6 +49289,8 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 	this.update = function( delta ) {
 
+		if ( this.enabled === false ) return;
+		
 		this.startY = this.object.position.y;
 		
 		var actualMoveSpeed = delta * this.movementSpeed;
