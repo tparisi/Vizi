@@ -7513,6 +7513,7 @@ Vizi.Viewer = function(param)
 	this.renderStatsUpdateInterval = (param.renderStatsUpdateInterval !== undefined) ? param.renderStatsUpdateInterval : 1000;
 	this.loopAnimations = (param.loopAnimations !== undefined) ? param.loopAnimations : false;
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
+	this.headlightIntensity = param.headlightIntensity || Vizi.Viewer.DEFAULT_HEADLIGHT_INTENSITY;
 	this.firstPerson = (param.firstPerson !== undefined) ? param.firstPerson : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
@@ -7704,12 +7705,12 @@ Vizi.Viewer.prototype.replaceScene = function(data)
 			this.lightColors.push(data.lights[i].color.clone());
 		}
 		
-		this.controllerScript.headlight.intensity = len ? 0 : 1;
+		this.controllerScript.headlight.intensity = len ? 0 : this.headlightIntensity;
 		this.headlightOn = len <= 0;
 	}
 	else
 	{
-		this.controllerScript.headlight.intensity = 1;
+		this.controllerScript.headlight.intensity = this.headlightIntensity;
 		this.headlightOn = true;
 	}
 	
@@ -7790,7 +7791,7 @@ Vizi.Viewer.prototype.addToScene = function(data)
 	}
 	else if (!this.lights.length)
 	{
-		this.controllerScript.headlight.intensity = 1;
+		this.controllerScript.headlight.intensity = this.headlightIntensity;
 		this.headlightOn = true;
 	}
 	
@@ -7952,8 +7953,13 @@ Vizi.Viewer.prototype.setLoopAnimations = function(on)
 
 Vizi.Viewer.prototype.setHeadlightOn = function(on)
 {
-	this.controllerScript.headlight.intensity = on ? 1 : 0;
+	this.controllerScript.headlight.intensity = this.headlightIntensity ? this.headlightIntensity : 0;
 	this.headlightOn = on;
+}
+
+Vizi.Viewer.prototype.setHeadlightIntensity = function(intensity)
+{
+	this.controllerScript.headlight.intensity = intensity;
 }
 
 Vizi.Viewer.prototype.setGridOn = function(on)
@@ -8170,6 +8176,7 @@ Vizi.Viewer.DEFAULT_GRID_SIZE = 100;
 Vizi.Viewer.DEFAULT_GRID_STEP_SIZE = 1;
 Vizi.Viewer.GRID_COLOR = 0x202020;
 Vizi.Viewer.GRID_OPACITY = 0.2;
+Vizi.Viewer.DEFAULT_HEADLIGHT_INTENSITY = 1;
 goog.provide('Vizi.SpotLight');
 goog.require('Vizi.Light');
 

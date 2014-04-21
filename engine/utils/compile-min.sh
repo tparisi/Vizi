@@ -1,13 +1,17 @@
 BUILDDIR=../build
 TARGET="$BUILDDIR/vizi-nodeps.min.js"
 OUTPUT="$BUILDDIR/vizi.min.js"
-THREE=../libs/three.js.r58/three.min.js
-STATS=../libs/three.js.r58/stats.min.js
-LOADERS=../libs/three.js.r59/loaders/ColladaLoader.js
+THREE=../libs/three.js.r66/three.min.js
+STATS=../libs/three.js.r66/stats.min.js
+LOADERS="../libs/three.js.r66/loaders/ColladaLoader.js \
+../libs/three.js.r66/loaders/glTF/glTF-parser.js \
+../libs/three.js.r66/loaders/glTF/glTFLoader.js \
+../libs/three.js.r66/loaders/glTF/glTFLoaderUtils.js \
+../libs/three.js.r66/loaders/glTF/glTFAnimation.js"
 RAF=../libs/requestAnimationFrame/RequestAnimationFrame.js
 MOUSEWHEEL=../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js
 TWEEN=../libs/tween.js/tween.min.js
-LIBS="$THREE $STATS $LOADERS $TWEEN $RAF $MOUSEWHEEL"
+LIBS="$THREE $STATS $LOADERS $TWEEN $RAF"
 NODEPS=../src/config/nodeps.js
 FLAGS='--language_in=ECMASCRIPT5'
 
