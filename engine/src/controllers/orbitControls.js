@@ -40,7 +40,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
-
+	
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
 	this.oneButton = false;

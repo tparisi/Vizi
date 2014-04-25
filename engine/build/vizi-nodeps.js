@@ -4399,7 +4399,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
-
+	
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
 	this.oneButton = false;
@@ -6066,6 +6066,14 @@ Vizi.ModelControllerScript = function(param)
 
 	this.radius = param.radius || Vizi.ModelControllerScript.default_radius;
 	this.minRadius = param.minRadius || Vizi.ModelControllerScript.default_min_radius;
+	this.minAngle = (param.minAngle !== undefined) ? param.minAngle : 
+		Vizi.ModelControllerScript.default_min_angle;
+	this.maxAngle = (param.maxAngle !== undefined) ? param.maxAngle : 
+		Vizi.ModelControllerScript.default_max_angle;
+	this.minDistance = (param.minDistance !== undefined) ? param.minDistance : 
+		Vizi.ModelControllerScript.default_min_distance;
+	this.maxDistance = (param.maxDistance !== undefined) ? param.maxDistance : 
+		Vizi.ModelControllerScript.default_max_distance;
 	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
@@ -6125,6 +6133,10 @@ Vizi.ModelControllerScript.prototype.createControls = function(camera)
 	controls.userMinY = this.minY;
 	controls.userMinZoom = this.minZoom;
 	controls.userMaxZoom = this.maxZoom;
+	controls.minPolarAngle = this.minAngle;
+	controls.maxPolarAngle = this.maxAngle;	
+	controls.minDistance = this.minDistance;	
+	controls.maxDistance = this.maxDistance;	
 	controls.oneButton = this.oneButton;
 	controls.userPan = this.allowPan;
 	controls.userZoom = this.allowZoom;
@@ -6163,6 +6175,10 @@ Vizi.ModelControllerScript.prototype.setEnabled = function(enabled)
 
 Vizi.ModelControllerScript.default_radius = 10;
 Vizi.ModelControllerScript.default_min_radius = 1;
+Vizi.ModelControllerScript.default_min_angle = 0;
+Vizi.ModelControllerScript.default_max_angle = Math.PI;
+Vizi.ModelControllerScript.default_min_distance = 0;
+Vizi.ModelControllerScript.default_max_distance = Infinity;
 Vizi.ModelControllerScript.MAX_X_ROTATION = 0; // Math.PI / 12;
 Vizi.ModelControllerScript.MIN_X_ROTATION = -Math.PI / 2;
 Vizi.ModelControllerScript.MAX_Y_ROTATION = Math.PI * 2;
