@@ -28,7 +28,7 @@ Vizi.Prefabs.Skybox = function(param)
 	} );
 
 	var visual = new Vizi.Visual(
-			{ geometry: new THREE.CubeGeometry( 1, 1, 1 ),
+			{ geometry: new THREE.CubeGeometry( 10000, 10000, 10000 ),
 				material: material,
 			});
 	box.addComponent(visual);
@@ -72,6 +72,7 @@ Vizi.SkyboxScript.prototype.realize = function()
 	this.uniforms = visual.material.uniforms;
 
 	this.camera = Vizi.Graphics.instance.backgroundLayer.camera;
+	this.camera.far = 20000;
 	this.camera.position.set(0, 0, 0);
 }
 
