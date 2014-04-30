@@ -51096,6 +51096,7 @@ Vizi.ModelControllerScript = function(param)
 		Vizi.ModelControllerScript.default_max_distance;
 	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
+	this.allowRotate = (param.allowRotate !== undefined) ? param.allowRotate : true;
 	this.oneButton = (param.oneButton !== undefined) ? param.oneButton : true;
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this._headlightOn = param.headlight;
@@ -51160,6 +51161,7 @@ Vizi.ModelControllerScript.prototype.createControls = function(camera)
 	controls.oneButton = this.oneButton;
 	controls.userPan = this.allowPan;
 	controls.userZoom = this.allowZoom;
+	controls.userRotate = this.allowRotate;
 	
 	return controls;
 }
