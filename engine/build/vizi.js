@@ -49962,12 +49962,12 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 {
 	var antialias = (param.antialias !== undefined) ? param.antialias : true;
 	var alpha = (param.alpha !== undefined) ? param.alpha : true;
-	var devicePixelRatio = (param.devicePixelRatio !== undefined) ? param.devicePixelRatio : 1;
+	//var devicePixelRatio = (param.devicePixelRatio !== undefined) ? param.devicePixelRatio : 1;
 	
     var renderer = // Vizi.Config.USE_WEBGL ?
     	new THREE.WebGLRenderer( { antialias: antialias, 
     		alpha: alpha,
-    		devicePixelRatio : devicePixelRatio } ); // :
+    		/*devicePixelRatio : devicePixelRatio */ } ); // :
     	// new THREE.CanvasRenderer;
     	
     renderer.sortObjects = false;
