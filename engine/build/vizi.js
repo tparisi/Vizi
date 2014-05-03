@@ -48307,6 +48307,86 @@ Vizi.PointLight.prototype.update = function()
 }
 
 Vizi.PointLight.DEFAULT_DISTANCE = 0;
+
+goog.require('Vizi.Prefabs');
+
+Vizi.Prefabs.DeviceOrientationController = function(param)
+{
+	param = param || {};
+	
+	var controller = new Vizi.Object(param);
+	var controllerScript = new Vizi.DeviceOrientationControllerScript(param);
+	controller.addComponent(controllerScript);
+	
+	return controller;
+}
+
+goog.provide('Vizi.DeviceOrientationControllerScript');
+goog.require('Vizi.Script');
+
+Vizi.DeviceOrientationControllerScript = function(param)
+{
+	Vizi.Script.call(this, param);
+
+	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this.roll = (param.roll !== undefined) ? param.roll : true;
+		
+    Object.defineProperties(this, {
+    	camera: {
+			get : function() {
+				return this._camera;
+			},
+			set: function(camera) {
+				this.setCamera(camera);
+			}
+		},
+    	enabled : {
+    		get: function() {
+    			return this._enabled;
+    		},
+    		set: function(v) {
+    			this.setEnabled(v);
+    		}
+    	},
+    });
+}
+
+goog.inherits(Vizi.DeviceOrientationControllerScript, Vizi.Script);
+
+Vizi.DeviceOrientationControllerScript.prototype.realize = function()
+{
+}
+
+Vizi.DeviceOrientationControllerScript.prototype.createControls = function(camera)
+{
+	var controls = new Vizi.DeviceOrientationControls(camera.object);
+	
+	if (this._enabled)
+		controls.connect();
+	
+	controls.roll = this.roll;
+	return controls;
+}
+
+Vizi.DeviceOrientationControllerScript.prototype.update = function()
+{
+	if (this._enabled)
+		this.controls.update();
+}
+
+Vizi.DeviceOrientationControllerScript.prototype.setEnabled = function(enabled)
+{
+	this._enabled = enabled;
+	if (this._enabled)
+		this.controls.connect();
+	else
+		this.controls.disconnect();
+}
+
+Vizi.DeviceOrientationControllerScript.prototype.setCamera = function(camera) {
+	this._camera = camera;
+	this.controls = this.createControls(camera);
+}
 /**
  * @fileoverview Base class for visual elements.
  * @author Tony Parisi
@@ -51298,6 +51378,86 @@ Vizi.SkyboxScript.prototype.update = function()
 }
 
 /**
+ * @fileoverview Object collects a group of Components that define an object and its behaviors
+ * 
+ * @author Tony Parisi
+ */
+
+
+goog.require('Vizi.Prefabs');
+
+Vizi.Prefabs.Skysphere = function(param)
+{
+	param = param || {};
+	
+	var sphere = new Vizi.Object({layer:Vizi.Graphics.instance.backgroundLayer});
+
+	var material = new THREE.MeshBasicMaterial( {
+		color:0xffffff,
+//		side: THREE.BackSide
+
+	} );
+
+	var geometry = new THREE.SphereGeometry( 500, 32, 32 );
+	geometry.applyMatrix( new THREE.Matrix4().makeScale( -1, 1, 1 ) );
+	var visual = new Vizi.Visual(
+			{ geometry: geometry,
+				material: material,
+			});
+	sphere.addComponent(visual);
+	
+	var script = new Vizi.SkysphereScript(param);
+	sphere.addComponent(script);
+	
+	sphere.realize();
+
+	return sphere;
+}
+
+goog.provide('Vizi.SkysphereScript');
+goog.require('Vizi.Script');
+
+Vizi.SkysphereScript = function(param)
+{
+	Vizi.Script.call(this, param);
+
+	this.maincampos = new THREE.Vector3; 
+	this.maincamrot = new THREE.Quaternion; 
+	this.maincamscale = new THREE.Vector3; 
+	
+    Object.defineProperties(this, {
+    	texture: {
+			get : function() {
+				return this.material.map;
+			},
+			set: function(texture) {
+				this.material.map = texture;
+			}
+		},
+    });
+}
+
+goog.inherits(Vizi.SkysphereScript, Vizi.Script);
+
+Vizi.SkysphereScript.prototype.realize = function()
+{
+	var visual = this._object.getComponent(Vizi.Visual);
+	this.material = visual.material;
+
+	this.camera = Vizi.Graphics.instance.backgroundLayer.camera;
+	this.camera.far = 20000;
+	this.camera.position.set(0, 0, 0);
+}
+
+Vizi.SkysphereScript.prototype.update = function()
+{
+	var maincam = Vizi.Graphics.instance.camera;
+	maincam.updateMatrixWorld();
+	maincam.matrixWorld.decompose(this.maincampos, this.maincamrot, this.maincamscale);
+	this.camera.quaternion.copy(this.maincamrot);
+}
+
+/**
  * @fileoverview General-purpose key frame animation
  * @author Tony Parisi
  */
@@ -52326,6 +52486,119 @@ Vizi.DirectionalLight.prototype.updateShadows = function()
 
 Vizi.DirectionalLight.DEFAULT_CAST_SHADOWS = false;
 Vizi.DirectionalLight.DEFAULT_SHADOW_DARKNESS = 0.3;
+/**
+ * @author richt / http://richt.me
+ * @author WestLangley / http://github.com/WestLangley
+ * @author Tony Parisi / http://www.tonyparisi.com adapted for Vizi
+ * W3C Device Orientation control (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
+ */
+
+goog.provide('Vizi.DeviceOrientationControls');
+
+Vizi.DeviceOrientationControls = function ( object ) {
+
+	this.object = object;
+
+	this.object.rotation.reorder( "YXZ" );
+
+	this.freeze = true;
+	this.roll = true;
+
+	this.deviceOrientation = {};
+
+	this.screenOrientation = 0;
+
+	this.onDeviceOrientationChangeEvent = function( rawEvtData ) {
+
+		this.deviceOrientation = rawEvtData;
+
+	};
+
+	this.onScreenOrientationChangeEvent = function() {
+
+		this.screenOrientation = window.orientation || 0;
+
+	};
+
+	this.update = function() {
+
+		var alpha, beta, gamma;
+
+		return function () {
+
+			if ( this.freeze ) return;
+
+			alpha  = this.deviceOrientation.gamma ? THREE.Math.degToRad( this.deviceOrientation.alpha ) : 0; // Z
+			beta   = this.deviceOrientation.beta  ? THREE.Math.degToRad( this.deviceOrientation.beta  ) : 0; // X'
+			gamma  = this.deviceOrientation.gamma ? THREE.Math.degToRad( this.deviceOrientation.gamma ) : 0; // Y''
+			orient = this.screenOrientation       ? THREE.Math.degToRad( this.screenOrientation       ) : 0; // O
+
+			setObjectQuaternion( this.object.quaternion, alpha, beta, gamma, orient );
+
+		}
+
+	}();
+
+	function bind( scope, fn ) {
+
+		return function () {
+
+			fn.apply( scope, arguments );
+
+		};
+
+	};
+
+	this.connect = function() {
+
+		this.onScreenOrientationChangeEvent(); // run once on load
+
+		window.addEventListener( 'orientationchange', bind( this, this.onScreenOrientationChangeEvent ), false );
+		window.addEventListener( 'deviceorientation', bind( this, this.onDeviceOrientationChangeEvent ), false );
+
+		this.freeze = false;
+
+	};
+
+	this.disconnect = function() {
+
+		this.freeze = true;
+
+		window.removeEventListener( 'orientationchange', bind( this, this.onScreenOrientationChangeEvent ), false );
+		window.removeEventListener( 'deviceorientation', bind( this, this.onDeviceOrientationChangeEvent ), false );
+
+	};
+
+	// The angles alpha, beta and gamma form a set of intrinsic Tait-Bryan angles of type Z-X'-Y''
+
+	setObjectQuaternion = function () {
+
+		var zee = new THREE.Vector3( 0, 0, 1 );
+
+		var euler = new THREE.Euler();
+
+		var q0 = new THREE.Quaternion();
+
+		var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
+
+		return function ( quaternion, alpha, beta, gamma, orient ) {
+
+			if (!this.roll)
+				gamma = 0;
+			
+			euler.set( beta, alpha, - gamma, 'YXZ' );                       // 'ZXY' for the device, but 'YXZ' for us
+
+			quaternion.setFromEuler( euler );                               // orient the device
+
+			quaternion.multiply( q1 );                                      // camera looks out the back of the device, not the top
+
+			quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) );    // adjust for screen orientation
+
+		}
+
+	}();
+
+};
 /**
  * @fileoverview Picker component - add one to get picking support on your object
  * 
@@ -53390,6 +53663,8 @@ goog.require('Vizi.FirstPersonControls');
 goog.require('Vizi.OrbitControls');
 goog.require('Vizi.FirstPersonControllerScript');
 goog.require('Vizi.ModelControllerScript');
+goog.require('Vizi.DeviceOrientationControls');
+goog.require('Vizi.DeviceOrientationControllerScript');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');
 goog.require('Vizi.Graphics');
@@ -53409,6 +53684,7 @@ goog.require('Vizi.PointLight');
 goog.require('Vizi.SpotLight');
 goog.require('Vizi.Loader');
 goog.require('Vizi.SkyboxScript');
+goog.require('Vizi.SkysphereScript');
 goog.require('Vizi.Prefabs');
 goog.require('Vizi.Decoration');
 goog.require('Vizi.SceneComponent');
