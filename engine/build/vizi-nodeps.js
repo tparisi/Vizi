@@ -7569,8 +7569,8 @@ Vizi.DeviceOrientationControls = function ( object ) {
 
 		return function ( quaternion, alpha, beta, gamma, orient ) {
 
-			if (!this.roll)
-				gamma = 0;
+//			if (!this.roll)
+//				gamma = 0;
 			
 			euler.set( beta, alpha, - gamma, 'YXZ' );                       // 'ZXY' for the device, but 'YXZ' for us
 
