@@ -52511,7 +52511,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 	this.onDeviceOrientationChangeEvent = function( rawEvtData ) {
 
 		this.deviceOrientation = rawEvtData;
-
+//		console.log(rawEvtData);
 	};
 
 	this.onScreenOrientationChangeEvent = function() {
@@ -52583,8 +52583,12 @@ Vizi.DeviceOrientationControls = function ( object ) {
 
 		return function ( quaternion, alpha, beta, gamma, orient ) {
 
-//			if (!this.roll)
-//				gamma = 0;
+			if (!this.roll) {
+				if (orient)
+					beta = 0;
+				else
+					gamma = 0;
+			}
 			
 			euler.set( beta, alpha, - gamma, 'YXZ' );                       // 'ZXY' for the device, but 'YXZ' for us
 
