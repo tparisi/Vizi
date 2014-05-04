@@ -52584,7 +52584,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 		return function ( quaternion, alpha, beta, gamma, orient ) {
 
 			if (!this.roll) {
-				if (orient)
+				if (Math.abs(orient) == (Math.PI / 2))
 					beta = 0;
 				else
 					gamma = 0;
