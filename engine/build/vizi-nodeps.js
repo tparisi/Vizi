@@ -7572,7 +7572,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 			if (!this.roll) {
 				if (Math.abs(orient) == (Math.PI / 2))
 					beta = 0;
-				else
+				else if (orient != Math.PI)
 					gamma = 0;
 			}
 			
