@@ -330,9 +330,8 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	function onTouchMove( event ) {
 		if ( scope.enabled === false ) return;
-		if ( scope.userZoom === false ) return;
 		
-		if ( event.changedTouches.length > 1 ) {
+		if ( event.changedTouches.length > 1 && scope.userZoom ) {
 			var touch0 = null;
 			var touch1 = null;
 			for (var i = 0; i < event.changedTouches.length; i++) {
@@ -354,7 +353,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 				 scope.touchDistance = touchDistance;
 			}
 		}
-		else {
+		else if (scope.userRotate){
 			// synthesize a left mouse button event
 			var mouseEvent = {
 				'type': 'mousemove',
