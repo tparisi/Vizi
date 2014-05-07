@@ -49793,7 +49793,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 	function onTouchMove( event ) {
 		if ( scope.enabled === false ) return;
 		
-		if ( event.changedTouches.length > 1 && scope.userZoom ) {
+		if ( event.changedTouches.length > 1 ) {
 			var touch0 = null;
 			var touch1 = null;
 			for (var i = 0; i < event.changedTouches.length; i++) {
@@ -49803,7 +49803,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 					touch1 = event.changedTouches[i];
 					
 			}
-			if (touch0 && touch1) {
+			if (touch0 && touch1 && scope.userZoom) {
 				 var touchDistance = calcDistance(touch0, touch1);
 				 var deltaDistance = touchDistance - scope.touchDistance;
 				 if (deltaDistance > 0) {
