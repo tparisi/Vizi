@@ -2551,7 +2551,7 @@ Vizi.Picker.prototype.onMouseOut = function(event)
 Vizi.Picker.prototype.onMouseMove = function(event)
 {
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (this == Vizi.PickManager.clickedObject || this == mouseOverObject)
+	if (this._object == Vizi.PickManager.clickedObject || this._object == mouseOverObject)
 	{
 		if (event.point)
 			this.lastHitPoint.copy(event.point);
@@ -3749,11 +3749,18 @@ Vizi.PickManager.handleMouseUp = function(event)
 {
     if (Vizi.PickManager.clickedObject)
     {
+    	var overobject = Vizi.PickManager.objectFromMouse(event);
     	var pickers = Vizi.PickManager.clickedObject.pickers;
     	var i, len = pickers.length;
     	for (i = 0; i < len; i++) {
     		if (pickers[i].enabled && pickers[i].onMouseUp) {
     			pickers[i].onMouseUp(event);
+    			// Also deliver a click event if we're over the same object as when
+    			// the mouse was first pressed
+    			if (overobject == Vizi.PickManager.clickedObject) {
+    				event.type = "click";
+    				pickers[i].onMouseClick(event);
+    			}
     		}
     	}
     }
@@ -3763,6 +3770,8 @@ Vizi.PickManager.handleMouseUp = function(event)
 
 Vizi.PickManager.handleMouseClick = function(event)
 {
+	return;
+	
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
     if (Vizi.PickManager.clickedObject)
@@ -4768,6 +4777,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onTouchMove( event ) {
+		if ( scope.enabled === false ) return;
 		if ( event.changedTouches.length > 1 ) {
 			var touch0 = null;
 			var touch1 = null;

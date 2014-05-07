@@ -329,6 +329,7 @@ Vizi.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onTouchMove( event ) {
+		if ( scope.enabled === false ) return;
 		if ( event.changedTouches.length > 1 ) {
 			var touch0 = null;
 			var touch1 = null;

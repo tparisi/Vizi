@@ -79,11 +79,18 @@ Vizi.PickManager.handleMouseUp = function(event)
 {
     if (Vizi.PickManager.clickedObject)
     {
+    	var overobject = Vizi.PickManager.objectFromMouse(event);
     	var pickers = Vizi.PickManager.clickedObject.pickers;
     	var i, len = pickers.length;
     	for (i = 0; i < len; i++) {
     		if (pickers[i].enabled && pickers[i].onMouseUp) {
     			pickers[i].onMouseUp(event);
+    			// Also deliver a click event if we're over the same object as when
+    			// the mouse was first pressed
+    			if (overobject == Vizi.PickManager.clickedObject) {
+    				event.type = "click";
+    				pickers[i].onMouseClick(event);
+    			}
     		}
     	}
     }
@@ -93,6 +100,8 @@ Vizi.PickManager.handleMouseUp = function(event)
 
 Vizi.PickManager.handleMouseClick = function(event)
 {
+	return;
+	
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
     
     if (Vizi.PickManager.clickedObject)
