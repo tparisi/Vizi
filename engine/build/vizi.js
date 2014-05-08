@@ -47708,13 +47708,15 @@ Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
 		var v2 = verts[intersection.face.b];
 		var v3 = verts[intersection.face.c];
 		hitpoint.sub(this.dragOffset);
-		var vec = hitpoint.clone().add(hitnormal);
 
 		this.dragPlane = new THREE.Plane().setFromCoplanarPoints(v1, v2, v3);
 
 		var projectedPoint = this.dragPlane.projectPoint(hitpoint);
-		var up = new THREE.Vector3(hitnormal.y, hitnormal.z, 0).normalize();
-
+		var vec = projectedPoint.clone().add(hitnormal);
+		var up = new THREE.Vector3(projectedPoint.y, projectedPoint.z, 0).normalize();
+		if (!Math.acos(up.dot(hitnormal)))
+			up = new THREE.Vector3(0, projectedPoint.x, projectedPoint.y).normalize();
+		
 		this.dispatchEvent("drag", {
 				type : "drag", 
 				offset : projectedPoint,
