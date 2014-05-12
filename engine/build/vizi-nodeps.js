@@ -2674,7 +2674,11 @@ Vizi.SurfaceDragger.prototype.onMouseDown = function(event)
 	if (intersection) {
 
 		var hitpoint = intersection.point.clone();
-		this.dragOffset = hitpoint.clone().sub(this._object.transform.position);
+		this.dragOffset = event.point.clone().sub(this._object.transform.position);
+        this.dispatchEvent("dragstart", {
+            type : "dragstart",
+            offset : hitpoint
+        });
 	}
 
 }
@@ -2693,19 +2697,22 @@ Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
 		var v1 = verts[intersection.face.a];
 		var v2 = verts[intersection.face.b];
 		var v3 = verts[intersection.face.c];
-		hitpoint.sub(this.dragOffset);
 
 		this.dragPlane = new THREE.Plane().setFromCoplanarPoints(v1, v2, v3);
 
-		var projectedPoint = this.dragPlane.projectPoint(hitpoint);
-		var vec = projectedPoint.clone().add(hitnormal);
-		var up = new THREE.Vector3(projectedPoint.y, projectedPoint.z, 0).normalize();
-		if (!Math.acos(up.dot(hitnormal)))
-			up = new THREE.Vector3(0, projectedPoint.x, projectedPoint.y).normalize();
+		//var projectedPoint = hitpoint.clone();
+		//projectedPoint.sub(this.dragOffset);
+		var offset = hitpoint.clone();; // .sub(this.dragOffset);
+		var vec = offset.clone().add(hitnormal);
+		var up = new THREE.Vector3(0, hitnormal.z, -hitnormal.y).normalize();
+		if (!up.lengthSq())
+			up.set(0, hitnormal.x, hitnormal.y).normalize();
+		if (hitnormal.x < 0 || hitnormal.z < 0)
+			up.negate();
 		
 		this.dispatchEvent("drag", {
 				type : "drag", 
-				offset : projectedPoint,
+				offset : offset,
 				normal : hitnormal,
 				up : up,
 				lookAt : vec
