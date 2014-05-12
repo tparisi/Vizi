@@ -26,6 +26,7 @@ Vizi.CylinderDragger.prototype.realize = function()
 
     // And some helpers
 	this.dragOffset = new THREE.Euler;
+	this.currentOffset = new THREE.Euler;
 	this.dragStartPoint = new THREE.Vector3;
 	this.dragPlane = new THREE.Plane(this.normal);
 }
@@ -45,6 +46,18 @@ Vizi.CylinderDragger.prototype.createDragCylinder = function() {
 	var mat = new THREE.MeshBasicMaterial({color:this.color, transparent: true, side:THREE.DoubleSide, opacity:0.2 });
 
 	var mesh = new THREE.Mesh(geom, mat);
+
+	var up = this.normal.clone();
+	up.applyEuler(this._object.transform.object.rotation);
+	// Hack city
+	if (this._object.visuals[0])
+		up.applyEuler(this._object.visuals[0].object.rotation);
+	var lookat = new THREE.Vector3(0, up.z, -up.y).normalize();
+	if (!lookat.lengthSq())
+		lookat.set(0, up.x, up.y).normalize();
+	
+	mesh.up.copy(up);
+	mesh.lookAt(lookat);
 	
 	return mesh;
 }
@@ -65,8 +78,13 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	//console.log("event.point: ", event.point);
 	
 	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
+	this.dragOffset.copy(this._object.transform.rotation);
 	
 	//console.log("dragStartPoint: ", this.dragStartPoint);
+
+	if (this.dragCylinder) {
+		this._object._parent.transform.object.remove(this.dragCylinder);
+	}
 	
 	this.dragCylinder = this.createDragCylinder();
 	this.dragStartPoint.normalize();
@@ -75,7 +93,7 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	this.dragCylinder.scale.copy(this._object.transform.scale);
 	this.dragCylinder.updateMatrixWorld();
 	this.dragCylinder.ignorePick = true;
-	this.dragCylinder.visible = false;
+	//this.dragCylinder.visible = false;
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
@@ -84,6 +102,10 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 		var hitpoint = intersection.point ? intersection.point.clone() : this.lastHitPoint.clone();
 		
 		this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+        this.dispatchEvent("dragstart", {
+            type : "dragstart",
+            offset : hitpoint
+        });
 	}
 }
 
@@ -106,12 +128,14 @@ Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
 		var cross = projectedPoint.clone().cross(this.dragStartPoint);
 		if (this.normal.dot(cross) > 0)
 			theta = -theta;
-				
-		this.dragOffset.set(this.normal.x * theta, this.normal.y * theta, this.normal.z * theta);
+		
+		this.currentOffset.set(this.dragOffset.x + this.normal.x * theta, 
+				this.dragOffset.y + this.normal.y * theta,
+				this.dragOffset.z + this.normal.z * theta);
 			
 		this.dispatchEvent("drag", {
 				type : "drag", 
-				offset : this.dragOffset,
+				offset : this.currentOffset,
 			}
 		);
 	}
