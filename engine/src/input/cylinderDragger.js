@@ -49,8 +49,8 @@ Vizi.CylinderDragger.prototype.createDragCylinder = function() {
 	var up = this.normal.clone();
 	up.applyEuler(this._object.transform.object.rotation);
 	// Hack city
-	if (this._object.visuals[0])
-		up.applyEuler(this._object.visuals[0].object.rotation);
+	//if (this._object.visuals[0])
+		//up.applyEuler(this._object.visuals[0].object.rotation);
 	var lookat = new THREE.Vector3(0, up.z, -up.y).normalize();
 	if (!lookat.lengthSq())
 		lookat.set(0, up.x, up.y).normalize();
@@ -93,7 +93,7 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	this.dragCylinder.scale.copy(this._object.transform.scale);
 	this.dragCylinder.updateMatrixWorld();
 	this.dragCylinder.ignorePick = true;
-	//this.dragCylinder.visible = false;
+	this.dragCylinder.visible = Vizi.CylinderDragger.SHOW_DRAG_CYLINDER;
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
@@ -168,3 +168,4 @@ Vizi.CylinderDragger.prototype.onTouchEnd = function(event) {
 	this.handleMouseUp(event);
 }
 
+Vizi.CylinderDragger.SHOW_DRAG_CYLINDER = false;
