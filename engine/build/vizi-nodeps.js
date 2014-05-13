@@ -3481,7 +3481,6 @@ Vizi.CylinderDragger.prototype.realize = function()
 	this.dragOffset = new THREE.Euler;
 	this.currentOffset = new THREE.Euler;
 	this.dragStartPoint = new THREE.Vector3;
-	this.dragPlane = new THREE.Plane(this.normal);
 }
 
 Vizi.CylinderDragger.prototype.update = function()
@@ -3530,6 +3529,7 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	
 	//console.log("event.point: ", event.point);
 	
+	this.dragPlane = new THREE.Plane(this.normal);
 	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
 	this.dragOffset.copy(this._object.transform.rotation);
 	
