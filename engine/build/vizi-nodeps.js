@@ -2580,7 +2580,7 @@ Vizi.Picker.prototype.onMouseDown = function(event)
 Vizi.Picker.prototype.onMouseUp = function(event)
 {
 	var mouseOverObject = Vizi.PickManager.objectFromMouse(event);
-	if (mouseOverObject != this)
+	if (mouseOverObject != this._object)
 	{
 		event.point = this.lastHitPoint;
 		event.normal = this.lastHitNormal;
