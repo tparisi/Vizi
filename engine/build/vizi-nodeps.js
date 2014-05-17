@@ -3522,26 +3522,46 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event) {
 Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	
 	var hitpoint = event.point.clone();
-	var modelMat = new THREE.Matrix4;
-	modelMat.getInverse(this._object.transform.object.matrixWorld);
-	hitpoint.applyMatrix4(modelMat);
 	this.lastHitPoint = hitpoint.clone();
 	
-	//console.log("event.point: ", event.point);
-	
+	console.log("event.point: ", event.point);
+
 	this.dragPlane = new THREE.Plane(this.normal);
 	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
 	this.dragOffset.copy(this._object.transform.rotation);
+
 	
+	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+    this.dispatchEvent("dragstart", {
+        type : "dragstart",
+        offset : hitpoint
+    });
+
+    this.showarrows = true;
+    
+	if (this.showarrows) {
+		
+		if (this.arrowDecoration)
+			this._object.removeComponent(this.arrowDecoration);
+		
+		var mesh = new THREE.ArrowHelper(this.normal, new THREE.Vector3, 500, 0x00ff00, 5, 5);
+		var visual = new Vizi.Decoration({object:mesh});
+		this._object.addComponent(visual);
+		this.arrowDecoration = visual;
+		
+	}
+    
+    return;
+    
 	//console.log("dragStartPoint: ", this.dragStartPoint);
 
 	if (this.dragCylinder) {
-		this._object._parent.transform.object.remove(this.dragCylinder);
+//		this._object._parent.transform.object.remove(this.dragCylinder);
 	}
 	
-	this.dragCylinder = this.createDragCylinder();
+//	this.dragCylinder = this.createDragCylinder();
 	this.dragStartPoint.normalize();
-	this._object._parent.transform.object.add(this.dragCylinder);
+//	this._object._parent.transform.object.add(this.dragCylinder);
 	this.dragCylinder.position.copy(this._object.transform.position);
 	this.dragCylinder.scale.copy(this._object.transform.scale);
 	this.dragCylinder.updateMatrixWorld();
@@ -3568,6 +3588,27 @@ Vizi.CylinderDragger.prototype.onMouseMove = function(event) {
 }
 
 Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
+	var hitpoint = event.point.clone();
+
+	console.log("event.point: ", event.point);
+	
+	var projectedPoint = this.dragPlane.projectPoint(hitpoint).normalize();
+	var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
+	var cross = projectedPoint.clone().cross(this.dragStartPoint);
+	if (this.normal.dot(cross) > 0)
+		theta = -theta;
+	
+	this.currentOffset.set(this.dragOffset.x + this.normal.x * theta, 
+			this.dragOffset.y + this.normal.y * theta,
+			this.dragOffset.z + this.normal.z * theta);
+		
+	this.dispatchEvent("drag", {
+			type : "drag", 
+			offset : this.currentOffset,
+		}
+	);
+	return;
+	
 	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragCylinder);	
 	
 	if (intersection) {
@@ -5234,10 +5275,10 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 	if (object.data)
 	{
 		var modelMat = new THREE.Matrix4;
-		//modelMat.getInverse(object.matrixWorld);
+		modelMat.getInverse(object.matrixWorld);
 		var hitPointWorld = point.clone();
 		hitPointWorld.applyMatrix4(object.matrixWorld);
-		//point.applyMatrix4(modelMat);
+		point.applyMatrix4(modelMat);
 		var normal = face ? face.normal : null
 		return { object: object.data, point: point, hitPointWorld : hitPointWorld, face: face, normal: normal };
 	}

@@ -268,10 +268,10 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 	if (object.data)
 	{
 		var modelMat = new THREE.Matrix4;
-		//modelMat.getInverse(object.matrixWorld);
+		modelMat.getInverse(object.matrixWorld);
 		var hitPointWorld = point.clone();
 		hitPointWorld.applyMatrix4(object.matrixWorld);
-		//point.applyMatrix4(modelMat);
+		point.applyMatrix4(modelMat);
 		var normal = face ? face.normal : null
 		return { object: object.data, point: point, hitPointWorld : hitPointWorld, face: face, normal: normal };
 	}
