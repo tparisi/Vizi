@@ -248,7 +248,7 @@ Vizi.PickManager.objectFromMouse = function(event)
     		}
     	}
 
-		return Vizi.PickManager.findObjectPicker(intersected.object.object);
+		return Vizi.PickManager.findObjectPicker(event, intersected.hitPointWorld, intersected.object.object);
 	}
 	else
 	{
@@ -256,7 +256,7 @@ Vizi.PickManager.objectFromMouse = function(event)
 	}
 }
 
-Vizi.PickManager.findObjectPicker = function(object) {
+Vizi.PickManager.findObjectPicker = function(event, hitPointWorld, object) {
 	while (object) {
 		
 		if (object.data && object.data._object.pickers) {
@@ -264,6 +264,11 @@ Vizi.PickManager.findObjectPicker = function(object) {
     		var i, len = pickers.length;
     		for (i = 0; i < len; i++) {
     			if (pickers[i].enabled) { // just need one :-)
+    				// Get the model space units for our event
+    				var modelMat = new THREE.Matrix4;
+    				modelMat.getInverse(object.matrixWorld);
+    				event.point = hitPointWorld.clone();
+    				event.point.applyMatrix4(modelMat);
     				return object.data._object;
     			}
     		}

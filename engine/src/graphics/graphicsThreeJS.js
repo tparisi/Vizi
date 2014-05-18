@@ -267,11 +267,13 @@ Vizi.GraphicsThreeJS.prototype.findObjectFromIntersected = function(object, poin
 {
 	if (object.data)
 	{
+		// The intersect point comes in as world units
+		var hitPointWorld = point.clone();
+		// Get the model space units for our event
 		var modelMat = new THREE.Matrix4;
 		modelMat.getInverse(object.matrixWorld);
-		var hitPointWorld = point.clone();
-		hitPointWorld.applyMatrix4(object.matrixWorld);
 		point.applyMatrix4(modelMat);
+		// Use the intersected face's normal if it's there
 		var normal = face ? face.normal : null
 		return { object: object.data, point: point, hitPointWorld : hitPointWorld, face: face, normal: normal };
 	}
