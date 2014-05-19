@@ -48482,7 +48482,7 @@ Vizi.CylinderDragger = function(param) {
     
     this.normal = param.normal || new THREE.Vector3(0, 1, 0);
     this.position = param.position || new THREE.Vector3;
-    this.color = 0x0000aa;
+    this.color = 0xaa0000;
 }
 
 goog.inherits(Vizi.CylinderDragger, Vizi.Picker);
@@ -48492,9 +48492,52 @@ Vizi.CylinderDragger.prototype.realize = function()
 	Vizi.Picker.prototype.realize.call(this);
 
     // And some helpers
+    this.dragObject = null;
 	this.dragOffset = new THREE.Euler;
 	this.currentOffset = new THREE.Euler;
+	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
+	this.dragPlane = this.createDragPlane();
+	this.dragPlane.visible = Vizi.CylinderDragger.SHOW_DRAG_PLANE;
+	this.dragPlane.ignorePick = true;
+	this._object.transform.object.add(this.dragPlane);
+}
+
+Vizi.CylinderDragger.prototype.createDragPlane = function() {
+
+	var size = 2000;
+	var normal = this.normal;
+	var position = this.position;
+	
+	var u = new THREE.Vector3(0, normal.z, -normal.y).normalize().multiplyScalar(size);
+	if (!u.lengthSq())
+		u = new THREE.Vector3(-normal.z, normal.x, 0).normalize().multiplyScalar(size);
+
+	var v = u.clone().cross(normal).normalize().multiplyScalar(size);
+	
+	var p1 = position.clone().sub(u).sub(v);
+	var p2 = position.clone().add(u).sub(v);
+	var p3 = position.clone().add(u).add(v);
+	var p4 = position.clone().sub(u).add(v);
+	
+	var planegeom = new THREE.Geometry();
+	planegeom.vertices.push(p1, p2, p3, p4); 
+	var planeface = new THREE.Face3( 0, 2, 1 );
+	planeface.normal.copy( normal );
+	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
+	planegeom.faces.push(planeface);
+	var planeface = new THREE.Face3( 0, 3, 2 );
+	planeface.normal.copy( normal );
+	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
+	planegeom.faces.push(planeface);
+	planegeom.computeFaceNormals();
+	planegeom.computeCentroids();
+
+	var mat = new THREE.MeshBasicMaterial({color:this.color, transparent: true, side:THREE.DoubleSide, opacity:0.1 });
+
+	var mesh = new THREE.Mesh(planegeom, mat);
+	
+	return mesh;
 }
 
 Vizi.CylinderDragger.prototype.update = function()
@@ -48508,25 +48551,25 @@ Vizi.CylinderDragger.prototype.onMouseDown = function(event) {
 
 Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 	
-	var hitpoint = event.point.clone();
-	this.lastHitPoint = hitpoint.clone();
+	if (this.dragPlane) {
+		
+		var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
+		
+		if (intersection)
+		{
+			this.dragOffset.copy(this._object.transform.rotation); // .sub(this.dragPlane.position);
+			this.dragStartPoint.copy(intersection.point).normalize();
+			this.dragObject = event.object;
+		    this.dispatchEvent("dragstart", {
+		        type : "dragstart",
+		        offset : intersection.point
+		    });
+		    
+		}
+	    
+	}
 	
-//	console.log("event.point: ", event.point);
-
-	this.dragPlane = new THREE.Plane(this.normal);
-	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint);
-	this.dragOffset.copy(this._object.transform.rotation);
-
-	
-	this.dragStartPoint = this.dragPlane.projectPoint(hitpoint).normalize();
-    this.dispatchEvent("dragstart", {
-        type : "dragstart",
-        offset : hitpoint
-    });
-
-    this.showarrows = false;
-    
-	if (this.showarrows) {
+	if (Vizi.CylinderDragger.SHOW_DRAG_NORMAL) {
 		
 		if (this.arrowDecoration)
 			this._object.removeComponent(this.arrowDecoration);
@@ -48545,25 +48588,27 @@ Vizi.CylinderDragger.prototype.onMouseMove = function(event) {
 }
 
 Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
-	var hitpoint = event.point.clone();
-
-//	console.log("event.point: ", event.point);
 	
-	var projectedPoint = this.dragPlane.projectPoint(hitpoint).normalize();
-	var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
-	var cross = projectedPoint.clone().cross(this.dragStartPoint);
-	if (this.normal.dot(cross) > 0)
-		theta = -theta;
+	var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
 	
-	this.currentOffset.set(this.dragOffset.x + this.normal.x * theta, 
-			this.dragOffset.y + this.normal.y * theta,
-			this.dragOffset.z + this.normal.z * theta);
+	if (intersection)
+	{
+		var projectedPoint = intersection.point.clone().normalize();
+		var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
+		var cross = projectedPoint.clone().cross(this.dragStartPoint);
+		if (this.normal.dot(cross) > 0)
+			theta = -theta;
 		
-	this.dispatchEvent("drag", {
-			type : "drag", 
-			offset : this.currentOffset,
-		}
-	);
+		this.currentOffset.set(this.dragOffset.x + this.normal.x * theta, 
+				this.dragOffset.y + this.normal.y * theta,
+				this.dragOffset.z + this.normal.z * theta);
+			
+		this.dispatchEvent("drag", {
+				type : "drag", 
+				offset : this.currentOffset,
+			}
+		);
+	}
 }
 
 Vizi.CylinderDragger.prototype.onMouseUp = function(event) {
@@ -48572,7 +48617,10 @@ Vizi.CylinderDragger.prototype.onMouseUp = function(event) {
 }
 
 Vizi.CylinderDragger.prototype.handleMouseUp = function(event) {
-	this._object._parent.transform.object.remove(this.dragCylinder);
+	
+	if (this.arrowDecoration)
+		this._object.removeComponent(this.arrowDecoration);
+
 }
 
 Vizi.CylinderDragger.prototype.onTouchStart = function(event) {
@@ -48593,7 +48641,8 @@ Vizi.CylinderDragger.prototype.onTouchEnd = function(event) {
 	this.handleMouseUp(event);
 }
 
-Vizi.CylinderDragger.SHOW_DRAG_CYLINDER = false;
+Vizi.CylinderDragger.SHOW_DRAG_PLANE = false;
+Vizi.CylinderDragger.SHOW_DRAG_NORMAL = false;
 /**
  * @fileoverview Main interface to the graphics and rendering subsystem
  * 
@@ -52627,7 +52676,7 @@ Vizi.PlaneDragger = function(param) {
     
     this.normal = param.normal || new THREE.Vector3(0, 0, 1);
     this.position = param.position || new THREE.Vector3;
-    this.color = 0x888888;
+    this.color = 0x0000aa;
 }
 
 goog.inherits(Vizi.PlaneDragger, Vizi.Picker);
@@ -52642,7 +52691,8 @@ Vizi.PlaneDragger.prototype.realize = function()
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
 	this.dragPlane = this.createDragPlane();
-	this.dragPlane.visible = false;
+	//this.dragPlane.visible = false;
+	this.dragPlane.ignorePick = true;
 	this._object._parent.transform.object.add(this.dragPlane);
 }
 
@@ -52665,11 +52715,11 @@ Vizi.PlaneDragger.prototype.createDragPlane = function() {
 	
 	var planegeom = new THREE.Geometry();
 	planegeom.vertices.push(p1, p2, p3, p4); 
-	var planeface = new THREE.Face3( 0, 1, 2 );
+	var planeface = new THREE.Face3( 0, 2, 1 );
 	planeface.normal.copy( normal );
 	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
 	planegeom.faces.push(planeface);
-	var planeface = new THREE.Face3( 0, 2, 3 );
+	var planeface = new THREE.Face3( 0, 3, 2 );
 	planeface.normal.copy( normal );
 	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
 	planegeom.faces.push(planeface);

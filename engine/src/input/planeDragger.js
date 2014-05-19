@@ -15,7 +15,7 @@ Vizi.PlaneDragger = function(param) {
     
     this.normal = param.normal || new THREE.Vector3(0, 0, 1);
     this.position = param.position || new THREE.Vector3;
-    this.color = 0x888888;
+    this.color = 0x0000aa;
 }
 
 goog.inherits(Vizi.PlaneDragger, Vizi.Picker);
@@ -30,7 +30,8 @@ Vizi.PlaneDragger.prototype.realize = function()
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
 	this.dragPlane = this.createDragPlane();
-	this.dragPlane.visible = false;
+	//this.dragPlane.visible = false;
+	this.dragPlane.ignorePick = true;
 	this._object._parent.transform.object.add(this.dragPlane);
 }
 
@@ -53,11 +54,11 @@ Vizi.PlaneDragger.prototype.createDragPlane = function() {
 	
 	var planegeom = new THREE.Geometry();
 	planegeom.vertices.push(p1, p2, p3, p4); 
-	var planeface = new THREE.Face3( 0, 1, 2 );
+	var planeface = new THREE.Face3( 0, 2, 1 );
 	planeface.normal.copy( normal );
 	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
 	planegeom.faces.push(planeface);
-	var planeface = new THREE.Face3( 0, 2, 3 );
+	var planeface = new THREE.Face3( 0, 3, 2 );
 	planeface.normal.copy( normal );
 	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
 	planegeom.faces.push(planeface);
