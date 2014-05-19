@@ -30,7 +30,7 @@ Vizi.PlaneDragger.prototype.realize = function()
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
 	this.dragPlane = this.createDragPlane();
-	//this.dragPlane.visible = false;
+	this.dragPlane.visible = Vizi.PlaneDragger.SHOW_DRAG_PLANE;
 	this.dragPlane.ignorePick = true;
 	this._object._parent.transform.object.add(this.dragPlane);
 }
@@ -109,6 +109,12 @@ Vizi.PlaneDragger.prototype.handleMouseDown = function(event) {
 		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
 		this.dragStartPoint.copy(event.object.position);
 		this.dragObject = event.object;
+		this.dispatchEvent("dragstart", {
+			type : "dragstart", 
+			object : this.dragObject, 
+			offset : this.dragOffset
+			}
+);
 	}
 }
 
@@ -139,3 +145,5 @@ Vizi.PlaneDragger.prototype.onTouchEnd = function(event) {
 	this.handleMouseUp(event);
 }
 
+Vizi.PlaneDragger.SHOW_DRAG_PLANE = false;
+Vizi.PlaneDragger.SHOW_DRAG_NORMAL = false;

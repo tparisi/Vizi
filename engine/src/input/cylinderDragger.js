@@ -89,9 +89,10 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 		var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
 		
 		if (intersection)
-		{
-			this.dragOffset.copy(this._object.transform.rotation); // .sub(this.dragPlane.position);
+		{			
+//			this.toModelSpace(intersection.point);
 			this.dragStartPoint.copy(intersection.point).normalize();
+//			this.dragOffset.copy(this._object.transform.rotation);
 			this.dragObject = event.object;
 		    this.dispatchEvent("dragstart", {
 		        type : "dragstart",
@@ -126,6 +127,7 @@ Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
 	
 	if (intersection)
 	{
+//		this.toModelSpace(intersection.point);
 		var projectedPoint = intersection.point.clone().normalize();
 		var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
 		var cross = projectedPoint.clone().cross(this.dragStartPoint);

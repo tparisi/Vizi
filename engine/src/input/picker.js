@@ -32,6 +32,13 @@ Vizi.Picker.prototype.update = function()
 {
 }
 
+Vizi.Picker.prototype.toModelSpace = function(vec)
+{
+	var modelMat = new THREE.Matrix4;
+	modelMat.getInverse(this._object.transform.object.matrixWorld);
+	vec.applyMatrix4(modelMat);
+}
+
 Vizi.Picker.prototype.onMouseOver = function(event)
 {
     this.dispatchEvent("mouseover", event);

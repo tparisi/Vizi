@@ -2538,6 +2538,13 @@ Vizi.Picker.prototype.update = function()
 {
 }
 
+Vizi.Picker.prototype.toModelSpace = function(vec)
+{
+	var modelMat = new THREE.Matrix4;
+	modelMat.getInverse(this._object.transform.object.matrixWorld);
+	vec.applyMatrix4(modelMat);
+}
+
 Vizi.Picker.prototype.onMouseOver = function(event)
 {
     this.dispatchEvent("mouseover", event);
@@ -3542,9 +3549,10 @@ Vizi.CylinderDragger.prototype.handleMouseDown = function(event) {
 		var intersection = Vizi.Graphics.instance.getObjectIntersection(event.elementX, event.elementY, this.dragPlane);
 		
 		if (intersection)
-		{
-			this.dragOffset.copy(this._object.transform.rotation); // .sub(this.dragPlane.position);
+		{			
+//			this.toModelSpace(intersection.point);
 			this.dragStartPoint.copy(intersection.point).normalize();
+//			this.dragOffset.copy(this._object.transform.rotation);
 			this.dragObject = event.object;
 		    this.dispatchEvent("dragstart", {
 		        type : "dragstart",
@@ -3579,6 +3587,7 @@ Vizi.CylinderDragger.prototype.handleMouseMove = function(event) {
 	
 	if (intersection)
 	{
+//		this.toModelSpace(intersection.point);
 		var projectedPoint = intersection.point.clone().normalize();
 		var theta = Math.acos(projectedPoint.dot(this.dragStartPoint));
 		var cross = projectedPoint.clone().cross(this.dragStartPoint);
@@ -7677,7 +7686,7 @@ Vizi.PlaneDragger.prototype.realize = function()
 	this.dragHitPoint = new THREE.Vector3;
 	this.dragStartPoint = new THREE.Vector3;
 	this.dragPlane = this.createDragPlane();
-	//this.dragPlane.visible = false;
+	this.dragPlane.visible = Vizi.PlaneDragger.SHOW_DRAG_PLANE;
 	this.dragPlane.ignorePick = true;
 	this._object._parent.transform.object.add(this.dragPlane);
 }
@@ -7756,6 +7765,12 @@ Vizi.PlaneDragger.prototype.handleMouseDown = function(event) {
 		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
 		this.dragStartPoint.copy(event.object.position);
 		this.dragObject = event.object;
+		this.dispatchEvent("dragstart", {
+			type : "dragstart", 
+			object : this.dragObject, 
+			offset : this.dragOffset
+			}
+);
 	}
 }
 
@@ -7786,7 +7801,8 @@ Vizi.PlaneDragger.prototype.onTouchEnd = function(event) {
 	this.handleMouseUp(event);
 }
 
-/**
+Vizi.PlaneDragger.SHOW_DRAG_PLANE = false;
+Vizi.PlaneDragger.SHOW_DRAG_NORMAL = false;/**
  * @fileoverview ScaleBehavior - simple scale up/down over time
  * 
  * @author Tony Parisi
