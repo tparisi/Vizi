@@ -7762,13 +7762,15 @@ Vizi.PlaneDragger.prototype.handleMouseDown = function(event) {
 	
 	if (intersection)
 	{
-		this.dragOffset.copy(intersection.point); // .sub(this.dragPlane.position);
+		this.dragOffset.copy(intersection.point);
 		this.dragStartPoint.copy(event.object.position);
+		this.dragHitPoint.copy(intersection.point).sub(this.dragOffset);
+		this.dragHitPoint.add(this.dragStartPoint);
 		this.dragObject = event.object;
 		this.dispatchEvent("dragstart", {
 			type : "dragstart", 
 			object : this.dragObject, 
-			offset : this.dragOffset
+			offset : this.dragHitPoint
 			}
 );
 	}
