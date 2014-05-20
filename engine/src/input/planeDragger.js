@@ -32,6 +32,7 @@ Vizi.PlaneDragger.prototype.realize = function()
 	this.dragPlane = this.createDragPlane();
 	this.dragPlane.visible = Vizi.PlaneDragger.SHOW_DRAG_PLANE;
 	this.dragPlane.ignorePick = true;
+	this.dragPlane.ignoreBounds = true;
 	this._object._parent.transform.object.add(this.dragPlane);
 }
 

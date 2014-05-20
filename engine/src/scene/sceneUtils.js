@@ -8,7 +8,7 @@ goog.provide('Vizi.SceneUtils');
 Vizi.SceneUtils.computeBoundingBox = function(obj) {
 	
 	var computeBoundingBox = function(obj) {
-		if (obj instanceof THREE.Mesh) {
+		if (obj instanceof THREE.Mesh && !obj.ignoreBounds) {
 			var geometry = obj.geometry;
 			if (geometry) {
 				if (!geometry.boundingBox) {
