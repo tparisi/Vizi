@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PartiArt</title>
+    <LINK REL=StyleSheet HREF="css/styles.css" TYPE="text/css" MEDIA=screen>
+</head>
+<body>
+
+    <script src="lib/three.js"></script>
+    <script src="lib/vizi/vizi-nodeps.js"></script>
+    <!-- 
+    <script src="//connect.soundcloud.com/sdk.js"></script>
+     -->
+
+    <script src="lib/ParticleEngine/ShaderParticles.min.js"></script>
+
+    <script src="lib/Detector.js"></script>
+
+    <script src ="lib/FastBlur.js"></script>
+
+    <script src="lib/terrain-generator/mersenne-twister.js"></script>
+    <script src="lib/terrain-generator/blur.js"></script>
+    <script src="lib/terrain-generator/destructure.js"></script>
+    <script src="lib/terrain-generator/mountains.js"></script>
+    <script src="lib/terrain-generator/perlinnoise.js"></script>
+    <script src="lib/terrain-generator/terraingen.js"></script>
+    <script src="lib/terrain-generator/circle.js"></script>
+
+    <script src="lib/water-material.js"></script>
+    <script src="lib/underscore.js"></script>
+    <script src="lib/utils.js"></script>
+    <script src="lib/PointerLockControls.js"></script>
+
+    <script src="build/js/main.js"></script>
+    <script src="build/js/controls.js"></script>
+    <script src="build/js/caves.js"></script>
+    <script src="build/js/stars.js"></script>
+    <script src="build/js/meteor.js"></script>
+    <script src="build/js/wand.js"></script>
+    <script src="build/js/fireflies.js"></script>
+    <script src="build/js/mystery.js"></script>
+    <script src="build/js/bubbles.js"></script>
+    <script src="build/js/fire.js"></script>
+    <script src="build/js/spells.js"></script>
+    <script src="build/js/dougs-crazy-shit.js"></script>
+    <script src = 'js/world.js'></script>
+    
+
+    <div class= 'infoButton'>
+      <span class='infoText'>
+       <image class = 'icon' src='assets/star.png'>
+      </span>
+    </div>
+    <div class='infoWrapper'>
+      <div class='info'>
+        <h2>PartiArt</h2>
+        <h3>Ericrius1@gmail.com</h3>
+        <h4>Acknowledgments</h4>
+        <p>ThreeJS: <a href = 'http://threejs.org'>Mr. Doob</a></p>
+        <p>Particle Engine: <a href = 'https://github.com/squarefeet/ShaderParticleEngine' target="_blank">Luke Moody</a></p>
+        <p>Water shaders and terrain generation library: <a href = 'https://github.com/jbouny' target="_blank">Jeremy Bouny</a></p>
+        <p>Music: <a href = 'https://soundcloud.com/ramesesb' target="_blank">Rameses B</a></p>
+      </div>
+    </div>
+    <div id="wand" class='spell'></div>
+    <div id="fire" class='spell hide-class'></div>
+    <div id="bubbles" class='spell hide-class'></div>
+    <div id="fireflies" class='spell hide-class'></div>
+    <div id="mystery" class='spell hide-class'></div>
+
+</body>
+
+</html>
