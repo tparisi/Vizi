@@ -14,42 +14,109 @@ Vizi.Gamepad = function()
     this.controllers = {
     };
     
+    this.values = {
+    };
+    
 	Vizi.Gamepad.instance = this;
 }       
+
+goog.inherits(Vizi.Gamepad, Vizi.EventDispatcher);
 
 Vizi.Gamepad.prototype.update = function() {
 
 	this.scanGamepads();
 
+	var buttonsChangedEvent = {
+			changedButtons: [],
+	};
+
+	var axesChangedEvent = {
+			changedAxes: [],
+	};
+	
 	for (var c in this.controllers) {
 	    var controller = this.controllers[c];
-	    for (var i = 0; i < controller.buttons.length; i++) {
+	    this.testValues(controller, buttonsChangedEvent, axesChangedEvent);
+	    this.saveValues(controller);
+	}
+	
+	if (buttonsChangedEvent.changedButtons.length) {
+		this.dispatchEvent("buttonsChanged", buttonsChangedEvent);
+	}
+
+	if (axesChangedEvent.changedAxes.length) {
+		this.dispatchEvent("axesChanged", axesChangedEvent);
+	}
+}
+
+Vizi.Gamepad.prototype.testValues = function(gamepad, buttonsChangedEvent, axesChangedEvent) {
+	var values = this.values[gamepad.index];
+	if (values) {
+	    for (var i = 0; i < gamepad.buttons.length; i++) {
 	        
-	        var val = controller.buttons[i];
+	        var val = gamepad.buttons[i];
 	        var pressed = val == 1.0;
 	        
 	        if (typeof(val) == "object") {
 	          pressed = val.pressed;
 	          val = val.value;
 	        }
-	        
-	        if (pressed) {
+
+	        if (pressed != values.buttons[i]) {
 	        	console.log("Pressed: ", i);
-	        }
-	        else {
-	        }
+	        	buttonsChangedEvent.changedButtons.push({
+	        		gamepad : gamepad.index,
+	        		button : i,
+	        		pressed : pressed,
+	        	});
+	        }	        	
 	      }
 
-	    for (var i = 0; i < controller.axes.length; i++) {
-	        var val = controller.axes[i];
-	        // if (val < 0)
-	        //	console.log("Axis: ", i);
+	    for (var i = 0; i < gamepad.axes.length; i++) {
+	        var val = gamepad.axes[i];
+	        if (val != values.axes[i]) {
+	        	console.log("Axis: ", i, val);
+	        	axesChangedEvent.changedAxes.push({
+	        		gamepad : gamepad.index,
+	        		axis : i,
+	        		value : val,
+	        	});
+	        }
+	      }		
+	}
+}
+
+Vizi.Gamepad.prototype.saveValues = function(gamepad) {
+	var values = this.values[gamepad.index];
+	if (values) {
+	    for (var i = 0; i < gamepad.buttons.length; i++) {
+	        
+	        var val = gamepad.buttons[i];
+	        var pressed = val == 1.0;
+	        
+	        if (typeof(val) == "object") {
+	          pressed = val.pressed;
+	          val = val.value;
+	        }
+
+	        values.buttons[i] = pressed;
 	      }
+
+	    for (var i = 0; i < gamepad.axes.length; i++) {
+	        var val = gamepad.axes[i];
+	        values.axes[i] = val;
+	      }		
 	}
 }
 
 Vizi.Gamepad.prototype.addGamepad = function(gamepad) {
 	  this.controllers[gamepad.index] = gamepad;
+	  this.values[gamepad.index] = {
+			  buttons : [],
+			  axes : [],
+	  };
+	  
+	  this.saveValues(gamepad);
 	  console.log("Gamepad added! ", gamepad.id);
 }
 
