@@ -20,6 +20,11 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.movementSpeed = 1.0;
 	this.lookSpeed = 1.0;
 
+	this.turnSpeed = 5; // degs
+	this.tiltSpeed = 5;
+	this.turnAngle = 0;
+	this.tiltAngle = 0;
+	
 	this.mouseX = 0;
 	this.mouseY = 0;
 	this.lastMouseX = 0;
@@ -40,6 +45,11 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.moveLeft = false;
 	this.moveRight = false;
 
+	this.turnRight = false;
+	this.turnLeft = false;
+	this.tiltUp = false;
+	this.tiltDown = false;
+	
 	this.mouseDragOn = false;
 	this.mouseLook = false;
 
@@ -274,6 +284,80 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 		
 	}
 	
+	this.onGamepadButtonsChanged = function ( event ) {
+	}
+	
+	var MOVE_VTHRESHOLD = 0.2;
+	var MOVE_HTHRESHOLD = 0.5;
+	this.onGamepadAxesChanged = function ( event ) {
+
+		var axes = event.changedAxes;
+		var i, len = axes.length;
+		for (i = 0; i < len; i++) {
+			var axis = axes[i];
+			
+			if (axis.axis == Vizi.Gamepad.AXIS_LEFT_V) {
+				// +Y is down
+				if (axis.value < -MOVE_VTHRESHOLD) {
+					this.moveForward = true;
+					this.moveBackward = false;
+				}
+				else if (axis.value > MOVE_VTHRESHOLD) {
+					this.moveBackward = true;
+					this.moveForward = false;
+				}
+				else {
+					this.moveBackward = false;
+					this.moveForward = false;
+				}
+			}
+			else if (axis.axis == Vizi.Gamepad.AXIS_LEFT_H) {
+				// +X is to the right
+				if (axis.value > MOVE_HTHRESHOLD) {
+					this.moveRight = true;
+					this.moveLeft = false;
+				}
+				else if (axis.value < -MOVE_HTHRESHOLD) {
+					this.moveLeft = true;
+					this.moveRight = false;
+				}
+				else {
+					this.moveLeft = false;
+					this.moveRight = false;
+				}
+			}
+			else if (axis.axis == Vizi.Gamepad.AXIS_RIGHT_V) {
+				// +Y is down
+				if (axis.value < -MOVE_VTHRESHOLD) {
+					this.tiltUp = true;
+					this.tiltDown = false;
+				}
+				else if (axis.value > MOVE_VTHRESHOLD) {
+					this.tiltDown = true;
+					this.tiltUp = false;
+				}
+				else {
+					this.tiltDown = false;
+					this.tiltUp = false;
+				}
+			}
+			else if (axis.axis == Vizi.Gamepad.AXIS_RIGHT_H) {
+				if (axis.value > MOVE_HTHRESHOLD) {
+					this.turnLeft = true;
+					this.turnRight = false;
+				}
+				else if (axis.value < -MOVE_HTHRESHOLD) {
+					this.turnRight = true;
+					this.turnLeft = false;
+				}
+				else {
+					this.turnLeft = false;
+					this.turnRight = false;
+				}
+			}
+		
+		}
+	};
 	
 	this.onKeyDown = function ( event ) {
 
@@ -379,6 +463,37 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			this.lastMouseY = this.mouseY;
 		}
 		
+		if (this.turnRight || this.turnLeft || this.tiltUp || this.tiltDown) {
+			
+			var dlon = 0;
+			if (this.turnRight)
+				dlon = 1;
+			else if (this.turnLeft)
+				dlon = -1;
+			this.lon += dlon * this.turnSpeed;
+			
+			var dlat = 0;
+			if (this.tiltUp)
+				dlat = 1;
+			else if (this.tiltDown)
+				dlat = -1;
+
+			this.lat += dlat * this.tiltSpeed;
+
+			this.theta = THREE.Math.degToRad( this.lon );
+
+			this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
+			this.phi = THREE.Math.degToRad( this.lat );
+
+			var targetPosition = this.target,
+				position = this.object.position;
+	
+			targetPosition.x = position.x - Math.sin( this.theta );
+			targetPosition.y = position.y + Math.sin( this.phi );
+			targetPosition.z = position.z - Math.cos( this.theta );
+	
+			this.object.lookAt( targetPosition );
+		}
 	};
 
 
@@ -393,6 +508,12 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 	this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
 	this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
 	this.domElement.addEventListener( 'resize', bind( this, this.handleResize ), false );
+	
+	var gamepad = Vizi.Gamepad.instance;
+	if (gamepad) {
+		gamepad.addEventListener( 'buttonsChanged', bind( this, this.onGamepadButtonsChanged ), false );
+		gamepad.addEventListener( 'axesChanged', bind( this, this.onGamepadAxesChanged ), false );
+	}
 	
 	function bind( scope, fn ) {
 

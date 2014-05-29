@@ -154,3 +154,7 @@ Vizi.Gamepad.DPAD_DOWN	 								= 13;
 Vizi.Gamepad.DPAD_LEFT	 								= 14;
 Vizi.Gamepad.DPAD_RIGHT	 								= 15;
 Vizi.Gamepad.HOME = Vizi.Gamepad.MENU					= 16;
+Vizi.Gamepad.AXIS_LEFT_H								= 0;
+Vizi.Gamepad.AXIS_LEFT_V								= 1;
+Vizi.Gamepad.AXIS_RIGHT_H								= 2;
+Vizi.Gamepad.AXIS_RIGHT_V								= 3;
