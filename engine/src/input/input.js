@@ -13,9 +13,15 @@ Vizi.Input = function()
 
 	this.mouse = new Vizi.Mouse();
 	this.keyboard = new Vizi.Keyboard();
+	this.gamepad = new Vizi.Gamepad();
 	Vizi.Input.instance = this;
 }
 
 goog.inherits(Vizi.Input, Vizi.Service);
+
+Vizi.Input.prototype.update = function() {
+	if (this.gamepad && this.gamepad.update)
+		this.gamepad.update();
+}
 
 Vizi.Input.instance = null;

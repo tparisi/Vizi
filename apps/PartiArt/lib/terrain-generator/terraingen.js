@@ -105,7 +105,7 @@ var TERRAINGEN =
 			inParameters.postgen[i].Apply( geometry, inParameters );
 		}
 		
-        geometry.computeCentroids();
+        // geometry.computeCentroids();
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
 		

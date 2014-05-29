@@ -37,6 +37,7 @@ goog.require('Vizi.Helpers');
 goog.require('Vizi.Input');
 goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');
+goog.require('Vizi.Gamepad');
 goog.require('Vizi.Picker');
 goog.require('Vizi.PickManager');
 goog.require('Vizi.CylinderDragger');

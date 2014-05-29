@@ -48288,7 +48288,82 @@ Vizi.Light.prototype.realize = function()
 
 Vizi.Light.DEFAULT_COLOR = 0xFFFFFF;
 Vizi.Light.DEFAULT_INTENSITY = 1;
-Vizi.Light.DEFAULT_RANGE = 10000;goog.provide('Vizi.PointLight');
+Vizi.Light.DEFAULT_RANGE = 10000;goog.provide('Vizi.DirectionalLight');
+goog.require('Vizi.Light');
+
+Vizi.DirectionalLight = function(param)
+{
+	param = param || {};
+
+	this.scaledDir = new THREE.Vector3;
+	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.DirectionalLight.DEFAULT_CAST_SHADOWS;
+	
+	Vizi.Light.call(this, param);
+
+	if (param.object) {
+		this.object = param.object; 
+		this.direction = param.object.position.clone().normalize().negate();
+		this.targetPos = param.object.target.position.clone();
+		this.shadowDarkness = param.object.shadowDarkness;
+	}
+	else {
+		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
+		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
+		this.targetPos = new THREE.Vector3;
+		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.DirectionalLight.DEFAULT_SHADOW_DARKNESS;
+	}
+}
+
+goog.inherits(Vizi.DirectionalLight, Vizi.Light);
+
+Vizi.DirectionalLight.prototype.realize = function() 
+{
+	Vizi.Light.prototype.realize.call(this);
+}
+
+Vizi.DirectionalLight.prototype.update = function() 
+{
+	// D'oh Three.js doesn't seem to transform light directions automatically
+	// Really bizarre semantics
+	this.position.copy(this.direction).normalize().negate();
+	var worldmat = this.object.parent.matrixWorld;
+	this.position.applyMatrix4(worldmat);
+	this.scaledDir.copy(this.direction);
+	this.scaledDir.multiplyScalar(Vizi.Light.DEFAULT_RANGE);
+	this.targetPos.copy(this.position);
+	this.targetPos.add(this.scaledDir);	
+ 	this.object.target.position.copy(this.targetPos);
+
+	this.updateShadows();
+	
+	Vizi.Light.prototype.update.call(this);
+}
+
+Vizi.DirectionalLight.prototype.updateShadows = function()
+{
+	if (this.castShadows)
+	{
+		this.object.castShadow = true;
+		this.object.shadowCameraNear = 1;
+		this.object.shadowCameraFar = Vizi.Light.DEFAULT_RANGE;
+		this.object.shadowCameraFov = 90;
+
+		// light.shadowCameraVisible = true;
+
+		this.object.shadowBias = 0.0001;
+		this.object.shadowDarkness = this.shadowDarkness;
+
+		this.object.shadowMapWidth = 1024;
+		this.object.shadowMapHeight = 1024;
+		
+		Vizi.Graphics.instance.enableShadows(true);
+	}	
+}
+
+
+Vizi.DirectionalLight.DEFAULT_CAST_SHADOWS = false;
+Vizi.DirectionalLight.DEFAULT_SHADOW_DARKNESS = 0.3;
+goog.provide('Vizi.PointLight');
 goog.require('Vizi.Light');
 
 Vizi.PointLight = function(param)
@@ -48932,10 +49007,16 @@ Vizi.Input = function()
 
 	this.mouse = new Vizi.Mouse();
 	this.keyboard = new Vizi.Keyboard();
+	this.gamepad = new Vizi.Gamepad();
 	Vizi.Input.instance = this;
 }
 
 goog.inherits(Vizi.Input, Vizi.Service);
+
+Vizi.Input.prototype.update = function() {
+	if (this.gamepad && this.gamepad.update)
+		this.gamepad.update();
+}
 
 Vizi.Input.instance = null;/**
  * @fileoverview Picker component - add one to get picking support on your object
@@ -52608,81 +52689,95 @@ Vizi.Loader.prototype.convertScene = function(scene) {
 
 	return convert(scene);
 }
-goog.provide('Vizi.DirectionalLight');
-goog.require('Vizi.Light');
+/**
+ *
+ */
+goog.provide('Vizi.Gamepad');
+goog.require('Vizi.EventDispatcher');
 
-Vizi.DirectionalLight = function(param)
+Vizi.Gamepad = function()
 {
-	param = param || {};
+    Vizi.EventDispatcher.call(this);
 
-	this.scaledDir = new THREE.Vector3;
-	this.castShadows = ( param.castShadows !== undefined ) ? param.castShadows : Vizi.DirectionalLight.DEFAULT_CAST_SHADOWS;
-	
-	Vizi.Light.call(this, param);
+    // N.B.: freak out if somebody tries to make 2
+	// throw (...)
 
-	if (param.object) {
-		this.object = param.object; 
-		this.direction = param.object.position.clone().normalize().negate();
-		this.targetPos = param.object.target.position.clone();
-		this.shadowDarkness = param.object.shadowDarkness;
+    this.controllers = {
+    };
+    
+	Vizi.Gamepad.instance = this;
+}       
+
+Vizi.Gamepad.prototype.update = function() {
+
+	this.scanGamepads();
+
+	for (var c in this.controllers) {
+	    var controller = this.controllers[c];
+	    for (var i = 0; i < controller.buttons.length; i++) {
+	        
+	        var val = controller.buttons[i];
+	        var pressed = val == 1.0;
+	        
+	        if (typeof(val) == "object") {
+	          pressed = val.pressed;
+	          val = val.value;
+	        }
+	        
+	        if (pressed) {
+	        	console.log("Pressed: ", i);
+	        }
+	        else {
+	        }
+	      }
+
+	    for (var i = 0; i < controller.axes.length; i++) {
+	        var val = controller.axes[i];
+	        if (val < 0)
+	        	console.log("Axis: ", i);
+	      }
 	}
-	else {
-		this.direction = param.direction || new THREE.Vector3(0, 0, -1);
-		this.object = new THREE.DirectionalLight(param.color, param.intensity, 0);
-		this.targetPos = new THREE.Vector3;
-		this.shadowDarkness = ( param.shadowDarkness !== undefined ) ? param.shadowDarkness : Vizi.DirectionalLight.DEFAULT_SHADOW_DARKNESS;
-	}
 }
 
-goog.inherits(Vizi.DirectionalLight, Vizi.Light);
-
-Vizi.DirectionalLight.prototype.realize = function() 
-{
-	Vizi.Light.prototype.realize.call(this);
+Vizi.Gamepad.prototype.addGamepad = function(gamepad) {
+	  this.controllers[gamepad.index] = gamepad;
+	  console.log("Gamepad added! ", gamepad.id);
 }
 
-Vizi.DirectionalLight.prototype.update = function() 
-{
-	// D'oh Three.js doesn't seem to transform light directions automatically
-	// Really bizarre semantics
-	this.position.copy(this.direction).normalize().negate();
-	var worldmat = this.object.parent.matrixWorld;
-	this.position.applyMatrix4(worldmat);
-	this.scaledDir.copy(this.direction);
-	this.scaledDir.multiplyScalar(Vizi.Light.DEFAULT_RANGE);
-	this.targetPos.copy(this.position);
-	this.targetPos.add(this.scaledDir);	
- 	this.object.target.position.copy(this.targetPos);
-
-	this.updateShadows();
-	
-	Vizi.Light.prototype.update.call(this);
+Vizi.Gamepad.prototype.scanGamepads = function() {
+  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+  for (var i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      if (!(gamepads[i].index in this.controllers)) {
+    	  this.addGamepad(gamepads[i]);
+      } else {
+    	  this.controllers[gamepads[i].index] = gamepads[i];
+      }
+    }
+  }
 }
 
-Vizi.DirectionalLight.prototype.updateShadows = function()
-{
-	if (this.castShadows)
-	{
-		this.object.castShadow = true;
-		this.object.shadowCameraNear = 1;
-		this.object.shadowCameraFar = Vizi.Light.DEFAULT_RANGE;
-		this.object.shadowCameraFov = 90;
+Vizi.Gamepad.instance = null;
 
-		// light.shadowCameraVisible = true;
-
-		this.object.shadowBias = 0.0001;
-		this.object.shadowDarkness = this.shadowDarkness;
-
-		this.object.shadowMapWidth = 1024;
-		this.object.shadowMapHeight = 1024;
-		
-		Vizi.Graphics.instance.enableShadows(true);
-	}	
-}
-
-
-Vizi.DirectionalLight.DEFAULT_CAST_SHADOWS = false;
-Vizi.DirectionalLight.DEFAULT_SHADOW_DARKNESS = 0.3;
+/* input codes
+*/
+Vizi.Gamepad.BUTTON_A = Vizi.Gamepad.BUTTON_CROSS 		= 0;
+Vizi.Gamepad.BUTTON_B = Vizi.Gamepad.BUTTON_CIRCLE 		= 1;
+Vizi.Gamepad.BUTTON_X = Vizi.Gamepad.BUTTON_SQUARE 		= 2;
+Vizi.Gamepad.BUTTON_Y = Vizi.Gamepad.BUTTON_TRIANGLE 	= 3;
+Vizi.Gamepad.SHOULDER_LEFT 								= 4;
+Vizi.Gamepad.SHOULDER_RIGHT 							= 5;
+Vizi.Gamepad.TRIGGER_LEFT 								= 6;
+Vizi.Gamepad.TRIGGER_RIGHT 								= 7;
+Vizi.Gamepad.SELECT = Vizi.Gamepad.BACK 				= 8;
+Vizi.Gamepad.START 										= 9;
+Vizi.Gamepad.STICK_LEFT 								= 10;
+Vizi.Gamepad.STICK_RIGHT 								= 11;
+Vizi.Gamepad.DPAD_UP	 								= 12;
+Vizi.Gamepad.DPAD_DOWN	 								= 13;
+Vizi.Gamepad.DPAD_LEFT	 								= 14;
+Vizi.Gamepad.DPAD_RIGHT	 								= 15;
+Vizi.Gamepad.HOME = Vizi.Gamepad.MENU					= 16;
 /**
  * @author richt / http://richt.me
  * @author WestLangley / http://github.com/WestLangley
@@ -53685,7 +53780,16 @@ Vizi.Viewer.prototype.calcSceneStats = function()
 }
 
 Vizi.Viewer.prototype.setController = function(type) {
-	var center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
+	if (!this.boundingBox)
+		this.boundingBox = Vizi.SceneUtils.computeBoundingBox(this.sceneRoot);
+
+	var center;
+	if (!isFinite(this.boundingBox.max.x)) {
+		center = new THREE.Vector3;
+	}
+	else {
+		center = this.boundingBox.max.clone().add(this.boundingBox.min).multiplyScalar(0.5);
+	}
 	switch (type) {
 		case "model" :
 			break;
@@ -53885,6 +53989,7 @@ goog.require('Vizi.Helpers');
 goog.require('Vizi.Input');
 goog.require('Vizi.Keyboard');
 goog.require('Vizi.Mouse');
+goog.require('Vizi.Gamepad');
 goog.require('Vizi.Picker');
 goog.require('Vizi.PickManager');
 goog.require('Vizi.CylinderDragger');
