@@ -38,6 +38,15 @@ FuturgoController = function(param)
 	this.accelerateStartTime = this.brakeStartTime = 
 		this.accelerateEndTime = this.brakeEndTime = 
 		this.lastUpdateTime;
+	
+	if (Vizi.Gamepad && Vizi.Gamepad.instance) {
+		var gamepad = Vizi.Gamepad.instance;
+		
+		var that = this;
+		gamepad.addEventListener( 'axesChanged', function(event) {
+			that.onGamepadAxesChanged(event);
+		});
+	}
 }
 
 goog.inherits(FuturgoController, Vizi.Script);
@@ -293,6 +302,65 @@ FuturgoController.prototype.onKeyUp = function(event) {
 }
 
 FuturgoController.prototype.onKeyPress = function(event) {
+}
+
+FuturgoController.prototype.onGamepadAxesChanged = function(event) {
+	
+	var MOVE_VTHRESHOLD = 0.2;
+	var MOVE_HTHRESHOLD = 0.5;
+	
+	var axes = event.changedAxes;
+	var i, len = axes.length;
+	for (i = 0; i < len; i++) {
+		var axis = axes[i];
+		
+		if (axis.axis == Vizi.Gamepad.AXIS_LEFT_V) {
+			// +Y is down
+			if (axis.value < -MOVE_VTHRESHOLD) {
+				this.moveForward = true;
+				this.moveBackward = false;
+				if (!this.accelerate) {
+					this.accelerateStartTime = Date.now();
+					this.accelerate = true; 
+				}
+			}
+			else if (axis.value > MOVE_VTHRESHOLD) {
+				this.moveBackward = true;
+				this.moveForward = false;
+				if (!this.brake) {
+					this.brakeStartTime = Date.now();
+					this.brake = true; 
+				}
+			}
+			else {
+				this.moveBackward = false;
+				this.moveForward = false;
+				if (this.accelerate) {
+					this.accelerate = false; 
+					this.accelerateEndTime = Date.now(); 
+				}
+				if (this.brake) {
+					this.brake = false; 
+					this.brakeEndTime = Date.now(); 
+				}
+			}
+		}
+		else if (axis.axis == Vizi.Gamepad.AXIS_LEFT_H) {
+			// +X is to the right
+			if (axis.value > MOVE_HTHRESHOLD) {
+				this.turnRight = true;
+				this.turnLeft = false;
+			}
+			else if (axis.value < -MOVE_HTHRESHOLD) {
+				this.turnLeft = true;
+				this.turnRight = false;
+			}
+			else {
+				this.turnLeft = false;
+				this.turnRight = false;
+			}
+		}
+	}
 }
 
 FuturgoController.ACCELERATION = 2; // m/s
