@@ -47402,7 +47402,8 @@ Vizi.Camera = function(param)
 	        },
 	        set: function(v) {
 	        	this._active = v;
-	        	if (this._realized && this._active)
+	        	// N.B.: trying this out for now... TP
+	        	if (/*this._realized && */ this._active)
 	        	{
 	        		Vizi.CameraManager.setActiveCamera(this);
 	        	}
@@ -47429,7 +47430,7 @@ Vizi.Camera.prototype.realize = function()
 	
 	Vizi.CameraManager.addCamera(this);
 	
-	if (this._active)
+	if (this._active && !Vizi.CameraManager.activeCamera)
 	{
 		Vizi.CameraManager.setActiveCamera(this);
 	}
@@ -52530,7 +52531,7 @@ Vizi.CameraManager.removeCamera = function(camera)
 
 Vizi.CameraManager.setActiveCamera = function(camera)
 {
-	if (Vizi.CameraManager.activeCamera)
+	if (Vizi.CameraManager.activeCamera && Vizi.CameraManager.activeCamera != camera)
 		Vizi.CameraManager.activeCamera.active = false;
 	
 	Vizi.CameraManager.activeCamera = camera;

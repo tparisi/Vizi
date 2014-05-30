@@ -23,7 +23,7 @@ Vizi.CameraManager.removeCamera = function(camera)
 
 Vizi.CameraManager.setActiveCamera = function(camera)
 {
-	if (Vizi.CameraManager.activeCamera)
+	if (Vizi.CameraManager.activeCamera && Vizi.CameraManager.activeCamera != camera)
 		Vizi.CameraManager.activeCamera.active = false;
 	
 	Vizi.CameraManager.activeCamera = camera;

@@ -5,16 +5,21 @@
 <title>Vizi - Skybox</title>
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+	<div id="container" style="width:100%; height:100%; position:absolute;background-color:black"></div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
 	<script src="../build/vizi.js"></script>
+	<script src="waterWorld.js"></script>
 	<script src="water.js"></script>
 	<script src="water-material.js"></script>
 	<script>
 
 	$(document).ready(function() {
 		var container = document.getElementById("container");
+
+		var app = new WaterWorld({ container : container });
+		app.run();
+		return;
 		
 		var app = new Vizi.Application({ container : container });
 		
@@ -46,12 +51,12 @@
 		cube.transform.position.y = 2;
 		cube.addComponent(visual);
 
-		var rotateBehavior = new Vizi.RotateBehavior({autoStart:true, 
+		var rotateBehavior = new Vizi.RotateBehavior({autoStart:false, 
 			loop:true, 
 			duration:.5});
 		cube.addComponent(rotateBehavior);
 		
-		var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+		var bounceBehavior = new Vizi.BounceBehavior({autoStart:false, 
 			loop:true, bounceVector:new THREE.Vector3(0, 5, 0),
 			duration:2});
 		cube.addComponent(bounceBehavior);
@@ -73,7 +78,7 @@
 		cube.transform.position.set(2, 1, -4);
 		cube.addComponent(visual);
 
-		var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+		var bounceBehavior = new Vizi.BounceBehavior({autoStart:false, 
 			loop:true, bounceVector:new THREE.Vector3(0, 0, -20),
 			duration:5});
 		cube.addComponent(bounceBehavior);
@@ -90,7 +95,7 @@
 		l2.addComponent(light2);
 		app.addObject(l2);
 		
-		var water = Water();
+		var water = WaterPrefab();
 		app.addObject(water);
 	}
 	);

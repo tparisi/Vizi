@@ -1,4 +1,4 @@
-Water = function(param) {
+WaterPrefab = function(param) {
 
 	param = param || {};
 	
@@ -14,10 +14,10 @@ Water = function(param) {
       distortionScale: 20,
 //      sunDirection:new THREE.Vector3(0, 1, 1).normalize(),
       sunColor:new THREE.Color(0x888888),
-//      waterColor:new THREE.Color(0x44ccdd),
+      waterColor:new THREE.Color(0x44ccdd),
     });
     
-    var aMeshMirror = new THREE.Mesh(new THREE.PlaneGeometry(Water.WATER_WIDTH, Water.WATER_WIDTH, 50, 50), water.material);
+    var aMeshMirror = new THREE.Mesh(new THREE.PlaneGeometry(WaterPrefab.WATER_WIDTH, WaterPrefab.WATER_WIDTH, 50, 50), water.material);
     aMeshMirror.add(water);
     aMeshMirror.rotation.x = -Math.PI * 0.5;
     
@@ -54,4 +54,4 @@ WaterScript.prototype.update = function()
 	this.water.render();
 }
 
-Water.WATER_WIDTH = 100000;
+WaterPrefab.WATER_WIDTH = 100000;
