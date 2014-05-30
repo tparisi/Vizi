@@ -4,17 +4,17 @@ WaterPrefab = function(param) {
 	
 	var obj = new Vizi.Object;
 
-    var waterNormals = new THREE.ImageUtils.loadTexture('./images/waternormals.jpg');
+    var waterNormals = new THREE.ImageUtils.loadTexture('../images/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
     var water = new THREE.Water(Vizi.Graphics.instance.renderer, Vizi.Graphics.instance.camera, Vizi.Graphics.instance.scene, {
       textureWidth: 512,
       textureHeight: 512,
       waterNormals: waterNormals,
       alpha: 1,
-      distortionScale: 20,
+      distortionScale: 50,
 //      sunDirection:new THREE.Vector3(0, 1, 1).normalize(),
-      sunColor:new THREE.Color(0x888888),
-      waterColor:new THREE.Color(0x44ccdd),
+//      sunColor:new THREE.Color(0x888888),
+//      waterColor:new THREE.Color(0x44ccdd),
     });
     
     var aMeshMirror = new THREE.Mesh(new THREE.PlaneGeometry(WaterPrefab.WATER_WIDTH, WaterPrefab.WATER_WIDTH, 50, 50), water.material);
@@ -39,7 +39,7 @@ WaterScript = function(param) {
 
 	this.water = param.water;
 	var that = this;
-    this.rippleFactor = 100;
+    this.rippleFactor = 500;
 }
 
 goog.inherits(WaterScript, Vizi.Script);

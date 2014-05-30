@@ -11,6 +11,7 @@ goog.inherits(WaterWorld, Vizi.Application);
 WaterWorld.prototype.init = function() {
 	
 	var cam = new Vizi.PerspectiveCamera;
+	cam.far = WaterWorld.EXTENT;
 	var camera = new Vizi.Object;
 	camera.addComponent(cam);
 	cam.active = true;
@@ -83,5 +84,13 @@ WaterWorld.prototype.init = function() {
 	var water = WaterPrefab();
 	this.addObject(water);
 	
+	var stars = StarsPrefab();
+	this.addObject(stars);
+
+	var meteors = MeteorsPrefab();
+	this.addObject(meteors);
+
 }
+
+WaterWorld.EXTENT = 100000;
 

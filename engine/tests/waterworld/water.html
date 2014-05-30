@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi - Water</title>
+</head>
+<body>
+	<div id="container" style="width:100%; height:100%; position:absolute;background-color:black"></div>
+
+    <script src="../../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+    <script src="../../libs/ParticleEngine/ShaderParticles.min.js"></script>
+    <script src="../../libs/utils.js"></script>
+    <script src="../../libs/three.js.r64/three.js"></script>
+    <script src="../../libs/three.js.r64/stats.min.js"></script>
+	<script src="../../build/vizi-nodeps.js"></script>
+	<script src="waterWorld.js"></script>
+	<script src="water.js"></script>
+	<script src="water-material.js"></script>
+	<script src="stars.js"></script>
+	<script src="meteors.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+
+		var app = new WaterWorld({ container : container, displayStats : true });
+		app.run();
+	}
+	);
+
+	</script>
+	
+</body>
+</html>
