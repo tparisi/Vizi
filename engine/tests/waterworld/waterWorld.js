@@ -1,6 +1,7 @@
 
 WaterWorld = function(param) {
 
+	param.tabstop = true;
 	Vizi.Application.call(this, param);
 	
 	this.init();
@@ -18,16 +19,20 @@ WaterWorld.prototype.init = function() {
 
 	this.addObject(camera);
 	
-	var controller = Vizi.Prefabs.ModelController({active:true, headlight:false, 
+	var controller = Vizi.Prefabs.FirstPersonController({active:true, headlight:false, 
 	});
-	var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+	var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
+	controllerScript.moveSpeed = 5;
+	controllerScript.turnSpeed = 2;
+	controllerScript.lookSpeed = .5;
 	controllerScript.camera = cam;
+	camera.transform.position.y = 2;
 	this.addObject(controller);
 	
 	var cube = new Vizi.Object;
 
 	var visual = new Vizi.Visual(
-			{ geometry: new THREE.CubeGeometry(2, 2, 2),
+			{ geometry: new THREE.CubeGeometry(.2, .2, .2),
 				material: new THREE.MeshPhongMaterial({
 					color:0xff0000,
 					})
@@ -42,8 +47,8 @@ WaterWorld.prototype.init = function() {
 		duration:.5});
 	cube.addComponent(rotateBehavior);
 	
-	var bounceBehavior = new Vizi.BounceBehavior({autoStart:false, 
-		loop:true, bounceVector:new THREE.Vector3(0, 5, 0),
+	var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+		loop:true, bounceVector:new THREE.Vector3(0, .5, 0),
 		duration:2});
 	cube.addComponent(bounceBehavior);
 
@@ -52,7 +57,7 @@ WaterWorld.prototype.init = function() {
 	var cube = new Vizi.Object;
 
 	var visual = new Vizi.Visual(
-			{ geometry: new THREE.CubeGeometry(2, 2, 2),
+			{ geometry: new THREE.CubeGeometry(.2, .2, .2),
 				material: new THREE.MeshPhongMaterial({
 					color:0x00ff00,
 					reflectivity:0.8,
@@ -64,8 +69,8 @@ WaterWorld.prototype.init = function() {
 	cube.transform.position.set(2, 1, -4);
 	cube.addComponent(visual);
 
-	var bounceBehavior = new Vizi.BounceBehavior({autoStart:false, 
-		loop:true, bounceVector:new THREE.Vector3(0, 0, -20),
+	var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+		loop:true, bounceVector:new THREE.Vector3(0, 0, -2),
 		duration:5});
 	cube.addComponent(bounceBehavior);
 	this.addObject(cube);

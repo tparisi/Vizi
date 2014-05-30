@@ -47507,10 +47507,13 @@ Vizi.FirstPersonControllerScript = function(param)
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this._move = (param.move !== undefined) ? param.move : true;
 	this._look = (param.look !== undefined) ? param.look : true;
+	this._turn = (param.move !== undefined) ? param.turn : true;
 	this._mouseLook = (param.mouseLook !== undefined) ? param.mouseLook : false;
 	
 	this.collisionDistance = 10;
 	this.moveSpeed = 13;
+	this.turnSpeed = 5;
+	this.lookSpeed = 1;
 	
 	this.savedCameraPos = new THREE.Vector3;	
 	this.movementVector = new THREE.Vector3;
@@ -47581,7 +47584,8 @@ Vizi.FirstPersonControllerScript.prototype.createControls = function(camera)
 	var controls = new Vizi.FirstPersonControls(camera.object, Vizi.Graphics.instance.container);
 	controls.mouseLook = this._mouseLook;
 	controls.movementSpeed = this._move ? this.moveSpeed : 0;
-	controls.lookSpeed = this._look ? 1.0 : 0;
+	controls.lookSpeed = this._look ? this.lookSpeed  : 0;
+	controls.turnSpeed = this._turn ? this.turnSpeed : 0;
 
 	this.clock = new THREE.Clock();
 	return controls;
