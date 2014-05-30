@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi - Skybox</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script src="water.js"></script>
+	<script src="water-material.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container });
+		
+		app.run();
+
+		var cam = new Vizi.PerspectiveCamera;
+		var camera = new Vizi.Object;
+		camera.addComponent(cam);
+		cam.active = true;
+
+		app.addObject(camera);
+		
+		var controller = Vizi.Prefabs.ModelController({active:true, headlight:false, 
+		});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+		controllerScript.camera = cam;
+		app.addObject(controller);
+		
+		var cube = new Vizi.Object;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshPhongMaterial({
+						color:0xff0000,
+						})
+				});
+
+
+		cube.transform.position.y = 2;
+		cube.addComponent(visual);
+
+		var rotateBehavior = new Vizi.RotateBehavior({autoStart:true, 
+			loop:true, 
+			duration:.5});
+		cube.addComponent(rotateBehavior);
+		
+		var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+			loop:true, bounceVector:new THREE.Vector3(0, 5, 0),
+			duration:2});
+		cube.addComponent(bounceBehavior);
+
+		app.addObject(cube);
+
+		var cube = new Vizi.Object;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshPhongMaterial({
+						color:0x00ff00,
+						reflectivity:0.8,
+						refractionRatio:0.1
+						})
+				});
+
+
+		cube.transform.position.set(2, 1, -4);
+		cube.addComponent(visual);
+
+		var bounceBehavior = new Vizi.BounceBehavior({autoStart:true, 
+			loop:true, bounceVector:new THREE.Vector3(0, 0, -20),
+			duration:5});
+		cube.addComponent(bounceBehavior);
+		app.addObject(cube);
+		
+		var l1 = new Vizi.Object;
+		var light1 = new Vizi.DirectionalLight({direction: new THREE.Vector3(-1, -2, -1)});
+		l1.addComponent(light1);
+		app.addObject(l1);
+
+
+		var l2 = new Vizi.Object;
+		var light2 = new Vizi.DirectionalLight({direction: new THREE.Vector3(1, 1, 1)});
+		l2.addComponent(light2);
+		app.addObject(l2);
+		
+		var water = Water();
+		app.addObject(water);
+	}
+	);
+
+	</script>
+	
+</body>
+</html>

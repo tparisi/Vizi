@@ -14,7 +14,7 @@
       this.camFar = FW.width * 2;
       this.time = Date.now();
       this.rippleFactor = 90;
-      FW.camera = new THREE.PerspectiveCamera(75.0, this.SCREEN_WIDTH / this.SCREEN_HEIGHT, 1, this.camFar);
+      FW.camera = new THREE.PerspectiveCamera(25.0, this.SCREEN_WIDTH / this.SCREEN_HEIGHT, 1, this.camFar);
       FW.scene = new THREE.Scene();
       this.controls = new FW.Controls(FW.camera);
       FW.scene.add(FW.controls.getObject());
