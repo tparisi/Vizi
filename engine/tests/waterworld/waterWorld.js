@@ -22,7 +22,7 @@ WaterWorld.prototype.init = function() {
 	var controller = Vizi.Prefabs.FirstPersonController({active:true, headlight:false, 
 	});
 	var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
-	controllerScript.moveSpeed = 5;
+	controllerScript.moveSpeed = 6;
 	controllerScript.turnSpeed = 2;
 	controllerScript.lookSpeed = .5;
 	controllerScript.camera = cam;
@@ -52,7 +52,7 @@ WaterWorld.prototype.init = function() {
 		duration:2});
 	cube.addComponent(bounceBehavior);
 
-	this.addObject(cube);
+	//this.addObject(cube);
 
 	var cube = new Vizi.Object;
 
@@ -73,7 +73,7 @@ WaterWorld.prototype.init = function() {
 		loop:true, bounceVector:new THREE.Vector3(0, 0, -2),
 		duration:5});
 	cube.addComponent(bounceBehavior);
-	this.addObject(cube);
+	//this.addObject(cube);
 	
 	var l1 = new Vizi.Object;
 	var light1 = new Vizi.DirectionalLight({direction: new THREE.Vector3(-1, -2, -1)});
@@ -95,6 +95,9 @@ WaterWorld.prototype.init = function() {
 	var meteors = MeteorsPrefab();
 	this.addObject(meteors);
 
+	var caves = CavesPrefab();
+	this.addObject(caves);
+	
 }
 
 WaterWorld.EXTENT = 100000;
