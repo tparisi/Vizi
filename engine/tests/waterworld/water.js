@@ -39,7 +39,7 @@ WaterScript = function(param) {
 
 	this.water = param.water;
 	var that = this;
-    this.rippleFactor = 500;
+    this.rippleFactor = 90;
 }
 
 goog.inherits(WaterScript, Vizi.Script);
