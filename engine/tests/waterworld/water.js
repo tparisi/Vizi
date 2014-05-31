@@ -10,7 +10,7 @@ WaterPrefab = function(param) {
       textureWidth: 512,
       textureHeight: 512,
       waterNormals: waterNormals,
-      alpha: 1,
+      alpha: .5,
       distortionScale: 20,
 //      sunDirection:new THREE.Vector3(0, 1, 1).normalize(),
 //      sunColor:new THREE.Color(0x888888),
