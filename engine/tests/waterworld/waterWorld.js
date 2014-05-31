@@ -16,7 +16,8 @@ WaterWorld.prototype.init = function() {
 		addLights = true,
 		addStars = true,
 		addMeteors = true,
-		addCaves = true;
+		addCaves = true,
+		addBrushes = true;
 	
 	var cam = new Vizi.PerspectiveCamera;
 	cam.far = WaterWorld.EXTENT;
@@ -96,13 +97,13 @@ WaterWorld.prototype.init = function() {
 	if (addLights) {
 
 		var l1 = new Vizi.Object;
-		var light1 = new Vizi.DirectionalLight({direction: new THREE.Vector3(-1, -2, -1)});
+		var light1 = new Vizi.DirectionalLight({direction: new THREE.Vector3(-1, -1, -1)});
 		l1.addComponent(light1);
 		this.addObject(l1);
 	
 	
 		var l2 = new Vizi.Object;
-		var light2 = new Vizi.DirectionalLight({direction: new THREE.Vector3(1, 1, 1)});
+		var light2 = new Vizi.DirectionalLight({direction: new THREE.Vector3(0, -1, -1)});
 		l2.addComponent(light2);
 		this.addObject(l2);
 	}
@@ -123,7 +124,12 @@ WaterWorld.prototype.init = function() {
 	if (addCaves) {
 		var caves = CavesPrefab();
 		this.addObject(caves);
-	}	
+	}
+	
+	if (addBrushes) {
+		var brushes = BrushesPrefab();
+		this.addObject(brushes);
+	}
 }
 
 WaterWorld.EXTENT = 100000;

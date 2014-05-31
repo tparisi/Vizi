@@ -60,6 +60,6 @@ CavesScript.prototype.realize = function()
     }
 }
 
-CavesScript.prototype.update = function()
-{
+CavesScript.prototype.update = function() {
 }
+
