@@ -28,7 +28,7 @@ FirefliesScript.prototype.realize = function()
     this.brushEmitters = [];
     this.height = 220;
     this.distanceFromPlayer = 70;
-    this.paintTimeoutInterval = 1000;
+    this.paintTimeoutInterval = 500;
     this.startingPos = new THREE.Vector3(0, 0, 0);
     this.fakeObject = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());
     texture = THREE.ImageUtils.loadTexture('../images/firefly.png');
@@ -56,7 +56,7 @@ FirefliesScript.prototype.initializePaint = function() {
           size: 10,
           sizeEnd: 10,
           colorEnd: new THREE.Color(),
-          particlesPerSecond: 100,
+          particlesPerSecond: 33,
           opacityStart: 0.5,
           opacityMiddle: 1,
           opacityEnd: 0.5,
@@ -85,6 +85,7 @@ FirefliesScript.prototype.startPaint = function() {
     
 		if (Math.random() < this.emitterActivateFraction) {
 			brushEmitter.position.copy(this.fakeObject.position);
+			brushEmitter.position.y = Math.max(5, brushEmitter.position.y);
 			brushEmitter.enable();
 		}
 	}	

@@ -22,12 +22,12 @@ BubblesScript.prototype.realize = function()
     var texture;
     this.name = 'bubbles';
     this.riseSpeed = .05;
-    this.numEmitters = 100;
+    this.numEmitters = 20;
     this.emitterActivateFraction = 1 / this.numEmitters;
     this.brushEmitters = [];
     this.height = 220;
     this.distanceFromPlayer = 30;
-    this.paintTimeoutInterval = 500;
+    this.paintTimeoutInterval = 50;
     this.startingPos = new THREE.Vector3(0, 0, 0);
     this.fakeObject = new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial());
     texture = THREE.ImageUtils.loadTexture('../images/bubbles.png');

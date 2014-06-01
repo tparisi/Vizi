@@ -21,7 +21,7 @@ WandScript.prototype.realize = function()
 {
     var texture;
     this.name = 'wand';
-    this.numEmitters = 20000;
+    this.numEmitters = 200;
     this.emitterActivateFraction = 1 / this.numEmitters;
     this.brushEmitters = [];
     this.height = 220;

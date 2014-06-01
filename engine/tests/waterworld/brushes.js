@@ -43,14 +43,6 @@ BrushesScript.prototype.realize = function() {
 BrushesScript.prototype.addDomHandlers = function() {
 	
 	var that = this;
-	
-	$('body').on('mousedown', function(event) {
-		return that.startPaint();
-	});
-	
-	$('body').on('mouseup', function() {
-		return that.endPaint();
-	});
 }
 
 BrushesScript.prototype.update = function() {
