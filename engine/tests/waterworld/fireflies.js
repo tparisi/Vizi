@@ -1,39 +1,41 @@
-WandPrefab = function(param) {
+FirefliesPrefab = function(param) {
 
 	param = param || {};
 	
 	var obj = new Vizi.Object;
 
-	var wandScript = new WandScript();
-	obj.addComponent(wandScript);
+	var firefliesScript = new FirefliesScript();
+	obj.addComponent(firefliesScript);
 	
 	return obj;
 }
 
 
-WandScript = function(param) {
+FirefliesScript = function(param) {
 	BrushScript.call(this, param);
 }
 
-goog.inherits(WandScript, BrushScript);
+goog.inherits(FirefliesScript, BrushScript);
 
-WandScript.prototype.realize = function()
+FirefliesScript.prototype.realize = function()
 {
     var texture;
-    this.name = 'wand';
-    this.numEmitters = 20000;
+    this.name = 'fireflies';
+    this.wormholeSpeed = 1;
+    this.riseSpeed = .1;
+    this.numEmitters = 10;
     this.emitterActivateFraction = 1 / this.numEmitters;
     this.brushEmitters = [];
     this.height = 220;
-    this.distanceFromPlayer = 50;
-    this.paintTimeoutInterval = 50;
+    this.distanceFromPlayer = 70;
+    this.paintTimeoutInterval = 1000;
     this.startingPos = new THREE.Vector3(0, 0, 0);
-    this.fakeObject = new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial());
-    texture = THREE.ImageUtils.loadTexture('../images/smokeparticle.png');
+    this.fakeObject = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());
+    texture = THREE.ImageUtils.loadTexture('../images/firefly.png');
     texture.minFilter = THREE.LinearMipMapLinearFilter;
     this.particleGroup = new ShaderParticleGroup({
       texture: texture,
-      maxAge: 5
+      maxAge: 3
     });
     
     this.initializePaint();
@@ -44,24 +46,22 @@ WandScript.prototype.realize = function()
     this._object.addChild(brush);
 }
 
-WandScript.prototype.initializePaint = function() {
+FirefliesScript.prototype.initializePaint = function() {
 	
-    var colorEnd, colorStart, i, brushEmitter, _i, _ref, _results;
+	var i, brushEmitter, _i, _ref, _results;
 
     for (i = _i = 0, _ref = this.numEmitters; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-      colorStart = new THREE.Color();
-      colorStart.setRGB(Math.random(), Math.random(), Math.random());
-      colorEnd = new THREE.Color();
-      colorEnd.setRGB(Math.random(), Math.random(), Math.random());
       brushEmitter = new ShaderParticleEmitter({
-        size: 20,
-        sizeEnd: 10,
-        colorStart: colorStart,
-        colorEnd: colorEnd,
-        particlesPerSecond: 1,
-        opacityStart: 0.2,
-        opacityMiddle: 1,
-        opacityEnd: 0
+          positionSpread: new THREE.Vector3(60, 20, 60),
+          size: 10,
+          sizeEnd: 10,
+          colorEnd: new THREE.Color(),
+          particlesPerSecond: 100,
+          opacityStart: 0.5,
+          opacityMiddle: 1,
+          opacityEnd: 0.5,
+          velocitySpread: new THREE.Vector3(5, 5, 5),
+          accelerationSpread: new THREE.Vector3(2, 2, 2)
       });
       this.particleGroup.addEmitter(brushEmitter);
       this.brushEmitters.push(brushEmitter);
@@ -69,9 +69,9 @@ WandScript.prototype.initializePaint = function() {
     }
 }
 
-WandScript.prototype.startPaint = function() {
-	
-    var direction, brushEmitter, _i, _len, _ref,
+FirefliesScript.prototype.startPaint = function() {
+
+	var direction, brushEmitter, _i, _len, _ref,
     _this = this;
 	this.fakeObject.position.copy(Vizi.Graphics.instance.camera.position);
 	direction = new THREE.Vector3(0, 0, -1);
@@ -85,11 +85,9 @@ WandScript.prototype.startPaint = function() {
     
 		if (Math.random() < this.emitterActivateFraction) {
 			brushEmitter.position.copy(this.fakeObject.position);
-			brushEmitter.position.y = Math.max(5, brushEmitter.position.y);
 			brushEmitter.enable();
 		}
-	}
-	
+	}	
 
 	this.paintTimeout = setTimeout(function() {
 		return _this.startPaint();
@@ -97,10 +95,10 @@ WandScript.prototype.startPaint = function() {
 		this.paintTimeoutInterval);
 }
 
-WandScript.prototype.endPaint = function() {
+FirefliesScript.prototype.endPaint = function() {
     return window.clearTimeout(this.paintTimeout);
 }
 
-WandScript.prototype.update = function() {
+FirefliesScript.prototype.update = function() {
     return this.particleGroup.tick();
 }

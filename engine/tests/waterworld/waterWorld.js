@@ -29,7 +29,9 @@ WaterWorld.prototype.init = function() {
 	this.addObject(camera);
 
 	if (fpsController) {
-		var controller = Vizi.Prefabs.FirstPersonController({active:true, headlight:false, 
+		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
+			headlight:false,
+			mouseLook:true,
 		});
 		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
 		controllerScript.moveSpeed = 6;
@@ -129,7 +131,17 @@ WaterWorld.prototype.init = function() {
 	if (addBrushes) {
 		var brushes = BrushesPrefab();
 		this.addObject(brushes);
+		
+		this.brushes = brushes.getComponent(BrushesScript);
 	}
+}
+
+WaterWorld.prototype.onKeyDown = function(event) {
+    switch ( event.keyCode ) {
+	    case 82:
+	      this.brushes.nextBrush();
+	      break;
+    }
 }
 
 WaterWorld.EXTENT = 100000;

@@ -24,11 +24,11 @@ BrushesScript.prototype.realize = function() {
 	
     this.brushes = [];
     this.activeBrushIndex = 0;
-    //this._object.addChild(WandPrefab());
+    this._object.addChild(WandPrefab());
     this._object.addChild(FirePrefab());
-	//this._object.addChild(BubblesPrefab());
-	//this._object.addChild(FirefliesPrefab());
-	//this._object.addChild(MysteryPrefab());
+	this._object.addChild(BubblesPrefab());
+	this._object.addChild(FirefliesPrefab());
+	this._object.addChild(MysteryPrefab());
     
     var i, len = this._object._children.length;
     for (i = 0; i < len; i++) {

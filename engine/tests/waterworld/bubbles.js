@@ -1,39 +1,40 @@
-WandPrefab = function(param) {
+BubblesPrefab = function(param) {
 
 	param = param || {};
 	
 	var obj = new Vizi.Object;
 
-	var wandScript = new WandScript();
-	obj.addComponent(wandScript);
+	var bubblesScript = new BubblesScript();
+	obj.addComponent(bubblesScript);
 	
 	return obj;
 }
 
 
-WandScript = function(param) {
+BubblesScript = function(param) {
 	BrushScript.call(this, param);
 }
 
-goog.inherits(WandScript, BrushScript);
+goog.inherits(BubblesScript, BrushScript);
 
-WandScript.prototype.realize = function()
+BubblesScript.prototype.realize = function()
 {
     var texture;
-    this.name = 'wand';
-    this.numEmitters = 20000;
+    this.name = 'bubbles';
+    this.riseSpeed = .05;
+    this.numEmitters = 100;
     this.emitterActivateFraction = 1 / this.numEmitters;
     this.brushEmitters = [];
     this.height = 220;
-    this.distanceFromPlayer = 50;
-    this.paintTimeoutInterval = 50;
+    this.distanceFromPlayer = 30;
+    this.paintTimeoutInterval = 500;
     this.startingPos = new THREE.Vector3(0, 0, 0);
     this.fakeObject = new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial());
-    texture = THREE.ImageUtils.loadTexture('../images/smokeparticle.png');
+    texture = THREE.ImageUtils.loadTexture('../images/bubbles.png');
     texture.minFilter = THREE.LinearMipMapLinearFilter;
     this.particleGroup = new ShaderParticleGroup({
       texture: texture,
-      maxAge: 5
+      maxAge: 2
     });
     
     this.initializePaint();
@@ -44,9 +45,9 @@ WandScript.prototype.realize = function()
     this._object.addChild(brush);
 }
 
-WandScript.prototype.initializePaint = function() {
-	
-    var colorEnd, colorStart, i, brushEmitter, _i, _ref, _results;
+BubblesScript.prototype.initializePaint = function() {
+
+	var colorEnd, colorStart, i, brushEmitter, _i, _ref, _results;
 
     for (i = _i = 0, _ref = this.numEmitters; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       colorStart = new THREE.Color();
@@ -54,14 +55,15 @@ WandScript.prototype.initializePaint = function() {
       colorEnd = new THREE.Color();
       colorEnd.setRGB(Math.random(), Math.random(), Math.random());
       brushEmitter = new ShaderParticleEmitter({
-        size: 20,
-        sizeEnd: 10,
-        colorStart: colorStart,
-        colorEnd: colorEnd,
-        particlesPerSecond: 1,
-        opacityStart: 0.2,
-        opacityMiddle: 1,
-        opacityEnd: 0
+          positionSpread: new THREE.Vector3(1, 1, 1),
+          sizeEnd: 5,
+          colorStart: colorStart,
+          colorEnd: colorEnd,
+          particlesPerSecond: 50,
+          opacityStart: 0.5,
+          opacityMiddle: 1,
+          opacityEnd: 0,
+          accelerationSpread: new THREE.Vector3(2, 2, 2)
       });
       this.particleGroup.addEmitter(brushEmitter);
       this.brushEmitters.push(brushEmitter);
@@ -69,9 +71,9 @@ WandScript.prototype.initializePaint = function() {
     }
 }
 
-WandScript.prototype.startPaint = function() {
-	
-    var direction, brushEmitter, _i, _len, _ref,
+BubblesScript.prototype.startPaint = function() {
+
+	var direction, brushEmitter, _i, _len, _ref,
     _this = this;
 	this.fakeObject.position.copy(Vizi.Graphics.instance.camera.position);
 	direction = new THREE.Vector3(0, 0, -1);
@@ -88,8 +90,7 @@ WandScript.prototype.startPaint = function() {
 			brushEmitter.position.y = Math.max(5, brushEmitter.position.y);
 			brushEmitter.enable();
 		}
-	}
-	
+	}	
 
 	this.paintTimeout = setTimeout(function() {
 		return _this.startPaint();
@@ -97,10 +98,10 @@ WandScript.prototype.startPaint = function() {
 		this.paintTimeoutInterval);
 }
 
-WandScript.prototype.endPaint = function() {
+BubblesScript.prototype.endPaint = function() {
     return window.clearTimeout(this.paintTimeout);
 }
 
-WandScript.prototype.update = function() {
+BubblesScript.prototype.update = function() {
     return this.particleGroup.tick();
 }

@@ -76,6 +76,7 @@ FireScript.prototype.startPaint = function() {
     _this = this;
 	this.fakeObject.position.copy(Vizi.Graphics.instance.camera.position);
 	direction = new THREE.Vector3(0, 0, -1);
+	direction.transformDirection(Vizi.Graphics.instance.camera.matrixWorld);
 	this.fakeObject.translateZ(direction.z * this.distanceFromPlayer);
 	this.fakeObject.translateY(direction.y * this.distanceFromPlayer);
 	this.fakeObject.translateX(direction.x * this.distanceFromPlayer);
