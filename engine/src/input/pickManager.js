@@ -57,6 +57,18 @@ Vizi.PickManager.handleMouseMove = function(event)
 
             }
         }
+        
+        if (Vizi.PickManager.overObject) {
+	    	var pickers = Vizi.PickManager.overObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		
+	    		if (pickers[i].enabled && pickers[i].moveWithoutCapture && pickers[i].onMouseMove) {
+	        		event.type = "mousemove";
+	    			pickers[i].onMouseMove(event);
+	    		}
+	    	}
+        }
     }
 }
 

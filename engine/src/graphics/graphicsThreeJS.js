@@ -129,6 +129,10 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.projector = projector;
 
     this.lastFrameTime = 0;
+    
+    if (param.riftRender) {
+    	  this.riftCam = new THREE.OculusRiftEffect(this.renderer);	
+    }
 }
 
 Vizi.GraphicsThreeJS.prototype.initMouse = function()
@@ -681,6 +685,15 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
+	// N.B.: start with hack, let's see how it goes...
+	if (this.riftCam) {
+	    this.riftCam.render(
+	        	[ this.backgroundLayer.scene, this.scene ],
+	        	[this.backgroundLayer.camera, this.camera]);
+
+	    return;
+	}
+	
     this.renderer.setClearColor( 0, 0 );
 	this.renderer.autoClearColor = true;
     this.renderer.render( this.backgroundLayer.scene, this.backgroundLayer.camera );

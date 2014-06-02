@@ -4,12 +4,12 @@ WaterWorld = function(param) {
 	param.tabstop = true;
 	Vizi.Application.call(this, param);
 	
-	this.init();
+	this.init(param);
 }
 
 goog.inherits(WaterWorld, Vizi.Application);
 
-WaterWorld.prototype.init = function() {
+WaterWorld.prototype.init = function(param) {
 
 	var addCubes = false,
 		fpsController = true,
@@ -18,6 +18,8 @@ WaterWorld.prototype.init = function() {
 		addMeteors = true,
 		addCaves = true,
 		addBrushes = true;
+	
+	var riftController = param.riftController;
 	
 	var cam = new Vizi.PerspectiveCamera;
 	cam.far = WaterWorld.EXTENT;
@@ -29,10 +31,22 @@ WaterWorld.prototype.init = function() {
 	
 	this.addObject(camera);
 
+	if (riftController) {
+		var controller = Vizi.Prefabs.RiftController({active:true, 
+			headlight:false,
+			mouseLook:true,
+		});
+		var controllerScript = controller.getComponent(Vizi.RiftControllerScript);
+		controllerScript.camera = cam;
+		
+		this.addObject(controller);
+	}
+	
 	if (fpsController) {
 		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
 			headlight:false,
 			mouseLook:true,
+			turn: !riftController,
 		});
 		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
 		controllerScript.moveSpeed = 6;

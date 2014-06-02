@@ -44976,7 +44976,492 @@ THREE.glTFInterpolator.prototype.copyValue = function(target) {
 		target.copy(this.vec3);
 	}		
 }
-// tween.js - http://github.com/sole/tween.js
+var OculusBridge = function(config) {
+
+	// ye olde websocket
+	var socket;
+
+	var reconnectTimeout 	= null;
+	var retryOnDisconnect 	= true;
+	var websocketAddress 	= config.hasOwnProperty("address") 			? config["address"] 		: "localhost";
+	var websocketPort 		= config.hasOwnProperty("port") 			? config["port"] 			: 9005;
+	var retryInterval 		= config.hasOwnProperty("retryInterval") 	? config["retryInterval"] 	: 1;
+	var debugEnabled		= config.hasOwnProperty("debug") 			? config["debug"] 			: false;
+
+	// Quaternion values
+	var quaternionValues = { 
+		x : 0,
+		y : 0,
+		z : 0,
+		w : 0 
+	};
+
+	// Accelerometer readings
+	var accelerationValues = {
+		x : 0,
+		y : 0,
+		z : 0
+	};
+
+	// Display metrics, set to defaults from the dev kit hardware
+	var displayMetrics = {
+		FOV 					: 125.871,
+
+		hScreenSize				: 0.14976,
+		vScreenSize				: 0.0935,
+		vScreenCenter			: 0.0935 / 2,
+
+		eyeToScreenDistance		: 0.041,
+
+		lensSeparationDistance	: 0.067,
+		interpupillaryDistance	: 0.0675,
+
+		hResolution				: 1280,
+		vResolution				: 720,
+
+		distortionK				: [1, .22, .24, 0],
+		chromaAbParameter		: [0.996, -0.004, 1.014, 0]
+	}
+
+	// Callback handlers.
+	var callbacks = {
+		onOrientationUpdate : null,
+		onAccelerationUpdate: null,
+		onConfigUpdate : null,
+		onConnect : null,
+		onDisconnect : null
+	};
+
+	// hook up any callbacks specified in the config object
+	for(var cb in callbacks){
+		if(typeof(config[cb]) == "function"){
+			callbacks[cb] = config[cb];
+		}
+	}
+
+	var updateOrientation = function(data) {
+
+		if(data["o"] && (data["o"].length == 4)) {
+			
+			quaternionValues.x = Number(data["o"][1]);
+			quaternionValues.y = Number(data["o"][2]);
+			quaternionValues.z = Number(data["o"][3]);
+			quaternionValues.w = Number(data["o"][0]);
+
+			if(callbacks["onOrientationUpdate"]) {
+				callbacks["onOrientationUpdate"](quaternionValues);
+			}
+		}
+	}
+
+	var updateAcceleration = function(data) {
+
+		if(data["a"] && (data["a"].length == 3)) {
+			
+			accelerationValues.x = Number(data["a"][0]);
+			accelerationValues.y = Number(data["a"][1]);
+			accelerationValues.z = Number(data["a"][2]);
+
+			if(callbacks["onAccelerationUpdate"]) {
+				callbacks["onAccelerationUpdate"](accelerationValues);
+			}
+		}
+	}
+
+	var updateConfig = function(data) {
+		displayMetrics.hScreenSize				= data["screenSize"][0];
+		displayMetrics.vScreenSize				= data["screenSize"][1];
+		displayMetrics.vScreenCenter			= data["screenSize"][1] / 2;
+
+		displayMetrics.eyeToScreenDistance		= data["eyeToScreen"];
+
+		displayMetrics.lensSeparationDistance	= data["lensDistance"];
+		displayMetrics.interpupillaryDistance	= data["interpupillaryDistance"];
+
+		displayMetrics.hResolution				= data["screenResolution"][0];
+		displayMetrics.vResolution				= data["screenResolution"][1];
+
+		displayMetrics.distortionK				= [ data["distortion"][0], data["distortion"][1], data["distortion"][2], data["distortion"][3] ];
+
+		displayMetrics.FOV						= data["fov"];
+
+		if(callbacks["onConfigUpdate"]) {
+			callbacks["onConfigUpdate"]( displayMetrics );
+		}
+	}
+
+
+	var connect = function() {
+		
+		retryOnDisconnect = true;
+		
+		var socketURL = "ws://" + websocketAddress + ":" + websocketPort + "/";
+		
+		// attempt to open the socket connection
+	 	socket = new WebSocket(socketURL); 
+
+		debug("Attempting to connect: " + socketURL);
+	 	
+
+	 	// hook up websocket events //
+
+		socket.onopen = function(){
+			debug("Connected!")
+
+			if(callbacks["onConnect"]) {
+				callbacks["onConnect"]();
+			}
+		}
+
+		socket.onerror = function(e){
+			debug("Socket error.");
+		}
+		
+		socket.onmessage = function(msg) {
+			
+			var data = JSON.parse( msg.data );
+
+			var message = data["m"];
+
+			switch(message){
+				case "config" :
+					updateConfig(data);
+				break;
+
+				// For backwards compatability with the bridge application.
+				case "orientation":
+					updateOrientation(data);
+				break;
+
+				case "update":
+					updateOrientation(data);
+					updateAcceleration(data);
+				break;
+
+				default:
+					debug("Unknown message received from server: " + msg.data);
+					disconnect();
+				break;
+			}
+
+		}
+		
+		socket.onclose = function() {
+			if(callbacks["onDisconnect"]) {
+				callbacks["onDisconnect"]();
+			}
+
+			if(retryOnDisconnect){
+				debug("Connection failed, retrying in 1 second...");
+				reconnectTimeout = window.setTimeout( reconnect, retryInterval * 1000 );
+			}
+		}
+	}
+
+	var debug = function(message){
+		if(debugEnabled){
+			console.log("OculusBridge: " + message);
+		}
+	}
+
+	var reconnect = function(){
+		connect();
+	}
+
+	var disconnect = function(){
+		retryOnDisconnect = false;
+		window.clearTimeout(reconnectTimeout);
+		socket.close();
+	}
+
+	var getConfiguration = function(){
+		return displayMetrics;
+	}
+
+	var getOrientation = function(){
+		return quaternionValues;
+	}
+
+	var getAcceleration = function(){
+		return accelerationValues;
+	}
+
+	var isConnected = function(){
+		return socket.readyState == 1;
+	}
+
+	return {
+		"isConnected" 		: isConnected,
+		"disconnect" 		: disconnect,
+		"connect" 			: connect,
+		"getOrientation" 	: getOrientation,
+		"getConfiguration" 	: getConfiguration
+	}
+};/**
+ * @author troffmo5 / http://github.com/troffmo5
+ *
+ * Effect to render the scene in stereo 3d side by side with lens distortion.
+ * It is written to be used with the Oculus Rift (http://www.oculusvr.com/) but
+ * it works also with other HMD using the same technology
+ */
+
+THREE.OculusRiftEffect = function ( renderer, options ) {
+	// worldFactor indicates how many units is 1 meter
+	var worldFactor = (options && options.worldFactor) ? options.worldFactor: 1.0;
+
+	// Specific HMD parameters
+	var HMD = (options && options.HMD) ? options.HMD: {
+		// Parameters from the Oculus Rift DK1
+		hResolution: 1280,
+		vResolution: 720,
+		hScreenSize: 0.14976,
+		vScreenSize: 0.0935,
+		interpupillaryDistance: 0.064,
+		lensSeparationDistance: 0.0635,
+		eyeToScreenDistance: 0.041,
+		distortionK : [1.0, 0.22, 0.24, 0.0],
+		chromaAbParameter : [0.996, -0.004, 1.014, 0]
+	};
+
+	// Perspective camera
+	var pCamera = new THREE.PerspectiveCamera();
+	pCamera.matrixAutoUpdate = false;
+	pCamera.target = new THREE.Vector3();
+
+	// Orthographic camera
+	var oCamera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0.0001, 100000 );
+	oCamera.position.z = 1;
+
+	// pre-render hooks
+	this.preLeftRender = function() {};
+	this.preRightRender = function() {};
+
+	//renderer.autoClear = false;
+	var emptyColor = new THREE.Color("black");
+
+	// Render target
+	var RTParams = { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat };
+	var renderTarget = new THREE.WebGLRenderTarget( 640, 800, RTParams );
+	var RTMaterial = new THREE.ShaderMaterial( {
+		uniforms: {
+			"texid": { type: "t", value: renderTarget },
+			"scale": { type: "v2", value: new THREE.Vector2(1.0,1.0) },
+			"scaleIn": { type: "v2", value: new THREE.Vector2(1.0,1.0) },
+			"lensCenter": { type: "v2", value: new THREE.Vector2(0.0,0.0) },
+			"hmdWarpParam": { type: "v4", value: new THREE.Vector4(1.0,0.0,0.0,0.0) },
+			"chromAbParam": { type: "v4", value: new THREE.Vector4(1.0,0.0,0.0,0.0) }
+		},
+		vertexShader: [
+			"varying vec2 vUv;",
+			"void main() {",
+			" vUv = uv;",
+			"	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+			"}"
+		].join("\n"),
+
+		fragmentShader: [
+			"uniform vec2 scale;",
+			"uniform vec2 scaleIn;",
+			"uniform vec2 lensCenter;",
+			"uniform vec4 hmdWarpParam;",
+			'uniform vec4 chromAbParam;',
+			"uniform sampler2D texid;",
+			"varying vec2 vUv;",
+			"void main()",
+			"{",
+			"  vec2 uv = (vUv*2.0)-1.0;", // range from [0,1] to [-1,1]
+			"  vec2 theta = (uv-lensCenter)*scaleIn;",
+			"  float rSq = theta.x*theta.x + theta.y*theta.y;",
+			"  vec2 rvector = theta*(hmdWarpParam.x + hmdWarpParam.y*rSq + hmdWarpParam.z*rSq*rSq + hmdWarpParam.w*rSq*rSq*rSq);",
+			'  vec2 rBlue = rvector * (chromAbParam.z + chromAbParam.w * rSq);',
+			"  vec2 tcBlue = (lensCenter + scale * rBlue);",
+			"  tcBlue = (tcBlue+1.0)/2.0;", // range from [-1,1] to [0,1]
+			"  if (any(bvec2(clamp(tcBlue, vec2(0.0,0.0), vec2(1.0,1.0))-tcBlue))) {",
+			"    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);",
+			"    return;}",
+			"  vec2 tcGreen = lensCenter + scale * rvector;",
+			"  tcGreen = (tcGreen+1.0)/2.0;", // range from [-1,1] to [0,1]
+			"  vec2 rRed = rvector * (chromAbParam.x + chromAbParam.y * rSq);",
+			"  vec2 tcRed = lensCenter + scale * rRed;",
+			"  tcRed = (tcRed+1.0)/2.0;", // range from [-1,1] to [0,1]
+			"  gl_FragColor = vec4(texture2D(texid, tcRed).r, texture2D(texid, tcGreen).g, texture2D(texid, tcBlue).b, 1);",
+			"}"
+		].join("\n")
+	} );
+
+	var mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), RTMaterial );
+
+	// Final scene
+	var finalScene = new THREE.Scene();
+	finalScene.add( oCamera );
+	finalScene.add( mesh );
+
+    var left = {}, right = {};
+    var distScale = 1.0;
+	this.setHMD = function(v) {
+		HMD = v;
+		// Compute aspect ratio and FOV
+		var aspect = HMD.hResolution / (2*HMD.vResolution);
+
+		// Fov is normally computed with:
+		//   THREE.Math.radToDeg( 2*Math.atan2(HMD.vScreenSize,2*HMD.eyeToScreenDistance) );
+		// But with lens distortion it is increased (see Oculus SDK Documentation)
+		var r = -1.0 - (4 * (HMD.hScreenSize/4 - HMD.lensSeparationDistance/2) / HMD.hScreenSize);
+		distScale = (HMD.distortionK[0] + HMD.distortionK[1] * Math.pow(r,2) + HMD.distortionK[2] * Math.pow(r,4) + HMD.distortionK[3] * Math.pow(r,6));
+		var fov = HMD.fov ? HMD.fov : THREE.Math.radToDeg(2*Math.atan2(HMD.vScreenSize*distScale, 2*HMD.eyeToScreenDistance));
+
+		// Compute camera projection matrices
+		var proj = (new THREE.Matrix4()).makePerspective( fov, aspect, 0.3, 10000 );
+		var h = 4 * (HMD.hScreenSize/4 - HMD.interpupillaryDistance/2) / HMD.hScreenSize;
+		left.proj = ((new THREE.Matrix4()).makeTranslation( h, 0.0, 0.0 )).multiply(proj);
+		right.proj = ((new THREE.Matrix4()).makeTranslation( -h, 0.0, 0.0 )).multiply(proj);
+
+		// Compute camera transformation matrices
+		left.tranform = (new THREE.Matrix4()).makeTranslation( -worldFactor * HMD.interpupillaryDistance/2, 0.0, 0.0 );
+		right.tranform = (new THREE.Matrix4()).makeTranslation( worldFactor * HMD.interpupillaryDistance/2, 0.0, 0.0 );
+
+		// Compute Viewport
+		left.viewport = [0, 0, HMD.hResolution/2, HMD.vResolution];
+		right.viewport = [HMD.hResolution/2, 0, HMD.hResolution/2, HMD.vResolution];
+
+		// Distortion shader parameters
+		var lensShift = 4 * (HMD.hScreenSize/4 - HMD.lensSeparationDistance/2) / HMD.hScreenSize;
+		left.lensCenter = new THREE.Vector2(lensShift, 0.0);
+		right.lensCenter = new THREE.Vector2(-lensShift, 0.0);
+
+		RTMaterial.uniforms['hmdWarpParam'].value = new THREE.Vector4(HMD.distortionK[0], HMD.distortionK[1], HMD.distortionK[2], HMD.distortionK[3]);
+		RTMaterial.uniforms['chromAbParam'].value = new THREE.Vector4(HMD.chromaAbParameter[0], HMD.chromaAbParameter[1], HMD.chromaAbParameter[2], HMD.chromaAbParameter[3]);
+		RTMaterial.uniforms['scaleIn'].value = new THREE.Vector2(1.0,1.0/aspect);
+		RTMaterial.uniforms['scale'].value = new THREE.Vector2(1.0/distScale, 1.0*aspect/distScale);
+		console.log(lensShift);
+		console.log("ScaleIn",  new THREE.Vector2(1.0,1.0/aspect));
+		console.log("Scale",  new THREE.Vector2(1.0,1.0/aspect));
+
+		// Create render target
+		renderTarget = new THREE.WebGLRenderTarget( HMD.hResolution*distScale/2, HMD.vResolution*distScale, RTParams );
+		RTMaterial.uniforms[ "texid" ].value = renderTarget;
+
+	}	
+	this.getHMD = function() {return HMD};
+
+	this.setHMD(HMD);	
+
+	this.setSize = function ( width, height ) {
+		left.viewport = [width/2 - HMD.hResolution/2, height/2 - HMD.vResolution/2, HMD.hResolution/2, HMD.vResolution];
+		right.viewport = [width/2, height/2 - HMD.vResolution/2, HMD.hResolution/2, HMD.vResolution];
+
+		renderer.setSize( width, height );
+	};
+
+	this.render = function ( scene, camera ) {
+		var cc = renderer.getClearColor().clone();
+		var autoClear = renderer.autoClear;
+
+		renderer.autoClear = false;
+
+		// Clear
+		renderer.setClearColor(emptyColor);
+		renderer.clear();
+		renderer.setClearColor(cc);
+
+		var scenes, cameras;
+		if (scene instanceof Array) {
+			scenes = scene;
+		}
+		else {
+			scenes = [ scene ];
+		}
+
+		if (camera instanceof Array) {
+			cameras = camera;
+		}
+		else {
+			cameras = [ camera ];
+		}
+
+		// Render left
+		this.preLeftRender();
+
+		renderer.setViewport(left.viewport[0], left.viewport[1], left.viewport[2], left.viewport[3]);
+		RTMaterial.uniforms['lensCenter'].value = left.lensCenter;
+
+		var i, len = scenes.length;
+		for (i = 0; i < len; i++) {
+
+			if (i == 0) {
+			   	renderer.setClearColor( 0, 0 );
+				renderer.autoClearColor = true;				
+			}
+			else {
+			    renderer.setClearColor( 0, 1 );
+				renderer.autoClearColor = false;				
+			}
+
+			var scene = scenes[i];
+			var camera = cameras[i];			
+
+			// camera parameters
+			scene.updateMatrix();
+			scene.updateMatrixWorld();
+			if (camera.matrixAutoUpdate) {
+					camera.updateMatrix();
+					camera.updateMatrixWorld();
+			}
+
+			pCamera.projectionMatrix.copy(left.proj);
+
+			pCamera.matrix.copy(camera.matrixWorld).multiply(left.tranform);
+			pCamera.matrixWorldNeedsUpdate = true;
+
+			renderer.render( scene, pCamera, renderTarget, true );
+		}
+
+
+		renderer.render( finalScene, oCamera );
+
+		// Render right
+		this.preRightRender();
+
+		renderer.setViewport(right.viewport[0], right.viewport[1], right.viewport[2], right.viewport[3]);
+		RTMaterial.uniforms['lensCenter'].value = right.lensCenter;
+		
+		var i, len = scenes.length;
+		for (i = 0; i < len; i++) {
+
+			if (i == 0) {
+			   	renderer.setClearColor( 0, 0 );
+				renderer.autoClearColor = true;				
+			}
+			else {
+			    renderer.setClearColor( 0, 1 );
+				renderer.autoClearColor = false;				
+			}
+
+			var scene = scenes[i];
+			var camera = cameras[i];			
+
+			// camera parameters
+			scene.updateMatrix();
+			scene.updateMatrixWorld();
+			if (camera.matrixAutoUpdate) {
+					camera.updateMatrix();
+					camera.updateMatrixWorld();
+			}
+			pCamera.projectionMatrix.copy(right.proj);
+
+			pCamera.matrix.copy(camera.matrixWorld).multiply(right.tranform);
+			pCamera.matrixWorldNeedsUpdate = true;
+
+
+			renderer.render( scene, pCamera, renderTarget, true );
+		}
+
+		renderer.render( finalScene, oCamera );
+
+		renderer.autoClear = autoClear;
+	};
+
+};// tween.js - http://github.com/sole/tween.js
 'use strict';var TWEEN=TWEEN||function(){var a=[];return{REVISION:"10",getAll:function(){return a},removeAll:function(){a=[]},add:function(c){a.push(c)},remove:function(c){c=a.indexOf(c);-1!==c&&a.splice(c,1)},update:function(c){if(0===a.length)return!1;for(var b=0,d=a.length,c=void 0!==c?c:void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();b<d;)a[b].update(c)?b++:(a.splice(b,1),d--);return!0}}}();
 TWEEN.Tween=function(a){var c={},b={},d={},e=1E3,g=0,i=0,k=null,u=TWEEN.Easing.Linear.None,v=TWEEN.Interpolation.Linear,p=[],q=null,r=!1,s=null,t=null,j;for(j in a)c[j]=parseFloat(a[j],10);this.to=function(a,c){void 0!==c&&(e=c);b=a;return this};this.start=function(e){TWEEN.add(this);r=!1;k=void 0!==e?e:void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();k+=i;for(var f in b){if(b[f]instanceof Array){if(0===b[f].length)continue;b[f]=[a[f]].concat(b[f])}c[f]=
 a[f];!1===c[f]instanceof Array&&(c[f]*=1);d[f]=c[f]||0}return this};this.stop=function(){TWEEN.remove(this);return this};this.delay=function(a){i=a;return this};this.repeat=function(a){g=a;return this};this.easing=function(a){u=a;return this};this.interpolation=function(a){v=a;return this};this.chain=function(){p=arguments;return this};this.onStart=function(a){q=a;return this};this.onUpdate=function(a){s=a;return this};this.onComplete=function(a){t=a;return this};this.update=function(n){if(n<k)return!0;
@@ -48749,6 +49234,18 @@ Vizi.PickManager.handleMouseMove = function(event)
 
             }
         }
+        
+        if (Vizi.PickManager.overObject) {
+	    	var pickers = Vizi.PickManager.overObject.pickers;
+	    	var i, len = pickers.length;
+	    	for (i = 0; i < len; i++) {
+	    		
+	    		if (pickers[i].enabled && pickers[i].moveWithoutCapture && pickers[i].onMouseMove) {
+	        		event.type = "mousemove";
+	    			pickers[i].onMouseMove(event);
+	    		}
+	    	}
+        }
     }
 }
 
@@ -50396,6 +50893,10 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.projector = projector;
 
     this.lastFrameTime = 0;
+    
+    if (param.riftRender) {
+    	  this.riftCam = new THREE.OculusRiftEffect(this.renderer);	
+    }
 }
 
 Vizi.GraphicsThreeJS.prototype.initMouse = function()
@@ -50948,6 +51449,15 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
+	// N.B.: start with hack, let's see how it goes...
+	if (this.riftCam) {
+	    this.riftCam.render(
+	        	[ this.backgroundLayer.scene, this.scene ],
+	        	[this.backgroundLayer.camera, this.camera]);
+
+	    return;
+	}
+	
     this.renderer.setClearColor( 0, 0 );
 	this.renderer.autoClearColor = true;
     this.renderer.render( this.backgroundLayer.scene, this.backgroundLayer.camera );
@@ -51968,7 +52478,144 @@ Vizi.KeyFrameAnimator.prototype.updateAnimations = function()
 // Statics
 Vizi.KeyFrameAnimator.default_duration = 1000;
 Vizi.KeyFrameAnimator.FORWARD_DIRECTION = 0;
-Vizi.KeyFrameAnimator.REVERSE_DIRECTION = 1;/**
+Vizi.KeyFrameAnimator.REVERSE_DIRECTION = 1;
+goog.require('Vizi.Prefabs');
+
+Vizi.Prefabs.RiftController = function(param)
+{
+	param = param || {};
+	
+	var controller = new Vizi.Object(param);
+	var controllerScript = new Vizi.RiftControllerScript(param);
+	controller.addComponent(controllerScript);
+	
+	return controller;
+}
+
+goog.provide('Vizi.RiftControllerScript');
+goog.require('Vizi.Script');
+
+Vizi.RiftControllerScript = function(param)
+{
+	Vizi.Script.call(this, param);
+
+	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this.oculusBridge = null;
+	
+    Object.defineProperties(this, {
+    	camera: {
+			get : function() {
+				return this._camera;
+			},
+			set: function(camera) {
+				this.setCamera(camera);
+			}
+		},
+    	enabled : {
+    		get: function() {
+    			return this._enabled;
+    		},
+    		set: function(v) {
+    			this.setEnabled(v);
+    		}
+    	},
+    });
+}
+
+goog.inherits(Vizi.RiftControllerScript, Vizi.Script);
+
+Vizi.RiftControllerScript.prototype.realize = function()
+{
+	this.bodyAngle     = 0;
+	this.bodyAxis      = new THREE.Vector3(0, 1, 0);
+	this.bodyPosition  = new THREE.Vector3(0, 15, 0);
+	this.velocity      = new THREE.Vector3();
+	
+	var that = this;
+	var bridgeOrientationUpdated = function(quatValues) {
+		that.bridgeOrientationUpdated(quatValues);
+	}
+	var bridgeConfigUpdated = function(quatValues) {
+		that.bridgeConfigUpdated(quatValues);
+	}
+	var bridgeConnected = function(quatValues) {
+		that.bridgeConnected(quatValues);
+	}
+	var bridgeDisconnected = function(quatValues) {
+		that.bridgeDisconnected(quatValues);
+	}
+
+	this.oculusBridge = new OculusBridge({
+		"debug" : true,
+		"onOrientationUpdate" : bridgeOrientationUpdated,
+		"onConfigUpdate"      : bridgeConfigUpdated,
+		"onConnect"           : bridgeConnected,
+		"onDisconnect"        : bridgeDisconnected
+	});
+	
+	this.oculusBridge.connect();
+	
+}
+
+Vizi.RiftControllerScript.prototype.update = function()
+{
+	if (this._enabled) {
+	}
+}
+
+Vizi.RiftControllerScript.prototype.setEnabled = function(enabled)
+{
+	this._enabled = enabled;
+}
+
+Vizi.RiftControllerScript.prototype.setCamera = function(camera) {
+	this._camera = camera;
+}
+
+Vizi.RiftControllerScript.prototype.bridgeOrientationUpdated = function(quatValues) {
+
+	// Do first-person style controls (like the Tuscany demo) using the rift and keyboard.
+
+	// TODO: Don't instantiate new objects in here, these should be re-used to avoid garbage collection.
+
+	// make a quaternion for the the body angle rotated about the Y axis.
+	var quat = new THREE.Quaternion();
+	quat.setFromAxisAngle(this.bodyAxis, this.bodyAngle);
+
+	// make a quaternion for the current orientation of the Rift
+	var quatCam = new THREE.Quaternion(quatValues.x, quatValues.y, quatValues.z, quatValues.w);
+
+	// multiply the body rotation by the Rift rotation.
+	quat.multiply(quatCam);
+
+	// Make a vector pointing along the Z axis and rotate it accoring to the combined look/body angle.
+	var xzVector = new THREE.Vector3(0, 0, 1);
+	xzVector.applyQuaternion(quat);
+
+	// Compute the X/Z angle based on the combined look/body angle.  This will be used for FPS style movement controls
+	// so you can steer with a combination of the keyboard and by moving your head.
+	viewAngle = Math.atan2(xzVector.z, xzVector.x) + Math.PI;
+
+	// Apply the combined look/body angle to the camera.
+	this._camera.quaternion.copy(quat);
+	
+	console.log("quat", quat);
+}
+
+Vizi.RiftControllerScript.prototype.bridgeConnected = function() {
+//  document.getElementById("logo").className = "";
+}
+
+Vizi.RiftControllerScript.prototype.bridgeDisconnected = function() {
+//  document.getElementById("logo").className = "offline";
+}
+
+Vizi.RiftControllerScript.prototype.bridgeConfigUpdated = function(config) {
+// console.log("Oculus config updated.");
+// riftCam.setHMD(config);      
+}
+
+/**
  * @fileoverview Interpolator for key frame animation
  * @author Tony Parisi
  */
@@ -54179,6 +54826,7 @@ goog.require('Vizi.FirstPersonControllerScript');
 goog.require('Vizi.ModelControllerScript');
 goog.require('Vizi.DeviceOrientationControls');
 goog.require('Vizi.DeviceOrientationControllerScript');
+goog.require('Vizi.RiftControllerScript');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');
 goog.require('Vizi.Graphics');
