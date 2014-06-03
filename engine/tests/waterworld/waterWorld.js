@@ -38,6 +38,7 @@ WaterWorld.prototype.init = function(param) {
 		});
 		var controllerScript = controller.getComponent(Vizi.RiftControllerScript);
 		controllerScript.camera = cam;
+		controllerScript.moveSpeed = 6;
 		
 		this.addObject(controller);
 	}
@@ -47,6 +48,7 @@ WaterWorld.prototype.init = function(param) {
 			headlight:false,
 			mouseLook:true,
 			turn: !riftController,
+			look: !riftController,
 		});
 		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
 		controllerScript.moveSpeed = 6;
@@ -180,6 +182,23 @@ WaterWorld.prototype.onKeyDown = function(event) {
 	      if (this.brushes) {	
 	    	  this.brushes.nextBrush();
 	      }
+	      break;
+	    case 67: // c
+			this.startAscent();
+          break;
+        case 32: // space
+			this.startDescent();
+	      break;
+    }
+}
+
+WaterWorld.prototype.onKeyUp = function(event) {
+    switch ( event.keyCode ) {
+	    case 67: // c
+			this.endAscent();
+          break;
+        case 32: // space
+			this.endDescent();
 	      break;
     }
 }
