@@ -46,7 +46,7 @@ WaterWorld.prototype.init = function(param) {
 	if (fpsController) {
 		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
 			headlight:false,
-			mouseLook:true,
+			mouseLook:false,
 			turn: !riftController,
 			look: !riftController,
 		});

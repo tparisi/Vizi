@@ -63,7 +63,7 @@ Vizi.Gamepad.prototype.testValues = function(gamepad, buttonsChangedEvent, axesC
 	        }
 
 	        if (pressed != values.buttons[i]) {
-	        	console.log("Pressed: ", i);
+//	        	console.log("Pressed: ", i);
 	        	buttonsChangedEvent.changedButtons.push({
 	        		gamepad : gamepad.index,
 	        		button : i,
@@ -75,7 +75,7 @@ Vizi.Gamepad.prototype.testValues = function(gamepad, buttonsChangedEvent, axesC
 	    for (var i = 0; i < gamepad.axes.length; i++) {
 	        var val = gamepad.axes[i];
 	        if (val != values.axes[i]) {
-	        	console.log("Axis: ", i, val);
+//	        	console.log("Axis: ", i, val);
 	        	axesChangedEvent.changedAxes.push({
 	        		gamepad : gamepad.index,
 	        		axis : i,

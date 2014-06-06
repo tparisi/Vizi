@@ -119,7 +119,7 @@ Vizi.RiftControllerScript.prototype.bridgeOrientationUpdated = function(quatValu
 	// Apply the combined look/body angle to the camera.
 	this._camera.quaternion.copy(quat);
 	
-	console.log("quat", quat);
+//	console.log("quat", quat);
 }
 
 Vizi.RiftControllerScript.prototype.bridgeConnected = function() {
