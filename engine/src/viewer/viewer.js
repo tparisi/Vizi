@@ -91,6 +91,7 @@ Vizi.Viewer.prototype.initScene = function()
 		controllerScript.camera = this.defaultCamera;
 		controllerScript.moveSpeed = 6;
 		
+		this.riftControllerScript = controllerScript;
 		this.addObject(controller);
 	}
 	

@@ -7723,9 +7723,9 @@ Vizi.OculusRiftControls = function ( camera ) {
 			moveObject.quaternion.copy(rotation);
 		}
 
-		moveObject.translateX( velocity.x );
-		moveObject.translateY( velocity.y );
-		moveObject.translateZ( velocity.z );
+		//moveObject.translateX( velocity.x );
+		//moveObject.translateY( velocity.y );
+		//moveObject.translateZ( velocity.z );
 
 		if ( moveObject.position.y < 10 ) {
 
@@ -8772,6 +8772,7 @@ Vizi.Viewer.prototype.initScene = function()
 		controllerScript.camera = this.defaultCamera;
 		controllerScript.moveSpeed = 6;
 		
+		this.riftControllerScript = controllerScript;
 		this.addObject(controller);
 	}
 	

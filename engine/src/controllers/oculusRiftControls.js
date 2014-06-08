@@ -180,9 +180,9 @@ Vizi.OculusRiftControls = function ( camera ) {
 			moveObject.quaternion.copy(rotation);
 		}
 
-		moveObject.translateX( velocity.x );
-		moveObject.translateY( velocity.y );
-		moveObject.translateZ( velocity.z );
+		//moveObject.translateX( velocity.x );
+		//moveObject.translateY( velocity.y );
+		//moveObject.translateZ( velocity.z );
 
 		if ( moveObject.position.y < 10 ) {
 
