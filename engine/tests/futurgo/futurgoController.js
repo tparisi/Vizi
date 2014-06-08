@@ -11,6 +11,7 @@ FuturgoController = function(param)
 
 	this.enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this.scene = param.scene || null;
+	this.camera = param.camera || null;
 	
 	this.turnSpeed = Math.PI / 2; // 90 degs/sec
 
@@ -78,6 +79,7 @@ FuturgoController.prototype.update = function()
 	this.updatePosition(now, deltat);	
 	this.testCollision();
 	this.testTerrain();
+	this.updateCamera();
 	
 	this.lastUpdateTime = now;
 }
@@ -225,6 +227,11 @@ FuturgoController.prototype.testTerrain = function() {
     }
 }
 
+FuturgoController.prototype.updateCamera = function() {
+	this.camera.transform.position.copy(this._object.transform.position);
+	this.camera.transform.position.y+= FuturgoCity.AVATAR_HEIGHT_SEATED;
+	this.camera.transform.rotation.copy(this._object.transform.rotation);
+}
 
 // Keyboard handlers
 FuturgoController.prototype.onKeyDown = function(event) {

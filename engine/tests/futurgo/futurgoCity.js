@@ -99,7 +99,7 @@ FuturgoCity.prototype.addBackground = function() {
 	
 	// Skybox from http://www.3delyvisions.com/
 	// http://www.3delyvisions.com/skf1.htm
-	var path = "./images/sky35/";
+	var path = "../images/sky35/";
 	
 	var urls = [ path + "rightcity.jpg", path + "leftcity.jpg",
 				 path + "topcity.jpg", path + "botcity.jpg",
@@ -277,19 +277,16 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var camera = new Vizi.PerspectiveCamera;
 	camera.near = 0.01;
 	driveCam.addComponent(camera);
-	futurgo.addChild(driveCam);	
-	// Account for scale in model so that
-	//   we can position the camera properly
-	var scaley = futurgo.transform.scale.y;
-	var scalez = futurgo.transform.scale.z;
-	var camy = FuturgoCity.AVATAR_HEIGHT_SEATED / scaley;
-	var camz = 0 / scalez;
-	driveCam.transform.position.set(0, camy, camz);
+	this.viewer.addObject(driveCam);	
+	
+	driveCam.transform.position.copy(futurgo.transform.position);
+	driveCam.transform.position.y = FuturgoCity.AVATAR_HEIGHT_SEATED;
 	this.driveCamera = camera;
 
 	// Add the car controller
 	this.carController = new FuturgoController({enabled:false,
-		scene: this.scene});
+		scene: this.scene,
+		camera: driveCam});
 	futurgo.addComponent(this.carController);
 	
 	this.carController.addEventListener("collide", function(collide) {
@@ -509,8 +506,8 @@ FuturgoCity.prototype.onKeyPress = function ( event ) {
 		this.carController.onKeyPress(event);
 }
 
-FuturgoCity.URL = "./models/futurgo_city/futurgo_city.dae";
-FuturgoCity.FuturgoURL = "./models/futurgo_mobile/futurgo_mobile.json";
+FuturgoCity.URL = "../models/futurgo_city/futurgo_city.dae";
+FuturgoCity.FuturgoURL = "../models/futurgo_mobile/futurgo_mobile.json";
 FuturgoCity.AVATAR_HEIGHT = 2;
 FuturgoCity.AVATAR_HEIGHT_SEATED = 1.3;
 FuturgoCity.OPACITY_SEMI_OPAQUE = 0.8;

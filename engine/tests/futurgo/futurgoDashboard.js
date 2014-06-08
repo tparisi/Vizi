@@ -169,7 +169,7 @@ FuturgoDashboardScript.prototype.setCarController = function(controller) {
 }
 
 // Constants
-FuturgoDashboardScript.imagePath = './models/futurgo_mobile/images/';
+FuturgoDashboardScript.imagePath = '../models/futurgo_mobile/images/';
 FuturgoDashboardScript.dashboardURL = FuturgoDashboardScript.imagePath + 'gauges.png';
 FuturgoDashboardScript.dialURL = FuturgoDashboardScript.imagePath + 'dial2.png';
 FuturgoDashboardScript.speedDialLeftOffset = 256;
