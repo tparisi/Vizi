@@ -30,6 +30,7 @@ goog.require('Vizi.FirstPersonControllerScript');
 goog.require('Vizi.ModelControllerScript');
 goog.require('Vizi.DeviceOrientationControls');
 goog.require('Vizi.DeviceOrientationControllerScript');
+goog.require('Vizi.OculusRiftControls');
 goog.require('Vizi.RiftControllerScript');
 goog.require('Vizi.EventDispatcher');
 goog.require('Vizi.EventService');

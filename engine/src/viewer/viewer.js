@@ -21,6 +21,7 @@ Vizi.Viewer = function(param)
 	this.loopAnimations = (param.loopAnimations !== undefined) ? param.loopAnimations : false;
 	this.headlightOn = (param.headlight !== undefined) ? param.headlight : true;
 	this.headlightIntensity = param.headlightIntensity || Vizi.Viewer.DEFAULT_HEADLIGHT_INTENSITY;
+	this.riftController = (param.riftController !== undefined) ? param.riftController : false;
 	this.firstPerson = (param.firstPerson !== undefined) ? param.firstPerson : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
 	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
@@ -58,7 +59,11 @@ Vizi.Viewer.prototype.initScene = function()
 	this.createGrid();
 	
 	if (this.firstPerson) {
-		this.controller = Vizi.Prefabs.FirstPersonController({active:true, headlight:true});
+		this.controller = Vizi.Prefabs.FirstPersonController({active:true, 
+			headlight:true,
+			turn: !this.riftController,
+			look: !this.riftController,
+			});
 		this.controllerScript = this.controller.getComponent(Vizi.FirstPersonControllerScript);
 	}
 	else {
@@ -75,6 +80,19 @@ Vizi.Viewer.prototype.initScene = function()
 	this.addObject(viewpoint);
 
 	this.controllerScript.camera = this.defaultCamera;
+	
+	if (this.riftController) {
+		var controller = Vizi.Prefabs.RiftController({active:true, 
+			headlight:false,
+			mouseLook:false,
+			useVRJS : true,
+		});
+		var controllerScript = controller.getComponent(Vizi.RiftControllerScript);
+		controllerScript.camera = this.defaultCamera;
+		controllerScript.moveSpeed = 6;
+		
+		this.addObject(controller);
+	}
 	
 	var ambientLightObject = new Vizi.Object;
 	this.ambientLight = new Vizi.AmbientLight({color:0xFFFFFF, intensity : this.ambientOn ? 1 : 0 });

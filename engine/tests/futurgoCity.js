@@ -11,6 +11,8 @@ FuturgoCity = function(param) {
 	this.mouseOverCallback = param.mouseOverCallback;
 	this.mouseOutCallback = param.mouseOutCallback;
 	this.mouseClickCallback = param.mouseClickCallback;
+	this.riftRender = param.riftRender;
+	this.riftController = param.riftController;
 	this.part_materials = [];
 	this.testDriveRunning = false;
 	this.wheelsMoving = false;
@@ -19,8 +21,12 @@ FuturgoCity = function(param) {
 FuturgoCity.prototype.go = function() {
 
 	// Create the viewer
-	this.viewer = new Vizi.Viewer({ container : this.container, firstPerson:true,
-		showGrid:false});
+	this.viewer = new Vizi.Viewer({ container : this.container, 
+		firstPerson:true,
+		showGrid:false,
+		riftRender: this.riftRender,
+		riftController:this.riftController,
+		});
 	
 	// We'll take the mouse clicks and keyboard
 	this.viewer.mouseDelegate = this;

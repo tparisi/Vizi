@@ -31,10 +31,13 @@ WaterWorld.prototype.init = function(param) {
 	
 	this.addObject(camera);
 
+	var useVRJS = true;
+	
 	if (riftController) {
 		var controller = Vizi.Prefabs.RiftController({active:true, 
 			headlight:false,
 			mouseLook:true,
+			useVRJS : useVRJS,
 		});
 		var controllerScript = controller.getComponent(Vizi.RiftControllerScript);
 		controllerScript.camera = cam;
@@ -43,6 +46,7 @@ WaterWorld.prototype.init = function(param) {
 		this.addObject(controller);
 	}
 	
+
 	if (fpsController) {
 		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
 			headlight:false,

@@ -21,6 +21,8 @@ Vizi.RiftControllerScript = function(param)
 
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this.oculusBridge = null;
+	this.riftControls = null;
+	this.useVRJS = (param.useVRJS !== undefined) ? param.useVRJS : false;
 	
     Object.defineProperties(this, {
     	camera: {
@@ -50,36 +52,49 @@ Vizi.RiftControllerScript.prototype.realize = function()
 	this.bodyAxis      = new THREE.Vector3(0, 1, 0);
 	this.bodyPosition  = new THREE.Vector3(0, 15, 0);
 	this.velocity      = new THREE.Vector3();
-	
-	var that = this;
-	var bridgeOrientationUpdated = function(quatValues) {
-		that.bridgeOrientationUpdated(quatValues);
-	}
-	var bridgeConfigUpdated = function(quatValues) {
-		that.bridgeConfigUpdated(quatValues);
-	}
-	var bridgeConnected = function(quatValues) {
-		that.bridgeConnected(quatValues);
-	}
-	var bridgeDisconnected = function(quatValues) {
-		that.bridgeDisconnected(quatValues);
-	}
 
-	this.oculusBridge = new OculusBridge({
-		"debug" : true,
-		"onOrientationUpdate" : bridgeOrientationUpdated,
-		"onConfigUpdate"      : bridgeConfigUpdated,
-		"onConnect"           : bridgeConnected,
-		"onDisconnect"        : bridgeDisconnected
-	});
-	
-	this.oculusBridge.connect();
-	
+	var that = this;
+	if (this.useVRJS) {
+		this.vrstate = null;
+		vr.load(function() {
+			that.vrstate = new vr.State();
+		});
+	}
+	else {
+		var bridgeOrientationUpdated = function(quatValues) {
+			that.bridgeOrientationUpdated(quatValues);
+		}
+		var bridgeConfigUpdated = function(quatValues) {
+			that.bridgeConfigUpdated(quatValues);
+		}
+		var bridgeConnected = function(quatValues) {
+			that.bridgeConnected(quatValues);
+		}
+		var bridgeDisconnected = function(quatValues) {
+			that.bridgeDisconnected(quatValues);
+		}
+		
+		this.oculusBridge = new OculusBridge({
+			"debug" : true,
+			"onOrientationUpdate" : bridgeOrientationUpdated,
+			"onConfigUpdate"      : bridgeConfigUpdated,
+			"onConnect"           : bridgeConnected,
+			"onDisconnect"        : bridgeDisconnected
+		});
+		
+		this.oculusBridge.connect();
+	}	
 }
 
 Vizi.RiftControllerScript.prototype.update = function()
 {
 	if (this._enabled) {
+		if (this.useVRJS) {
+			if (this.vrstate) {
+				var polled = vr.pollState(this.vrstate);
+				this.riftControls.update(this.clock.getDelta(), polled ? this.vrstate : null );
+			}
+		}
 	}
 }
 
@@ -90,6 +105,17 @@ Vizi.RiftControllerScript.prototype.setEnabled = function(enabled)
 
 Vizi.RiftControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
+	if (this.useVRJS) {
+		this.riftControls = this.createControls(camera);
+	}
+}
+
+Vizi.RiftControllerScript.prototype.createControls = function(camera)
+{
+	var controls = new Vizi.OculusRiftControls(camera.object);
+
+	this.clock = new THREE.Clock();
+	return controls;
 }
 
 Vizi.RiftControllerScript.prototype.bridgeOrientationUpdated = function(quatValues) {

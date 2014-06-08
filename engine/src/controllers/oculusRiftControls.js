@@ -17,13 +17,15 @@
  * @author benvanik
  */
 
-THREE.OculusRiftControls = function ( camera ) {
+goog.provide('Vizi.OculusRiftControls');
+
+Vizi.OculusRiftControls = function ( camera ) {
 
 	var scope = this;
 
-	var moveObject = new THREE.Object3D();
-	moveObject.position.y = 10;
-	moveObject.add( camera );
+	var moveObject = camera; //new THREE.Object3D();
+//	moveObject.position.y = 10;
+//	moveObject.add( camera );
 
 	var moveForward = false;
 	var moveBackward = false;
@@ -162,19 +164,20 @@ THREE.OculusRiftControls = function ( camera ) {
 		}
 
 		var rotation = new THREE.Quaternion();
-		var angles = new THREE.Vector3();
+		var angles = new THREE.Euler();
 		if (vrstate) {
 			rotation.set(
 					vrstate.hmd.rotation[0],
 					vrstate.hmd.rotation[1],
 					vrstate.hmd.rotation[2],
 					vrstate.hmd.rotation[3]);
-			angles.setEulerFromQuaternion(rotation, 'XYZ');
-			angles.z = 0;
-			angles.normalize();
-			rotation.setFromEuler(angles, 'XYZ');
-			rotation.normalize();
+			//angles.setFromQuaternion(rotation, 'XYZ');
+			// angles.z = 0;
+			//rotation.setFromEuler(angles, 'XYZ');
+			//rotation.normalize();
 			// velocity.applyQuaternion(rotation);
+			
+			moveObject.quaternion.copy(rotation);
 		}
 
 		moveObject.translateX( velocity.x );
@@ -184,7 +187,7 @@ THREE.OculusRiftControls = function ( camera ) {
 		if ( moveObject.position.y < 10 ) {
 
 			velocity.y = 0;
-			moveObject.position.y = 10;
+			// moveObject.position.y = 10;
 
 			canJump = true;
 
