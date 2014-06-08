@@ -229,7 +229,7 @@ FuturgoController.prototype.testTerrain = function() {
 
 FuturgoController.prototype.updateCamera = function() {
 	this.camera.transform.position.copy(this._object.transform.position);
-	this.camera.transform.position.y+= FuturgoCity.AVATAR_HEIGHT_SEATED;
+	this.camera.transform.position.y += FuturgoCity.AVATAR_HEIGHT_SEATED;
 	this.camera.transform.rotation.copy(this._object.transform.rotation);
 }
 

@@ -72,6 +72,7 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	
 	this.viewer.setController("FPS");
 	this.cameraController = this.viewer.controllerScript;
+	this.riftControllerScript = this.viewer.riftControllerScript;
 	this.walkCamera = this.viewer.defaultCamera;
 	
 	this.addBackground();
@@ -274,7 +275,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 
 	// Drop a camera inside the vehicle
 	var driveCam = new Vizi.Object;
-	var camera = new Vizi.PerspectiveCamera;
+	var camera = new Vizi.PerspectiveCamera({fov:75});
 	camera.near = 0.01;
 	driveCam.addComponent(camera);
 	this.viewer.addObject(driveCam);	
@@ -363,6 +364,8 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 		
 		// Switch to the car interior camera
 		that.cameraController.camera = that.driveCamera;
+		if (that.riftControllerScript)
+			that.riftControllerScript.camera = that.driveCamera;
 		// Don't allow camera move, we want to
 		// stay in the car
 		that.cameraController.move = false;
@@ -426,6 +429,8 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 
 		// Switch back to walk camera
 		that.cameraController.camera = that.walkCamera;
+		if (that.riftControllerScript)
+			that.riftControllerScript.camera = that.walkCamera;
 		that.cameraController.camera.active = true;
 		// Enable camera camera controller more
 		that.cameraController.move = true;
@@ -509,6 +514,7 @@ FuturgoCity.prototype.onKeyPress = function ( event ) {
 FuturgoCity.URL = "../models/futurgo_city/futurgo_city.dae";
 FuturgoCity.FuturgoURL = "../models/futurgo_mobile/futurgo_mobile.json";
 FuturgoCity.AVATAR_HEIGHT = 2;
-FuturgoCity.AVATAR_HEIGHT_SEATED = 1.3;
+FuturgoCity.AVATAR_HEIGHT_SEATED = 1.4;
+FuturgoCity.AVATAR_Z_SEATED = .25;
 FuturgoCity.OPACITY_SEMI_OPAQUE = 0.8;
 FuturgoCity.OPACITY_MOSTLY_TRANSPARENT = 0.2;
