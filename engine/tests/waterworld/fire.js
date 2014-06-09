@@ -21,7 +21,7 @@ FireScript.prototype.realize = function()
 {
     var texture;
     this.name = 'fire';
-    this.numEmitters = 20;
+    this.numEmitters = 10;
     this.emitterActivateFraction = 1 / this.numEmitters;
     this.brushEmitters = [];
     this.distanceFromPlayer = 50;

@@ -17,7 +17,8 @@ WaterWorld.prototype.init = function(param) {
 		addStars = true,
 		addMeteors = true,
 		addCaves = true,
-		addBrushes = true;
+		addBrushes = true,
+		addHelp = param.riftController;
 	
 	var riftController = param.riftController;
 	
@@ -66,7 +67,7 @@ WaterWorld.prototype.init = function(param) {
 	}
 	
 	controllerScript.camera = cam;
-	camera.transform.position.set(0, 2, 5);
+	camera.transform.position.set(0, 2, 4);
 	this.addObject(controller);
 	
 	if (addCubes) {
@@ -163,6 +164,23 @@ WaterWorld.prototype.init = function(param) {
 				that.onGamepadButtonsChanged(event);
 			});
 		}
+	}
+
+	this.helpScreenVisible = false;
+	
+	if (addHelp) {
+		var help = HelpScreenPrefab();
+
+		this.addObject(help);
+		
+		this.helpScreen = help.getComponent(HelpScreenScript);
+		
+		var that = this;
+		setTimeout(function() { 
+			that.helpScreen.show(); 
+			that.helpScreenVisible = true;
+			}, 2000);
+		
 	}
 
 	// Time pump for gravity sim etc.
@@ -289,6 +307,11 @@ WaterWorld.prototype.onGamepadButtonsChanged = function(event) {
 					this.endDescent();
 				}
 				break;
+			case Vizi.Gamepad.BUTTON_A : 
+				if (button.pressed) {
+					this.toggleHelpScreen();
+				}
+				break;
 		}
 	}
 }
@@ -316,6 +339,14 @@ WaterWorld.prototype.onTimerTime = function(t) {
 		this.camera.position.y += dy;
 		this.camera.position.y = Math.max(0, this.camera.position.y);
 	}
+}
+
+WaterWorld.prototype.toggleHelpScreen = function() {
+	this.helpScreenVisible = !this.helpScreenVisible;
+	if (this.helpScreenVisible)
+		this.helpScreen.show();
+	else
+		this.helpScreen.hide();
 }
 
 WaterWorld.EXTENT = 100000;

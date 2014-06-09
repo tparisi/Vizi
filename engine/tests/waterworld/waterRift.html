@@ -6,6 +6,10 @@
 </head>
 <body>
 	<div id="container" style="width:100%; height:100%; position:absolute;background-color:black"></div>
+	<audio volume="0.5" autoplay id="blue_danube">
+	  <source src="../sounds/bluedanube.wav" type="audio/wav" />
+	  Your browser does not support MP4 files in the audio element.
+	</audio>
 
     <script src="../../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
     <script src="../../libs/ParticleEngine/ShaderParticles.min.js"></script>
@@ -38,6 +42,7 @@
 	<script src="bubbles.js"></script>
 	<script src="fireflies.js"></script>
 	<script src="mystery.js"></script>
+	<script src="helpScreen.js"></script>
 	<script>
 
 	$(document).ready(function() {
