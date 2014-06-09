@@ -11,6 +11,8 @@ FuturgoCity = function(param) {
 	this.mouseOverCallback = param.mouseOverCallback;
 	this.mouseOutCallback = param.mouseOutCallback;
 	this.mouseClickCallback = param.mouseClickCallback;
+	this.riftRender = param.riftRender;
+	this.riftController = param.riftController;
 	this.part_materials = [];
 	this.testDriveRunning = false;
 	this.wheelsMoving = false;
@@ -22,6 +24,8 @@ FuturgoCity.prototype.go = function() {
 	this.viewer = new Vizi.Viewer({ container : this.container, 
 		firstPerson:true,
 		showGrid:false,
+		riftRender: this.riftRender,
+		riftController:this.riftController,
 		});
 	
 	// We'll take the mouse clicks and keyboard
@@ -68,6 +72,7 @@ FuturgoCity.prototype.onLoadComplete = function(data, loadStartTime)
 	
 	this.viewer.setController("FPS");
 	this.cameraController = this.viewer.controllerScript;
+	this.riftControllerScript = this.viewer.riftControllerScript;
 	this.walkCamera = this.viewer.defaultCamera;
 	
 	this.addBackground();
@@ -359,6 +364,8 @@ FuturgoCity.prototype.startTestDrive = function(event) {
 		
 		// Switch to the car interior camera
 		that.cameraController.camera = that.driveCamera;
+		if (that.riftControllerScript)
+			that.riftControllerScript.camera = that.driveCamera;
 		// Don't allow camera move, we want to
 		// stay in the car
 		that.cameraController.move = false;
@@ -422,6 +429,8 @@ FuturgoCity.prototype.endTestDrive = function(event) {
 
 		// Switch back to walk camera
 		that.cameraController.camera = that.walkCamera;
+		if (that.riftControllerScript)
+			that.riftControllerScript.camera = that.walkCamera;
 		that.cameraController.camera.active = true;
 		// Enable camera camera controller more
 		that.cameraController.move = true;
