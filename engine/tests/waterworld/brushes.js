@@ -4,7 +4,7 @@ BrushesPrefab = function(param) {
 	
 	var obj = new Vizi.Object;
 
-	var brushesScript = new BrushesScript();
+	var brushesScript = new BrushesScript(param);
 	obj.addComponent(brushesScript);
 	
 	return obj;
@@ -16,6 +16,7 @@ goog.require('Vizi.Script');
 BrushesScript = function(param) {
 	Vizi.Script.call(this, param);
 
+	this.ui = param.ui;
 }
 
 goog.inherits(BrushesScript, Vizi.Script);
@@ -28,7 +29,7 @@ BrushesScript.prototype.realize = function() {
     this._object.addChild(FirePrefab());
 	this._object.addChild(BubblesPrefab());
 	this._object.addChild(FirefliesPrefab());
-	this._object.addChild(MysteryPrefab());
+//	this._object.addChild(MysteryPrefab());
     
     var i, len = this._object._children.length;
     for (i = 0; i < len; i++) {
@@ -53,6 +54,9 @@ BrushesScript.prototype.nextBrush = function() {
     this.activeBrushIndex++;
     if (this.activeBrushIndex === this.brushes.length) {
       this.activeBrushIndex = 0;
+    }
+    if (this.ui) {
+  	  this.ui.setBrush(this.activeBrushIndex)
     }
 }
 

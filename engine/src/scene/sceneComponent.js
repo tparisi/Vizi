@@ -64,7 +64,27 @@ Vizi.SceneComponent = function(param)
     		value : function(v) {
     			this.object.lookAt(v);
     		}
-    	}
+    	},
+    	translateOnAxis : {
+    		value : function(a, d) {
+    			this.object.translateOnAxis(a, d);
+    		}
+    	},
+    	translateX : {
+    		value : function(d) {
+    			this.object.translateX(d);
+    		}
+    	},
+    	translateY : {
+    		value : function(d) {
+    			this.object.translateY(d);
+    		}
+    	},
+    	translateZ: {
+    		value : function(d) {
+    			this.object.translateZ(d);
+    		}
+    	},
     });
     
     this.layer = param.layer;

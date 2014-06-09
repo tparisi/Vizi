@@ -18,7 +18,8 @@ WaterWorld.prototype.init = function(param) {
 		addMeteors = true,
 		addCaves = true,
 		addBrushes = true,
-		addHelp = param.riftController;
+		addBrushUI = true,
+		addHelp = true; // param.riftController;
 	
 	var riftController = param.riftController;
 	
@@ -150,8 +151,20 @@ WaterWorld.prototype.init = function(param) {
 		this.addObject(caves);
 	}
 	
+	this.hud = Vizi.Prefabs.HUD({zDistance:3});
+	this.addObject(this.hud);
+	
 	if (addBrushes) {
-		var brushes = BrushesPrefab();
+
+		var buiScript;
+		if (addBrushUI) {
+			var bui = BrushUIPrefab();
+			this.hud.addChild(bui);
+			
+			buiScript = bui.getComponent(BrushUIScript);
+		}
+		
+		var brushes = BrushesPrefab({ui: buiScript});
 		this.addObject(brushes);
 		
 		this.brushes = brushes.getComponent(BrushesScript);	
@@ -171,7 +184,8 @@ WaterWorld.prototype.init = function(param) {
 	if (addHelp) {
 		var help = HelpScreenPrefab();
 
-		this.addObject(help);
+		//this.addObject(help);
+		this.hud.addChild(help);
 		
 		this.helpScreen = help.getComponent(HelpScreenScript);
 		

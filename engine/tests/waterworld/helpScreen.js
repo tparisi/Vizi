@@ -18,13 +18,16 @@ HelpScreenPrefab = function(param) {
 	var visual = new Vizi.Visual({object:mesh});
 	obj.addComponent(visual);
 	
-	obj.transform.position.y = -2; // below the water
+	obj.transform.position.set(0, -4, 0); // below the water
 	
 	var mover = new Vizi.MoveBehavior({loop:false, duration:1, moveVector:new THREE.Vector3(0, 4, 0)});
 	obj.addComponent(mover);
 	
 	var mover = new Vizi.MoveBehavior({loop:false, duration:1, moveVector:new THREE.Vector3(0, -4, 0)});
 	obj.addComponent(mover);
+	
+	var picker = new Vizi.Picker;
+	obj.addComponent(picker);
 	
 	return obj;
 }
@@ -38,6 +41,11 @@ goog.inherits(HelpScreenScript, Vizi.Script);
 
 HelpScreenScript.prototype.realize = function() {
 	this.getMovers();
+	var picker = this._object.getComponent(Vizi.Picker);
+	var that = this;
+	picker.addEventListener("dblclick", function(event) {
+		that.hide();
+	});
 }
 
 HelpScreenScript.prototype.getMovers = function() {
