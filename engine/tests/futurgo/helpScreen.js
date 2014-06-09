@@ -93,4 +93,4 @@ HelpScreenScript.prototype.hide = function() {
 	this.visible = false;
 }
 
-HelpScreenScript.helpScreenUrl = "../images/partiarthelp.png";
+HelpScreenScript.helpScreenUrl = "../images/futurgorifthelp.png";

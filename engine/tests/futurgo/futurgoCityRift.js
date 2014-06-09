@@ -44,7 +44,7 @@ FuturgoCity.prototype.go = function() {
 	// Create the sound manager and start the
 	// ambient sound
 	this.sound = new FuturgoSound;
-	this.sound.start();
+	// this.sound.start();
 }
 
 FuturgoCity.prototype.loadURL = function(url) {
@@ -304,6 +304,33 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	this.futurgo = futurgo;
 	this.futurgoScene = futurgoScene;
 	this.testDriveRunning = false;
+
+	// Help screen for Rift
+	this.hud = Vizi.Prefabs.HUD({zDistance:3});
+	this.viewer.addObject(this.hud);
+
+	var help = HelpScreenPrefab();
+
+	//this.addObject(help);
+	this.hud.addChild(help);
+	
+	this.helpScreen = help.getComponent(HelpScreenScript);
+	
+	var that = this;
+	setTimeout(function() { 
+		that.helpScreen.show(); 
+		that.helpScreenVisible = true;
+		}, 2000);
+
+	if (Vizi.Gamepad && Vizi.Gamepad.instance) {
+		var gamepad = Vizi.Gamepad.instance;
+		
+		var that = this;
+		gamepad.addEventListener( 'buttonsChanged', function(event) {
+			that.onGamepadButtonsChanged(event);
+		});
+	}
+	
 }
 
 FuturgoCity.prototype.onPickerMouseOver = function(what, event) {
@@ -509,6 +536,37 @@ FuturgoCity.prototype.onKeyUp = function ( event ) {
 FuturgoCity.prototype.onKeyPress = function ( event ) {
 	if (this.carController)
 		this.carController.onKeyPress(event);
+}
+
+FuturgoCity.prototype.onGamepadButtonsChanged = function(event) {
+    
+	var buttons = event.changedButtons;
+	
+	var i, len = buttons.length;
+	for (i = 0; i < len; i++) {
+		var button = buttons[i];
+		
+		switch (button.button) {
+			case Vizi.Gamepad.TRIGGER_RIGHT : 
+				if (button.pressed) {
+					this.toggleStartStop();
+				}
+				break;
+			case Vizi.Gamepad.BUTTON_A : 
+				if (button.pressed) {
+					this.toggleHelpScreen();
+				}
+				break;
+		}
+	}
+}
+
+FuturgoCity.prototype.toggleHelpScreen = function() {
+	this.helpScreenVisible = !this.helpScreenVisible;
+	if (this.helpScreenVisible)
+		this.helpScreen.show();
+	else
+		this.helpScreen.hide();
 }
 
 FuturgoCity.URL = "../models/futurgo_city/futurgo_city.dae";

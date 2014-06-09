@@ -38,6 +38,7 @@ THREE.glTFAnimation = function(interps)
 	this.running = false;
 	this.loop = false;
 	this.duration = 0;
+	this.direction = THREE.glTFAnimation.FORWARD_DIRECTION;
 	this.startTime = 0;
 	this.interps = [];
 	
@@ -85,6 +86,9 @@ THREE.glTFAnimation.prototype.update = function()
 	var deltat = (now - this.startTime) / 1000;
 	var t = deltat % this.duration;
 	var nCycles = Math.floor(deltat / this.duration);
+	if (this.direction == THREE.glTFAnimation.REVERSE_DIRECTION) {
+		t = this.duration - t;
+	}
 	
 	if (nCycles >= 1 && !this.loop)
 	{
@@ -92,7 +96,10 @@ THREE.glTFAnimation.prototype.update = function()
 		var i, len = this.interps.length;
 		for (i = 0; i < len; i++)
 		{
-			this.interps[i].interp(this.duration);
+			if (this.direction == THREE.glTFAnimation.REVERSE_DIRECTION)
+				this.interps[i].interp(0);
+			else
+				this.interps[i].interp(this.duration);
 		}
 		this.stop();
 		return;
@@ -249,3 +256,7 @@ THREE.glTFInterpolator.prototype.copyValue = function(target) {
 		target.copy(this.vec3);
 	}		
 }
+
+THREE.glTFAnimation.FORWARD_DIRECTION = 0;
+THREE.glTFAnimation.REVERSE_DIRECTION = 1;
+

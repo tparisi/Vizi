@@ -288,7 +288,7 @@ WaterWorld.prototype.onGamepadButtonsChanged = function(event) {
 		switch (button.button) {
 			case Vizi.Gamepad.TRIGGER_LEFT : 
 				if (this.brushes) {
-					if (!button.pressed) {
+					if (button.pressed) {
 						this.brushes.nextBrush();
 					}
 				}

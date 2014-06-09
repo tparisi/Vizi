@@ -14,7 +14,7 @@ BrushUIPrefab = function(param) {
 		var material = new THREE.MeshBasicMaterial({
 			map: map,
 			transparent:true,
-			opacity:.8,
+//			opacity:.8,
 		});
 		var mesh = new THREE.Mesh(geometry, material);
 		mesh.visible = (i == 0);
@@ -25,7 +25,7 @@ BrushUIPrefab = function(param) {
 		obj.addComponent(brushUIScript);
 	}	
 
-	obj.transform.position.set(-3, -1.6, 0);
+	obj.transform.position.set(-1, -1.6, 0);
 	
 	return obj;
 }

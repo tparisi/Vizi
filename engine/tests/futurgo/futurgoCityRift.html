@@ -8,39 +8,9 @@
 	<link rel="stylesheet" href="../../libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="../../libs/colorpicker/css/colorpicker.css" />
 	<link href='../css/fonts.css' rel='stylesheet' type='text/css'>
-	<link href="../css/futurgoCity.css" rel="stylesheet" type='text/css'/> 
+	<link href="../css/futurgoCityRift.css" rel="stylesheet" type='text/css'/> 
 </head>
 <body>
-	<div id="top_frame"></div>
-	<div id="menubar">
-	    <div id="menuORDER" class="menuItem" onclick="onMenuCommand(this.id);">ORDER</div>
-	    <div id="menuTEST_DRIVE" class="menuItem" onclick="onMenuCommand(this.id);">TEST DRIVE</div>
-	    <div id="menuFEATURES" class="menuItem" onclick="onMenuCommand(this.id);">FEATURES</div>
-	    <div id="menuSPECS" class="menuItem" onclick="onMenuCommand(this.id);">SPECS</div>
-	    <div id="menuCHARGING" class="menuItem" onclick="onMenuCommand(this.id);">CHARGING</div>
-	    <div id="menuGALLERY" class="menuItem" onclick="onMenuCommand(this.id);">GALLERY</div>
-	    <div id="menuVIDEO" class="menuItem" onclick="onMenuCommand(this.id);">VIDEO</div>
-	    <div id="menuFAQ" class="menuItem" onclick="onMenuCommand(this.id);">QUESTIONS?</div>
-	    <span></span>
-  	</div>
-	<div id="bot_frame"></div>
-	<div id="left_banner_bg"></div>
-	<div id="futurgo_logo"></div>
-
-	<div id="help_text">
-	<div id="help_walk">
-	Use arrow or WASD keys to walk; drag mouse to look up/down.
-	</div>
-	<div id="help_drive" style="display:none;">
-	Use arrow keys to drive: UP: forward. DOWN: brake. LEFT/RIGHT: turn. Drag mouse to look up/down.
-	</div>
-	</div>
-	<div id="tabbar_left">
-		<div id="tab01"><div class="tabLink" onclick="startTestDrive();"></div></div>
-		<div id="tab02"><div class="tabLink" onclick="endTestDrive();"></div></div>
-		<div id="tab03"><div class="tabLink" onclick="tour();"></div></div>
-	</div>
-	<div id="vizi_powered"></div>
 	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
 	Loading scene...
@@ -64,6 +34,7 @@
 	<script src="futurgoController.js"></script>
 	<script src="futurgoDashboard.js"></script>
 	<script src="futurgoSound.js"></script>
+	<script src="helpScreen.js"></script>
 	<script>
 
    	var futurgoCity = null;
