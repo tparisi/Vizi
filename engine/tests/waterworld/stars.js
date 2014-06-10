@@ -6,7 +6,8 @@ StarsPrefab = function(param) {
 
     var texture;
     var colorStart = new THREE.Color();
-    colorStart.setRGB(Math.random(), Math.random(), Math.random());
+    var val = Math.random() * .5;
+    colorStart.setRGB(val, val, val);
     texture = THREE.ImageUtils.loadTexture('../images/star.png');
     texture.minFilter = THREE.LinearMipMapLinearFilter;
     
@@ -52,6 +53,7 @@ StarsScript.prototype.update = function()
 }
 
 StarsScript.prototype.generateStars = function() {
+	var val = rnd(.1, .5);
     this.starEmitter = new ShaderParticleEmitter({
       type: 'sphere',
       radius: 50000,
@@ -63,7 +65,7 @@ StarsScript.prototype.generateStars = function() {
       opacityMiddle: 1,
       opacityEnd: 0,
       colorStart: this.colorStart,
-      colorSpread: new THREE.Vector3(rnd(.1, .5), rnd(.1, .5), rnd(.1, .5))
+      colorSpread: new THREE.Vector3(.1, .1, .1),
     });
     return this.starGroup.addEmitter(this.starEmitter);
 }

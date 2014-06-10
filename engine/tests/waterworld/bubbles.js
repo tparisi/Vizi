@@ -51,17 +51,17 @@ BubblesScript.prototype.initializePaint = function() {
 
     for (i = _i = 0, _ref = this.numEmitters; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       colorStart = new THREE.Color();
-      colorStart.setRGB(Math.random(), Math.random(), Math.random());
+      colorStart.setRGB(.1, .1, Math.random());
       colorEnd = new THREE.Color();
-      colorEnd.setRGB(Math.random(), Math.random(), Math.random());
+      colorEnd.setRGB(0, 0, .2);
       brushEmitter = new ShaderParticleEmitter({
           positionSpread: new THREE.Vector3(1, 1, 1),
           sizeEnd: 5,
           colorStart: colorStart,
           colorEnd: colorEnd,
           particlesPerSecond: 50,
-          opacityStart: 0.5,
-          opacityMiddle: 1,
+          opacityStart: 0.1,
+          opacityMiddle: .25,
           opacityEnd: 0,
           accelerationSpread: new THREE.Vector3(2, 2, 2)
       });

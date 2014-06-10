@@ -50,9 +50,9 @@ WandScript.prototype.initializePaint = function() {
 
     for (i = _i = 0, _ref = this.numEmitters; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       colorStart = new THREE.Color();
-      colorStart.setRGB(Math.random(), Math.random(), Math.random());
+      colorStart.setRGB(0, Math.random(), 0);
       colorEnd = new THREE.Color();
-      colorEnd.setRGB(Math.random(), Math.random(), Math.random());
+      colorEnd.setRGB(0, Math.random(), 0);
       brushEmitter = new ShaderParticleEmitter({
         size: 20,
         sizeEnd: 10,
@@ -60,7 +60,7 @@ WandScript.prototype.initializePaint = function() {
         colorEnd: colorEnd,
         particlesPerSecond: 1,
         opacityStart: 0.2,
-        opacityMiddle: 1,
+        opacityMiddle: 0.4,
         opacityEnd: 0
       });
       this.particleGroup.addEmitter(brushEmitter);

@@ -48,9 +48,9 @@ FireScript.prototype.initializePaint = function() {
 
     for (i = _i = 0, _ref = this.numEmitters; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       colorStart = new THREE.Color();
-      colorStart.setHSL(rnd(0.55, 0.65), .3, .3);
+      colorStart.setRGB(.1, .1, .1);
       colorEnd = new THREE.Color();
-      colorEnd.setHSL(rnd(0, .1), 0.8, 0.3);
+      colorEnd.setRGB(.2, 0.1, 0.0);
       brushEmitter = new ShaderParticleEmitter({
           positionSpread: new THREE.Vector3(2, 7, 2),
           sizeEnd: 15,
