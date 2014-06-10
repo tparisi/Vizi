@@ -177,10 +177,10 @@ Vizi.OculusRiftControls = function ( camera ) {
 			//rotation.normalize();
 			// velocity.applyQuaternion(rotation);
 			
-			if (rotation.x != 0 && 
-					rotation.y != 0 &&
-					rotation.z != 0 &&
-					rotation.w != 0) {
+			if (!(rotation.x == 0 && 
+					rotation.y == 0 &&
+					rotation.z == 0 &&
+					rotation.w == 0)) {
 				
 				moveObject.quaternion.copy(rotation);
 				

@@ -10,7 +10,7 @@ BrushUIPrefab = function(param) {
 		var map = new THREE.ImageUtils.loadTexture(BrushUIScript.urls[i]);
 		
 		var brushUITexture = new THREE.ImageUtils.loadTexture(BrushUIScript.urls[0]);
-		var geometry = new THREE.PlaneGeometry(.5, .5);
+		var geometry = new THREE.PlaneGeometry(.25, .25);
 		var material = new THREE.MeshBasicMaterial({
 			map: map,
 			transparent:true,
@@ -25,7 +25,7 @@ BrushUIPrefab = function(param) {
 		obj.addComponent(brushUIScript);
 	}	
 
-	obj.transform.position.set(-1, -1.6, 0);
+	obj.transform.position.set(0, -1, 0);
 	
 	return obj;
 }

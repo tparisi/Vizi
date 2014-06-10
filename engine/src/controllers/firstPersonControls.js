@@ -488,11 +488,18 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			var targetPosition = this.target,
 				position = this.object.position;
 	
-			targetPosition.x = position.x - Math.sin( this.theta );
-			targetPosition.y = position.y + Math.sin( this.phi );
-			targetPosition.z = position.z - Math.cos( this.theta );
-	
-			this.object.lookAt( targetPosition );
+			if (this.turnSpeed) {
+				targetPosition.x = position.x - Math.sin( this.theta );
+			}
+			
+			if (this.tiltSpeed) {
+				targetPosition.y = position.y + Math.sin( this.phi );
+				targetPosition.z = position.z - Math.cos( this.theta );
+			}
+			
+			if (this.turnSpeed || this.tiltSpeed) {
+				this.object.lookAt( targetPosition );
+			}
 		}
 	};
 

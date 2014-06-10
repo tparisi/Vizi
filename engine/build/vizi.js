@@ -50771,12 +50771,14 @@ Vizi.FirstPersonControllerScript = function(param)
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this._move = (param.move !== undefined) ? param.move : true;
 	this._look = (param.look !== undefined) ? param.look : true;
-	this._turn = (param.move !== undefined) ? param.turn : true;
+	this._turn = (param.turn !== undefined) ? param.turn : true;
+	this._tilt = (param.tilt !== undefined) ? param.tilt : true;
 	this._mouseLook = (param.mouseLook !== undefined) ? param.mouseLook : false;
 	
 	this.collisionDistance = 10;
 	this.moveSpeed = 13;
 	this.turnSpeed = 5;
+	this.tiltSpeed = 5;
 	this.lookSpeed = 1;
 	
 	this.savedCameraPos = new THREE.Vector3;	
@@ -50850,6 +50852,7 @@ Vizi.FirstPersonControllerScript.prototype.createControls = function(camera)
 	controls.movementSpeed = this._move ? this.moveSpeed : 0;
 	controls.lookSpeed = this._look ? this.lookSpeed  : 0;
 	controls.turnSpeed = this._turn ? this.turnSpeed : 0;
+	controls.tiltSpeed = this._tilt ? this.tiltSpeed : 0;
 
 	this.clock = new THREE.Clock();
 	return controls;
@@ -53017,11 +53020,18 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 			var targetPosition = this.target,
 				position = this.object.position;
 	
-			targetPosition.x = position.x - Math.sin( this.theta );
-			targetPosition.y = position.y + Math.sin( this.phi );
-			targetPosition.z = position.z - Math.cos( this.theta );
-	
-			this.object.lookAt( targetPosition );
+			if (this.turnSpeed) {
+				targetPosition.x = position.x - Math.sin( this.theta );
+			}
+			
+			if (this.tiltSpeed) {
+				targetPosition.y = position.y + Math.sin( this.phi );
+				targetPosition.z = position.z - Math.cos( this.theta );
+			}
+			
+			if (this.turnSpeed || this.tiltSpeed) {
+				this.object.lookAt( targetPosition );
+			}
 		}
 	};
 
@@ -55998,10 +56008,10 @@ Vizi.OculusRiftControls = function ( camera ) {
 			//rotation.normalize();
 			// velocity.applyQuaternion(rotation);
 			
-			if (rotation.x != 0 && 
-					rotation.y != 0 &&
-					rotation.z != 0 &&
-					rotation.w != 0) {
+			if (!(rotation.x == 0 && 
+					rotation.y == 0 &&
+					rotation.z == 0 &&
+					rotation.w == 0)) {
 				
 				moveObject.quaternion.copy(rotation);
 				
