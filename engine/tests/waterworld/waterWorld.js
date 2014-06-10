@@ -57,7 +57,7 @@ WaterWorld.prototype.init = function(param) {
 			look: !riftController,
 		});
 		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
-		controllerScript.moveSpeed = 6;
+		controllerScript.moveSpeed = 10;
 		controllerScript.turnSpeed = 4;
 		controllerScript.lookSpeed = 4;
 	}
