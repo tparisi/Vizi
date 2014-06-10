@@ -50906,7 +50906,7 @@ Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
 	this.controls.movementSpeed = this.moveSpeed;
-	this.controls.lookSpeed = 0.1;
+	this.controls.lookSpeed = this._look ?  0.1 : 0;
 
 }
 
@@ -52963,7 +52963,7 @@ Vizi.FirstPersonControls = function ( object, domElement ) {
 
 		var DRAG_DEAD_ZONE = 1;
 		
-		if (this.mouseDragOn || this.mouseLook) {
+		if ((this.mouseDragOn || this.mouseLook) && this.lookSpeed) {
 			
 			var deltax = this.lastMouseX - this.mouseX;
 			if (Math.abs(deltax) < DRAG_DEAD_ZONE)

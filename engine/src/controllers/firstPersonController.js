@@ -162,7 +162,7 @@ Vizi.FirstPersonControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
 	this.controls = this.createControls(camera);
 	this.controls.movementSpeed = this.moveSpeed;
-	this.controls.lookSpeed = 0.1;
+	this.controls.lookSpeed = this._look ?  0.1 : 0;
 
 }
 
