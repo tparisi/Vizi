@@ -52,12 +52,12 @@ WaterWorld.prototype.init = function(param) {
 	if (fpsController) {
 		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
 			headlight:false,
-			mouseLook:false,
+			mouseLook:true,
 			turn: !riftController,
 			look: !riftController,
 		});
 		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
-		controllerScript.moveSpeed = 10;
+		controllerScript.moveSpeed = 12;
 		controllerScript.turnSpeed = 4;
 		controllerScript.lookSpeed = 4;
 	}

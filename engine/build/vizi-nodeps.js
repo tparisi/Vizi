@@ -7740,7 +7740,14 @@ Vizi.OculusRiftControls = function ( camera ) {
 			//rotation.normalize();
 			// velocity.applyQuaternion(rotation);
 			
-			moveObject.quaternion.copy(rotation);
+			if (rotation.x != 0 && 
+					rotation.y != 0 &&
+					rotation.z != 0 &&
+					rotation.w != 0) {
+				
+				moveObject.quaternion.copy(rotation);
+				
+			}
 		}
 
 		//moveObject.translateX( velocity.x );
