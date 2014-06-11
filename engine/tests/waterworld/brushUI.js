@@ -65,19 +65,7 @@ BrushUIScript.prototype.update = function() {
 		var brushes = this.brushes.brushes;
 		var brush = brushes[this.brushIndex];
 		if (brush) {
-			if (true) {
-				this._object.transform.position.z = -brush.distanceFromPlayer / 10;
-			}
-			else {
-				this.brushDirection.set(0, 0, -1);
-				this.brushDirection.transformDirection(Vizi.Graphics.instance.camera.matrixWorld);
-				this.brushDirection.multiplyScalar(brush.distanceFromPlayer);
-				this.cameraPosition.setFromMatrixPosition(Vizi.Graphics.instance.camera.matrixWorld);
-				this.brushPosition.copy(this.cameraPosition).add(this.brushDirection);
-				this._object.transform.position.copy(this.brushPosition);
-				this._object.transform.lookAt(this.cameraPosition);
-			}
-// );
+			this._object.transform.position.z = -brush.distanceFromPlayer / 10;
 		}
 	}
 }
