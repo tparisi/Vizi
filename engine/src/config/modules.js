@@ -27,6 +27,8 @@ goog.require('Vizi.PerspectiveCamera');
 goog.require('Vizi.FirstPersonControls');
 goog.require('Vizi.OrbitControls');
 goog.require('Vizi.FirstPersonControllerScript');
+goog.require('Vizi.PointerLockControllerScript');
+goog.require('Vizi.PointerLockControls');
 goog.require('Vizi.ModelControllerScript');
 goog.require('Vizi.DeviceOrientationControls');
 goog.require('Vizi.DeviceOrientationControllerScript');

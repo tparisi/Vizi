@@ -12,6 +12,7 @@ goog.inherits(WaterWorld, Vizi.Application);
 WaterWorld.prototype.init = function(param) {
 
 	var addCubes = false,
+		pointerLockController = false,
 		fpsController = true,
 		addLights = true,
 		addStars = true,
@@ -49,7 +50,20 @@ WaterWorld.prototype.init = function(param) {
 	}
 	
 
-	if (fpsController) {
+	if (pointerLockController) {
+		var controller = Vizi.Prefabs.PointerLockController({active:true, 
+			headlight:false,
+			mouseLook:!riftController,
+			turn: !riftController,
+			tilt: !riftController,
+			look: !riftController,
+		});
+		var controllerScript = controller.getComponent(Vizi.PointerLockControllerScript);
+		controllerScript.moveSpeed = 12;
+		controllerScript.turnSpeed = 4;
+		controllerScript.lookSpeed = 4;
+	}
+	else if (fpsController) {
 		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
 			headlight:false,
 			mouseLook:!riftController,
