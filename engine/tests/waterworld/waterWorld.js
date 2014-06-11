@@ -260,12 +260,21 @@ WaterWorld.prototype.onKeyUp = function(event) {
 }
 
 WaterWorld.prototype.onMouseDown = function(event) {
-	this.startPaint();
+	if (event.button === 0) {
+		this.startPaint();
+	}
+	else if (event.button == 2) {
+		if (this.brushes)
+			this.brushes.nextBrush();
+	}
 	Vizi.Application.prototype.onMouseDown(event);
 }
 
 WaterWorld.prototype.onMouseUp = function(event) {
-	this.endPaint();
+	if (event.button === 0) {
+		this.endPaint();
+	}
+	
 	Vizi.Application.prototype.onMouseUp(event);
 }
 
