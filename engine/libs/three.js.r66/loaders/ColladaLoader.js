@@ -1183,7 +1183,7 @@ THREE.ColladaLoader = function () {
 				var sampler = animation.sampler[i];
 				var id = channel.target.split('/')[0];
 
-				if ( id == node.id ) {
+				if ( sampler && id == node.id ) {
 
 					sampler.create();
 					channel.sampler = sampler;
