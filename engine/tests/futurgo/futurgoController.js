@@ -13,7 +13,7 @@ FuturgoController = function(param)
 	this.scene = param.scene || null;
 	this.camera = param.camera || null;
 	
-	this.turnSpeed = Math.PI / 2; // 90 degs/sec
+	this.turnSpeed = Math.PI / 4; // 90 degs/sec
 
 	this.moveForward = false;
 	this.moveBackward = false;
@@ -370,11 +370,11 @@ FuturgoController.prototype.onGamepadAxesChanged = function(event) {
 	}
 }
 
-FuturgoController.ACCELERATION = 2; // m/s
-FuturgoController.BRAKING = 1.5; // m/s
-FuturgoController.INERTIA = 12; // m/s
+FuturgoController.ACCELERATION = 1; // m/s
+FuturgoController.BRAKING = .75; // m/s
+FuturgoController.INERTIA = 6; // m/s
 FuturgoController.COLLISION_MIN = 1; // m
 FuturgoController.COLLISION_MAX = 2; // m
-FuturgoController.MAX_SPEED = 24; // m/s
-FuturgoController.MAX_ACCELERATION = 24; // m/s
+FuturgoController.MAX_SPEED = 12; // m/s
+FuturgoController.MAX_ACCELERATION = 12; // m/s
 FuturgoController.BOUNCE_DURATION = 0.5; // sec

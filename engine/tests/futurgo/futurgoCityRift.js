@@ -521,6 +521,7 @@ FuturgoCity.prototype.playCloseAnimations = function() {
 // Event handling
 FuturgoCity.prototype.onMouseDown = function ( event ) {
 	this.viewer.focus();
+	this.toggleStartStop();
 }
 
 FuturgoCity.prototype.onKeyDown = function ( event ) {
