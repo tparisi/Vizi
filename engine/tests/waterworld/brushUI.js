@@ -59,15 +59,6 @@ BrushUIScript.prototype.realize = function() {
 }
 
 BrushUIScript.prototype.update = function() {
-
-	return;
-	if (this.brushes) {
-		var brushes = this.brushes.brushes;
-		var brush = brushes[this.brushIndex];
-		if (brush) {
-			this._object.transform.position.z = -brush.distanceFromPlayer / 10;
-		}
-	}
 }
 
 BrushUIScript.prototype.setBrush = function(index) {
