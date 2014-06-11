@@ -109,24 +109,26 @@ BrushUIScript.prototype.setBrushes = function(brushes) {
 
 BrushUIScript.createMesh = function(index) {
 	
-	var geometry, color = 0;
-	
+	var geometry, color = 0, specular = 0;
+	var rotation = new THREE.Euler;
 	switch (index) {
 		case 0 : // wand
 			geometry = new THREE.SphereGeometry(BrushUIScript.BRUSH_SIZE / 2, 16, 16);
 			color = 0x00ff00;
 			break;
 		case 1 : // fire
-			geometry = new THREE.CylinderGeometry(0, BrushUIScript.BRUSH_SIZE / 3, BrushUIScript.BRUSH_SIZE, 16, 16);
+			geometry = new THREE.CylinderGeometry(0, BrushUIScript.BRUSH_SIZE / 2, BrushUIScript.BRUSH_SIZE, 16, 16);
 			color = 0xffaa00;
 			break;
 		case 2 : // bubbles
 			geometry = new THREE.SphereGeometry(BrushUIScript.BRUSH_SIZE / 2, 16, 16);
 			color = 0x0044ff;
+			specular = 0xffffff;
 			break;
 		case 3 : // fireflies
-			geometry = new THREE.CylinderGeometry(BrushUIScript.BRUSH_SIZE / 6, BrushUIScript.BRUSH_SIZE / 6, BrushUIScript.BRUSH_SIZE, 16, 16);
+			geometry = new THREE.CylinderGeometry(BrushUIScript.BRUSH_SIZE / 12, BrushUIScript.BRUSH_SIZE / 6, BrushUIScript.BRUSH_SIZE * 1.5, 16, 16);
 			color = 0xffff00;
+			rotation.z = Math.PI / 6;
 			break;
 	}
 	
@@ -134,7 +136,15 @@ BrushUIScript.createMesh = function(index) {
 	var map = null;
 	
 	if (geometry) {
-		return new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:color, map:map, transparent:true, opacity:.5}));
+		var mesh = new THREE.Mesh(geometry, 
+				new THREE.MeshPhongMaterial({color:color, 
+					specular:specular, 
+					map:map, 
+					transparent:true, 
+					opacity:.5,
+					}));
+		mesh.rotation.copy(rotation);
+		return mesh;
 	}
 	else {
 		return null;
