@@ -19,7 +19,7 @@ WaterWorld.prototype.init = function(param) {
 		addMeteors = true,
 		addCaves = true,
 		addBrushes = true,
-		addBrushUI = false, // not good yet
+		addBrushUI = true, 
 		addHelp = true; // param.riftController;
 	
 	var riftController = param.riftController;
@@ -184,6 +184,11 @@ WaterWorld.prototype.init = function(param) {
 		
 		this.brushes = brushes.getComponent(BrushesScript);	
 
+		if (buiScript) {
+			buiScript.setBrushes(this.brushes);
+			buiScript.setBrush(0);
+		}
+		
 		if (Vizi.Gamepad && Vizi.Gamepad.instance) {
 			var gamepad = Vizi.Gamepad.instance;
 			

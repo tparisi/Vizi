@@ -67,3 +67,7 @@ BrushesScript.prototype.startPaint = function() {
 BrushesScript.prototype.endPaint = function() {
     return this.brushes[this.activeBrushIndex].endPaint();
 }
+
+BrushesScript.prototype.getBrush = function(index) {
+	return this.brushes[index];
+}
