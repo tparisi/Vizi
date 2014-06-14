@@ -102,7 +102,7 @@ Vizi.ModelControllerScript.prototype.createControls = function(camera)
 	controls.userPan = this.allowPan;
 	controls.userZoom = this.allowZoom;
 	controls.userRotate = this.allowRotate;
-	
+	controls.enabled = this._enabled;
 	return controls;
 }
 

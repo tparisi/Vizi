@@ -55075,7 +55075,7 @@ Vizi.ModelControllerScript.prototype.createControls = function(camera)
 	controls.userPan = this.allowPan;
 	controls.userZoom = this.allowZoom;
 	controls.userRotate = this.allowRotate;
-	
+	controls.enabled = this._enabled;
 	return controls;
 }
 
@@ -57815,6 +57815,32 @@ Vizi.Viewer.prototype.useCamera = function(id) {
 	if (index >= 0 && this.cameras && this.cameras[index]) {
 		this.cameras[index].active = true;
 		this.controllerScript.enabled = (index == 0);
+	}
+}
+
+Vizi.Viewer.prototype.addCamera = function(camera, id) {
+
+	this.cameras.push(camera);
+	this.cameraNames.push(id);
+
+}
+
+Vizi.Viewer.prototype.getCamera = function(id) {
+
+	var index = id;
+	
+	if (typeof(id) == "string") {
+		var cameraNames = this.cameraNames;
+		if (this.cameraNames) {
+			index = this.cameraNames.indexOf(id);
+		}
+	}
+
+	if (index >= 0 && this.cameras && this.cameras[index]) {
+		return this.cameras[index];
+	}
+	else {
+		return null;
 	}
 }
 
