@@ -2877,6 +2877,13 @@ Vizi.SurfaceDragger.prototype.onMouseDown = function(event)
 
 }
 
+Vizi.SurfaceDragger.prototype.onMouseUp = function(event) {
+	Vizi.Picker.prototype.onMouseUp.call(this, event);
+    this.dispatchEvent("dragend", {
+        type : "dragend",
+    });
+}
+
 Vizi.SurfaceDragger.prototype.onMouseMove = function(event)
 {
 	Vizi.Picker.prototype.onMouseMove.call(this, event);
