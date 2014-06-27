@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Vizi - Getting Started</title>
+    <meta name="description" content="Vizi - Getting Started">
+    <style type="text/css">
+      html, body { height:100%; width:100%; margin:0; padding:0; background:#000; color:#FFF }
+      #container { width: 100%; height: 100% }
+    </style>
+    <script src="../build/vizi.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      // Create Vizi application
+      var container = document.getElementById("container");
+      var app = new Vizi.Application({ container: container });
+
+      // Create a phong-shaded cube
+      var cube = new Vizi.Object;
+      var visual = new Vizi.Visual({
+        geometry: new THREE.CubeGeometry(2,2,2),
+        material: new THREE.MeshPhongMaterial({ color: 0xcccccc })
+      });
+      cube.addComponent(visual);
+
+      // Add rotation behaviour
+      var rotator = new Vizi.RotateBehavior({autoStart:true});
+      cube.addComponent(rotator);
+
+      // Rotate cube to demonstrate 3D
+      cube.transform.rotation.x = Math.PI / 5;
+
+      // Create light to show shading
+      var light = new Vizi.Object;
+      light.addComponent(new Vizi.DirectionalLight);
+
+      // Add cube and light to the scene
+      app.addObject(cube);
+      app.addObject(light);
+
+      // Run the app
+      app.run();
+    </script>
+  </body>
+</html>
