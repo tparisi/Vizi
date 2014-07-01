@@ -12,12 +12,12 @@
 	</div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
-	<script src="../build/vizi.js"></script>
+	<script src="../build/vizi.min.js"></script>
 	<script>
 
 	$(document).ready(function() {
 
-		Vizi.loadUrl("./models/duck/duck.dae", document.getElementById("container"));
+		Vizi.loadUrl("./models/duck/duck.json", document.getElementById("container"), { headlight:true } );
 	}
 	);
 	

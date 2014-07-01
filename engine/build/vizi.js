@@ -43417,7 +43417,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         this._entries = {};
     };
 
-    LoadDelegate = function() {
+    var LoadDelegate = function() {
     }
     
     LoadDelegate.prototype.loadCompleted = function(callback, obj) {
@@ -52274,6 +52274,7 @@ Vizi.PickManager.handleMouseUp = function(event)
 
 Vizi.PickManager.handleMouseClick = function(event)
 {
+	/* N.B.: bailing out here, not sure why, leave this commented out
 	return;
 	
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
@@ -52290,6 +52291,7 @@ Vizi.PickManager.handleMouseClick = function(event)
     }
 
     Vizi.PickManager.clickedObject = null;
+    */
 }
 
 Vizi.PickManager.handleMouseDoubleClick = function(event)
@@ -55202,12 +55204,6 @@ Vizi.SkyboxScript.prototype.update = function()
 	maincam.updateMatrixWorld();
 	maincam.matrixWorld.decompose(this.maincampos, this.maincamrot, this.maincamscale);
 	this.camera.quaternion.copy(this.maincamrot);
-	return;
-	
-	var dir = Vizi.Graphics.instance.camera.position.clone()
-		.negate().normalize(); // say that 3x fast
-	
-	Vizi.Graphics.instance.backgroundLayer.camera.lookAt(dir);
 }
 
 /**
@@ -57464,7 +57460,7 @@ Vizi.Viewer = function(param)
 	this.riftController = (param.riftController !== undefined) ? param.riftController : false;
 	this.firstPerson = (param.firstPerson !== undefined) ? param.firstPerson : false;
 	this.showGrid = (param.showGrid !== undefined) ? param.showGrid : false;
-	this.showBoundingBox = (param.showBoundingBox !== undefined) ? param.showBoundingBox : false;
+	this.createBoundingBoxes = (param.createBoundingBoxes !== undefined) ? param.createBoundingBoxes : false;
 	this.showBoundingBoxes = (param.showBoundingBoxes !== undefined) ? param.showBoundingBoxes : false;
 	this.allowPan = (param.allowPan !== undefined) ? param.allowPan : true;
 	this.allowZoom = (param.allowZoom !== undefined) ? param.allowZoom : true;
@@ -57964,7 +57960,7 @@ Vizi.Viewer.prototype.setGridOn = function(on)
 
 Vizi.Viewer.prototype.setBoundingBoxesOn = function(on)
 {
-	this.showBoundingBoxes = !this.showBoundingBoxes;
+	this.showBoundingBoxes = on;
 	var that = this;
 	this.sceneRoot.map(Vizi.Decoration, function(o) {
 		if (!that.highlightedObject || (o != that.highlightDecoration)) {
@@ -58101,8 +58097,9 @@ Vizi.Viewer.prototype.fitToScene = function()
 	}
 	
 	// Bounding box display
-	if (true) {
+	if (this.createBoundingBoxes) {
 		
+		var that = this;
 		this.sceneRoot.map(Vizi.Object, function(o) {
 			if (o._parent) {
 				
@@ -58112,7 +58109,7 @@ Vizi.Viewer.prototype.fitToScene = function()
 				});
 				
 				o._parent.addComponent(decoration);							
-				decoration.visible = this.showBoundingBoxes;
+				decoration.visible = that.showBoundingBoxes;
 			}
 		});
 	}
@@ -58423,6 +58420,10 @@ Vizi.loadUrl = function(url, element, options) {
 		viewer.replaceScene(data);
 		if (viewer.cameras.length > 1) {
 			viewer.useCamera(1);
+		}
+		
+		if (options.headlight) {
+			viewer.setHeadlightOn(true);
 		}
 	}
 

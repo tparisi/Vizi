@@ -82,11 +82,5 @@ Vizi.SkyboxScript.prototype.update = function()
 	maincam.updateMatrixWorld();
 	maincam.matrixWorld.decompose(this.maincampos, this.maincamrot, this.maincamscale);
 	this.camera.quaternion.copy(this.maincamrot);
-	return;
-	
-	var dir = Vizi.Graphics.instance.camera.position.clone()
-		.negate().normalize(); // say that 3x fast
-	
-	Vizi.Graphics.instance.backgroundLayer.camera.lookAt(dir);
 }
 
