@@ -112,6 +112,7 @@ Vizi.PickManager.handleMouseUp = function(event)
 
 Vizi.PickManager.handleMouseClick = function(event)
 {
+	/* N.B.: bailing out here, not sure why, leave this commented out
 	return;
 	
     Vizi.PickManager.clickedObject = Vizi.PickManager.objectFromMouse(event);
@@ -128,6 +129,7 @@ Vizi.PickManager.handleMouseClick = function(event)
     }
 
     Vizi.PickManager.clickedObject = null;
+    */
 }
 
 Vizi.PickManager.handleMouseDoubleClick = function(event)

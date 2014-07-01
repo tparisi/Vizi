@@ -5,7 +5,7 @@
 <title>Vizi Test Load Scene</title>
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -44,10 +44,17 @@
 				}
 			});
 		loader.loadScene("./models/duck.dae");
-		
+
+		var camobj1 = new Vizi.Object;
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		app.addObject(camobj1);
+
 		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
 		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
-
+		controllerScript.camera = camera1;
+		camera1.active = true;
+		
 		container.addEventListener("mouseup", function(e) {
 				controllerScript.headlightOn = !controllerScript.headlightOn;
 				if (rotator)
@@ -62,7 +69,6 @@
 		
 		app.addObject(controller);
 		app.run();
-		controllerScript.controls.userPanSpeed = 0.1;
 	}
 	);
 

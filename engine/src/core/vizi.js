@@ -19,6 +19,10 @@ Vizi.loadUrl = function(url, element, options) {
 		if (viewer.cameras.length > 1) {
 			viewer.useCamera(1);
 		}
+		
+		if (options.headlight) {
+			viewer.setHeadlightOn(true);
+		}
 	}
 
 	function onLoadProgress(progress) {

@@ -151,7 +151,7 @@
 		var sceneStats = document.getElementById("scene_stats");
 		
 		viewer = new Vizi.Viewer({ container : container, showGrid : true, headlight : true,
-			showBoundingBox : true, flipY : false, oneButton: true });
+			createBoundingBoxes : true, flipY : false, oneButton: true });
 		viewer.addEventListener("renderstats", function(stats) { onRenderStats(stats, renderStats); });
 		viewer.addEventListener("scenestats", function(stats) { onSceneStats(stats, sceneStats); });
 
