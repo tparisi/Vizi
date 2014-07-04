@@ -1,6 +1,6 @@
 /**
  * @fileoverview The base Application class
- * 
+ *
  * @author Tony Parisi
  */
 goog.provide('Vizi.Application');
@@ -30,14 +30,14 @@ Vizi.Application.prototype.initialize = function(param)
 
 	this.running = false;
 	this.tabstop = param.tabstop;
-	
+
 	this._services = [];
 	this._objects = [];
 
 	// Add required services first
 	this.addService("time");
 	this.addService("input");
-	
+
 	// Add optional (game-defined) services next
 	this.addOptionalServices();
 
@@ -45,15 +45,24 @@ Vizi.Application.prototype.initialize = function(param)
 	this.addService("tween");
 	this.addService("events");
 	this.addService("graphics");
-	
+
 	// Start all the services
 	this.initServices(param);
 }
 
 Vizi.Application.prototype.addService = function(serviceName)
 {
-	var service = Vizi.Services.create(serviceName);
-	this._services.push(service);	
+    var existing = Vizi.Services[serviceName];
+    var service;
+
+    //Check if service has been created, is so use it.
+    if(existing) {
+        service = existing;
+    } else {
+        service = Vizi.Services.create(serviceName);
+    }
+
+	this._services.push(service);
 }
 
 Vizi.Application.prototype.initServices = function(param)
@@ -84,18 +93,18 @@ Vizi.Application.prototype.run = function()
 	this.running = true;
 	this.runloop();
 }
-	        
+
 Vizi.Application.prototype.runloop = function()
 {
 	var now = Date.now();
 	var deltat = now - this.lastFrameTime;
-	
+
 	if (deltat >= Vizi.Application.minFrameTime)
 	{
 		this.updateServices();
         this.lastFrameTime = now;
 	}
-	
+
 	var that = this;
     requestAnimationFrame( function() { that.runloop(); } );
 }
@@ -113,12 +122,12 @@ Vizi.Application.prototype.updateServices = function()
 Vizi.Application.prototype.updateObjects = function()
 {
 	var i, len = this._objects.length;
-	
+
 	for (i = 0; i < len; i++)
 	{
 		this._objects[i].update();
 	}
-	
+
 }
 
 Vizi.Application.prototype.addObject = function(o)
@@ -140,14 +149,14 @@ Vizi.Application.prototype.removeObject = function(o) {
 Vizi.Application.prototype.realizeObjects = function()
 {
 	var i, len = this._objects.length;
-	
+
 	for (i = 0; i < len; i++)
 	{
 		this._objects[i].realize();
 	}
-	
+
 }
-	
+
 Vizi.Application.prototype.onMouseMove = function(event)
 {
 	if (this.mouseDelegate  && this.mouseDelegate.onMouseMove)
@@ -218,21 +227,21 @@ Vizi.Application.prototype.onKeyPress = function(event)
 	{
 		this.keyboardDelegate.onKeyPress(event);
 	}
-}	
+}
 
 /* statics */
 
 Vizi.Application.instance = null;
 Vizi.Application.curObjectID = 0;
 Vizi.Application.minFrameTime = 1;
-	    	
+
 Vizi.Application.handleMouseMove = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseMove)
-    	Vizi.Application.instance.onMouseMove(event);	            	
+    	Vizi.Application.instance.onMouseMove(event);
 }
 
 Vizi.Application.handleMouseDown = function(event)
@@ -240,93 +249,93 @@ Vizi.Application.handleMouseDown = function(event)
     // Click to focus
     if (Vizi.Application.instance.tabstop)
     	Vizi.Application.instance.focus();
-        
+
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseDown)
-    	Vizi.Application.instance.onMouseDown(event);	            	
+    	Vizi.Application.instance.onMouseDown(event);
 }
 
 Vizi.Application.handleMouseUp = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseUp)
-    	Vizi.Application.instance.onMouseUp(event);	            	
+    	Vizi.Application.instance.onMouseUp(event);
 }
 
 Vizi.Application.handleMouseClick = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseClick)
-    	Vizi.Application.instance.onMouseClick(event);	            	
+    	Vizi.Application.instance.onMouseClick(event);
 }
 
 Vizi.Application.handleMouseDoubleClick = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseDoubleClick)
-    	Vizi.Application.instance.onMouseDoubleClick(event);	            	
+    	Vizi.Application.instance.onMouseDoubleClick(event);
 }
 
 Vizi.Application.handleMouseScroll = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.overObject)
     	return;
-    
+
     if (Vizi.Application.instance.onMouseScroll)
-    	Vizi.Application.instance.onMouseScroll(event);	            	
+    	Vizi.Application.instance.onMouseScroll(event);
 }
 
 Vizi.Application.handleTouchStart = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onTouchStart)
-    	Vizi.Application.instance.onTouchStart(event);	            	
+    	Vizi.Application.instance.onTouchStart(event);
 }
 
 Vizi.Application.handleTouchMove = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onTouchMove)
-    	Vizi.Application.instance.onTouchMove(event);	            	
+    	Vizi.Application.instance.onTouchMove(event);
 }
 
 Vizi.Application.handleTouchEnd = function(event)
 {
     if (Vizi.PickManager && Vizi.PickManager.clickedObject)
     	return;
-    
+
     if (Vizi.Application.instance.onTouchEnd)
-    	Vizi.Application.instance.onTouchEnd(event);	            	
+    	Vizi.Application.instance.onTouchEnd(event);
 }
 
 Vizi.Application.handleKeyDown = function(event)
 {
     if (Vizi.Application.instance.onKeyDown)
-    	Vizi.Application.instance.onKeyDown(event);	            	
+    	Vizi.Application.instance.onKeyDown(event);
 }
 
 Vizi.Application.handleKeyUp = function(event)
 {
     if (Vizi.Application.instance.onKeyUp)
-    	Vizi.Application.instance.onKeyUp(event);	            	
+    	Vizi.Application.instance.onKeyUp(event);
 }
 
 Vizi.Application.handleKeyPress = function(event)
 {
     if (Vizi.Application.instance.onKeyPress)
-    	Vizi.Application.instance.onKeyPress(event);	            	
+    	Vizi.Application.instance.onKeyPress(event);
 }
 
 Vizi.Application.prototype.onTouchMove = function(event)
@@ -352,4 +361,3 @@ Vizi.Application.prototype.onTouchEnd = function(event)
 		this.touchDelegate.onTouchEnd(event);
 	}
 }
-
