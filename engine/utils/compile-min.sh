@@ -7,7 +7,10 @@ LOADERS="../libs/three.js.r66/loaders/ColladaLoader.js \
 ../libs/three.js.r66/loaders/glTF/glTF-parser.js \
 ../libs/three.js.r66/loaders/glTF/glTFLoader.js \
 ../libs/three.js.r66/loaders/glTF/glTFLoaderUtils.js \
-../libs/three.js.r66/loaders/glTF/glTFAnimation.js"
+../libs/three.js.r66/loaders/glTF/glTFAnimation.js \
+../libs/oculus/OculusBridge.js \
+../libs/oculus/RiftCamera.js \
+../libs/oculus/vr.js"
 RAF=../libs/requestAnimationFrame/RequestAnimationFrame.js
 MOUSEWHEEL=../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js
 TWEEN=../libs/tween.js/tween.min.js
