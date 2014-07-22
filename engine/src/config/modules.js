@@ -13,6 +13,7 @@ goog.require('Vizi.Services');
 goog.require('Vizi.AnimationService');
 goog.require('Vizi.Interpolator');
 goog.require('Vizi.KeyFrameAnimator');
+goog.require('Vizi.Transition');
 goog.require('Vizi.TweenService');
 goog.require('Vizi.Behavior');
 goog.require('Vizi.BounceBehavior');

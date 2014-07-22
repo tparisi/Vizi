@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script>
+
+	var cube = null;
+	var dirlight = null;
+	var camera1 = null, camera2 = null;
+	var colorTransition = null;
+	var positionTransition = null;
+	
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container, displayStats:true } );
+
+		var camobj1 = new Vizi.Object;
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		camera1.position.z = 20;
+		app.addObject(camobj1);
+		
+		var root = new Vizi.Object;
+		
+		var group = new Vizi.Object;
+		var picker = new Vizi.Picker();
+		picker.overCursor = 'pointer';
+		picker.addEventListener("mouseover", onPickerMouseOver);
+		picker.addEventListener("mouseout", onPickerMouseOut);
+		picker.addEventListener("mousedown", onPickerMouseDown);
+		picker.addEventListener("mouseup", onPickerMouseUp);
+		group.addComponent(picker);
+
+		root.addChild(group);
+		
+		cube = createCube();
+		group.addChild(cube);
+
+		
+		colorTransition = new Vizi.Transition({
+			target: cube.visuals[0].material.color,
+			to : {
+				r : 0,
+				g : 1,
+				b : 0,
+			},
+			duration : 2000,
+		});
+
+		positionTransition = new Vizi.Transition({
+			target: cube.transform.position,
+			to : {
+				y : 1,
+			},
+			duration : 1000,
+		});
+		
+		group.addComponent(colorTransition);
+		group.addComponent(positionTransition);
+		
+		dirlight = new Vizi.Object;
+		dirlight.addComponent(new Vizi.PointLight);
+		dirlight.transform.position.z = 20;
+		root.addChild(dirlight);
+		
+		app.addObject(root);
+
+		app.run();
+	}
+	);
+
+	function createCube() {	
+		var o = new Vizi.Object;
+
+		o.transform.rotation.x = Math.PI / 6;
+		
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshPhongMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/board.png")})
+				});
+
+		
+		o.addComponent(visual);
+
+		return o;
+	}
+
+	function onPickerMouseOver(event)
+	{
+		cube.visuals[0].material.color.setRGB(1, 1, 1);
+		colorTransition.start();
+		positionTransition.to.y += 1;
+		positionTransition.start();
+	}
+		
+	function onPickerMouseOut(event)
+	{
+		colorTransition.stop();
+	}
+
+	function onPickerMouseDown(event)
+	{
+	}
+
+	function onPickerMouseUp(event)
+	{
+	}
+	
+	</script>
+	
+</body>
+</html>
