@@ -59,6 +59,8 @@ goog.require('Vizi.SkyboxScript');
 goog.require('Vizi.SkysphereScript');
 goog.require('Vizi.Prefabs');
 goog.require('Vizi.Decoration');
+goog.require('Vizi.ParticleEmitter');
+goog.require('Vizi.ParticleSystemScript');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.SceneUtils');
 goog.require('Vizi.SceneVisual');
