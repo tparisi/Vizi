@@ -5717,7 +5717,16 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.lastFrameTime = 0;
     
     if (param.riftRender) {
-    	  this.riftCam = new THREE.OculusRiftEffect(this.renderer);	
+    	  var ok = true;
+    	  this.riftCam = new THREE.VREffect(this.renderer, function(err) {
+    		  if (err) {
+    			  console.log(err);
+    			  ok = false;
+    		  }
+    	  });
+    	  
+    	  if (!ok)
+    		  this.riftCam = null;
     }
 }
 
@@ -6273,10 +6282,8 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam) {
-	    this.riftCam.render(
-	        	[ this.backgroundLayer.scene, this.scene ],
-	        	[this.backgroundLayer.camera, this.camera]);
-
+		// start with 1 layer to test
+	    this.riftCam.render(this.scene, this.camera);
 	    return;
 	}
 	
@@ -7316,9 +7323,7 @@ Vizi.RiftControllerScript = function(param)
 	Vizi.Script.call(this, param);
 
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
-	this.oculusBridge = null;
 	this.riftControls = null;
-	this.useVRJS = (param.useVRJS !== undefined) ? param.useVRJS : false;
 	
     Object.defineProperties(this, {
     	camera: {
@@ -7344,53 +7349,12 @@ goog.inherits(Vizi.RiftControllerScript, Vizi.Script);
 
 Vizi.RiftControllerScript.prototype.realize = function()
 {
-	this.bodyAngle     = 0;
-	this.bodyAxis      = new THREE.Vector3(0, 1, 0);
-	this.bodyPosition  = new THREE.Vector3(0, 15, 0);
-	this.velocity      = new THREE.Vector3();
-
-	var that = this;
-	if (this.useVRJS) {
-		this.vrstate = null;
-		vr.load(function() {
-			that.vrstate = new vr.State();
-		});
-	}
-	else {
-		var bridgeOrientationUpdated = function(quatValues) {
-			that.bridgeOrientationUpdated(quatValues);
-		}
-		var bridgeConfigUpdated = function(quatValues) {
-			that.bridgeConfigUpdated(quatValues);
-		}
-		var bridgeConnected = function(quatValues) {
-			that.bridgeConnected(quatValues);
-		}
-		var bridgeDisconnected = function(quatValues) {
-			that.bridgeDisconnected(quatValues);
-		}
-		
-		this.oculusBridge = new OculusBridge({
-			"debug" : true,
-			"onOrientationUpdate" : bridgeOrientationUpdated,
-			"onConfigUpdate"      : bridgeConfigUpdated,
-			"onConnect"           : bridgeConnected,
-			"onDisconnect"        : bridgeDisconnected
-		});
-		
-		this.oculusBridge.connect();
-	}	
 }
 
 Vizi.RiftControllerScript.prototype.update = function()
 {
-	if (this._enabled) {
-		if (this.useVRJS) {
-			if (this.vrstate) {
-				var polled = vr.pollState(this.vrstate);
-				this.riftControls.update(this.clock.getDelta(), polled ? this.vrstate : null );
-			}
-		}
+	if (this._enabled && this.riftControls) {
+		this.riftControls.update();
 	}
 }
 
@@ -7401,61 +7365,24 @@ Vizi.RiftControllerScript.prototype.setEnabled = function(enabled)
 
 Vizi.RiftControllerScript.prototype.setCamera = function(camera) {
 	this._camera = camera;
-	if (this.useVRJS) {
-		this.riftControls = this.createControls(camera);
-	}
+	this.riftControls = this.createControls(camera);
 }
 
 Vizi.RiftControllerScript.prototype.createControls = function(camera)
 {
-	var controls = new Vizi.OculusRiftControls(camera.object);
-
-	this.clock = new THREE.Clock();
-	return controls;
-}
-
-Vizi.RiftControllerScript.prototype.bridgeOrientationUpdated = function(quatValues) {
-
-	// Do first-person style controls (like the Tuscany demo) using the rift and keyboard.
-
-	// TODO: Don't instantiate new objects in here, these should be re-used to avoid garbage collection.
-
-	// make a quaternion for the the body angle rotated about the Y axis.
-	var quat = new THREE.Quaternion();
-	quat.setFromAxisAngle(this.bodyAxis, this.bodyAngle);
-
-	// make a quaternion for the current orientation of the Rift
-	var quatCam = new THREE.Quaternion(quatValues.x, quatValues.y, quatValues.z, quatValues.w);
-
-	// multiply the body rotation by the Rift rotation.
-	quat.multiply(quatCam);
-
-	// Make a vector pointing along the Z axis and rotate it accoring to the combined look/body angle.
-	var xzVector = new THREE.Vector3(0, 0, 1);
-	xzVector.applyQuaternion(quat);
-
-	// Compute the X/Z angle based on the combined look/body angle.  This will be used for FPS style movement controls
-	// so you can steer with a combination of the keyboard and by moving your head.
-	viewAngle = Math.atan2(xzVector.z, xzVector.x) + Math.PI;
-
-	// Apply the combined look/body angle to the camera.
-	this._camera.quaternion.copy(quat);
+	var ok = true;
 	
-//	console.log("quat", quat);
+	var controls = new THREE.VRControls(camera.object, function(err) {
+			if (err) {
+				console.log(err);
+				ok = false;
+			}
+		});
+
+	// N.B.: this only works because the callback up there is synchronous...
+	return ok ?  controls : null;
 }
 
-Vizi.RiftControllerScript.prototype.bridgeConnected = function() {
-//  document.getElementById("logo").className = "";
-}
-
-Vizi.RiftControllerScript.prototype.bridgeDisconnected = function() {
-//  document.getElementById("logo").className = "offline";
-}
-
-Vizi.RiftControllerScript.prototype.bridgeConfigUpdated = function(config) {
-// console.log("Oculus config updated.");
-// riftCam.setHMD(config);      
-}
 
 /**
  * @fileoverview Interpolator for key frame animation

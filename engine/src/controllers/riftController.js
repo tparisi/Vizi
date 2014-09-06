@@ -67,13 +67,17 @@ Vizi.RiftControllerScript.prototype.setCamera = function(camera) {
 
 Vizi.RiftControllerScript.prototype.createControls = function(camera)
 {
+	var ok = true;
+	
 	var controls = new THREE.VRControls(camera.object, function(err) {
 			if (err) {
 				console.log(err);
+				ok = false;
 			}
 		});
 
-	return controls;
+	// N.B.: this only works because the callback up there is synchronous...
+	return ok ?  controls : null;
 }
 
 

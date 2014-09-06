@@ -131,7 +131,16 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.lastFrameTime = 0;
     
     if (param.riftRender) {
-    	  this.riftCam = new THREE.OculusRiftEffect(this.renderer);	
+    	  var ok = true;
+    	  this.riftCam = new THREE.VREffect(this.renderer, function(err) {
+    		  if (err) {
+    			  console.log(err);
+    			  ok = false;
+    		  }
+    	  });
+    	  
+    	  if (!ok)
+    		  this.riftCam = null;
     }
 }
 
@@ -687,10 +696,8 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam) {
-	    this.riftCam.render(
-	        	[ this.backgroundLayer.scene, this.scene ],
-	        	[this.backgroundLayer.camera, this.camera]);
-
+		// start with 1 layer to test
+	    this.riftCam.render(this.scene, this.camera);
 	    return;
 	}
 	
