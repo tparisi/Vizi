@@ -43417,7 +43417,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         this._entries = {};
     };
 
-    var LoadDelegate = function() {
+    LoadDelegate = function() {
     }
     
     LoadDelegate.prototype.loadCompleted = function(callback, obj) {
