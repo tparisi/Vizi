@@ -45076,32 +45076,63 @@ THREE.VREffect = function ( renderer, done ) {
 		renderer.enableScissorTest( true );
 		renderer.clear();
 
-		// Grab camera matrix from user.
-		// This is interpreted as the head base.
-		if ( camera.matrixAutoUpdate ) {
-			camera.updateMatrix();
+		var scenes, cameras;
+		if (scene instanceof Array) {
+			scenes = scene;
 		}
-		var eyeWorldMatrix = camera.matrixWorld.clone();
+		else {
+			scenes = [ scene ];
+		}
 
-		cameraLeft = camera.clone();
-		cameraRight = camera.clone();
-		cameraLeft.projectionMatrix = this.FovToProjection( this.leftEyeFOV );
-		cameraRight.projectionMatrix = this.FovToProjection( this.rightEyeFOV );
-		cameraLeft.position.add(new THREE.Vector3(
-			leftEyeTranslation.x, leftEyeTranslation.y, leftEyeTranslation.z) );
-		cameraRight.position.add(new THREE.Vector3(
-			rightEyeTranslation.x, rightEyeTranslation.y, rightEyeTranslation.z) );
+		if (camera instanceof Array) {
+			cameras = camera;
+		}
+		else {
+			cameras = [ camera ];
+		}
 
-		// render left eye
-		renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
-		renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
-		renderer.render( scene, cameraLeft );
 
-		// render right eye
-		renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
-		renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
-		renderer.render( scene, cameraRight );
+		var i, len = scenes.length;
+		for (i = 0; i < len; i++) {
 
+			var scene = scenes[i];
+			var camera = cameras[i];
+			
+			if (i == 0) {
+			   	renderer.setClearColor( 0, 0 );
+				renderer.autoClearColor = true;				
+			}
+			else {
+			    renderer.setClearColor( 0, 1 );
+				renderer.autoClearColor = false;				
+			}
+			// Grab camera matrix from user.
+			// This is interpreted as the head base.
+			if ( camera.matrixAutoUpdate ) {
+				camera.updateMatrix();
+			}
+			var eyeWorldMatrix = camera.matrixWorld.clone();
+	
+			cameraLeft = camera.clone();
+			cameraRight = camera.clone();
+			cameraLeft.projectionMatrix = this.FovToProjection( this.leftEyeFOV );
+			cameraRight.projectionMatrix = this.FovToProjection( this.rightEyeFOV );
+			cameraLeft.position.add(new THREE.Vector3(
+				leftEyeTranslation.x, leftEyeTranslation.y, leftEyeTranslation.z) );
+			cameraRight.position.add(new THREE.Vector3(
+				rightEyeTranslation.x, rightEyeTranslation.y, rightEyeTranslation.z) );
+	
+			// render left eye
+			renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
+			renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
+			renderer.render( scene, cameraLeft );
+	
+			// render right eye
+			renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
+			renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
+			renderer.render( scene, cameraRight );
+		}
+		
 	};
 
 	this.setFullScreen = function( enable ) {
@@ -45166,7 +45197,7 @@ THREE.VREffect = function ( renderer, done ) {
 	{
 		rightHanded = rightHanded === undefined ? true : rightHanded;
 		zNear = zNear === undefined ? 0.01 : zNear;
-		zFar = zFar === undefined ? 10000.0 : zFar;
+		zFar = zFar === undefined ? 100000.0 : zFar;
 
 		var handednessScale = rightHanded ? -1.0 : 1.0;
 
@@ -52517,8 +52548,8 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam) {
-		// start with 1 layer to test
-	    this.riftCam.render(this.scene, this.camera);
+		// start with 2 layer to test
+	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 	    return;
 	}
 	

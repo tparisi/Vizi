@@ -691,8 +691,8 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam) {
-		// start with 1 layer to test
-	    this.riftCam.render(this.scene, this.camera);
+		// start with 2 layer to test
+	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 	    return;
 	}
 	
