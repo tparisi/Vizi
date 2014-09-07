@@ -43417,7 +43417,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
         this._entries = {};
     };
 
-    LoadDelegate = function() {
+    var LoadDelegate = function() {
     }
     
     LoadDelegate.prototype.loadCompleted = function(callback, obj) {
@@ -52547,7 +52547,7 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam) {
+	if (this.riftCam && this.riftCam._vrHMD) {
 		// start with 2 layer to test
 	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 	    return;

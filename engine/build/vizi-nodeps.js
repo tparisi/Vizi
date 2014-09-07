@@ -6276,7 +6276,7 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam) {
+	if (this.riftCam && this.riftCam._vrHMD) {
 		// start with 2 layer to test
 	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 	    return;
