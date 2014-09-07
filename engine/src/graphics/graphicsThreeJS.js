@@ -131,16 +131,11 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.lastFrameTime = 0;
     
     if (param.riftRender) {
-    	  var ok = true;
-    	  this.riftCam = new THREE.VREffect(this.renderer, function(err) {
-    		  if (err) {
-    			  console.log(err);
-    			  ok = false;
-    		  }
-    	  });
-    	  
-    	  if (!ok)
-    		  this.riftCam = null;
+    	this.riftCam = new THREE.VREffect(this.renderer, function(err) {
+			if (err) {
+				console.log("Error creating VR renderer: ", err);
+			}
+    	});
     }
 }
 
@@ -725,6 +720,13 @@ Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
 	this.renderer.shadowMapEnabled = enable;
 	this.renderer.shadowMapSoft = enable;
 	this.renderer.shadowMapCullFrontFaces = false;
+}
+
+Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
+{
+	if (this.riftCam) {
+		this.riftCam.setFullScreen(enable);
+	}
 }
 
 Vizi.GraphicsThreeJS.default_display_stats = false;
