@@ -19,7 +19,7 @@
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
-		var app = new Vizi.Application({ container : container, displayStats:true } );
+		var app = new Vizi.Application({ riftRender : true, container : container, displayStats:true } );
 
 		var camobj1 = new Vizi.Object;
 		camera1 = new Vizi.PerspectiveCamera({active:true});
