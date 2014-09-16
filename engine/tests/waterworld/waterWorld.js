@@ -20,7 +20,7 @@ WaterWorld.prototype.init = function(param) {
 		addCaves = true,
 		addBrushes = true,
 		addBrushUI = true, 
-		addHelp = true; // param.riftController;
+		addHelp = false; // param.riftController;
 	
 	var riftController = param.riftController;
 	

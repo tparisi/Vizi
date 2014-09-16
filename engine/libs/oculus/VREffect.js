@@ -121,8 +121,10 @@ THREE.VREffect = function ( renderer, done ) {
 			scene.updateMatrix();
 			scene.updateMatrixWorld();
 
-			camera.updateMatrix();
-			camera.updateMatrixWorld();
+			if (camera.matrixAutoUpdate) {
+				camera.updateMatrix();
+				camera.updateMatrixWorld();
+			}
 
 			var eyeWorldMatrix = camera.matrixWorld.clone();
 	

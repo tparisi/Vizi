@@ -28,6 +28,7 @@ Vizi.HUDScript = function(param) {
 
 	this.zDistance = (param.zDistance !== undefined) ? param.zDistance : Vizi.HUDScript.DEFAULT_Z_DISTANCE;
 	this.position = new THREE.Vector3(0, 0, -this.zDistance);
+	this.savedPosition = this.position.clone();
 	this.scale = new THREE.Vector3;
 	this.quaternion = new THREE.Quaternion;
 }
@@ -36,6 +37,8 @@ goog.inherits(Vizi.HUDScript, Vizi.Script);
 
 Vizi.HUDScript.prototype.realize = function() {
 }
+
+Vizi.HUDScript.EPSILON = 0.001;
 
 Vizi.HUDScript.prototype.update = function() {
 	
@@ -48,6 +51,12 @@ Vizi.HUDScript.prototype.update = function() {
 	this._object.transform.quaternion.copy(this.quaternion);
 	this._object.transform.position.copy(this.position);
 	this._object.transform.translateZ(-this.zDistance);
+	
+	if (this.savedPosition.distanceTo(this.position) > Vizi.HUDScript.EPSILON) {
+		console.log("Position changed:", this.position)
+	}
+	
+	this.savedPosition.copy(this.position);
 }
 
 Vizi.HUDScript.DEFAULT_Z_DISTANCE = 1;
