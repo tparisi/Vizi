@@ -318,8 +318,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	
 	var that = this;
 	setTimeout(function() { 
-		that.helpScreen.show(); 
-		that.helpScreenVisible = true;
+//		that.helpScreen.show(); 
+//		that.helpScreenVisible = true;
 		}, 2000);
 
 	if (Vizi.Gamepad && Vizi.Gamepad.instance) {

@@ -45109,10 +45109,9 @@ THREE.VREffect = function ( renderer, done ) {
 
 			scene.updateMatrix();
 			scene.updateMatrixWorld();
-			if (camera.matrixAutoUpdate) {
-					camera.updateMatrix();
-					camera.updateMatrixWorld();
-			}
+
+			camera.updateMatrix();
+			camera.updateMatrixWorld();
 
 			var eyeWorldMatrix = camera.matrixWorld.clone();
 	
@@ -45120,9 +45119,9 @@ THREE.VREffect = function ( renderer, done ) {
 			cameraRight = camera.clone();
 			cameraLeft.projectionMatrix = this.FovToProjection( this.leftEyeFOV );
 			cameraRight.projectionMatrix = this.FovToProjection( this.rightEyeFOV );
-			cameraLeft.position.add(new THREE.Vector3(
+			cameraLeft.position.applyMatrix4(eyeWorldMatrix).add(new THREE.Vector3(
 				leftEyeTranslation.x, leftEyeTranslation.y, leftEyeTranslation.z) );
-			cameraRight.position.add(new THREE.Vector3(
+			cameraRight.position.applyMatrix4(eyeWorldMatrix).add(new THREE.Vector3(
 				rightEyeTranslation.x, rightEyeTranslation.y, rightEyeTranslation.z) );
 	
 			cameraLeft.updateMatrix();
