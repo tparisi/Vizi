@@ -48,6 +48,8 @@ THREE.VREffect = function ( renderer, done ) {
 					self.rightEyeTranslation = vrHMD.getEyeTranslation( "right" );
 					self.leftEyeFOV = vrHMD.getRecommendedEyeFieldOfView( "left" );
 					self.rightEyeFOV = vrHMD.getRecommendedEyeFieldOfView( "right" );
+					self.leftEyeMatrix = (new THREE.Matrix4()).makeTranslation(self.leftEyeTranslation.x, self.leftEyeTranslation.y, self.leftEyeTranslation.z);
+					self.rightEyeMatrix = (new THREE.Matrix4()).makeTranslation(self.rightEyeTranslation.x, self.rightEyeTranslation.y, self.rightEyeTranslation.z);
 					break; // We keep the first we encounter
 				}
 			}
@@ -126,28 +128,20 @@ THREE.VREffect = function ( renderer, done ) {
 				camera.updateMatrixWorld();
 			}
 
-			var eyeWorldMatrix = camera.matrixWorld.clone();
-	
 			cameraLeft = camera.clone();
 			cameraRight = camera.clone();
+			cameraLeft.matrixAutoUpdate = false;
+			cameraRight.matrixAutoUpdate = false;
 			cameraLeft.projectionMatrix = this.FovToProjection( this.leftEyeFOV );
 			cameraRight.projectionMatrix = this.FovToProjection( this.rightEyeFOV );
-			cameraLeft.position.applyMatrix4(eyeWorldMatrix).add(new THREE.Vector3(
-				leftEyeTranslation.x, leftEyeTranslation.y, leftEyeTranslation.z) );
-			cameraRight.position.applyMatrix4(eyeWorldMatrix).add(new THREE.Vector3(
-				rightEyeTranslation.x, rightEyeTranslation.y, rightEyeTranslation.z) );
-	
-			cameraLeft.updateMatrix();
-			cameraLeft.updateMatrixWorld();
-			
+			cameraLeft.matrixWorld.multiply(this.leftEyeMatrix);
+			cameraRight.matrixWorld.multiply(this.rightEyeMatrix);
+				
 			// render left eye
 			renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
 			renderer.render( scene, cameraLeft );
-	
-			cameraRight.updateMatrix();
-			cameraRight.updateMatrixWorld();
-			
+				
 			// render right eye
 			renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
