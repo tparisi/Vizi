@@ -9,8 +9,20 @@
 	<link rel="stylesheet" media="screen" type="text/css" href="../../libs/colorpicker/css/colorpicker.css" />
 	<link href='../css/fonts.css' rel='stylesheet' type='text/css'>
 	<link href="../css/futurgoCityRift.css" rel="stylesheet" type='text/css'/> 
+	<style>
+			.button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 8px;
+				color: #FFF;
+				background-color: #555;
+			}
+	
+	</style>
 </head>
 <body>
+	<div class="button">Start VR Mode</div>
 	<div id="container"></div>
 	<div id="loadStatus" style="display:none">
 	Loading scene...
@@ -59,10 +71,12 @@
 		loadStatus.style.display = 'block';
 
 		futurgoCity.go();
+
+		var fullScreenButton = document.querySelector( '.button' );
+		fullScreenButton.onclick = function() {
+			Vizi.Graphics.instance.setFullScreen( true );
+		};
 		
-		setTimeout(function() {
-			Vizi.Graphics.instance.setFullScreen(true);
-		}, 500);
 	}
 	);
 
