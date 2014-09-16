@@ -131,7 +131,11 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
     this.lastFrameTime = 0;
     
     if (param.riftRender) {
-    	  this.riftCam = new THREE.OculusRiftEffect(this.renderer);	
+    	this.riftCam = new THREE.VREffect(this.renderer, function(err) {
+			if (err) {
+				console.log("Error creating VR renderer: ", err);
+			}
+    	});
     }
 }
 
@@ -686,11 +690,9 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam) {
-	    this.riftCam.render(
-	        	[ this.backgroundLayer.scene, this.scene ],
-	        	[this.backgroundLayer.camera, this.camera]);
-
+	if (this.riftCam && this.riftCam._vrHMD) {
+		// start with 2 layer to test
+	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 	    return;
 	}
 	
@@ -718,6 +720,13 @@ Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
 	this.renderer.shadowMapEnabled = enable;
 	this.renderer.shadowMapSoft = enable;
 	this.renderer.shadowMapCullFrontFaces = false;
+}
+
+Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
+{
+	if (this.riftCam) {
+		this.riftCam.setFullScreen(enable);
+	}
 }
 
 Vizi.GraphicsThreeJS.default_display_stats = false;

@@ -318,8 +318,8 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	
 	var that = this;
 	setTimeout(function() { 
-		that.helpScreen.show(); 
-		that.helpScreenVisible = true;
+//		that.helpScreen.show(); 
+//		that.helpScreenVisible = true;
 		}, 2000);
 
 	if (Vizi.Gamepad && Vizi.Gamepad.instance) {
@@ -521,7 +521,9 @@ FuturgoCity.prototype.playCloseAnimations = function() {
 // Event handling
 FuturgoCity.prototype.onMouseDown = function ( event ) {
 	this.viewer.focus();
-	this.toggleStartStop();
+	if (this.testDriveRunning) {
+		this.endTestDrive();
+	}
 }
 
 FuturgoCity.prototype.onKeyDown = function ( event ) {

@@ -3,10 +3,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Vizi - Water</title>
+<style>
+
+			.button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 8px;
+				color: #FFF;
+				background-color: #555;
+			}
+
+
+#container {
+	z-index:-2;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	position:absolute;
+	background-color:black;
+}
+
+:focus { outline: none; }
+	
+</style>
 </head>
 <body>
-	<div id="container" style="width:100%; height:100%; position:absolute;background-color:black"></div>
-	<audio volume="0.5" autoplay id="blue_danube">
+	<div class="button">Start VR Mode</div>
+	<div id="container"></div>
+	<audio volume="0.5" id="blue_danube">
 	  <source src="../sounds/bluedanube.wav" type="audio/wav" />
 	  Your browser does not support MP4 files in the audio element.
 	</audio>
@@ -22,13 +48,12 @@
     <script src="../../libs/terrain-generator/circle.js"></script>
     <script src="../../libs/utils.js"></script>
     <script src="../../libs/FastBlur.js"></script>
+    <!--
     <script src="../../libs/three.js.r64/three.js"></script>
     <script src="../../libs/three.js.r64/stats.min.js"></script>
     <script src="../../libs/tween.js/tween.min.js"></script>
-    <script src="../../libs/oculus/OculusBridge.js"></script>
-    <script src="../../libs/oculus/RiftCamera.js"></script>
-    <script src="../../libs/oculus/vr.js"></script>
-	<script src="../../build/vizi-nodeps.js"></script>
+    -->
+	<script src="../../build/vizi.js"></script>
 	<script src="waterWorld.js"></script>
 	<script src="water.js"></script>
 	<script src="water-material.js"></script>
@@ -49,13 +74,19 @@
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 
-		var app = new WaterWorld({ container : container, 
-			displayStats : true, 
+		var waterworld = new WaterWorld({ container : container, 
+			displayStats : false, 
 			riftRender : true, 
 			riftController : true,
 			 });
-		app.run();
+		waterworld.run();
 
+		var fullScreenButton = document.querySelector( '.button' );
+		fullScreenButton.onclick = function() {
+			Vizi.Graphics.instance.setFullScreen( true );
+			document.getElementById('blue_danube').play();
+		};
+		
 	}
 	);
 
