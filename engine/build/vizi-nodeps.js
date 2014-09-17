@@ -5723,6 +5723,9 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 			}
     	});
     }
+    
+    // Placeholder for effects composer
+    this.composer = null;
 }
 
 Vizi.GraphicsThreeJS.prototype.initMouse = function()
@@ -6277,28 +6280,42 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 {
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam && this.riftCam._vrHMD) {
-		// start with 2 layer to test
-	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
-	    return;
+		this.renderVR();
+	}
+	else if (this.composer) {
+		this.renderEffects();
+	}
+	else {
+		this.render();
 	}
 	
+    var frameTime = Date.now();
+    var deltat = (frameTime - this.lastFrameTime) / 1000;
+    this.frameRate = 1 / deltat;
+
+    this.lastFrameTime = frameTime;
+
+    if (this.stats)
+    {
+    	this.stats.update();
+    }
+}
+
+Vizi.GraphicsThreeJS.prototype.render = function() {
     this.renderer.setClearColor( 0, 0 );
 	this.renderer.autoClearColor = true;
     this.renderer.render( this.backgroundLayer.scene, this.backgroundLayer.camera );
     this.renderer.setClearColor( 0, 1 );
 	this.renderer.autoClearColor = false;
     this.renderer.render( this.scene, this.camera );
+}
 
-    var frameTime = Date.now();
-    var deltat = (frameTime - this.lastFrameTime) / 1000;
-    this.frameRate = 1 / deltat;
+Vizi.GraphicsThreeJS.prototype.renderVR = function() {
+	// start with 2 layer to test; will need to work in postprocessing when that's ready
+    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
+}
 
-    this.lastFrameTime = frameTime;
-    	
-    if (this.stats)
-    {
-    	this.stats.update();
-    }
+Vizi.GraphicsThreeJS.prototype.renderEffects = function() {
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
