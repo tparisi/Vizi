@@ -68,6 +68,11 @@
 			});
 		
 		app.addObject(controller);
+
+		var effect = new Vizi.Effect( new THREE.BloomPass );
+		effect.pass.renderToScreen = false;
+        Vizi.Graphics.instance.addEffect(effect);
+
 		app.run();
 	}
 	);

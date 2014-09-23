@@ -5723,6 +5723,9 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 			}
     	});
     }
+    
+    // Placeholder for effects composer
+    this.composer = null;
 }
 
 Vizi.GraphicsThreeJS.prototype.initMouse = function()
@@ -6275,30 +6278,45 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
+    var frameTime = Date.now();
+    var deltat = (frameTime - this.lastFrameTime) / 1000;
+    this.frameRate = 1 / deltat;
+
+    this.lastFrameTime = frameTime;
+
 	// N.B.: start with hack, let's see how it goes...
 	if (this.riftCam && this.riftCam._vrHMD) {
-		// start with 2 layer to test
-	    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
-	    return;
+		this.renderVR();
+	}
+	else if (this.composer) {
+		this.renderEffects(deltat);
+	}
+	else {
+		this.render();
 	}
 	
+    if (this.stats)
+    {
+    	this.stats.update();
+    }
+}
+
+Vizi.GraphicsThreeJS.prototype.render = function() {
     this.renderer.setClearColor( 0, 0 );
 	this.renderer.autoClearColor = true;
     this.renderer.render( this.backgroundLayer.scene, this.backgroundLayer.camera );
     this.renderer.setClearColor( 0, 1 );
 	this.renderer.autoClearColor = false;
     this.renderer.render( this.scene, this.camera );
+}
 
-    var frameTime = Date.now();
-    var deltat = (frameTime - this.lastFrameTime) / 1000;
-    this.frameRate = 1 / deltat;
+Vizi.GraphicsThreeJS.prototype.renderVR = function() {
+	// start with 2 layer to test; will need to work in postprocessing when that's ready
+    this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
+}
 
-    this.lastFrameTime = frameTime;
-    	
-    if (this.stats)
-    {
-    	this.stats.update();
-    }
+Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
+	this.composer.render(deltat);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
@@ -6313,6 +6331,29 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	if (this.riftCam) {
 		this.riftCam.setFullScreen(enable);
 	}
+}
+
+Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
+	
+	if (!this.composer) {
+		this.composer = new Vizi.Composer();
+	}
+	
+	if (!this.effects) {
+		this.effects  = [];
+	}
+	
+	
+	if (effect.isShaderEffect) {
+		for (var i = 0; i < this.effects.length; i++) {
+			var ef = this.effects[i];
+			ef.pass.renderToScreen = false;
+		}	
+		effect.pass.renderToScreen = true;
+	}
+	
+	this.effects.push(effect);
+	this.composer.addEffect(effect);
 }
 
 Vizi.GraphicsThreeJS.default_display_stats = false;
@@ -9288,6 +9329,46 @@ Vizi.ScaleBehavior.prototype.stop = function()
 	
 	Vizi.Behavior.prototype.stop.call(this);
 }/**
+ * @fileoverview Vizi Effects Composer - postprocessing effects composer, wraps Three.js
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.Composer');
+
+/**
+ * @constructor
+ */
+
+Vizi.Composer = function(param)
+{
+	// Freak out if somebody tries to make 2
+    if (Vizi.Composer.instance)
+    {
+        throw new Error('Composer singleton already exists')
+    }
+
+	Vizi.Composer.instance = this;
+
+    // Create the effects composer
+    // For now, create default render pass to start it up
+	var graphics = Vizi.Graphics.instance;
+    this.composer = new THREE.EffectComposer( graphics.renderer );
+	this.composer.addPass( new THREE.RenderPass( graphics.scene, graphics.camera ) );
+}
+
+Vizi.Composer.prototype.render = function(deltat) {
+
+	// for now just pass it through
+	this.composer.render(deltat);	
+}
+
+Vizi.Composer.prototype.addEffect = function(effect) {
+
+	this.composer.addPass(effect.pass);	
+}
+
+Vizi.Composer.instance = null;/**
  * @fileoverview Viewer class - Application Subclass for Model/Scene Viewer
  * @author Tony Parisi / http://www.tonyparisi.com
  */
@@ -10263,6 +10344,42 @@ Vizi.SpotLight.DEFAULT_EXPONENT = 10;
 Vizi.SpotLight.DEFAULT_CAST_SHADOWS = false;
 Vizi.SpotLight.DEFAULT_SHADOW_DARKNESS = 0.3;
 /**
+ * @fileoverview Effect - Vizi postprocessing effect, wraps Three.js
+ * 
+ * @author Tony Parisi
+ */
+
+goog.provide('Vizi.Effect');
+goog.require('Vizi.EventDispatcher');
+
+/**
+ * @constructor
+ */
+
+Vizi.Effect = function(shader)
+{
+    Vizi.EventDispatcher.call(this);	
+    
+	this.isShaderEffect = false;
+
+    if (shader.render && typeof(shader.render) == "function") {
+    	this.pass = shader;
+    }
+    else {
+    	this.pass = new THREE.ShaderPass(shader);
+    	this.isShaderEffect = true;
+    }
+}
+
+goog.inherits(Vizi.Effect, Vizi.EventDispatcher);
+
+Vizi.Effect.prototype.update = function() {
+
+	// hook for later - maybe we do
+	// subclass with specific knowledge about shader uniforms
+}
+
+/**
  * @fileoverview Base class for visual decoration - like Vizi.Visual but not pickable.
  * @author Tony Parisi
  */
@@ -10351,6 +10468,8 @@ goog.require('Vizi.Prefabs');
 goog.require('Vizi.Decoration');
 goog.require('Vizi.ParticleEmitter');
 goog.require('Vizi.ParticleSystemScript');
+goog.require('Vizi.Composer');
+goog.require('Vizi.Effect');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.SceneUtils');
 goog.require('Vizi.SceneVisual');
