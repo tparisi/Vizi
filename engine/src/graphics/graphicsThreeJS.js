@@ -692,23 +692,23 @@ Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 
 Vizi.GraphicsThreeJS.prototype.update = function()
 {
-	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam && this.riftCam._vrHMD) {
-		this.renderVR();
-	}
-	else if (this.composer) {
-		this.renderEffects();
-	}
-	else {
-		this.render();
-	}
-	
     var frameTime = Date.now();
     var deltat = (frameTime - this.lastFrameTime) / 1000;
     this.frameRate = 1 / deltat;
 
     this.lastFrameTime = frameTime;
 
+	// N.B.: start with hack, let's see how it goes...
+	if (this.riftCam && this.riftCam._vrHMD) {
+		this.renderVR();
+	}
+	else if (this.composer) {
+		this.renderEffects(deltat);
+	}
+	else {
+		this.render();
+	}
+	
     if (this.stats)
     {
     	this.stats.update();
@@ -729,7 +729,8 @@ Vizi.GraphicsThreeJS.prototype.renderVR = function() {
     this.riftCam.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 }
 
-Vizi.GraphicsThreeJS.prototype.renderEffects = function() {
+Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
+	this.composer.render(deltat);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
@@ -744,6 +745,29 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	if (this.riftCam) {
 		this.riftCam.setFullScreen(enable);
 	}
+}
+
+Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
+	
+	if (!this.composer) {
+		this.composer = new Vizi.Composer();
+	}
+	
+	if (!this.effects) {
+		this.effects  = [];
+	}
+	
+	
+	if (effect.isShaderEffect) {
+		for (var i = 0; i < this.effects.length; i++) {
+			var ef = this.effects[i];
+			ef.pass.renderToScreen = false;
+		}	
+		effect.pass.renderToScreen = true;
+	}
+	
+	this.effects.push(effect);
+	this.composer.addEffect(effect);
 }
 
 Vizi.GraphicsThreeJS.default_display_stats = false;

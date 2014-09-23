@@ -61,6 +61,8 @@ goog.require('Vizi.Prefabs');
 goog.require('Vizi.Decoration');
 goog.require('Vizi.ParticleEmitter');
 goog.require('Vizi.ParticleSystemScript');
+goog.require('Vizi.Composer');
+goog.require('Vizi.Effect');
 goog.require('Vizi.SceneComponent');
 goog.require('Vizi.SceneUtils');
 goog.require('Vizi.SceneVisual');
