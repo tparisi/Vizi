@@ -6343,13 +6343,12 @@ Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
 		this.effects  = [];
 	}
 	
-	
 	if (effect.isShaderEffect) {
 		for (var i = 0; i < this.effects.length; i++) {
 			var ef = this.effects[i];
-			ef.pass.renderToScreen = false;
+//			ef.pass.renderToScreen = false;
 		}	
-		effect.pass.renderToScreen = true;
+//		effect.pass.renderToScreen = true;
 	}
 	
 	this.effects.push(effect);
@@ -9355,6 +9354,9 @@ Vizi.Composer = function(param)
 	var graphics = Vizi.Graphics.instance;
     this.composer = new THREE.EffectComposer( graphics.renderer );
 	this.composer.addPass( new THREE.RenderPass( graphics.scene, graphics.camera ) );
+	var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+	copyPass.renderToScreen = true;
+	this.composer.addPass(copyPass);
 }
 
 Vizi.Composer.prototype.render = function(deltat) {
@@ -9365,7 +9367,8 @@ Vizi.Composer.prototype.render = function(deltat) {
 
 Vizi.Composer.prototype.addEffect = function(effect) {
 
-	this.composer.addPass(effect.pass);	
+	var index = this.composer.passes.length - 1;
+	this.composer.insertPass(effect.pass, index);	
 }
 
 Vizi.Composer.instance = null;/**

@@ -5,7 +5,7 @@
 <title>Vizi</title>
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -66,14 +66,12 @@
 		var effect = new Vizi.Effect(THREE.DotScreenShader);
 		effect.pass.uniforms[ 'scale' ].value = 4;
 		effect.pass.uniforms[ 'tDiffuse' ].value = THREE.ImageUtils.loadTexture("./images/lavatile.jpg");
-//        Vizi.Graphics.instance.addEffect(effect);
+        Vizi.Graphics.instance.addEffect(effect);
 
 		var effect = new Vizi.Effect( THREE.RGBShiftShader );
 		effect.pass.uniforms[ 'amount' ].value = 0.0015;
-//        Vizi.Graphics.instance.addEffect(effect);
-
-		var effect = new Vizi.Effect( THREE.CopyShader );
         Vizi.Graphics.instance.addEffect(effect);
+
 		
 		app.run();
 	}

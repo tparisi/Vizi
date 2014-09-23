@@ -757,13 +757,12 @@ Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
 		this.effects  = [];
 	}
 	
-	
 	if (effect.isShaderEffect) {
 		for (var i = 0; i < this.effects.length; i++) {
 			var ef = this.effects[i];
-			ef.pass.renderToScreen = false;
+//			ef.pass.renderToScreen = false;
 		}	
-		effect.pass.renderToScreen = true;
+//		effect.pass.renderToScreen = true;
 	}
 	
 	this.effects.push(effect);
