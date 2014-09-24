@@ -17,6 +17,7 @@ LOADERS="../libs/three.js.r66/loaders/ColladaLoader.js \
 ../libs/three.js.r66/shaders/ConvolutionShader.js \
 ../libs/three.js.r66/shaders/CopyShader.js \
 ../libs/three.js.r66/shaders/DotScreenShader.js \
+../libs/three.js.r66/shaders/DotScreenRGBShader.js \
 ../libs/three.js.r66/shaders/FilmShader.js \
 ../libs/three.js.r66/shaders/RGBShiftShader.js \
 ../libs/oculus/VREffect.js \

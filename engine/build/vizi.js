@@ -45711,6 +45711,76 @@ THREE.DotScreenShader = {
 /**
  * @author alteredq / http://alteredqualia.com/
  *
+ * Dot screen shader
+ * based on glfx.js sepia shader
+ * https://github.com/evanw/glfx.js
+ */
+
+THREE.DotScreenRGBShader = {
+
+	uniforms: {
+
+		"tDiffuse": { type: "t", value: null },
+		"tSize":    { type: "v2", value: new THREE.Vector2( 256, 256 ) },
+		"center":   { type: "v2", value: new THREE.Vector2( 0.5, 0.5 ) },
+		"angle":    { type: "f", value: 1.57 },
+		"scale":    { type: "f", value: 1.0 }
+
+	},
+
+	vertexShader: [
+
+		"varying vec2 vUv;",
+
+		"void main() {",
+
+			"vUv = uv;",
+			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+		"}"
+
+	].join("\n"),
+
+	fragmentShader: [
+
+		"uniform vec2 center;",
+		"uniform float angle;",
+		"uniform float scale;",
+		"uniform vec2 tSize;",
+
+		"uniform sampler2D tDiffuse;",
+
+		"varying vec2 vUv;",
+
+		"float pattern() {",
+
+			"float s = sin( angle ), c = cos( angle );",
+
+			"vec2 tex = vUv * tSize - center;",
+			"vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;",
+
+			"return ( sin( point.x ) * sin( point.y ) ) * 4.0;",
+
+		"}",
+
+		"void main() {",
+
+			"vec4 color = texture2D( tDiffuse, vUv );",
+
+			"float r = color.r * 10.0 - 5.0 + pattern();",
+			"float g = color.g * 10.0 - 5.0 + pattern();",
+			"float b = color.b * 10.0 - 5.0 + pattern();",
+
+			"gl_FragColor = vec4( r, g, b, color.a );",
+
+		"}"
+
+	].join("\n")
+
+};
+/**
+ * @author alteredq / http://alteredqualia.com/
+ *
  * Film grain & scanlines shader
  *
  * - ported from HLSL to WebGL / GLSL
@@ -53489,6 +53559,13 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	}
 }
 
+Vizi.GraphicsThreeJS.prototype.setCamera = function(camera) {
+	this.camera = camera;
+	if (this.composer) {
+		this.composer.setCamera(camera);
+	}
+}
+
 Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
 	
 	if (!this.composer) {
@@ -55562,7 +55639,7 @@ Vizi.CameraManager.setActiveCamera = function(camera)
 		Vizi.CameraManager.activeCamera.active = false;
 	
 	Vizi.CameraManager.activeCamera = camera;
-	Vizi.Graphics.instance.camera = camera.object;
+	Vizi.Graphics.instance.setCamera(camera.object);
 }
 
 
@@ -56525,6 +56602,11 @@ Vizi.Composer.prototype.addEffect = function(effect) {
 
 	var index = this.composer.passes.length - 1;
 	this.composer.insertPass(effect.pass, index);	
+}
+
+Vizi.Composer.prototype.setCamera = function(camera) {
+	var renderpass = this.composer.passes[0];
+	renderpass.camera = camera;
 }
 
 Vizi.Composer.instance = null;/**

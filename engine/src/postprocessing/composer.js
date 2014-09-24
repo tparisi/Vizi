@@ -42,4 +42,9 @@ Vizi.Composer.prototype.addEffect = function(effect) {
 	this.composer.insertPass(effect.pass, index);	
 }
 
+Vizi.Composer.prototype.setCamera = function(camera) {
+	var renderpass = this.composer.passes[0];
+	renderpass.camera = camera;
+}
+
 Vizi.Composer.instance = null;

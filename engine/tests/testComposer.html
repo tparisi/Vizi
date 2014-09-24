@@ -20,11 +20,11 @@
 		var cube = new Vizi.Object;
 		cube.transform.rotation.x = Math.PI / 5;
 
-		var map = null; // THREE.ImageUtils.loadTexture("./images/board.png");
+		var map = THREE.ImageUtils.loadTexture("./images/board.png");
 		
 		var visual = new Vizi.Visual(
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
-					material: new THREE.MeshPhongMaterial({color:0xeeeeee,  map : map})
+					material: new THREE.MeshPhongMaterial({color:0x00ffff,  map : map})
 				});
 
 
@@ -56,21 +56,20 @@
 
 		var effect = new Vizi.Effect( THREE.FilmShader );
 		effect.pass.uniforms['sCount'].value = 1024;
-		effect.pass.uniforms['grayscale'].value = 0;
-		
-        Vizi.Graphics.instance.addEffect(effect);
+		effect.pass.uniforms['grayscale'].value = 0;		
+//        Vizi.Graphics.instance.addEffect(effect);
         
 		var effect = new Vizi.Effect( new THREE.BloomPass);
-        Vizi.Graphics.instance.addEffect(effect);
+//        Vizi.Graphics.instance.addEffect(effect);
 		
-		var effect = new Vizi.Effect(THREE.DotScreenShader);
+		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
 		effect.pass.uniforms[ 'scale' ].value = 4;
-		effect.pass.uniforms[ 'tDiffuse' ].value = THREE.ImageUtils.loadTexture("./images/lavatile.jpg");
+//		effect.pass.uniforms[ 'tDiffuse' ].value = THREE.ImageUtils.loadTexture("./images/lavatile.jpg");
         Vizi.Graphics.instance.addEffect(effect);
 
 		var effect = new Vizi.Effect( THREE.RGBShiftShader );
 		effect.pass.uniforms[ 'amount' ].value = 0.0015;
-        Vizi.Graphics.instance.addEffect(effect);
+//        Vizi.Graphics.instance.addEffect(effect);
 
 		
 		app.run();

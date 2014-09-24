@@ -27,7 +27,7 @@ Vizi.CameraManager.setActiveCamera = function(camera)
 		Vizi.CameraManager.activeCamera.active = false;
 	
 	Vizi.CameraManager.activeCamera = camera;
-	Vizi.Graphics.instance.camera = camera.object;
+	Vizi.Graphics.instance.setCamera(camera.object);
 }
 
 

@@ -747,6 +747,13 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	}
 }
 
+Vizi.GraphicsThreeJS.prototype.setCamera = function(camera) {
+	this.camera = camera;
+	if (this.composer) {
+		this.composer.setCamera(camera);
+	}
+}
+
 Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
 	
 	if (!this.composer) {

@@ -6333,6 +6333,13 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	}
 }
 
+Vizi.GraphicsThreeJS.prototype.setCamera = function(camera) {
+	this.camera = camera;
+	if (this.composer) {
+		this.composer.setCamera(camera);
+	}
+}
+
 Vizi.GraphicsThreeJS.prototype.addEffect = function(effect) {
 	
 	if (!this.composer) {
@@ -8406,7 +8413,7 @@ Vizi.CameraManager.setActiveCamera = function(camera)
 		Vizi.CameraManager.activeCamera.active = false;
 	
 	Vizi.CameraManager.activeCamera = camera;
-	Vizi.Graphics.instance.camera = camera.object;
+	Vizi.Graphics.instance.setCamera(camera.object);
 }
 
 
@@ -9369,6 +9376,11 @@ Vizi.Composer.prototype.addEffect = function(effect) {
 
 	var index = this.composer.passes.length - 1;
 	this.composer.insertPass(effect.pass, index);	
+}
+
+Vizi.Composer.prototype.setCamera = function(camera) {
+	var renderpass = this.composer.passes[0];
+	renderpass.camera = camera;
 }
 
 Vizi.Composer.instance = null;/**
