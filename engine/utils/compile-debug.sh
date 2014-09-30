@@ -21,6 +21,7 @@ $THREEDIR/shaders/CopyShader.js \
 $THREEDIR/shaders/DotScreenShader.js \
 $THREEDIR/shaders/DotScreenRGBShader.js \
 $THREEDIR/shaders/FilmShader.js \
+$THREEDIR/shaders/FXAAShader.js \
 $THREEDIR/shaders/RGBShiftShader.js \
 ../libs/oculus/VREffect.js \
 ../libs/oculus/VRControls.js \
