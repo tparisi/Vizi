@@ -3,7 +3,7 @@ TARGET="$BUILDDIR/vizi-nodeps.min.js"
 OUTPUT="$BUILDDIR/vizi.min.js"
 #THREEDIR=../libs/three.js.r66
 THREEDIR=../libs/three.js.r68
-THREE="$THREEDIR/three.js"
+THREE="$THREEDIR/three.min.js"
 STATS="$THREEDIR/stats.min.js"
 LOADERS="$THREEDIR/loaders/ColladaLoader.js \
 $THREEDIR/loaders/glTF/glTF-parser.js \
@@ -24,7 +24,7 @@ $THREEDIR/shaders/FilmShader.js \
 $THREEDIR/shaders/RGBShiftShader.js \
 ../libs/oculus/VREffect.js \
 ../libs/oculus/VRControls.js \
-../libs/ParticleEngine/ShaderParticles.min.js"
+$THREEDIR/ParticleEngine/ShaderParticles.min.js"
 
 
 RAF=../libs/requestAnimationFrame/RequestAnimationFrame.js

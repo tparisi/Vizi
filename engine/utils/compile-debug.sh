@@ -24,7 +24,7 @@ $THREEDIR/shaders/FilmShader.js \
 $THREEDIR/shaders/RGBShiftShader.js \
 ../libs/oculus/VREffect.js \
 ../libs/oculus/VRControls.js \
-../libs/ParticleEngine/ShaderParticles.min.js"
+$THREEDIR/ParticleEngine/ShaderParticles.min.js"
 
 RAF=../libs/requestAnimationFrame/RequestAnimationFrame.js
 MOUSEWHEEL=../libs/jquery-mousewheel-3.0.4/jquery.mousewheel.js
