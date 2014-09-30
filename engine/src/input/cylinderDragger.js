@@ -65,7 +65,6 @@ Vizi.CylinderDragger.prototype.createDragPlane = function() {
 	planeface.vertexNormals.push( normal.clone(), normal.clone(), normal.clone(), normal.clone() );
 	planegeom.faces.push(planeface);
 	planegeom.computeFaceNormals();
-	planegeom.computeCentroids();
 
 	var mat = new THREE.MeshBasicMaterial({color:this.color, transparent: true, side:THREE.DoubleSide, opacity:0.1 });
 

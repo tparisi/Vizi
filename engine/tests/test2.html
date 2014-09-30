@@ -69,7 +69,8 @@
 		
 		app.addObject(controller);
 
-		var effect = new Vizi.Effect( new THREE.BloomPass );
+		var effect = new Vizi.Effect( THREE.DotScreenRGBShader );
+		effect.pass.uniforms.scale.value=4;
 		effect.pass.renderToScreen = false;
         Vizi.Graphics.instance.addEffect(effect);
 

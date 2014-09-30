@@ -1,25 +1,27 @@
 BUILDDIR=../build
 TARGET="$BUILDDIR/vizi-nodeps.js"
 OUTPUT="$BUILDDIR/vizi.js"
-THREE=../libs/three.js.r66/three.js
-STATS=../libs/three.js.r66/stats.min.js
-LOADERS="../libs/three.js.r66/loaders/ColladaLoader.js \
-../libs/three.js.r66/loaders/glTF/glTF-parser.js \
-../libs/three.js.r66/loaders/glTF/glTFLoader.js \
-../libs/three.js.r66/loaders/glTF/glTFLoaderUtils.js \
-../libs/three.js.r66/loaders/glTF/glTFAnimation.js \
-../libs/three.js.r66/postprocessing/EffectComposer.js \
-../libs/three.js.r66/postprocessing/FilmPass.js \
-../libs/three.js.r66/postprocessing/BloomPass.js \
-../libs/three.js.r66/postprocessing/MaskPass.js \
-../libs/three.js.r66/postprocessing/RenderPass.js \
-../libs/three.js.r66/postprocessing/ShaderPass.js \
-../libs/three.js.r66/shaders/ConvolutionShader.js \
-../libs/three.js.r66/shaders/CopyShader.js \
-../libs/three.js.r66/shaders/DotScreenShader.js \
-../libs/three.js.r66/shaders/DotScreenRGBShader.js \
-../libs/three.js.r66/shaders/FilmShader.js \
-../libs/three.js.r66/shaders/RGBShiftShader.js \
+#THREEDIR=../libs/three.js.r66
+THREEDIR=../libs/three.js.r68
+THREE="$THREEDIR/three.js"
+STATS="$THREEDIR/stats.min.js"
+LOADERS="$THREEDIR/loaders/ColladaLoader.js \
+$THREEDIR/loaders/glTF/glTF-parser.js \
+$THREEDIR/loaders/glTF/glTFLoader.js \
+$THREEDIR/loaders/glTF/glTFLoaderUtils.js \
+$THREEDIR/loaders/glTF/glTFAnimation.js \
+$THREEDIR/postprocessing/EffectComposer.js \
+$THREEDIR/postprocessing/FilmPass.js \
+$THREEDIR/postprocessing/BloomPass.js \
+$THREEDIR/postprocessing/MaskPass.js \
+$THREEDIR/postprocessing/RenderPass.js \
+$THREEDIR/postprocessing/ShaderPass.js \
+$THREEDIR/shaders/ConvolutionShader.js \
+$THREEDIR/shaders/CopyShader.js \
+$THREEDIR/shaders/DotScreenShader.js \
+$THREEDIR/shaders/DotScreenRGBShader.js \
+$THREEDIR/shaders/FilmShader.js \
+$THREEDIR/shaders/RGBShiftShader.js \
 ../libs/oculus/VREffect.js \
 ../libs/oculus/VRControls.js \
 ../libs/ParticleEngine/ShaderParticles.min.js"
