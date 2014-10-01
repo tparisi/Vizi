@@ -23,7 +23,7 @@ Vizi.Composer = function(param)
     // Create the effects composer
     // For now, create default render pass to start it up
 	var graphics = Vizi.Graphics.instance;
-    this.composer = new THREE.EffectComposer( graphics.renderer );
+    this.composer = new THREE.EffectComposer( graphics.riftCam ? graphics.riftCam : graphics.renderer );
 	this.composer.addPass( new THREE.RenderPass( graphics.scene, graphics.camera ) );
 	var copyPass = new THREE.ShaderPass( THREE.CopyShader );
 	copyPass.renderToScreen = true;

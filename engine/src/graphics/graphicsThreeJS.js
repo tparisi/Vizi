@@ -699,11 +699,11 @@ Vizi.GraphicsThreeJS.prototype.update = function()
     this.lastFrameTime = frameTime;
 
 	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam && this.riftCam._vrHMD) {
-		this.renderVR();
-	}
-	else if (this.composer) {
+	if (this.composer) {
 		this.renderEffects(deltat);
+	}
+    else if (this.riftCam && this.riftCam._vrHMD) {
+		this.renderVR();
 	}
 	else {
 		this.render();

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container,
+					riftRender : true, 
+		 });
+		app.focus();
+		
+		var cube = new Vizi.Object;
+		cube.transform.rotation.x = Math.PI / 5;
+
+		var map = THREE.ImageUtils.loadTexture("./images/board.png");
+		
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+					material: new THREE.MeshPhongMaterial({color:0x00ffff,  map : map})
+				});
+
+
+		var picker = new Vizi.Picker;
+		var highlight = new Vizi.HighlightBehavior({highlightColor:0xffff00});
+		var rotator = new Vizi.RotateBehavior({loop:true});
+
+		picker.addEventListener("mouseover", function() { highlight.on(); });
+		picker.addEventListener("mouseout", function() { highlight.off(); });
+		picker.addEventListener("mouseup", function() { rotator.toggle(); });
+						
+		cube.addComponent(visual);
+		cube.addComponent(picker);
+		cube.addComponent(rotator);
+		cube.addComponent(highlight);
+		app.addObject(cube);
+
+		var camobj1 = new Vizi.Object;
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		app.addObject(camobj1);
+		
+		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+		controllerScript.camera = camera1;
+		camera1.active = true;
+				
+		app.addObject(controller);
+
+		var effect = new Vizi.Effect( THREE.FilmShader );
+		effect.pass.uniforms['sCount'].value = 1024;
+		effect.pass.uniforms['grayscale'].value = 0;		
+//        Vizi.Graphics.instance.addEffect(effect);
+        
+		var effect = new Vizi.Effect( new THREE.BloomPass);
+//        Vizi.Graphics.instance.addEffect(effect);
+		
+		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
+		effect.pass.uniforms[ 'scale' ].value = 4;
+//		effect.pass.uniforms[ 'tDiffuse' ].value = THREE.ImageUtils.loadTexture("./images/lavatile.jpg");
+        Vizi.Graphics.instance.addEffect(effect);
+
+		var effect = new Vizi.Effect( THREE.RGBShiftShader );
+		effect.pass.uniforms[ 'amount' ].value = 0.0035;
+//        Vizi.Graphics.instance.addEffect(effect);
+	
+//		Vizi.Graphics.instance.composer = new Vizi.Composer();	
+		app.run();
+	}
+	);
+
+	</script>
+	
+</body>
+</html>

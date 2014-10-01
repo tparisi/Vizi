@@ -43350,6 +43350,14 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 
 		var width = window.innerWidth || 1;
 		var height = window.innerHeight || 1;
+		if (renderer._renderer) {
+			width = renderer._renderer.domElement.offsetWidth  / renderer._renderer.devicePixelRatio;
+			height = renderer._renderer.domElement.offsetHeight  / renderer._renderer.devicePixelRatio;
+		}
+		else {
+			width = renderer.domElement.offsetWidth  / renderer.devicePixelRatio;
+			height = renderer.domElement.offsetHeight  / renderer.devicePixelRatio;
+		}
 		var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
 
 		renderTarget = new THREE.WebGLRenderTarget( width, height, parameters );
@@ -43408,8 +43416,18 @@ THREE.EffectComposer.prototype = {
 
 			if ( !pass.enabled ) continue;
 
-			pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
-
+			if (this.renderer instanceof THREE.VREffect) {
+				if (pass instanceof THREE.RenderPass) {
+					pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+				}
+				else {
+					pass.render( this.renderer._renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+				}
+			}
+			else {
+				pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+			}
+			
 			if ( pass.needsSwap ) {
 
 				if ( maskActive ) {
@@ -44524,12 +44542,17 @@ THREE.VREffect = function ( renderer, done ) {
 			// render left eye
 			renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
-			renderer.render( scene, cameraLeft );
+			renderer.render( scene, cameraLeft, renderTarget, forceClear );
 				
 			// render right eye
 			renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
-			renderer.render( scene, cameraRight );
+			renderer.render( scene, cameraRight, renderTarget, forceClear );
+
+			renderer.enableScissorTest( false );
+			renderer.setViewport( 0, 0, rendererWidth, rendererHeight );
+			renderer.setScissor( 0, 0, rendererWidth, rendererHeight );
+		
 		}
 		
 	};
@@ -51955,11 +51978,11 @@ Vizi.GraphicsThreeJS.prototype.update = function()
     this.lastFrameTime = frameTime;
 
 	// N.B.: start with hack, let's see how it goes...
-	if (this.riftCam && this.riftCam._vrHMD) {
-		this.renderVR();
-	}
-	else if (this.composer) {
+	if (this.composer) {
 		this.renderEffects(deltat);
+	}
+    else if (this.riftCam && this.riftCam._vrHMD) {
+		this.renderVR();
 	}
 	else {
 		this.render();
@@ -55028,7 +55051,7 @@ Vizi.Composer = function(param)
     // Create the effects composer
     // For now, create default render pass to start it up
 	var graphics = Vizi.Graphics.instance;
-    this.composer = new THREE.EffectComposer( graphics.renderer );
+    this.composer = new THREE.EffectComposer( graphics.riftCam ? graphics.riftCam : graphics.renderer );
 	this.composer.addPass( new THREE.RenderPass( graphics.scene, graphics.camera ) );
 	var copyPass = new THREE.ShaderPass( THREE.CopyShader );
 	copyPass.renderToScreen = true;

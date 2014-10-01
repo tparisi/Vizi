@@ -140,12 +140,17 @@ THREE.VREffect = function ( renderer, done ) {
 			// render left eye
 			renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
-			renderer.render( scene, cameraLeft );
+			renderer.render( scene, cameraLeft, renderTarget, forceClear );
 				
 			// render right eye
 			renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
-			renderer.render( scene, cameraRight );
+			renderer.render( scene, cameraRight, renderTarget, forceClear );
+
+			renderer.enableScissorTest( false );
+			renderer.setViewport( 0, 0, rendererWidth, rendererHeight );
+			renderer.setScissor( 0, 0, rendererWidth, rendererHeight );
+		
 		}
 		
 	};

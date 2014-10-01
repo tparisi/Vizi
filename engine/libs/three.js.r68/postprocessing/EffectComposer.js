@@ -10,6 +10,14 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 
 		var width = window.innerWidth || 1;
 		var height = window.innerHeight || 1;
+		if (renderer._renderer) {
+			width = renderer._renderer.domElement.offsetWidth  / renderer._renderer.devicePixelRatio;
+			height = renderer._renderer.domElement.offsetHeight  / renderer._renderer.devicePixelRatio;
+		}
+		else {
+			width = renderer.domElement.offsetWidth  / renderer.devicePixelRatio;
+			height = renderer.domElement.offsetHeight  / renderer.devicePixelRatio;
+		}
 		var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
 
 		renderTarget = new THREE.WebGLRenderTarget( width, height, parameters );
@@ -68,8 +76,18 @@ THREE.EffectComposer.prototype = {
 
 			if ( !pass.enabled ) continue;
 
-			pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
-
+			if (this.renderer instanceof THREE.VREffect) {
+				if (pass instanceof THREE.RenderPass) {
+					pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+				}
+				else {
+					pass.render( this.renderer._renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+				}
+			}
+			else {
+				pass.render( this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+			}
+			
 			if ( pass.needsSwap ) {
 
 				if ( maskActive ) {
