@@ -670,7 +670,12 @@ Vizi.GraphicsThreeJS.prototype.onKeyPress = function(event)
 Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 {
 	this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
-
+	
+	if (this.composer) {
+		this.composer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+	}
+	
+	
 	if (Vizi.CameraManager && Vizi.CameraManager.handleWindowResize(this.container.offsetWidth, this.container.offsetHeight))
 	{		
 	}

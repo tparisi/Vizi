@@ -50,6 +50,11 @@ THREE.VREffect = function ( renderer, done ) {
 					self.rightEyeFOV = vrHMD.getRecommendedEyeFieldOfView( "right" );
 					self.leftEyeMatrix = (new THREE.Matrix4()).makeTranslation(self.leftEyeTranslation.x, self.leftEyeTranslation.y, self.leftEyeTranslation.z);
 					self.rightEyeMatrix = (new THREE.Matrix4()).makeTranslation(self.rightEyeTranslation.x, self.rightEyeTranslation.y, self.rightEyeTranslation.z);
+					var geom = new THREE.BoxGeometry;
+					var material = new THREE.MeshBasicMaterial({color:0x0000ff});
+					self.cube = new THREE.Mesh(geom, material);
+					self.dummyScene = new THREE.Scene;
+					self.dummyScene.add(cube);
 					break; // We keep the first we encounter
 				}
 			}
@@ -86,8 +91,6 @@ THREE.VREffect = function ( renderer, done ) {
 		var rendererWidth = renderer.domElement.width / renderer.devicePixelRatio;
 		var rendererHeight = renderer.domElement.height / renderer.devicePixelRatio;
 		var eyeDivisionLine = rendererWidth / 2;
-		renderer.enableScissorTest( true );
-		renderer.clear();
 
 		var scenes, cameras;
 		if (scene instanceof Array) {
@@ -137,14 +140,26 @@ THREE.VREffect = function ( renderer, done ) {
 			cameraLeft.matrixWorld.multiply(this.leftEyeMatrix);
 			cameraRight.matrixWorld.multiply(this.rightEyeMatrix);
 				
+			// render something to scene HACK otherwise viewport isn't getting set?
+			renderer.setViewport( 0, 0, rendererWidth, rendererHeight );
+			renderer.setScissor( 0, 0, rendererHeight, rendererHeight );
+			renderer.render(this.dummyScene, camera, renderTarget, forceClear );
+
+			// Initial clear
+			renderer.enableScissorTest( true );
+			
 			// render left eye
 			renderer.setViewport( 0, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( 0, 0, eyeDivisionLine, rendererHeight );
+//			renderer.clear();
 			renderer.render( scene, cameraLeft, renderTarget, forceClear );
 				
 			// render right eye
+			renderer.enableScissorTest( true );
+			
 			renderer.setViewport( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
 			renderer.setScissor( eyeDivisionLine, 0, eyeDivisionLine, rendererHeight );
+//			renderer.clear();
 			renderer.render( scene, cameraRight, renderTarget, forceClear );
 
 			renderer.enableScissorTest( false );

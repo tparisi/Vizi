@@ -4,8 +4,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Vizi</title>
 </head>
+<style>
+:focus { outline: none; }
+
+			.button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 8px;
+				color: #FFF;
+				background-color: #555;
+			}
+</style>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;"></div>
+	<div class="button">Start VR Mode</div>
+	<div id="container" style="width:98%; height:98%; position:absolute;z-index:-2;"></div>
 
     <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
 	<script src="../build/vizi.js"></script>
@@ -18,32 +31,36 @@
 					riftRender : true, 
 		 });
 		app.focus();
+
+	if (true) {
+		var camobj1 = new Vizi.Object;
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		app.addObject(camobj1);
 		
-		var cube = new Vizi.Object;
-		cube.transform.rotation.x = Math.PI / 5;
+		var controller = Vizi.Prefabs.RiftController({active:true, 
+			headlight:true,
+			mouseLook:false,
+		});
+		var controllerScript = controller.getComponent(Vizi.RiftControllerScript);
+		controllerScript.camera = camera1;
+		camera1.active = true;
+				
+		app.addObject(controller);
 
-		var map = THREE.ImageUtils.loadTexture("./images/board.png");
-		
-		var visual = new Vizi.Visual(
-				{ geometry: new THREE.CubeGeometry(2, 2, 2),
-					material: new THREE.MeshPhongMaterial({color:0x00ffff,  map : map})
-				});
+		var controller = Vizi.Prefabs.FirstPersonController({active:true, 
+			headlight:false,
+			mouseLook:false,
+			turn: false,
+			tilt: false,
+			look: false,
+		});
+		var controllerScript = controller.getComponent(Vizi.FirstPersonControllerScript);
+		controllerScript.camera = camera1;
+		app.addObject(controller);
 
-
-		var picker = new Vizi.Picker;
-		var highlight = new Vizi.HighlightBehavior({highlightColor:0xffff00});
-		var rotator = new Vizi.RotateBehavior({loop:true});
-
-		picker.addEventListener("mouseover", function() { highlight.on(); });
-		picker.addEventListener("mouseout", function() { highlight.off(); });
-		picker.addEventListener("mouseup", function() { rotator.toggle(); });
-						
-		cube.addComponent(visual);
-		cube.addComponent(picker);
-		cube.addComponent(rotator);
-		cube.addComponent(highlight);
-		app.addObject(cube);
-
+	}
+	else {
 		var camobj1 = new Vizi.Object;
 		camera1 = new Vizi.PerspectiveCamera({active:true});
 		camobj1.addComponent(camera1);
@@ -55,6 +72,34 @@
 		camera1.active = true;
 				
 		app.addObject(controller);
+	}
+		
+		var cube = new Vizi.Object;
+		cube.transform.position.z = -10;
+		cube.transform.rotation.x = Math.PI / 5;
+
+		var map = THREE.ImageUtils.loadTexture("./images/flowers.jpg");
+		
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.BoxGeometry(2, 2, 2),
+					material: new THREE.MeshPhongMaterial({color:0x00ffff,  map : map})
+				});
+
+
+		var picker = new Vizi.Picker;
+		var highlight = new Vizi.HighlightBehavior({highlightColor:0xffff00});
+		var rotator = new Vizi.RotateBehavior({loop:true});
+
+		picker.addEventListener("mouseover", function() { highlight.on(); });
+		picker.addEventListener("mouseout", function() { highlight.off(); });
+		picker.addEventListener("mouseup", function() { /*rotator.toggle();*/});
+						
+		cube.addComponent(visual);
+		cube.addComponent(picker);
+		cube.addComponent(rotator);
+		cube.addComponent(highlight);
+		app.addObject(cube);
+
 
 		var effect = new Vizi.Effect( THREE.FilmShader );
 		effect.pass.uniforms['sCount'].value = 1024;
@@ -62,7 +107,7 @@
 //        Vizi.Graphics.instance.addEffect(effect);
         
 		var effect = new Vizi.Effect( new THREE.BloomPass);
-//        Vizi.Graphics.instance.addEffect(effect);
+//       Vizi.Graphics.instance.addEffect(effect);
 		
 		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
 		effect.pass.uniforms[ 'scale' ].value = 4;
@@ -72,8 +117,12 @@
 		var effect = new Vizi.Effect( THREE.RGBShiftShader );
 		effect.pass.uniforms[ 'amount' ].value = 0.0035;
 //        Vizi.Graphics.instance.addEffect(effect);
+
+		var fullScreenButton = document.querySelector( '.button' );
+		fullScreenButton.onclick = function() {
+			Vizi.Graphics.instance.setFullScreen( true );
+		};
 	
-//		Vizi.Graphics.instance.composer = new Vizi.Composer();	
 		app.run();
 	}
 	);

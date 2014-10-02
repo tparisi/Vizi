@@ -47,4 +47,8 @@ Vizi.Composer.prototype.setCamera = function(camera) {
 	renderpass.camera = camera;
 }
 
+Vizi.Composer.prototype.setSize = function(width, height) {
+	this.composer.setSize(width, height);
+}
+
 Vizi.Composer.instance = null;

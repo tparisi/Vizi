@@ -8,7 +8,12 @@ Vizi.Prefabs.RiftController = function(param)
 	var controller = new Vizi.Object(param);
 	var controllerScript = new Vizi.RiftControllerScript(param);
 	controller.addComponent(controllerScript);
+
+	var intensity = param.headlight ? 1 : 0;
 	
+	var headlight = new Vizi.DirectionalLight({ intensity : intensity });
+	controller.addComponent(headlight);
+
 	return controller;
 }
 
@@ -21,6 +26,10 @@ Vizi.RiftControllerScript = function(param)
 
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
 	this.riftControls = null;
+
+	this._headlightOn = param.headlight;
+	
+	this.cameraDir = new THREE.Vector3;
 	
     Object.defineProperties(this, {
     	camera: {
@@ -46,6 +55,8 @@ goog.inherits(Vizi.RiftControllerScript, Vizi.Script);
 
 Vizi.RiftControllerScript.prototype.realize = function()
 {
+	this.headlight = this._object.getComponent(Vizi.DirectionalLight);
+	this.headlight.intensity = this._headlightOn ? 1 : 0;
 }
 
 Vizi.RiftControllerScript.prototype.update = function()
@@ -53,6 +64,14 @@ Vizi.RiftControllerScript.prototype.update = function()
 	if (this._enabled && this.riftControls) {
 		this.riftControls.update();
 	}
+	
+	if (this._headlightOn)
+	{
+		this.cameraDir.set(0, 0, -1);
+		this.cameraDir.transformDirection(this.camera.object.matrixWorld);
+		
+		this.headlight.direction.copy(this.cameraDir);
+	}	
 }
 
 Vizi.RiftControllerScript.prototype.setEnabled = function(enabled)
