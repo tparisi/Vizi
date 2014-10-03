@@ -228,7 +228,7 @@ WaterWorld.prototype.init = function(param) {
 		that.onTimerTime(t);
 	});
 	this.addObject(timeobj);
-	
+		
 	this.timer.start();
 }
 

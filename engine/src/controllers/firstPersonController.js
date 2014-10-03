@@ -30,6 +30,7 @@ Vizi.FirstPersonControllerScript = function(param)
 	this._turn = (param.turn !== undefined) ? param.turn : true;
 	this._tilt = (param.tilt !== undefined) ? param.tilt : true;
 	this._mouseLook = (param.mouseLook !== undefined) ? param.mouseLook : false;
+	this.testCollisions = (param.testCollisions !== undefined) ? param.testCollisions : false;
 	
 	this.collisionDistance = 10;
 	this.moveSpeed = 13;
@@ -118,7 +119,13 @@ Vizi.FirstPersonControllerScript.prototype.update = function()
 {
 	this.saveCamera();
 	this.controls.update(this.clock.getDelta());
-	var collide = this.testCollision();
+	if (this.testCollisions) {
+		var collide = this.testCollision();
+	}
+	else {
+		var collide = null;
+	}
+	
 	if (collide && collide.object) {
 		this.restoreCamera();
 		this.dispatchEvent("collide", collide);
