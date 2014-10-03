@@ -192,6 +192,14 @@ Vizi.GraphicsThreeJS.prototype.addDomHandlers = function()
 {
 	var that = this;
 	window.addEventListener( 'resize', function(event) { that.onWindowResize(event); }, false );
+
+	
+	var fullScreenChange =
+		this.renderer.domElement.mozRequestFullScreen? 'mozfullscreenchange' : 'webkitfullscreenchange';
+	
+	document.addEventListener( fullScreenChange, 
+			function(e) {that.onFullScreenChanged(e); }, false );
+
 }
 
 Vizi.GraphicsThreeJS.prototype.objectFromMouse = function(event)
@@ -669,10 +677,20 @@ Vizi.GraphicsThreeJS.prototype.onKeyPress = function(event)
 
 Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 {
-	this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+	var width = this.container.offsetWidth,
+		height = this.container.offsetHeight;
+
+	// HACK HACK HACK seems to be the only reliable thing and even this
+	// is dicey on Chrome. Is there a race condition?
+	if (this.riftCam) {
+		width = window.innerWidth;
+		height = window.innerHeight;
+	}
+	
+	this.renderer.setSize(width, height);
 	
 	if (this.composer) {
-		this.composer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+		this.composer.setSize(width, height);
 	}
 	
 	
@@ -685,6 +703,19 @@ Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 		this.camera.updateProjectionMatrix();
 	}
 }
+
+Vizi.GraphicsThreeJS.prototype.onFullScreenChanged = function(event) {
+	
+	if ( !document.mozFullScreenElement && !document.webkitFullScreenElement ) {
+		this.fullscreen = false;
+	}
+	else {
+		this.fullscreen = true;
+	}
+}
+
+
+
 
 Vizi.GraphicsThreeJS.prototype.setCursor = function(cursor)
 {
@@ -748,6 +779,9 @@ Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
 Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 {
 	if (this.riftCam) {
+
+		this.fullscreen = enable;
+		
 		this.riftCam.setFullScreen(enable);
 	}
 }

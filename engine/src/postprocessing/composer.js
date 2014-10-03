@@ -23,8 +23,14 @@ Vizi.Composer = function(param)
     // Create the effects composer
     // For now, create default render pass to start it up
 	var graphics = Vizi.Graphics.instance;
+	graphics.renderer.autoClear = false;
     this.composer = new THREE.EffectComposer( graphics.riftCam ? graphics.riftCam : graphics.renderer );
-	this.composer.addPass( new THREE.RenderPass( graphics.scene, graphics.camera ) );
+    var bgPass = new THREE.RenderPass( graphics.backgroundLayer.scene, graphics.backgroundLayer.camera );
+    bgPass.clear = true;
+	this.composer.addPass( bgPass );
+	var fgPass = new THREE.RenderPass( graphics.scene, graphics.camera );
+	fgPass.clear = false;
+	this.composer.addPass(fgPass);
 	var copyPass = new THREE.ShaderPass( THREE.CopyShader );
 	copyPass.renderToScreen = true;
 	this.composer.addPass(copyPass);
@@ -43,7 +49,7 @@ Vizi.Composer.prototype.addEffect = function(effect) {
 }
 
 Vizi.Composer.prototype.setCamera = function(camera) {
-	var renderpass = this.composer.passes[0];
+	var renderpass = this.composer.passes[1];
 	renderpass.camera = camera;
 }
 

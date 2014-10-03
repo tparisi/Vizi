@@ -90,7 +90,7 @@ z-index: 1;
 
 		app.addObject(camera);
 		
-		if (false) {
+		if (true) {
 			var controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
 				});
 			var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
@@ -116,15 +116,16 @@ z-index: 1;
 				{ geometry: new THREE.CubeGeometry(2, 2, 2),
 					material: new THREE.MeshPhongMaterial({
 						color:0xffffff,
-						envMap:texture,
-						reflectivity:0.8,
-						refractionRatio:0.1
 						})
 				});
 
 
 		cube.addComponent(visual);
-		// app.addObject(cube);
+		app.addObject(cube);
+
+		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
+		effect.pass.uniforms[ 'scale' ].value = 12;
+        //Vizi.Graphics.instance.addEffect(effect);
 
 		var fullScreenButton = document.querySelector( '.button' );
 		fullScreenButton.onclick = function() {

@@ -111,7 +111,6 @@
 		
 		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
 		effect.pass.uniforms[ 'scale' ].value = 4;
-//		effect.pass.uniforms[ 'tDiffuse' ].value = THREE.ImageUtils.loadTexture("./images/lavatile.jpg");
         Vizi.Graphics.instance.addEffect(effect);
 
 		var effect = new Vizi.Effect( THREE.RGBShiftShader );

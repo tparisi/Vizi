@@ -22,6 +22,10 @@
  *
  */
 THREE.VREffect = function ( renderer, done ) {
+	
+	this.FULLSCREEN_WIDTH = 1280;
+	this.FULLSCREEN_HEIGHT = 800;
+	
 	this._renderer = renderer;
 
 	this._init = function() {
@@ -195,7 +199,8 @@ THREE.VREffect = function ( renderer, done ) {
 			height: renderer.domElement.height
 		};
 		// Hardcoded Rift display size
-		renderer.setSize( 1280, 800, false );
+		
+		renderer.setSize( this.FULLSCREEN_WIDTH, this.FULLSCREEN_HEIGHT, false );
 		this.startFullscreen();
 	};
 
