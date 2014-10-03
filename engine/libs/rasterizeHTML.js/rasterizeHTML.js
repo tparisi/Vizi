@@ -8,7 +8,7 @@ window.rasterizeHTMLInline = (function (module) {
     /* Img Inlining */
 
     var encodeImageAsDataURI = function (image, baseUrl, cache, successCallback, errorCallback) {
-        var url = image.attributes.src.nodeValue,
+        var url = image.attributes.src.value,
             base = baseUrl || image.ownerDocument.baseURI;
 
         if (module.util.isDataUri(url)) {
@@ -21,7 +21,7 @@ window.rasterizeHTMLInline = (function (module) {
         module.util.getDataURIForImageURL(url, {
             cache: cache
         }, function (dataURI) {
-            image.attributes.src.nodeValue = dataURI;
+            image.attributes.src.value = dataURI;
             successCallback();
         }, function () {
             errorCallback(url);
@@ -76,7 +76,7 @@ window.rasterizeHTMLInline = (function (module) {
                 var errors = importErrors.concat(resourceErrors);
 
                 if (changedFromImports || changedFromResources) {
-                    style.childNodes[0].nodeValue = module.css.cssRulesToText(cssRules);
+                    style.childNodes[0].value = module.css.cssRulesToText(cssRules);
                 }
 
                 callback(errors);
@@ -93,7 +93,7 @@ window.rasterizeHTMLInline = (function (module) {
             cssStyles = [];
 
         styles.forEach(function (style) {
-            if (!style.attributes.type || style.attributes.type.nodeValue === "text/css") {
+            if (!style.attributes.type || style.attributes.type.value === "text/css") {
                 cssStyles.push(style);
             }
         });
@@ -139,7 +139,7 @@ window.rasterizeHTMLInline = (function (module) {
     };
 
     var loadLinkedCSS = function (link, baseUrl, cache, successCallback, errorCallback) {
-        var cssHref = link.attributes.href.nodeValue,
+        var cssHref = link.attributes.href.value,
             documentBaseUrl = baseUrl || link.ownerDocument.baseURI,
             cssHrefRelativeToDoc = module.util.getUrlRelativeToDocumentBase(cssHref, documentBaseUrl);
 
@@ -174,8 +174,8 @@ window.rasterizeHTMLInline = (function (module) {
             errors = [];
 
         module.util.map(links, function (link, finish) {
-            if (link.attributes.rel && link.attributes.rel.nodeValue === "stylesheet" &&
-                (!link.attributes.type || link.attributes.type.nodeValue === "text/css")) {
+            if (link.attributes.rel && link.attributes.rel.value === "stylesheet" &&
+                (!link.attributes.type || link.attributes.type.value === "text/css")) {
                 loadLinkedCSS(link, baseUrl, cache, function(css, moreErrors) {
                     substituteLinkWithInlineStyle(link, css + "\n");
 
@@ -205,7 +205,7 @@ window.rasterizeHTMLInline = (function (module) {
 
     var loadLinkedScript = function (script, baseUrl, cache, successCallback, errorCallback) {
         var base = baseUrl || script.ownerDocument.baseURI,
-            scriptSrcRelativeToDoc = module.util.getUrlRelativeToDocumentBase(script.attributes.src.nodeValue, base);
+            scriptSrcRelativeToDoc = module.util.getUrlRelativeToDocumentBase(script.attributes.src.value, base);
 
         module.util.ajax(scriptSrcRelativeToDoc, {cache: cache}, successCallback, function () {
             errorCallback(scriptSrcRelativeToDoc);
@@ -217,7 +217,7 @@ window.rasterizeHTMLInline = (function (module) {
             parent = oldScriptNode.parentNode;
 
         if (oldScriptNode.attributes.type) {
-            newScript.type = oldScriptNode.attributes.type.nodeValue;
+            newScript.type = oldScriptNode.attributes.type.value;
         }
 
         newScript.appendChild(oldScriptNode.ownerDocument.createTextNode(jsCode));
