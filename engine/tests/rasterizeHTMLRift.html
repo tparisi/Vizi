@@ -14,9 +14,21 @@
     <script type="text/javascript" src="../libs/rasterizeHTML.js/rasterizeHTML.js"></script>
     <style>
 
+	body {
+		overflow:hidden;
+	}
+			.button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 8px;
+				color: #FFF;
+				background-color: #555;
+			}
+
         #container {
         	width: 98%;
-        	height: 95%;
+        	height: 98%;
         	position: absolute;
         	background-color:green;
         	z-index:-1;
@@ -25,12 +37,13 @@
     </style>
 </head>
 <body>
+	<div class="button">Start VR Mode</div>
     <div id="container"></div>
     <script type="text/javascript">
         $(document).ready(function() {
 			var container = document.getElementById("container");
 		
-			var app = new Vizi.Application({ container : container });
+			var app = new Vizi.Application({ container : container, riftRender : true, bgColor:0x00ff00 });
 		
 			var cube = new Vizi.Object;
 
@@ -62,10 +75,10 @@
     			rasterizeHTML.drawHTML("Hello world", cvs, null, function() {
     				// alert("in callback");
 					map.needsUpdate = true;
-	    		});
+    			});
 			}
 			else {
-    		
+			    		
 	var loadres = $.ajax({
 	      type: 'GET',
 	      url: '/Vizi/engine/tests/futurgo.html',
@@ -81,6 +94,7 @@
 	    	  console.log(err); alert("load error: " + err.status + "; " + err.statusText); 
 	    	  }
 	});	
+	
     		}
 						
 		var camobj1 = new Vizi.Object;
@@ -97,6 +111,11 @@
 		app.addObject(controller);
 		
 		app.run();
+
+		var fullScreenButton = document.querySelector( '.button' );
+		fullScreenButton.onclick = function() {
+			Vizi.Graphics.instance.setFullScreen( true );
+		};
 
         });
          

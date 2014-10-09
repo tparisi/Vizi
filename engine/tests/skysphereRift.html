@@ -90,7 +90,7 @@ z-index: 1;
 
 		app.addObject(camera);
 		
-		if (true) {
+		if (false) {
 			var controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
 				});
 			var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
@@ -125,7 +125,13 @@ z-index: 1;
 
 		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
 		effect.pass.uniforms[ 'scale' ].value = 12;
-        //Vizi.Graphics.instance.addEffect(effect);
+        Vizi.Graphics.instance.addEffect(effect);
+
+		var effect = new Vizi.Effect( new THREE.BloomPass);
+//       Vizi.Graphics.instance.addEffect(effect);
+
+		var effect = new Vizi.Effect(THREE.CopyShader);
+//        Vizi.Graphics.instance.addEffect(effect);
 
 		var fullScreenButton = document.querySelector( '.button' );
 		fullScreenButton.onclick = function() {

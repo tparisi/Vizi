@@ -312,7 +312,7 @@ FuturgoCity.prototype.onFuturgoLoadComplete = function(data) {
 	var help = HelpScreenPrefab();
 
 	//this.addObject(help);
-	this.hud.addChild(help);
+	// this.hud.addChild(help);
 	
 	this.helpScreen = help.getComponent(HelpScreenScript);
 	

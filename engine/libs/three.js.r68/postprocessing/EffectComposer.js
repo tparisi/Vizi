@@ -11,12 +11,12 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 		var width = window.innerWidth || 1;
 		var height = window.innerHeight || 1;
 		if (renderer._renderer) {
-			width = renderer._renderer.domElement.offsetWidth / renderer._renderer.devicePixelRatio;
-			height = renderer._renderer.domElement.offsetHeight / renderer._renderer.devicePixelRatio;
+			width = renderer._renderer.domElement.offsetWidth; // / renderer._renderer.devicePixelRatio;
+			height = renderer._renderer.domElement.offsetHeight; // / renderer._renderer.devicePixelRatio;
 		}
 		else {
-			width = renderer.domElement.offsetWidth  / renderer.devicePixelRatio;
-			height = renderer.domElement.offsetHeight / renderer.devicePixelRatio;
+			width = renderer.domElement.offsetWidth; //  / renderer.devicePixelRatio;
+			height = renderer.domElement.offsetHeight; // / renderer.devicePixelRatio;
 		}
 		var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
 

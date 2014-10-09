@@ -36,6 +36,7 @@
 		var camobj1 = new Vizi.Object;
 		camera1 = new Vizi.PerspectiveCamera({active:true});
 		camobj1.addComponent(camera1);
+		camobj1.transform.position.z = -5;
 		app.addObject(camobj1);
 		
 		var controller = Vizi.Prefabs.RiftController({active:true, 
@@ -111,7 +112,7 @@
 		
 		var effect = new Vizi.Effect(THREE.DotScreenRGBShader);
 		effect.pass.uniforms[ 'scale' ].value = 4;
-        Vizi.Graphics.instance.addEffect(effect);
+//        Vizi.Graphics.instance.addEffect(effect);
 
 		var effect = new Vizi.Effect( THREE.RGBShiftShader );
 		effect.pass.uniforms[ 'amount' ].value = 0.0035;
