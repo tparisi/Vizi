@@ -32,7 +32,7 @@ z-index: 1;
       </style>
 </head>
 <body>
-	<div id="container" style="width:98%; height:98%; position:absolute;z-index:-2"></div>
+	<div id="container" style="width:100%; height:100%; position:absolute;z-index:-2"></div>
 	<select id="viewSelect">
 	<option value="pan0.jpg">Plaza</option>
 	<option value="pan1.jpg">Mall</option>
@@ -89,19 +89,16 @@ z-index: 1;
 
 		app.addObject(camera);
 		
-		if (false) {
 			var controller = Vizi.Prefabs.ModelController({active:true, headlight:true, 
 				});
 			var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
 			controllerScript.camera = cam;
 			app.addObject(controller);
-		}
-		else {
+
 			var docontroller = Vizi.Prefabs.DeviceOrientationController({enabled:true, active:true, headlight:true, roll:false});
 			var docontrollerScript = docontroller.getComponent(Vizi.DeviceOrientationControllerScript);
 			docontrollerScript.camera = cam;
 			app.addObject(docontrollerScript);
-		}
 
 		
 		var cube = new Vizi.Object;
@@ -116,6 +113,20 @@ z-index: 1;
 
 		cube.addComponent(visual);
 		app.addObject(cube);
+
+		var floor = new Vizi.Object;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.PlaneGeometry(200, 200, 32, 32),
+					material: new THREE.MeshPhongMaterial({
+						color:0xffffff, wireframe: true
+						})
+				});
+
+
+		floor.addComponent(visual);
+		floor.transform.rotation.x = -Math.PI / 2;
+		app.addObject(floor);
 		
 		app.run();
 	}
