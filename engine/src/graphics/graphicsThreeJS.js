@@ -137,6 +137,10 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 			}
     	});
     }
+    else if (param.cardboard) {
+    	this.cardboard = new THREE.StereoEffect(this.renderer);
+    	this.cardboard.setSize( this.container.offsetWidth, this.container.offsetHeight );
+    }
     
     // Placeholder for effects composer
     this.composer = null;
@@ -686,6 +690,10 @@ Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 		width = window.innerWidth;
 		height = window.innerHeight;
 	}
+
+	if (this.cardboard) {
+		this.cardboard.setSize(width, height);
+	}
 	
 	this.renderer.setSize(width, height);
 	
@@ -738,6 +746,9 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 	if (this.composer) {
 		this.renderEffects(deltat);
 	}
+	else if (this.cardboard) {
+		this.renderStereo();
+	}
     else if (this.riftCam && this.riftCam._vrHMD) {
 		this.renderVR();
 	}
@@ -767,6 +778,11 @@ Vizi.GraphicsThreeJS.prototype.renderVR = function() {
 
 Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
 	this.composer.render(deltat);
+}
+
+Vizi.GraphicsThreeJS.prototype.renderStereo = function() {
+	// start with 2 layer to test; will need to work in postprocessing when that's ready
+    this.cardboard.render(this.scene, this.camera);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)

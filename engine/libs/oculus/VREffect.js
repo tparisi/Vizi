@@ -236,7 +236,7 @@ THREE.VREffect = function ( renderer, done ) {
 	this.FovPortToProjection = function( fov, rightHanded /* = true */, zNear /* = 0.01 */, zFar /* = 10000.0 */ )
 	{
 		rightHanded = rightHanded === undefined ? true : rightHanded;
-		zNear = zNear === undefined ? 0.001 : zNear;
+		zNear = zNear === undefined ? 0.01 : zNear;
 		zFar = zFar === undefined ? 100000.0 : zFar;
 
 		var handednessScale = rightHanded ? -1.0 : 1.0;

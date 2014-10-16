@@ -1798,6 +1798,11 @@ Vizi.Object = function(param) {
      */
     this.name = "";
  
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._realizing = false;
     
     /**
      * @type {Boolean}
@@ -1860,7 +1865,7 @@ Vizi.Object.prototype.addChild = function(child) {
     child.setParent(this);
     this._children.push(child);
 
-    if (this._realized && !child._realized)
+    if ((this._realizing || this._realized) && !child._realized)
     {
     	child.realize();
     }
@@ -2045,6 +2050,8 @@ Vizi.Object.prototype.getComponents = function(type) {
 //---------------------------------------------------------------------
 
 Vizi.Object.prototype.realize = function() {
+    this._realizing = true;
+    
     this.realizeComponents();
     this.realizeChildren();
         
@@ -3739,7 +3746,12 @@ Vizi.Prefabs.DeviceOrientationController = function(param)
 	var controller = new Vizi.Object(param);
 	var controllerScript = new Vizi.DeviceOrientationControllerScript(param);
 	controller.addComponent(controllerScript);
+
+	var intensity = param.headlight ? 1 : 0;
 	
+	var headlight = new Vizi.DirectionalLight({ intensity : intensity });
+	controller.addComponent(headlight);
+		
 	return controller;
 }
 
@@ -3751,6 +3763,7 @@ Vizi.DeviceOrientationControllerScript = function(param)
 	Vizi.Script.call(this, param);
 
 	this._enabled = (param.enabled !== undefined) ? param.enabled : true;
+	this._headlightOn = param.headlight;
 	this.roll = (param.roll !== undefined) ? param.roll : true;
 		
     Object.defineProperties(this, {
@@ -3770,13 +3783,23 @@ Vizi.DeviceOrientationControllerScript = function(param)
     			this.setEnabled(v);
     		}
     	},
+        headlightOn: {
+	        get: function() {
+	            return this._headlightOn;
+	        },
+	        set:function(v)
+	        {
+	        	this.setHeadlightOn(v);
+	        }
+    	},
     });
 }
 
 goog.inherits(Vizi.DeviceOrientationControllerScript, Vizi.Script);
 
-Vizi.DeviceOrientationControllerScript.prototype.realize = function()
-{
+Vizi.DeviceOrientationControllerScript.prototype.realize = function() {
+	this.headlight = this._object.getComponent(Vizi.DirectionalLight);
+	this.headlight.intensity = this._headlightOn ? 1 : 0;
 }
 
 Vizi.DeviceOrientationControllerScript.prototype.createControls = function(camera)
@@ -3794,6 +3817,11 @@ Vizi.DeviceOrientationControllerScript.prototype.update = function()
 {
 	if (this._enabled)
 		this.controls.update();
+
+	if (this._headlightOn)
+	{
+		this.headlight.direction.copy(this._camera.position).negate();
+	}	
 }
 
 Vizi.DeviceOrientationControllerScript.prototype.setEnabled = function(enabled)
@@ -3803,6 +3831,14 @@ Vizi.DeviceOrientationControllerScript.prototype.setEnabled = function(enabled)
 		this.controls.connect();
 	else
 		this.controls.disconnect();
+}
+
+Vizi.DeviceOrientationControllerScript.prototype.setHeadlightOn = function(on)
+{
+	this._headlightOn = on;
+	if (this.headlight) {
+		this.headlight.intensity = on ? 1 : 0;
+	}
 }
 
 Vizi.DeviceOrientationControllerScript.prototype.setCamera = function(camera) {
@@ -5729,6 +5765,10 @@ Vizi.GraphicsThreeJS.prototype.initRenderer = function(param)
 			}
     	});
     }
+    else if (param.cardboard) {
+    	this.cardboard = new THREE.StereoEffect(this.renderer);
+    	this.cardboard.setSize( this.container.offsetWidth, this.container.offsetHeight );
+    }
     
     // Placeholder for effects composer
     this.composer = null;
@@ -6278,6 +6318,10 @@ Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 		width = window.innerWidth;
 		height = window.innerHeight;
 	}
+
+	if (this.cardboard) {
+		this.cardboard.setSize(width, height);
+	}
 	
 	this.renderer.setSize(width, height);
 	
@@ -6330,6 +6374,9 @@ Vizi.GraphicsThreeJS.prototype.update = function()
 	if (this.composer) {
 		this.renderEffects(deltat);
 	}
+	else if (this.cardboard) {
+		this.renderStereo();
+	}
     else if (this.riftCam && this.riftCam._vrHMD) {
 		this.renderVR();
 	}
@@ -6359,6 +6406,11 @@ Vizi.GraphicsThreeJS.prototype.renderVR = function() {
 
 Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
 	this.composer.render(deltat);
+}
+
+Vizi.GraphicsThreeJS.prototype.renderStereo = function() {
+	// start with 2 layer to test; will need to work in postprocessing when that's ready
+    this.cardboard.render(this.scene, this.camera);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
@@ -6592,6 +6644,7 @@ Vizi.Application.prototype.run = function()
 {
     // core game loop here
 	this.realizeObjects();
+	Vizi.Graphics.instance.scene.updateMatrixWorld();
 	this.lastFrameTime = Date.now();
 	this.running = true;
 	this.runloop();

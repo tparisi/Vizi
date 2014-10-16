@@ -44,6 +44,11 @@ Vizi.Object = function(param) {
      */
     this.name = "";
  
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._realizing = false;
     
     /**
      * @type {Boolean}
@@ -106,7 +111,7 @@ Vizi.Object.prototype.addChild = function(child) {
     child.setParent(this);
     this._children.push(child);
 
-    if (this._realized && !child._realized)
+    if ((this._realizing || this._realized) && !child._realized)
     {
     	child.realize();
     }
@@ -291,6 +296,8 @@ Vizi.Object.prototype.getComponents = function(type) {
 //---------------------------------------------------------------------
 
 Vizi.Object.prototype.realize = function() {
+    this._realizing = true;
+    
     this.realizeComponents();
     this.realizeChildren();
         

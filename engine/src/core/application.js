@@ -80,6 +80,7 @@ Vizi.Application.prototype.run = function()
 {
     // core game loop here
 	this.realizeObjects();
+	Vizi.Graphics.instance.scene.updateMatrixWorld();
 	this.lastFrameTime = Date.now();
 	this.running = true;
 	this.runloop();
