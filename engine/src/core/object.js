@@ -314,7 +314,9 @@ Vizi.Object.prototype.realizeComponents = function() {
 
     for (; i < count; ++i)
     {
-        this._components[i].realize();
+        if (!this._components[i]._realized) {
+        	this._components[i].realize();
+        }
     }
 }
 
@@ -328,7 +330,9 @@ Vizi.Object.prototype.realizeChildren = function() {
 
     for (; i < count; ++i)
     {
-        this._children[i].realize();
+        if (!this._children[i]._realized) {
+        	this._children[i].realize();
+        }
     }
 }
 

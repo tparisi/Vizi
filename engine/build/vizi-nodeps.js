@@ -2068,7 +2068,9 @@ Vizi.Object.prototype.realizeComponents = function() {
 
     for (; i < count; ++i)
     {
-        this._components[i].realize();
+        if (!this._components[i]._realized) {
+        	this._components[i].realize();
+        }
     }
 }
 
@@ -2082,7 +2084,9 @@ Vizi.Object.prototype.realizeChildren = function() {
 
     for (; i < count; ++i)
     {
-        this._children[i].realize();
+        if (!this._children[i]._realized) {
+        	this._children[i].realize();
+        }
     }
 }
 
@@ -6410,7 +6414,7 @@ Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
 
 Vizi.GraphicsThreeJS.prototype.renderStereo = function() {
 	// start with 2 layer to test; will need to work in postprocessing when that's ready
-    this.cardboard.render(this.scene, this.camera);
+    this.cardboard.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)

@@ -782,7 +782,7 @@ Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
 
 Vizi.GraphicsThreeJS.prototype.renderStereo = function() {
 	// start with 2 layer to test; will need to work in postprocessing when that's ready
-    this.cardboard.render(this.scene, this.camera);
+    this.cardboard.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)

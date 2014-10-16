@@ -75,13 +75,13 @@ z-index: 1;
 		var path = "images/spherepano/pan0.jpg";
 		
 		var texture = THREE.ImageUtils.loadTexture(path);
-/*
+
 		var skysphere = Vizi.Prefabs.Skysphere();
 		skysphereScript = skysphere.getComponent(Vizi.SkysphereScript);
 		skysphereScript.texture = texture;
 
 		app.addObject(skysphere);
-*/
+
 		var cam = new Vizi.PerspectiveCamera;
 		var camera = new Vizi.Object;
 		camera.addComponent(cam);
