@@ -187,7 +187,7 @@ Vizi.Object.prototype.addComponent = function(component) {
     this._components.push(component);
     component.setObject(this);
     
-    if (this._realized && !component._realized)
+    if ((this._realizing || this._realized) && !component._realized)
     {
     	component.realize();
     }
