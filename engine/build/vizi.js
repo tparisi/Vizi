@@ -51027,6 +51027,8 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	this.oneButton = false;
 	
+	this.usekeys = false;
+	
 	// internals
 
 	var scope = this;
@@ -51433,6 +51435,10 @@ Vizi.OrbitControls = function ( object, domElement ) {
 
 	function onKeyDown( event ) {
 
+		if ( !scope.usekeys) {
+			return;
+		}
+		
 		if ( scope.enabled === false ) return;
 		if ( scope.userPan === false ) return;
 
