@@ -77,6 +77,9 @@
 			Vizi.Graphics.instance.setFullScreen( true );
 		};
 		
+		document.addEventListener("keyup", function(event) {
+			onKeyUp(event);
+		});
 	}
 	);
 
@@ -106,6 +109,7 @@
 	}
 
 	function onMouseClick(what, event) {
+		return;
 		if (what == "futurgo") {
 			toggleStartStop();
 		}
@@ -131,6 +135,12 @@
 	}
 
 	function toggleStartStop() {
+		futurgoCity.toggleStartStop();
+	}
+	
+	function onKeyUp(event) {
+		if (event.keyCode == 32)
+			toggleStartStop();
 	}
 	
 	</script>
