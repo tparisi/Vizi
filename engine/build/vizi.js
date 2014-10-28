@@ -55024,10 +55024,10 @@ Vizi.DeviceOrientationControls = function ( object ) {
 
 			if ( this.freeze ) return;
 
-			alpha  = this.deviceOrientation.gamma ? THREE.Math.degToRad( this.deviceOrientation.alpha ) : 0; // Z
+			alpha  = this.deviceOrientation.alpha ? THREE.Math.degToRad( this.deviceOrientation.alpha ) : 0; // Z
 			beta   = this.deviceOrientation.beta  ? THREE.Math.degToRad( this.deviceOrientation.beta  ) : 0; // X'
 			gamma  = this.deviceOrientation.gamma ? THREE.Math.degToRad( this.deviceOrientation.gamma ) : 0; // Y''
-			orient = 0; // this.screenOrientation       ? THREE.Math.degToRad( this.screenOrientation       ) : 0; // O
+			orient = this.screenOrientation       ? THREE.Math.degToRad( this.screenOrientation       ) : 0; // O
 
 			setObjectQuaternion( this.object.quaternion, alpha, beta, gamma, orient );
 
