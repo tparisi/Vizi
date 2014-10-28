@@ -800,6 +800,17 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 		
 		this.riftCam.setFullScreen(enable);
 	}
+	else if (this.cardboard) {
+
+		var canvas = this.renderer.domElement;
+
+		if ( canvas.mozRequestFullScreen ) {
+			canvas.mozRequestFullScreen();
+		} else {
+			canvas.webkitRequestFullscreen();
+		}
+		
+	}
 }
 
 Vizi.GraphicsThreeJS.prototype.setCamera = function(camera) {

@@ -128,6 +128,12 @@ z-index: 1;
 		floor.transform.rotation.x = -Math.PI / 2;
 		app.addObject(floor);
 		
+		document.addEventListener("click", function(event) {
+			Vizi.Graphics.instance.setFullScreen(true);
+		});
+		document.addEventListener("touchend", function(event) {
+			Vizi.Graphics.instance.setFullScreen(true);
+		});
 		app.run();
 	}
 	);
