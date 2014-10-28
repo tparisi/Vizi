@@ -82,7 +82,7 @@ z-index: 1;
 
 		app.addObject(skysphere);
 
-		var cam = new Vizi.PerspectiveCamera;
+		var cam = new Vizi.PerspectiveCamera({fov:90});
 		var camera = new Vizi.Object;
 		camera.addComponent(cam);
 		cam.active = true;
