@@ -95,7 +95,7 @@ z-index: 1;
 			controllerScript.camera = cam;
 			app.addObject(controller);
 
-			var docontroller = Vizi.Prefabs.DeviceOrientationController({enabled:true, active:true, headlight:true, roll:false});
+			var docontroller = Vizi.Prefabs.DeviceOrientationController({enabled:true, active:true, headlight:true, roll:true});
 			var docontrollerScript = docontroller.getComponent(Vizi.DeviceOrientationControllerScript);
 			docontrollerScript.camera = cam;
 			app.addObject(docontrollerScript);
