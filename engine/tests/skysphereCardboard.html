@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vizi - Skybox</title>
+<title>Vizi - VR Panorama</title>
       <style>
           body {
               margin: 0px;
@@ -128,11 +128,12 @@ z-index: 1;
 		floor.transform.rotation.x = -Math.PI / 2;
 		app.addObject(floor);
 		
-		document.addEventListener("click", function(event) {
+		var canvas = Vizi.Graphics.instance.renderer.domElement;
+		canvas.addEventListener("click", function(event) {
 			Vizi.Graphics.instance.setFullScreen(true);
 		});
-		document.addEventListener("touchend", function(event) {
-			Vizi.Graphics.instance.setFullScreen(true);
+		canvas.addEventListener("touchend", function(event) {
+			Vizi.Graphics.instance.setFullScreen(!Vizi.Graphics.instance.fullscreen);
 		});
 		app.run();
 	}

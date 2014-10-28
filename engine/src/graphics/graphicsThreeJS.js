@@ -714,7 +714,7 @@ Vizi.GraphicsThreeJS.prototype.onWindowResize = function(event)
 
 Vizi.GraphicsThreeJS.prototype.onFullScreenChanged = function(event) {
 	
-	if ( !document.mozFullScreenElement && !document.webkitFullScreenElement ) {
+	if ( !document.mozFullscreenElement && !document.webkitFullscreenElement ) {
 		this.fullscreen = false;
 	}
 	else {
@@ -803,13 +803,21 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 	else if (this.cardboard) {
 
 		var canvas = this.renderer.domElement;
-
-		if ( canvas.mozRequestFullScreen ) {
-			canvas.mozRequestFullScreen();
-		} else {
-			canvas.webkitRequestFullscreen();
-		}
 		
+		if (enable) {
+			if ( canvas.mozRequestFullScreen ) {
+				canvas.mozRequestFullScreen();
+			} else {
+				canvas.webkitRequestFullscreen();
+			}
+		}
+		else {
+			if ( document.mozCancelFullScreen ) {
+				document.mozCancelFullScreen();
+			} else {
+				document.webkitExitFullscreen();
+			}
+		}
 	}
 }
 
