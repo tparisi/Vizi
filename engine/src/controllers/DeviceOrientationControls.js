@@ -108,7 +108,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 
 			quaternion.multiply( q1 );                                      // camera looks out the back of the device, not the top
 
-			quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) );    // adjust for screen orientation
+			quaternion.multiply( q0.setFromAxisAngle( zee, orient ) );    // adjust for screen orientation
 
 		}
 
