@@ -45,7 +45,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 			gamma  = this.deviceOrientation.gamma ? THREE.Math.degToRad( this.deviceOrientation.gamma ) : 0; // Y''
 			orient = this.screenOrientation       ? THREE.Math.degToRad( this.screenOrientation       ) : 0; // O
 
-			setObjectQuaternion( this.object.quaternion, alpha, beta, gamma, orient );
+			this.setObjectQuaternion( this.object.quaternion, alpha, beta, gamma, orient );
 
 		}
 
@@ -83,7 +83,7 @@ Vizi.DeviceOrientationControls = function ( object ) {
 
 	// The angles alpha, beta and gamma form a set of intrinsic Tait-Bryan angles of type Z-X'-Y''
 
-	setObjectQuaternion = function () {
+	this.setObjectQuaternion = function () {
 
 		var zee = new THREE.Vector3( 0, 0, 1 );
 
