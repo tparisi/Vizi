@@ -43872,7 +43872,7 @@ THREE.StereoEffect = function ( renderer ) {
 
 	// API
 
-	this.separation = 3;
+	this.separation = 0.03200000151991844; // 3;
 
 	// internals
 
