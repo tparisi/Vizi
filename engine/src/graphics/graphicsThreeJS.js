@@ -719,6 +719,8 @@ Vizi.GraphicsThreeJS.prototype.onFullScreenChanged = function(event) {
 	}
 	else {
 		this.fullscreen = true;
+    	if (this.cardboard)
+    		this.cardboard.setSize( window.innerWidth,  window.innerHeight );
 	}
 }
 
