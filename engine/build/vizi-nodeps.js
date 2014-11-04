@@ -5839,6 +5839,7 @@ Vizi.GraphicsThreeJS.prototype.addDomHandlers = function()
 	var that = this;
 	window.addEventListener( 'resize', function(event) { that.onWindowResize(event); }, false );
 
+	setTimeout('resize', function(event) { that.onWindowResize(event); }, 10);
 	
 	var fullScreenChange =
 		this.renderer.domElement.mozRequestFullScreen? 'mozfullscreenchange' : 'webkitfullscreenchange';
@@ -6361,8 +6362,6 @@ Vizi.GraphicsThreeJS.prototype.onFullScreenChanged = function(event) {
 	}
 	else {
 		this.fullscreen = true;
-    	if (this.cardboard)
-    		this.cardboard.setSize( window.innerWidth,  window.innerHeight );
 	}
 }
 
@@ -6426,8 +6425,8 @@ Vizi.GraphicsThreeJS.prototype.renderEffects = function(deltat) {
 
 Vizi.GraphicsThreeJS.prototype.renderStereo = function() {
 	// start with 2 layer to test; will need to work in postprocessing when that's ready
-//    this.cardboard.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
-    this.cardboard.render(this.scene, this.camera);
+    this.cardboard.render([this.backgroundLayer.scene, this.scene], [this.backgroundLayer.camera, this.camera]);
+//    this.cardboard.render(this.scene, this.camera);
 }
 
 Vizi.GraphicsThreeJS.prototype.enableShadows = function(enable)
@@ -6450,10 +6449,10 @@ Vizi.GraphicsThreeJS.prototype.setFullScreen = function(enable)
 		var canvas = this.renderer.domElement;
 		
 		if (enable) {
-			if ( canvas.mozRequestFullScreen ) {
-				canvas.mozRequestFullScreen();
+			if ( this.container.mozRequestFullScreen ) {
+				this.container.mozRequestFullScreen();
 			} else {
-				canvas.webkitRequestFullscreen();
+				this.container.webkitRequestFullscreen();
 			}
 		}
 		else {
