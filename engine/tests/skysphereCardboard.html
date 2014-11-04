@@ -97,11 +97,12 @@ z-index: 1;
 			controllerScript.camera = cam;
 			app.addObject(controller);
 
-			var docontroller = Vizi.Prefabs.DeviceOrientationController({enabled:true, active:true, headlight:true, roll:true});
+		/*
+			var docontroller = Vizi.Prefabs.DeviceOrientationController({enabled:true, active:false, headlight:true, roll:true});
 			var docontrollerScript = docontroller.getComponent(Vizi.DeviceOrientationControllerScript);
 			docontrollerScript.camera = cam;
 			app.addObject(docontrollerScript);
-
+		*/
 		
 		var cube = new Vizi.Object;
 
@@ -112,10 +113,11 @@ z-index: 1;
 						})
 				});
 
-		cube.transform.position.z = -10;
+		cube.transform.position.z = 0;
 		cube.addComponent(visual);
 		app.addObject(cube);
 
+		/*
 		var floor = new Vizi.Object;
 
 		var visual = new Vizi.Visual(
@@ -130,6 +132,37 @@ z-index: 1;
 		floor.transform.rotation.x = -Math.PI / 2;
 //		app.addObject(floor);
 		
+		*/
+		
+
+      var texture = THREE.ImageUtils.loadTexture(
+        'images/patterns/checker.png'
+      );
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat = new THREE.Vector2(50, 50);
+
+      var material = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        specular: 0xffffff,
+        shininess: 20,
+        shading: THREE.FlatShading,
+        map: texture
+      });
+
+      var geometry = new THREE.PlaneGeometry(1000, 1000);
+
+      var mesh = new THREE.Mesh(geometry, material);
+
+      var visual = new Vizi.Visual({object:mesh});
+
+		var floor = new Vizi.Object;
+		floor.addComponent(visual);
+		
+		floor.transform.rotation.x = -Math.PI / 2;
+		app.addObject(floor);
+		      	
+		/*
 		var canvas = Vizi.Graphics.instance.renderer.domElement;
 		canvas.addEventListener("click", function(event) {
 			Vizi.Graphics.instance.setFullScreen(true);
@@ -137,6 +170,8 @@ z-index: 1;
 		canvas.addEventListener("touchend", function(event) {
 			Vizi.Graphics.instance.setFullScreen(!Vizi.Graphics.instance.fullscreen);
 		});
+		*/
+		
 		app.run();
 	}
 	);

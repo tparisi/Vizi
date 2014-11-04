@@ -8,7 +8,7 @@ THREE.StereoEffect = function ( renderer ) {
 
 	// API
 
-	this.separation = 0.03200000151991844; // 3;
+	this.separation = 3;
 
 	// internals
 
@@ -36,85 +36,47 @@ THREE.StereoEffect = function ( renderer ) {
 
 	this.render = function ( scene, camera ) {
 
-		var scenes, cameras;
-		if (scene instanceof Array) {
-			scenes = scene;
-		}
-		else {
-			scenes = [ scene ];
-		}
+		scene.updateMatrixWorld();
 
-		if (camera instanceof Array) {
-			cameras = camera;
-		}
-		else {
-			cameras = [ camera ];
-		}
+		if ( camera.parent === undefined ) camera.updateMatrixWorld();
+	
+		camera.matrixWorld.decompose( _position, _quaternion, _scale );
 
+		// left
 
-		var i, len = scenes.length;
-		for (i = 0; i < len; i++) {
+		_cameraL.fov = camera.fov;
+		_cameraL.aspect = 0.5 * camera.aspect;
+		_cameraL.near = camera.near;
+		_cameraL.far = camera.far;
+		_cameraL.updateProjectionMatrix();
 
-			var scene = scenes[i];
-			var camera = cameras[i];
-			
-			if (i == 0) {
-			   	renderer.setClearColor( 0, 0 );
-				renderer.autoClearColor = true;				
-			}
-			else {
-			    renderer.setClearColor( 0, 1 );
-				renderer.autoClearColor = false;				
-			}
+		_cameraL.position.copy( _position );
+		_cameraL.quaternion.copy( _quaternion );
+		_cameraL.translateX( - this.separation );
+		_cameraL.updateMatrixWorld();
 
-			scene.updateMatrix();
-			scene.updateMatrixWorld();
+		// right
 
-			if (camera.matrixAutoUpdate) {
-				camera.updateMatrix();
-				camera.updateMatrixWorld();
-			}
+		_cameraR.near = camera.near;
+		_cameraR.far = camera.far;
+		_cameraR.projectionMatrix = _cameraL.projectionMatrix;
 
-			scene.updateMatrixWorld();
+		_cameraR.position.copy( _position );
+		_cameraR.quaternion.copy( _quaternion );
+		_cameraR.translateX( this.separation );
+		_cameraR.updateMatrixWorld();
 
-			if ( camera.parent === undefined ) camera.updateMatrixWorld();
-		
-			camera.matrixWorld.decompose( _position, _quaternion, _scale );
+		//
 
-			// left
-	
-			_cameraL.fov = camera.fov;
-			_cameraL.aspect = 0.5 * camera.aspect;
-			_cameraL.near = camera.near;
-			_cameraL.far = camera.far;
-			_cameraL.updateProjectionMatrix();
-	
-			_cameraL.position.copy( _position );
-			_cameraL.quaternion.copy( _quaternion );
-			_cameraL.translateX( - this.separation );
-	
-			// right
-	
-			_cameraR.near = camera.near;
-			_cameraR.far = camera.far;
-			_cameraR.projectionMatrix = _cameraL.projectionMatrix;
-	
-			_cameraR.position.copy( _position );
-			_cameraR.quaternion.copy( _quaternion );
-			_cameraR.translateX( this.separation );
-	
-			//
-	
-			// renderer.setViewport( 0, 0, _width * 2, _height );
-			// don't do this, defeats layering
-			// renderer.clear();
-	
-			renderer.setViewport( 0, 0, _width, _height );
-			renderer.render( scene, _cameraL );
-	
-			renderer.setViewport( _width, 0, _width, _height );
-			renderer.render( scene, _cameraR );
-		}
+		renderer.setViewport( 0, 0, _width * 2, _height );
+		renderer.clear();
+
+		renderer.setViewport( 0, 0, _width, _height );
+		renderer.render( scene, _cameraL );
+
+		renderer.setViewport( _width, 0, _width, _height );
+		renderer.render( scene, _cameraR );
+
 	};
 
 };
