@@ -5839,7 +5839,7 @@ Vizi.GraphicsThreeJS.prototype.addDomHandlers = function()
 	var that = this;
 	window.addEventListener( 'resize', function(event) { that.onWindowResize(event); }, false );
 
-	setTimeout('resize', function(event) { that.onWindowResize(event); }, 10);
+	setTimeout(function(event) { that.onWindowResize(event); }, 10);
 	
 	var fullScreenChange =
 		this.renderer.domElement.mozRequestFullScreen? 'mozfullscreenchange' : 'webkitfullscreenchange';
