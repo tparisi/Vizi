@@ -1884,6 +1884,7 @@ Vizi.Object.prototype.removeChild = function(child) {
         this._children.splice(i, 1);
         child.removeAllComponents();
         child.setParent(null);
+        child._realized = child._realizing = false;
     }
 }
 
@@ -1999,6 +2000,7 @@ Vizi.Object.prototype.removeAllComponents = function() {
     	if (component.removeFromScene)
     	{
     		component.removeFromScene();
+    		component._realized = component._realizing = false;
     	}
     	
         component.setObject(null);
@@ -2069,6 +2071,8 @@ Vizi.Object.prototype.realizeComponents = function() {
     for (; i < count; ++i)
     {
         if (!this._components[i]._realized) {
+        	// in case we're part of a previously-removed object getting re-parented
+        	this._components[i].setObject(this);
         	this._components[i].realize();
         }
     }

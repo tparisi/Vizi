@@ -32,7 +32,7 @@ z-index: 1;
       </style>
 </head>
 <body>
-	<div id="container" style="width:100%; height:100%; position:absolute;z-index:-2"></div>
+	<div id="container" style="width:100%; height:100%; position:absolute;z-index:-2;background-color:blue;"></div>
 	<select id="viewSelect">
 	<option value="pan0.jpg">Plaza</option>
 	<option value="pan1.jpg">Mall</option>
@@ -76,12 +76,14 @@ z-index: 1;
 		
 		var texture = THREE.ImageUtils.loadTexture(path);
 
+		/*
 		var skysphere = Vizi.Prefabs.Skysphere();
 		skysphereScript = skysphere.getComponent(Vizi.SkysphereScript);
 		skysphereScript.texture = texture;
 
 		app.addObject(skysphere);
-
+		*/
+		
 		var cam = new Vizi.PerspectiveCamera({fov:90});
 		var camera = new Vizi.Object;
 		camera.addComponent(cam);
