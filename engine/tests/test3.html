@@ -18,10 +18,11 @@
 		app.focus();
 		
 		var cube = new Vizi.Object;
+		cube.transform.position.z = -10;
 		cube.transform.rotation.x = Math.PI / 5;
 
 		var visual = new Vizi.Visual(
-				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+				{ geometry: new THREE.BoxGeometry(2, 2, 2),
 					material: new THREE.MeshBasicMaterial({color:0xeeeeee, map:THREE.ImageUtils.loadTexture("./images/board.png")})
 				});
 

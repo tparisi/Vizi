@@ -48288,7 +48288,7 @@ Vizi.Camera.prototype.lookAt = function(v)
 	this.object.lookAt(v);
 }
 
-Vizi.Camera.DEFAULT_POSITION = new THREE.Vector3(0, 0, 10);
+Vizi.Camera.DEFAULT_POSITION = new THREE.Vector3(0, 0, 0);
 Vizi.Camera.DEFAULT_NEAR = 1;
 Vizi.Camera.DEFAULT_FAR = 10000;
 /**
@@ -52993,7 +52993,7 @@ Vizi.Prefabs.Skybox = function(param)
 	} );
 
 	var visual = new Vizi.Visual(
-			{ geometry: new THREE.CubeGeometry( 10000, 10000, 10000 ),
+			{ geometry: new THREE.BoxGeometry( 10000, 10000, 10000 ),
 				material: material,
 			});
 	box.addComponent(visual);
@@ -54631,7 +54631,7 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data, userData)
 	
 	if (data.scene)
 	{
-		console.log("In loaded callback for ", url);
+		// console.log("In loaded callback for ", url);
 		
 		var convertedScene = this.convertScene(data.scene);
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
@@ -55446,7 +55446,8 @@ Vizi.Viewer.prototype.initScene = function()
 	this.addObject(this.controller);
 
 	var viewpoint = new Vizi.Object;
-	this.defaultCamera = new Vizi.PerspectiveCamera({active:true});
+	this.defaultCamera = new Vizi.PerspectiveCamera({active:true, 
+		position : Vizi.Viewer.DEFAULT_CAMERA_POSITION});
 	viewpoint.addComponent(this.defaultCamera);
 	viewpoint.name = "[default]";
 	this.addObject(viewpoint);
@@ -56106,6 +56107,7 @@ Vizi.Viewer.prototype.setController = function(type) {
 	this.controllerScript.center = center;
 }
 
+Vizi.Viewer.DEFAULT_CAMERA_POSITION = new THREE.Vector3(0, 0, 10);
 Vizi.Viewer.DEFAULT_GRID_SIZE = 100;
 Vizi.Viewer.DEFAULT_GRID_STEP_SIZE = 1;
 Vizi.Viewer.GRID_COLOR = 0x202020;

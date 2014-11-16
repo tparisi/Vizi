@@ -19,7 +19,7 @@
 	$(document).ready(function() {
 		var container = document.getElementById("container");
 		
-		var app = new Vizi.Application({ riftRender : true, container : container, displayStats:true } );
+		var app = new Vizi.Application({ container : container, displayStats:true } );
 
 		var camobj1 = new Vizi.Object;
 		camera1 = new Vizi.PerspectiveCamera({active:true});
@@ -84,7 +84,7 @@
 		o.transform.rotation.x = Math.PI / 6;
 		
 		var visual = new Vizi.Visual(
-				{ geometry: new THREE.CubeGeometry(2, 2, 2),
+				{ geometry: new THREE.BoxGeometry(2, 2, 2),
 					material: new THREE.MeshPhongMaterial({color:0xffffff, map:THREE.ImageUtils.loadTexture("./images/board.png")})
 				});
 

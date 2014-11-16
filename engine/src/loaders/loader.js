@@ -152,7 +152,7 @@ Vizi.Loader.prototype.handleSceneLoaded = function(url, data, userData)
 	
 	if (data.scene)
 	{
-		console.log("In loaded callback for ", url);
+		// console.log("In loaded callback for ", url);
 		
 		var convertedScene = this.convertScene(data.scene);
 		result.scene = convertedScene; // new Vizi.SceneVisual({scene:data.scene}); // 
