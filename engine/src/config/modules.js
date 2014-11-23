@@ -48,6 +48,7 @@ goog.require('Vizi.PickManager');
 goog.require('Vizi.CylinderDragger');
 goog.require('Vizi.PlaneDragger');
 goog.require('Vizi.SurfaceDragger');
+goog.require('Vizi.ViewPicker');
 goog.require('Vizi.Light');
 goog.require('Vizi.AmbientLight');
 goog.require('Vizi.DirectionalLight');

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Vizi</title>
+</head>
+<body>
+	<div id="container" style="width:98%; height:98%; position:absolute;background-color:red"></div>
+
+    <script src="../libs/jquery-1.9.1/jquery-1.9.1.js"></script>
+	<script src="../build/vizi.js"></script>
+	<script>
+
+	$(document).ready(function() {
+		var container = document.getElementById("container");
+		
+		var app = new Vizi.Application({ container : container });
+		
+		var cube = new Vizi.Object;
+		cube.transform.rotation.x = Math.PI / 5;
+
+		var visual = new Vizi.Visual(
+				{ geometry: new THREE.BoxGeometry(2, 2, 2),
+					material: new THREE.MeshBasicMaterial({color:0xeeeeee, map:THREE.ImageUtils.loadTexture("./images/board.png")})
+				});
+
+
+		var picker = new Vizi.ViewPicker;
+		var highlight = new Vizi.HighlightBehavior({highlightColor:0x00ff00});
+		var rotator = new Vizi.RotateBehavior({loop:true});
+
+		picker.addEventListener("viewover", function() { 
+			highlight.on();
+			rotator.start(); 
+		});
+
+		picker.addEventListener("viewout", function() { 
+			highlight.off();
+			rotator.stop(); 
+		});
+						
+		cube.addComponent(visual);
+		cube.addComponent(picker);
+		cube.addComponent(highlight);
+		cube.addComponent(rotator);
+		app.addObject(cube);
+
+		var camobj1 = new Vizi.Object;
+		camera1 = new Vizi.PerspectiveCamera({active:true});
+		camobj1.addComponent(camera1);
+		app.addObject(camobj1);
+		camobj1.transform.position.z = 10;
+
+		var controller = Vizi.Prefabs.ModelController({active:true, headlight:true});
+		var controllerScript = controller.getComponent(Vizi.ModelControllerScript);
+		controllerScript.camera = camera1;
+		camera1.active = true;
+
+		app.addObject(controller);
+
+		app.run();
+	}
+	);
+
+	</script>
+	
+</body>
+</html>
