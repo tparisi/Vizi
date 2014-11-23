@@ -4,11 +4,16 @@
  * @authod arodic / http://aleksandarrodic.com/
  */
 
+/*
+ * Adapted for Vizi
+ * @authod tparisi / http://tonyparisi.com/
+ */
+
 THREE.StereoEffect = function ( renderer ) {
 
 	// API
 
-	this.separation = 0.03;
+	this.separation = 0.0635 / 2;
 
 	// internals
 
