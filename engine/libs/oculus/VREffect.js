@@ -58,7 +58,7 @@ THREE.VREffect = function ( renderer, done ) {
 					var material = new THREE.MeshBasicMaterial({color:0x0000ff});
 					self.cube = new THREE.Mesh(geom, material);
 					self.dummyScene = new THREE.Scene;
-					self.dummyScene.add(cube);
+					self.dummyScene.add(self.cube);
 					break; // We keep the first we encounter
 				}
 			}

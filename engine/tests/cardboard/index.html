@@ -43,11 +43,12 @@
       container.appendChild(element);
 
       effect = new THREE.StereoEffect(renderer);
+      effect.separation = 0.0635 / 2;
 
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
-      camera.position.set(0, 10, 0);
+      camera.position.set(0, 1, 0);
       scene.add(camera);
 
       controls = new THREE.OrbitControls(camera, element);
@@ -61,9 +62,10 @@
       controls.noPan = true;
 
       function setOrientationControls(e) {
-        if (!e.alpha) {
-          return;
-        }
+        console.log("In setOrientationControls")
+//        if (!e.alpha) {
+//          return;
+//        }
 
         controls = new THREE.DeviceOrientationControls(camera, true);
         controls.connect();
@@ -99,6 +101,13 @@
 
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
+      scene.add(mesh);
+
+      var geometry = new THREE.BoxGeometry(2, 2, 2);
+      var material = new THREE.MeshBasicMaterial;
+
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.z = -5;
       scene.add(mesh);
 
       window.addEventListener('resize', resize, false);

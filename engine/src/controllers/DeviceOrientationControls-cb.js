@@ -15,9 +15,9 @@
  * (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
  */
 
-goog.provide('Vizi.DeviceOrientationControls');
+goog.provide('Vizi.DeviceOrientationControlsCB');
 
-Vizi.DeviceOrientationControls = function(object) {
+Vizi.DeviceOrientationControlsCB = function(object) {
 
   this.object = object;
 
@@ -160,8 +160,10 @@ Vizi.DeviceOrientationControls = function(object) {
 
   this.align = function() {
 
+    // N.B.: this seemed, literally, ass-backwards so changed
+    // it to point the opposite way --TP
     tempVector3
-      .set(0, 0, -1)
+      .set(0, 0, 1) // z was: -1
       .applyQuaternion( tempQuaternion.copy(this.orientationQuaternion).inverse(), 'ZXY' );
 
     tempEuler.setFromQuaternion(

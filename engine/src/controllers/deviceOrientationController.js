@@ -66,7 +66,7 @@ Vizi.DeviceOrientationControllerScript.prototype.realize = function() {
 
 Vizi.DeviceOrientationControllerScript.prototype.createControls = function(camera)
 {
-	var controls = new Vizi.DeviceOrientationControls(camera.object);
+	var controls = new Vizi.DeviceOrientationControlsCB(camera.object);
 	
 	if (this._enabled)
 		controls.connect();
